@@ -1,0 +1,329 @@
+---
+import Layout from '../layouts/Layout.astro';
+import data from '../data/rankings.json';
+import portraitsRaw from '../data/portraits.json';
+import { flag, countryName, age, keyName } from '../lib/pdc.mjs';
+import { money, avatarColours, initials } from '../lib/format.mjs';
+
+const portraits = Object.fromEntries(Object.entries(portraitsRaw as Record<string, { image: string }>).map(([k, v]) => [k, v.image]));
+const prev = (data.previous || {}) as Record<string, number>;
+const players = data.players.map(p => ({ ...p, move: prev[p.id] ? prev[p.id] - p.pos : null }));
+const top3 = players.slice(0, 3);
+const max = players[0]?.money || 1;
+const pic = (name: string) => portraits[keyName(name)];
+const av = (name: string) => { const [c1, c2] = avatarColours(name); return `--c1:${c1};--c2:${c2}`; };
+---
+<Layout title="World Rankings" description="The PDC Order of Merit, with full player profiles, darts used and tournament history." active="rankings">
+  <section class="hero wrap">
+    <span class="eyebrow">PDC Order of Merit</span>
+    <h1>World <span class="accent">Rankings</span></h1>
+    <p class="lede">Ranked on prize money won over two years. Tap any player in the top 128 for their profile, season record and full tournament history.</p>
+  </section>
+
+  <section class="wrap podium">
+    {[top3[1], top3[0], top3[2]].filter(Boolean).map((p, i) => (
+      <button class={`pod pod-${p.pos}`} data-player={p.id} data-reveal style={`--d:${[150, 0, 300][i]}ms`}>
+        <span class="rank">{p.pos}</span>
+        <span class="avatar big" style={`--size:${p.pos === 1 ? 132 : 104}px;${av(p.name)}`}>
+          {pic(p.name) ? <img src={pic(p.name)} alt="" /> : initials(p.name)}
+        </span>
+        <strong>{p.name}</strong>
+        {p.nick && <em>“{p.nick}”</em>}
+        <span class="money tabular" data-money={p.money}>{money(p.money)}</span>
+        <span class="step" />
+      </button>
+    ))}
+  </section>
+
+  <section class="wrap">
+    <div class="tools" data-reveal>
+      <label class="search">
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><circle cx="11" cy="11" r="7" fill="none" stroke="currentColor" stroke-width="2" /><path d="M20 20l-4-4" stroke="currentColor" stroke-width="2" stroke-linecap="round" /></svg>
+        <input id="q" type="search" placeholder="Search players or countries" autocomplete="off" />
+      </label>
+      <span class="muted small" id="asof">{players.length} ranked players</span>
+    </div>
+    <div class="table card" role="table" aria-label="PDC World Rankings">
+      <div class="tr th" role="row">
+        <span role="columnheader">#</span><span role="columnheader">Player</span><span role="columnheader" class="hide-s">Country</span><span role="columnheader" class="hide-s">Age</span><span role="columnheader" class="r">Prize money</span>
+      </div>
+      {players.map(p => (
+        <button class:list={['tr', { clickable: p.pos <= 128 }]} role="row" data-player={p.pos <= 128 ? p.id : undefined} disabled={p.pos > 128} data-search={`${p.name} ${p.nick || ''} ${countryName(p.country) || ''}`.toLowerCase()}>
+          <span class="pos tabular" role="cell">{p.pos}
+            {p.move ? <i class={p.move > 0 ? 'up' : 'down'} title={`${p.move > 0 ? 'Up' : 'Down'} ${Math.abs(p.move)}`}>{p.move > 0 ? '▲' : '▼'}{Math.abs(p.move)}</i> : null}
+          </span>
+          <span class="who" role="cell">
+            <span class="avatar" style={`--size:38px;${av(p.name)}`}>{pic(p.name) ? <img src={pic(p.name)} alt="" loading="lazy" /> : initials(p.name)}</span>
+            <span><b>{p.name}</b>{p.nick && <small>{p.nick}</small>}</span>
+          </span>
+          <span class="hide-s" role="cell">{flag(p.country)} {countryName(p.country)}</span>
+          <span class="hide-s tabular" role="cell">{age(p.dob) ?? '–'}</span>
+          <span class="r money-cell" role="cell">
+            <span class="tabular" data-money={p.money}>{money(p.money)}</span>
+            <span class="bar"><span style={`width:${(p.money / max) * 100}%`} /></span>
+          </span>
+        </button>
+      ))}
+    </div>
+  </section>
+
+  <dialog id="profile" aria-label="Player profile">
+    <div class="sheet" id="sheet"></div>
+  </dialog>
+
+  <script is:inline type="application/json" id="r-data" set:html={JSON.stringify({ portraits })}></script>
+
+  <script>
+    import { API, normaliseRankings, flag, countryName, age, keyName } from '../lib/pdc.mjs';
+    import { money, avatarColours, initials } from '../lib/format.mjs';
+
+    const esc = (s: unknown) => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]!);
+    const cache = new Map<string, any>();
+
+    function finishClass(label: string) {
+      if (label === 'Winner') return 'f-win';
+      if (label === 'Runner-up') return 'f-ru';
+      if (/semi/i.test(label)) return 'f-sf';
+      if (/quarter/i.test(label)) return 'f-qf';
+      return '';
+    }
+
+    function render(p: any, portraits: Record<string, string>) {
+      const [c1, c2] = avatarColours(p.name);
+      const img = portraits[keyName(p.name)];
+      const s = p.season;
+      const winPct = s.played ? Math.round((s.won / s.played) * 100) : 0;
+      const legPct = s.legsFor + s.legsAgainst ? Math.round((s.legsFor / (s.legsFor + s.legsAgainst)) * 100) : 0;
+      const career = Object.entries(p.career || {}) as [string, number][];
+      const groups = [
+        { k: 'all', label: 'All' },
+        { k: 'major', label: 'Majors', test: (h: any) => !h.tag && !/masters$|world series/i.test(h.name) },
+        { k: 'ws', label: 'World Series', test: (h: any) => /masters$|world series/i.test(h.name) && !/^the masters$/i.test(h.name) },
+        { k: 'et', label: 'European Tour', test: (h: any) => /^European Tour/.test(h.tag || '') },
+      ];
+      const titles = p.history.filter((h: any) => h.label === 'Winner').length;
+      const finals = p.history.filter((h: any) => h.label === 'Winner' || h.label === 'Runner-up').length;
+      const bySeason = new Map<number, any[]>();
+      for (const h of p.history) { if (!bySeason.has(h.season)) bySeason.set(h.season, []); bySeason.get(h.season)!.push(h); }
+      const fact = (k: string, v: unknown) => v ? `<div class="fact"><span>${k}</span><b>${esc(v)}</b></div>` : '';
+      return `
+        <button class="close" aria-label="Close profile" data-close>✕</button>
+        <header class="ph">
+          <span class="avatar" style="--size:112px;--c1:${c1};--c2:${c2}">${img ? `<img src="${img}" alt="">` : esc(initials(p.name))}</span>
+          <div>
+            <p class="ph-rank">World #${esc(p.rank)} ${p.tourCard ? '<span>Tour Card</span>' : ''}</p>
+            <h2>${esc(p.name)}</h2>
+            ${p.nick ? `<p class="ph-nick">“${esc(p.nick)}”</p>` : ''}
+            <p class="ph-country">${flag(p.country)} ${esc(countryName(p.country) || '')}</p>
+          </div>
+        </header>
+        <div class="facts">
+          ${fact('Age', age(p.dob))}
+          ${fact('Darts', p.darts)}
+          ${fact('Hometown', p.hometown)}
+          ${fact('Walk-on', p.walkOn)}
+          ${fact('Throws', p.leftHanded ? 'Left-handed' : null)}
+          ${fact('Started playing', p.started)}
+          ${fact('Nine-darters', p.nineDarters)}
+        </div>
+        <section class="season">
+          <h3>${s.year} season</h3>
+          <div class="stats">
+            <div class="ring" style="--p:${winPct}"><svg viewBox="0 0 36 36"><circle cx="18" cy="18" r="15.9" class="bg"/><circle cx="18" cy="18" r="15.9" class="fg" style="stroke-dasharray:${winPct} 100"/></svg><b>${winPct}%</b><span>Matches won</span></div>
+            <div class="ring alt" style="--p:${legPct}"><svg viewBox="0 0 36 36"><circle cx="18" cy="18" r="15.9" class="bg"/><circle cx="18" cy="18" r="15.9" class="fg" style="stroke-dasharray:${legPct} 100"/></svg><b>${legPct}%</b><span>Legs won</span></div>
+            <div class="num"><b>${s.won}–${s.lost}</b><span>Win–loss</span></div>
+            <div class="num"><b>${s.titles.length}</b><span>Titles in ${s.year}</span></div>
+          </div>
+          ${s.titles.length ? `<p class="titles">🏆 ${s.titles.map(esc).join(' · ')}</p>` : ''}
+          <p class="note">Season record covers PDC main-tour events (majors, Premier League, World Series, European Tour and Players Championships). Leg counts exclude set-play matches. Three-dart averages aren't in the PDC's free data feed.</p>
+        </section>
+        ${career.length ? `<section class="career"><h3>Career titles</h3><div class="bars">${career.map(([k, v]) => `<div><span>${esc(k.replace('Senior PDC Titles', 'All PDC titles'))}</span><i style="--w:${Math.min(100, (v / Math.max(...career.map(c => c[1]), 1)) * 100)}%"></i><b>${v}</b></div>`).join('')}</div></section>` : ''}
+        <section class="history">
+          <div class="hh"><h3>Tournament history</h3><p class="muted">${p.history.length} events · ${finals} finals · ${titles} titles</p></div>
+          <div class="hfilter">${groups.map((g, i) => `<button class="chip" data-g="${g.k}" aria-pressed="${i === 0}">${g.label}</button>`).join('')}</div>
+          <div class="seasons">
+            ${p.history.length ? [...bySeason.entries()].map(([yr, list]) => `
+              <div class="yr"><h4>${yr}</h4><ul>${list.map(h => `<li data-g="${groups.slice(1).filter(g => g.test!(h)).map(g => g.k).join(' ')}"><span class="ev">${esc(h.name)}${h.tag ? ` <small>${esc(h.tag)}</small>` : ''}</span><span class="fin ${finishClass(h.label)}">${esc(h.label)}</span></li>`).join('')}</ul></div>`).join('')
+              : '<p class="muted">No major, World Series or European Tour appearances recorded yet.</p>'}
+          </div>
+        </section>
+        <p class="src muted">Data: PDC. <a href="https://www.pdc.tv/players/${esc(p.slug)}" target="_blank" rel="noopener">Official PDC profile ↗</a></p>`;
+    }
+
+    function init() {
+      const dlg = document.getElementById('profile') as HTMLDialogElement | null;
+      if (!dlg) return;
+      const sheet = document.getElementById('sheet')!;
+      const { portraits } = JSON.parse(document.getElementById('r-data')!.textContent!);
+
+      const open = async (id: string, rank: string) => {
+        sheet.innerHTML = '<div class="loading"><span class="spinner"></span>Loading profile…</div>';
+        dlg.showModal();
+        try {
+          if (!cache.has(id)) {
+            const res = await fetch(`/data/players/${id}.json`);
+            if (!res.ok) throw new Error();
+            cache.set(id, await res.json());
+          }
+          sheet.innerHTML = render({ ...cache.get(id), rank }, portraits);
+          sheet.querySelectorAll<HTMLElement>('.bars i').forEach((el, i) => setTimeout(() => el.classList.add('go'), 150 + i * 80));
+          sheet.querySelectorAll<HTMLElement>('.ring').forEach(el => requestAnimationFrame(() => el.classList.add('go')));
+        } catch {
+          sheet.innerHTML = '<button class="close" data-close aria-label="Close">✕</button><div class="loading">Profile unavailable right now. Please try again later.</div>';
+        }
+      };
+      document.querySelectorAll<HTMLElement>('[data-player]').forEach(el => el.addEventListener('click', () => {
+        const rank = el.classList.contains('pod') ? el.querySelector('.rank')!.textContent! : el.querySelector('.pos')!.firstChild!.textContent!.trim();
+        open(el.dataset.player!, rank);
+      }));
+      dlg.addEventListener('click', e => {
+        const t = e.target as HTMLElement;
+        if (t === dlg || t.closest('[data-close]')) dlg.close();
+        const g = t.closest<HTMLElement>('[data-g]');
+        if (g && g.tagName === 'BUTTON') {
+          sheet.querySelectorAll('.hfilter .chip').forEach(c => c.setAttribute('aria-pressed', String(c === g)));
+          const k = g.dataset.g!;
+          sheet.querySelectorAll<HTMLElement>('.seasons li').forEach(li => { li.hidden = k !== 'all' && !li.dataset.g!.split(' ').includes(k); });
+          sheet.querySelectorAll<HTMLElement>('.seasons .yr').forEach(y => { y.hidden = !y.querySelector('li:not([hidden])'); });
+        }
+      });
+
+      // Search
+      const q = document.getElementById('q') as HTMLInputElement;
+      q.addEventListener('input', () => {
+        const v = q.value.trim().toLowerCase();
+        document.querySelectorAll<HTMLElement>('.table .tr[data-search]').forEach(r => { r.hidden = !!v && !r.dataset.search!.includes(v); });
+      });
+
+      // Refresh prize money live from the PDC feed (rankings move after every event).
+      fetch(`${API.rankings}2YEAR?page.size=500`).then(r => r.ok ? r.json() : null).then(body => {
+        if (!body) return;
+        const live = normaliseRankings(body);
+        const byId = new Map(live.map((p: any) => [p.id, p]));
+        let changed = false;
+        document.querySelectorAll<HTMLElement>('[data-player]').forEach(el => {
+          const p: any = byId.get(el.dataset.player!);
+          const m = el.querySelector<HTMLElement>('[data-money]');
+          if (p && m && Number(m.dataset.money) !== p.money) { m.textContent = money(p.money); m.dataset.money = String(p.money); m.classList.add('bump'); changed = true; }
+        });
+        document.getElementById('asof')!.textContent = `${live.length} ranked players · ${changed ? 'updated live' : 'up to date'}`;
+      }).catch(() => {});
+    }
+    document.addEventListener('astro:page-load', init);
+  </script>
+</Layout>
+
+<style>
+  .podium { display: grid; grid-template-columns: 1fr 1.15fr 1fr; align-items: end; gap: 16px; margin: 10px auto 36px; max-width: 860px; }
+  .pod { position: relative; display: flex; flex-direction: column; align-items: center; gap: 6px; background: none; border: 0; cursor: pointer; padding: 0; text-align: center; }
+  .pod .rank { font-family: var(--display); font-size: 15px; font-weight: 800; width: 34px; height: 34px; border-radius: 50%; display: grid; place-items: center; background: var(--ink); color: #fff; position: absolute; top: -6px; left: calc(50% + 30px); z-index: 2; box-shadow: var(--shadow); }
+  .pod-1 .rank { background: linear-gradient(135deg, #e8c766, var(--gold)); color: #3d2e05; left: calc(50% + 40px); }
+  .pod .big { transition: transform .5s var(--spring); }
+  .pod:hover .big { transform: translateY(-6px) scale(1.04) rotate(-2deg); }
+  .pod-1 .big { box-shadow: 0 0 0 5px #fff, 0 0 0 8px var(--gold), var(--shadow-lg); }
+  .pod strong { font-family: var(--display); font-size: 20px; margin-top: 8px; }
+  .pod em { color: var(--muted); font-size: 14px; }
+  .pod .money { font-weight: 700; font-size: 15px; }
+  .step { display: block; width: 100%; margin-top: 10px; border-radius: 16px 16px 6px 6px; background: linear-gradient(var(--card), var(--paper-2)); border: 1px solid var(--line); height: 70px; }
+  .pod-1 .step { height: 110px; background: linear-gradient(#fffaf0, var(--gold-soft)); border-color: #ecd9a0; }
+  .pod-3 .step { height: 48px; }
+
+  .tools { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 12px; flex-wrap: wrap; }
+  .search { display: flex; align-items: center; gap: 10px; background: var(--card); border: 1px solid var(--line); border-radius: 999px; padding: 0 16px; flex: 1; max-width: 420px; box-shadow: var(--shadow-sm); transition: box-shadow .2s, border-color .2s; }
+  .search:focus-within { border-color: var(--ink); box-shadow: 0 0 0 4px rgba(20, 22, 31, .08); }
+  .search input { border: 0; outline: 0; background: none; font: inherit; padding: 12px 0; width: 100%; }
+  .small { font-size: 13px; }
+  .table { overflow: hidden; }
+  .tr { display: grid; grid-template-columns: 76px 1.6fr 1fr 60px 1.1fr; align-items: center; gap: 12px; padding: 10px 18px; width: 100%; border: 0; border-bottom: 1px solid var(--line); background: none; text-align: left; font: inherit; color: inherit; }
+  .tr:last-child { border-bottom: 0; }
+  .th { font-size: 12px; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); background: var(--paper-2); }
+  .tr.clickable { cursor: pointer; transition: background .2s, transform .25s var(--ease); }
+  .tr.clickable:hover { background: #fffaf0; }
+  .tr.clickable:hover .who b { color: var(--red); }
+  .tr:disabled { cursor: default; opacity: .85; }
+  .pos { font-family: var(--display); font-weight: 800; font-size: 18px; display: flex; align-items: center; gap: 6px; }
+  .pos i { font-style: normal; font-family: var(--body); font-size: 11px; font-weight: 700; }
+  .up { color: var(--green); } .down { color: var(--red); }
+  .who { display: flex; align-items: center; gap: 12px; min-width: 0; }
+  .who > span:last-child { display: flex; flex-direction: column; min-width: 0; }
+  .who b { transition: color .2s; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .who small { color: var(--muted); font-size: 12px; }
+  .r { text-align: right; justify-self: end; }
+  .money-cell { display: flex; flex-direction: column; align-items: flex-end; gap: 4px; width: 100%; font-weight: 600; }
+  .bar { width: 100%; max-width: 180px; height: 4px; background: var(--paper-2); border-radius: 9px; overflow: hidden; }
+  .bar span { display: block; height: 100%; background: linear-gradient(90deg, var(--red), #f05d23); border-radius: 9px; }
+  :global(.bump) { animation: bump 1s var(--spring); color: var(--green); }
+  @keyframes bump { 0% { transform: scale(1.25); } 100% { transform: none; } }
+
+  dialog { border: 0; padding: 0; width: min(760px, 100% - 24px); max-height: min(88vh, 900px); border-radius: 26px; background: var(--card); color: var(--ink); box-shadow: var(--shadow-lg); overflow: hidden; }
+  dialog[open] { animation: pop .45s var(--spring); }
+  dialog::backdrop { background: rgba(20, 22, 31, .45); backdrop-filter: blur(6px); animation: fade .3s; }
+  @keyframes pop { from { opacity: 0; transform: translateY(24px) scale(.96); } }
+  @keyframes fade { from { opacity: 0; } }
+  .sheet { overflow-y: auto; max-height: min(88vh, 900px); padding: 28px; position: relative; }
+  .sheet :global(.close) { position: absolute; top: 16px; right: 16px; width: 38px; height: 38px; border-radius: 50%; border: 1px solid var(--line); background: var(--card); cursor: pointer; font-size: 15px; transition: transform .3s var(--spring); z-index: 2; }
+  .sheet :global(.close:hover) { transform: rotate(90deg); }
+  .sheet :global(.loading) { padding: 60px; text-align: center; color: var(--muted); display: flex; flex-direction: column; align-items: center; gap: 14px; }
+  .sheet :global(.spinner) { width: 34px; height: 34px; border-radius: 50%; border: 4px solid var(--paper-2); border-top-color: var(--red); animation: spin .8s linear infinite; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .sheet :global(.ph) { display: flex; gap: 22px; align-items: center; padding: 6px 0 22px; margin: -28px -28px 0; padding: 32px 28px 24px; background: radial-gradient(500px 200px at 0% 0%, var(--red-soft), transparent 70%), radial-gradient(500px 220px at 100% 0%, var(--green-soft), transparent 70%); }
+  .sheet :global(.ph h2) { font-size: clamp(28px, 4vw, 40px); }
+  .sheet :global(.ph-rank) { margin: 0 0 4px; font-weight: 800; color: var(--red); font-size: 13px; letter-spacing: .1em; text-transform: uppercase; }
+  .sheet :global(.ph-rank span) { margin-left: 8px; color: var(--green); background: var(--green-soft); padding: 2px 8px; border-radius: 99px; letter-spacing: .04em; }
+  .sheet :global(.ph-nick) { margin: 4px 0 0; color: var(--muted); font-style: italic; font-size: 17px; }
+  .sheet :global(.ph-country) { margin: 6px 0 0; font-weight: 600; }
+  .sheet :global(.facts) { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 10px; margin: 6px 0 24px; }
+  .sheet :global(.fact) { background: var(--paper); border: 1px solid var(--line); border-radius: 14px; padding: 10px 14px; }
+  .sheet :global(.fact span) { display: block; font-size: 11px; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); }
+  .sheet :global(.fact b) { font-size: 15px; }
+  .sheet :global(h3) { font-size: 20px; margin-bottom: 12px; }
+  .sheet :global(.stats) { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
+  .sheet :global(.ring), .sheet :global(.num) { background: var(--paper); border: 1px solid var(--line); border-radius: 16px; padding: 14px 8px; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; position: relative; }
+  .sheet :global(.ring svg) { width: 76px; height: 76px; transform: rotate(-90deg); }
+  .sheet :global(.ring circle) { fill: none; stroke-width: 3.4; }
+  .sheet :global(.ring .bg) { stroke: var(--paper-2); }
+  .sheet :global(.ring .fg) { stroke: var(--green); stroke-linecap: round; stroke-dashoffset: 100; transition: stroke-dashoffset 1.4s var(--ease); }
+  .sheet :global(.ring.alt .fg) { stroke: var(--red); }
+  .sheet :global(.ring.go .fg) { stroke-dashoffset: 0; }
+  .sheet :global(.ring b) { position: absolute; top: 40px; font-family: var(--display); font-size: 18px; }
+  .sheet :global(.ring span), .sheet :global(.num span) { font-size: 12px; color: var(--muted); font-weight: 600; margin-top: 4px; }
+  .sheet :global(.num b) { font-family: var(--display); font-size: 30px; }
+  .sheet :global(.titles) { margin: 12px 0 0; font-weight: 600; font-size: 14px; background: var(--gold-soft); border-radius: 12px; padding: 10px 14px; }
+  .sheet :global(.note) { font-size: 12px; color: var(--muted); margin: 10px 0 0; }
+  .sheet :global(.season), .sheet :global(.career), .sheet :global(.history) { margin-top: 26px; }
+  .sheet :global(.bars > div) { display: grid; grid-template-columns: 130px 1fr 40px; align-items: center; gap: 10px; margin: 8px 0; font-size: 14px; font-weight: 600; }
+  .sheet :global(.bars i) { height: 10px; border-radius: 9px; background: var(--paper-2); position: relative; overflow: hidden; }
+  .sheet :global(.bars i::after) { content: ''; position: absolute; inset: 0; width: 0; background: linear-gradient(90deg, var(--gold), #e8c766); border-radius: 9px; transition: width 1s var(--ease); }
+  .sheet :global(.bars i.go::after) { width: var(--w); }
+  .sheet :global(.bars b) { text-align: right; font-family: var(--display); }
+  .sheet :global(.hh) { display: flex; justify-content: space-between; align-items: baseline; flex-wrap: wrap; gap: 8px; }
+  .sheet :global(.hh p) { margin: 0; font-size: 13px; }
+  .sheet :global(.hfilter) { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 14px; }
+  .sheet :global(.hfilter .chip) { padding: 6px 12px; font-size: 13px; }
+  .sheet :global(.yr) { display: grid; grid-template-columns: 60px 1fr; gap: 12px; padding: 10px 0; border-top: 1px solid var(--line); }
+  .sheet :global(.yr h4) { font-size: 18px; color: var(--muted); padding-top: 4px; }
+  .sheet :global(.yr ul) { list-style: none; margin: 0; padding: 0; }
+  .sheet :global(.yr li) { display: flex; justify-content: space-between; gap: 10px; padding: 5px 0; font-size: 14px; }
+  .sheet :global(.yr li small) { color: var(--muted); }
+  .sheet :global(.fin) { flex: none; font-size: 12px; font-weight: 700; padding: 2px 10px; border-radius: 99px; background: var(--paper-2); color: var(--ink-2); }
+  .sheet :global(.f-win) { background: linear-gradient(135deg, #e8c766, var(--gold)); color: #3d2e05; }
+  .sheet :global(.f-ru) { background: #e9ecf2; color: #39404f; }
+  .sheet :global(.f-sf) { background: var(--green-soft); color: #075c3f; }
+  .sheet :global(.f-qf) { background: var(--sky-soft); color: var(--sky); }
+  .sheet :global(.src) { margin-top: 20px; font-size: 13px; }
+
+  @media (max-width: 720px) {
+    .podium { gap: 8px; }
+    .pod strong { font-size: 15px; }
+    .pod em { display: none; }
+    .pod .big { --size: 84px !important; }
+    .pod-1 .big { --size: 100px !important; }
+    .tr { grid-template-columns: 58px 1fr auto; padding: 10px 12px; }
+    .hide-s { display: none; }
+    .bar { display: none; }
+    .sheet { padding: 20px; }
+    .sheet :global(.ph) { margin: -20px -20px 0; padding: 26px 20px 20px; flex-direction: column; align-items: flex-start; }
+    .sheet :global(.stats) { grid-template-columns: repeat(2, 1fr); }
+    .sheet :global(.bars > div) { grid-template-columns: 100px 1fr 32px; }
+  }
+</style>

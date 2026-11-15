@@ -1,0 +1,212 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Dartboard from '../components/Dartboard.astro';
+import calendar from '../data/calendar.json';
+import { BROADCASTER_INFO } from '../lib/pdc.mjs';
+import { dayNum, monthShort, monthLong, weekday, dateRange } from '../lib/format.mjs';
+
+type Ev = (typeof calendar.events)[number];
+const events = calendar.events as Ev[];
+const months = new Map<string, Ev[]>();
+for (const e of events) {
+  const k = e.start.slice(0, 7);
+  if (!months.has(k)) months.set(k, []);
+  months.get(k)!.push(e);
+}
+const place = (e: { venue: string | null; city: string | null }) => (e.venue && e.city && e.venue.includes(e.city) ? e.venue : [e.venue, e.city].filter(Boolean).join(' · '));
+const kind = (e: Ev) => (e.name === 'Premier League' ? 'pl' : e.broadcaster);
+const lite = events.map(e => ({ id: e.id, name: e.name, tag: e.tag, start: e.start, end: e.end, b: e.broadcaster, city: e.city, venue: e.venue }));
+---
+<Layout title="The Oche" description="Every PDC darts event on Sky Sports, ITV and PDCTV — dates, venues, broadcasters and winners." active="calendar">
+  <section class="hero wrap cal-hero">
+    <div class="copy">
+      <span class="eyebrow">Season calendar</span>
+      <h1>Every big night<br />on <span class="accent">the oche.</span></h1>
+      <p class="lede">The PDC majors, Premier League nights and World Series events on Sky Sports and ITV, plus every European Tour event live on PDCTV.</p>
+      <div class="next card" id="next" data-reveal>
+        <span class="muted">Loading next event…</span>
+      </div>
+    </div>
+    <div class="art"><Dartboard size={440} /></div>
+  </section>
+
+  <section class="wrap controls" data-reveal>
+    <div class="chips" role="group" aria-label="Filter by broadcaster">
+      <button class="chip" data-filter="all" aria-pressed="true">All events</button>
+      <button class="chip" data-filter="sky" aria-pressed="false" style="--c: var(--sky)"><span class="dot" style="color:var(--sky)"></span>Sky Sports</button>
+      <button class="chip" data-filter="itv" aria-pressed="false"><span class="dot" style="color:var(--itv)"></span>ITV</button>
+      <button class="chip" data-filter="pdctv" aria-pressed="false"><span class="dot" style="color:var(--pdctv)"></span>European Tour</button>
+      <button class="chip" data-filter="pl" aria-pressed="false"><span class="dot" style="color:var(--gold)"></span>Premier League</button>
+    </div>
+    <label class="toggle">
+      <input type="checkbox" id="showPast" />
+      <span class="track"><span class="thumb"></span></span>
+      Show completed
+    </label>
+  </section>
+
+  <section class="wrap months" id="months">
+    {[...months.entries()].map(([k, list]) => (
+      <div class="month" data-month={k}>
+        <h2 class="month-title"><span>{monthLong(k + '-01')}</span></h2>
+        <div class="grid">
+          {list.map((e, i) => (
+            <article
+              class:list={['ev card lift', { major: e.major }]}
+              data-kind={kind(e)} data-start={e.start} data-end={e.end}
+              data-reveal style={`--d:${Math.min(i, 6) * 60}ms`}>
+              <div class="date">
+                <span class="wd">{weekday(e.start)}</span>
+                <span class="dn">{dayNum(e.start)}{e.end !== e.start && <small>–{dayNum(e.end)}{e.end.slice(0, 7) !== e.start.slice(0, 7) && ` ${monthShort(e.end)}`}</small>}</span>
+                <span class="mo">{monthShort(e.start)}</span>
+              </div>
+              <div class="body">
+                <div class="row">
+                  <span class={`tv tv-${e.broadcaster}`}>{BROADCASTER_INFO[e.broadcaster as keyof typeof BROADCASTER_INFO].label}</span>
+                  {e.major && <span class="major-tag">Major</span>}
+                  <span class="status" data-status></span>
+                </div>
+                <h3>{e.name}</h3>
+                {e.tag && <p class="tag">{e.tag}</p>}
+                <p class="where muted">{place(e) || 'Venue to be announced'}</p>
+                <p class="when muted sr-only">{dateRange(e.start, e.end)}</p>
+                {e.winner && <p class="winner"><span aria-hidden="true">🏆</span> {e.winner.name}</p>}
+              </div>
+            </article>
+          ))}
+        </div>
+      </div>
+    ))}
+    <p class="empty" id="none" hidden>No events match this filter.</p>
+  </section>
+
+  <script is:inline type="application/json" id="cal-data" set:html={JSON.stringify(lite)}></script>
+
+  <script>
+    import { BROADCASTER_INFO } from '../lib/pdc.mjs';
+    import { dateRange } from '../lib/format.mjs';
+
+    let timer: number | undefined;
+    function init() {
+      const root = document.getElementById('months');
+      if (!root) return;
+      const today = new Date().toLocaleDateString('en-CA', { timeZone: 'Europe/London' });
+      const cards = [...root.querySelectorAll<HTMLElement>('.ev')];
+      for (const c of cards) {
+        const { start = '', end = '' } = c.dataset;
+        const s = c.querySelector<HTMLElement>('[data-status]')!;
+        if (start <= today && end >= today) { c.classList.add('live'); s.className = 'status live-dot'; s.textContent = 'On now'; }
+        else if (end < today) { c.classList.add('past'); s.className = 'status done'; s.textContent = 'Completed'; }
+        else {
+          const days = Math.round((Date.parse(start) - Date.parse(today)) / 864e5);
+          s.className = 'status soon'; s.textContent = days === 1 ? 'Tomorrow' : days <= 60 ? `In ${days} days` : '';
+        }
+      }
+
+      let filter = 'all';
+      const showPast = document.getElementById('showPast') as HTMLInputElement;
+      const apply = () => {
+        let shown = 0;
+        for (const c of cards) {
+          const ok = (filter === 'all' || c.dataset.kind === filter) && (showPast.checked || !c.classList.contains('past'));
+          c.hidden = !ok; if (ok) shown++;
+        }
+        root.querySelectorAll<HTMLElement>('.month').forEach(m => { m.hidden = !m.querySelector('.ev:not([hidden])'); });
+        document.getElementById('none')!.hidden = shown > 0;
+        root.querySelectorAll('[data-reveal]:not(.in)').forEach(el => el.classList.add('in'));
+      };
+      document.querySelectorAll<HTMLButtonElement>('[data-filter]').forEach(b => b.addEventListener('click', () => {
+        filter = b.dataset.filter!;
+        document.querySelectorAll('[data-filter]').forEach(x => x.setAttribute('aria-pressed', String(x === b)));
+        apply();
+      }));
+      showPast.addEventListener('change', apply);
+      apply();
+
+      // Featured "next up" card with a live countdown.
+      const data = JSON.parse(document.getElementById('cal-data')!.textContent!);
+      const live = data.find((e: any) => e.start <= today && e.end >= today);
+      const next = live || data.find((e: any) => e.start > today);
+      const box = document.getElementById('next')!;
+      if (!next) { box.innerHTML = '<span class="muted">The new season calendar will appear here soon.</span>'; return; }
+      const info = BROADCASTER_INFO[next.b as keyof typeof BROADCASTER_INFO];
+      box.innerHTML = `
+        <div class="nx-top">${live ? '<span class="live-dot">Live now</span>' : '<span class="nx-label">Next up</span>'}<span class="tv tv-${next.b}">${info.label}</span></div>
+        <h3>${next.name}${next.tag ? ` <small>${next.tag}</small>` : ''}</h3>
+        <p class="muted">${dateRange(next.start, next.end)} · ${next.venue && next.city && next.venue.includes(next.city) ? next.venue : [next.venue, next.city].filter(Boolean).join(', ')}</p>
+        ${live ? `<a class="cta" href="/matches">Follow the matches <span aria-hidden="true">→</span></a>` : `<div class="count" aria-live="off">${['d', 'h', 'm', 's'].map(u => `<div><b data-u="${u}">0</b><span>${{ d: 'days', h: 'hrs', m: 'mins', s: 'secs' }[u]}</span></div>`).join('')}</div>`}`;
+      clearInterval(timer);
+      if (!live) {
+        const target = Date.parse(next.start + 'T12:00:00Z');
+        const tick = () => {
+          let s = Math.max(0, Math.floor((target - Date.now()) / 1000));
+          const v = { d: Math.floor(s / 86400), h: Math.floor(s / 3600) % 24, m: Math.floor(s / 60) % 60, s: s % 60 } as Record<string, number>;
+          box.querySelectorAll<HTMLElement>('[data-u]').forEach(el => { const n = String(v[el.dataset.u!]).padStart(2, '0'); if (el.textContent !== n) { el.textContent = n; el.animate([{ transform: 'translateY(-30%)', opacity: 0 }, { transform: 'none', opacity: 1 }], { duration: 350, easing: 'cubic-bezier(.2,.8,.2,1)' }); } });
+        };
+        tick(); timer = window.setInterval(tick, 1000);
+      }
+    }
+    document.addEventListener('astro:page-load', init);
+  </script>
+</Layout>
+
+<style>
+  .cal-hero { display: grid; grid-template-columns: 1.15fr .85fr; align-items: center; gap: 24px; }
+  .art { display: grid; place-items: center; }
+  .art :global(.board) { width: min(440px, 100%); }
+  .next { margin-top: 28px; padding: 20px 22px; max-width: 520px; box-shadow: var(--shadow); }
+  .next :global(.nx-top) { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+  .next :global(.nx-label) { font-size: 12px; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); }
+  .next :global(h3) { font-size: 26px; }
+  .next :global(h3 small) { font-size: 15px; color: var(--muted); font-weight: 600; }
+  .next :global(p) { margin: 4px 0 14px; font-size: 14px; }
+  .next :global(.count) { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+  .next :global(.count div) { background: var(--paper-2); border-radius: 12px; padding: 10px 6px; text-align: center; overflow: hidden; }
+  .next :global(.count b) { display: block; font-family: var(--display); font-size: 28px; font-variant-numeric: tabular-nums; }
+  .next :global(.count span) { font-size: 11px; text-transform: uppercase; letter-spacing: .1em; color: var(--muted); }
+  .next :global(.cta) { display: inline-flex; gap: 8px; background: var(--red); color: #fff; padding: 10px 16px; border-radius: 999px; font-weight: 700; text-decoration: none; transition: transform .3s var(--spring); }
+  .next :global(.cta:hover) { transform: translateX(4px); }
+
+  .controls { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 14px; padding: 16px 0 8px; position: sticky; top: 68px; z-index: 20; background: linear-gradient(var(--paper) 75%, transparent); }
+  .chips { display: flex; flex-wrap: wrap; gap: 8px; }
+  .toggle { display: inline-flex; align-items: center; gap: 10px; font-weight: 600; font-size: 14px; cursor: pointer; user-select: none; }
+  .toggle input { position: absolute; opacity: 0; }
+  .track { width: 42px; height: 24px; border-radius: 999px; background: #d9d2c4; position: relative; transition: background .25s; }
+  .thumb { position: absolute; top: 3px; left: 3px; width: 18px; height: 18px; border-radius: 50%; background: #fff; box-shadow: var(--shadow-sm); transition: transform .35s var(--spring); }
+  .toggle input:checked + .track { background: var(--green); }
+  .toggle input:checked + .track .thumb { transform: translateX(18px); }
+  .toggle input:focus-visible + .track { outline: 3px solid var(--sky); outline-offset: 2px; }
+
+  .month { margin-top: 36px; }
+  .month-title { font-size: 15px; font-family: var(--body); font-weight: 800; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); display: flex; align-items: center; gap: 14px; margin-bottom: 14px; }
+  .month-title::after { content: ''; flex: 1; height: 1px; background: var(--line); }
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(330px, 1fr)); gap: 14px; }
+  .ev { display: flex; gap: 16px; padding: 16px; position: relative; overflow: hidden; }
+  .ev.major { border-color: #ecd9a0; background: linear-gradient(135deg, #fffdf6, #fff 60%); }
+  .ev.major::after { content: ''; position: absolute; inset: 0 auto 0 0; width: 4px; background: linear-gradient(var(--gold), #e8c766); }
+  .ev.live { border-color: var(--red); box-shadow: 0 0 0 3px var(--red-soft), var(--shadow); }
+  .ev.past { opacity: .72; }
+  .ev.past:hover { opacity: 1; }
+  .date { flex: none; width: 64px; border-radius: 14px; background: var(--ink); color: #fff; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 8px 4px; text-align: center; }
+  .ev.live .date { background: var(--red); }
+  .date .wd, .date .mo { font-size: 11px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; opacity: .75; }
+  .date .dn { font-family: var(--display); font-size: 26px; font-weight: 800; line-height: 1.05; }
+  .date .dn small { font-size: 13px; opacity: .8; }
+  .body { min-width: 0; flex: 1; }
+  .row { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-bottom: 6px; }
+  .major-tag { font-size: 11px; font-weight: 800; letter-spacing: .06em; text-transform: uppercase; color: #8a6a0f; background: var(--gold-soft); padding: 4px 9px; border-radius: 999px; }
+  .status { margin-left: auto; font-size: 12px; font-weight: 700; color: var(--muted); }
+  .status.soon { color: var(--green); }
+  h3 { font-size: 20px; }
+  .tag { margin: 2px 0 0; font-weight: 600; font-size: 14px; color: var(--ink-2); }
+  .where { margin: 6px 0 0; font-size: 13px; }
+  .winner { margin: 8px 0 0; font-weight: 700; font-size: 14px; display: inline-flex; gap: 6px; background: var(--gold-soft); padding: 4px 10px; border-radius: 999px; }
+
+  @media (max-width: 860px) {
+    .cal-hero { grid-template-columns: 1fr; }
+    .art { order: -1; }
+    .art :global(.board) { width: min(260px, 70vw); }
+    .controls { top: 104px; }
+  }
+  @media (max-width: 400px) { .grid { grid-template-columns: 1fr; } }
+</style>

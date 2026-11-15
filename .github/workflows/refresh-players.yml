@@ -1,0 +1,36 @@
+name: Refresh player profiles
+
+on:
+  schedule:
+    - cron: '30 4 * * *' # daily, 04:30 UTC
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  issues: write
+
+concurrency:
+  group: data-commit
+  cancel-in-progress: false
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm run data:rankings
+      - run: npm run data:players
+      - uses: ./.github/actions/commit
+        with:
+          message: 'data: refresh player profiles and tournament history'
+          paths: src/data public/data data
+      - if: failure()
+        uses: ./.github/actions/report-failure
+        with:
+          job: player profiles

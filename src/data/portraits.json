@@ -1,0 +1,763 @@
+{
+ "lukelittler": {
+  "name": "Luke Littler",
+  "image": "/portraits/player-lukelittler.jpg",
+  "credit": "Sandro Halank, Wikimedia Commons",
+  "license": "CC BY-SA 4.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+  "source": "https://commons.wikimedia.org/wiki/File:2026-03-26_Premier_League_Darts_%E2%80%93_Night_8_%E2%80%93_Berlin_2026_by_Sandro_Halank%E2%80%93168.jpg",
+  "article": "https://en.wikipedia.org/wiki/Luke_Littler",
+  "imageLabel": "Portrait cropped for display"
+ },
+ "gianvanveen": {
+  "name": "Gian van Veen",
+  "image": "/portraits/player-gianvanveen.jpg",
+  "credit": "Sandro Halank, Wikimedia Commons",
+  "license": "CC BY-SA 4.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+  "source": "https://commons.wikimedia.org/wiki/File:2026-03-26_Premier_League_Darts_%E2%80%93_Night_8_%E2%80%93_Berlin_2026_by_Sandro_Halank%E2%80%93102.jpg",
+  "article": "https://en.wikipedia.org/wiki/Gian_van_Veen",
+  "imageLabel": "Portrait cropped for display"
+ },
+ "lukehumphries": {
+  "name": "Luke Humphries",
+  "image": "/portraits/player-lukehumphries.jpg",
+  "credit": "Sandro Halank, Wikimedia Commons",
+  "license": "CC BY-SA 4.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+  "source": "https://commons.wikimedia.org/wiki/File:2026-03-26_Premier_League_Darts_%E2%80%93_Night_8_%E2%80%93_Berlin_2026_by_Sandro_Halank%E2%80%93049.jpg",
+  "article": "https://en.wikipedia.org/wiki/Luke_Humphries",
+  "imageLabel": "Portrait cropped for display"
+ },
+ "gerwynprice": {
+  "name": "Gerwyn Price",
+  "image": "/portraits/player-gerwynprice.jpg",
+  "credit": "Sandro Halank, Wikimedia Commons",
+  "license": "CC BY-SA 4.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+  "source": "https://commons.wikimedia.org/wiki/File:2025-04-03_Premier_League_Darts_Berlin_2025_by_Sandro_Halank%E2%80%93167.jpg",
+  "article": "https://en.wikipedia.org/wiki/Gerwyn_Price",
+  "imageLabel": "Portrait cropped for display"
+ },
+ "jonnyclayton": {
+  "name": "Jonny Clayton",
+  "image": "/portraits/player-jonnyclayton.jpg",
+  "credit": "Sandro Halank, Wikimedia Commons",
+  "license": "CC BY-SA 4.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+  "source": "https://commons.wikimedia.org/wiki/File:2026-03-26_Premier_League_Darts_%E2%80%93_Night_8_%E2%80%93_Berlin_2026_by_Sandro_Halank%E2%80%93028_(cropped).jpg",
+  "article": "https://en.wikipedia.org/wiki/Jonny_Clayton",
+  "imageLabel": "Portrait cropped for display"
+ },
+ "rosssmith": {
+  "name": "Ross Smith",
+  "image": "/portraits/player-rosssmith.png",
+  "credit": "DARTS NOW",
+  "license": "CC BY 3.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by/3.0",
+  "source": "https://commons.wikimedia.org/wiki/File:RossSmithEC25.png",
+  "article": "https://en.wikipedia.org/wiki/Ross_Smith_(darts_player)",
+  "imageLabel": "Portrait cropped for display"
+ },
+ "jameswade": {
+  "name": "James Wade",
+  "image": "/portraits/player-jameswade.jpg",
+  "credit": "Sandro Halank, Wikimedia Commons",
+  "license": "CC BY-SA 4.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+  "source": "https://commons.wikimedia.org/wiki/File:2022-06-13_Play-offs_(2022_Premier_League_Darts)_by_Sandro_Halank%E2%80%93073.jpg",
+  "article": "https://en.wikipedia.org/wiki/James_Wade",
+  "imageLabel": "Portrait cropped for display"
+ },
+ "joshrock": {
+  "name": "Josh Rock",
+  "image": "/portraits/player-joshrock.jpg",
+  "credit": "Sandro Halank, Wikimedia Commons",
+  "license": "CC BY-SA 4.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+  "source": "https://commons.wikimedia.org/wiki/File:2026-03-26_Premier_League_Darts_%E2%80%93_Night_8_%E2%80%93_Berlin_2026_by_Sandro_Halank%E2%80%93130.jpg",
+  "article": "https://en.wikipedia.org/wiki/Josh_Rock",
+  "imageLabel": "Portrait cropped for display"
+ },
+ "nathanaspinall": {
+  "name": "Nathan Aspinall",
+  "image": "/portraits/player-nathanaspinall.jpg",
+  "credit": "Sandro Halank, Wikimedia Commons",
+  "license": "CC BY-SA 4.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+  "source": "https://commons.wikimedia.org/wiki/File:2025-04-03_Premier_League_Darts_Berlin_2025_by_Sandro_Halank%E2%80%93016.jpg",
+  "article": "https://en.wikipedia.org/wiki/Nathan_Aspinall",
+  "imageLabel": "Portrait cropped for display"
+ },
+ "michaelvangerwen": {
+  "name": "Michael van Gerwen",
+  "image": "/portraits/player-michaelvangerwen.jpg",
+  "credit": "Sandro Halank, Wikimedia Commons",
+  "license": "CC BY-SA 4.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+  "source": "https://commons.wikimedia.org/wiki/File:2026-03-26_Premier_League_Darts_%E2%80%93_Night_8_%E2%80%93_Berlin_2026_by_Sandro_Halank%E2%80%93162.jpg",
+  "article": "https://en.wikipedia.org/wiki/Michael_van_Gerwen",
+  "imageLabel": "Portrait cropped for display"
+ },
+ "dannynoppert": {
+  "name": "Danny Noppert",
+  "image": "/portraits/player-dannynoppert.png",
+  "credit": "DARTS NOW",
+  "license": "CC BY 3.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by/3.0",
+  "source": "https://commons.wikimedia.org/wiki/File:Danny_Noppert_2025.png",
+  "article": "https://en.wikipedia.org/wiki/Danny_Noppert",
+  "imageLabel": "Portrait cropped for display"
+ },
+ "chrisdobey": {
+  "name": "Chris Dobey",
+  "image": "/portraits/player-chrisdobey.jpg",
+  "credit": "Sandro Halank, Wikimedia Commons",
+  "license": "CC BY-SA 4.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+  "source": "https://commons.wikimedia.org/wiki/File:2025-04-03_Premier_League_Darts_Berlin_2025_by_Sandro_Halank%E2%80%93158.jpg",
+  "article": "https://en.wikipedia.org/wiki/Chris_Dobey",
+  "imageLabel": "Portrait cropped for display"
+ },
+ "garyanderson": {
+  "name": "Gary Anderson",
+  "image": "/portraits/player-garyanderson.png",
+  "credit": "DARTS NOW",
+  "license": "CC BY 3.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by/3.0",
+  "source": "https://commons.wikimedia.org/wiki/File:Gary_Anderson_2024_(cropped).png",
+  "article": "https://en.wikipedia.org/wiki/Gary_Anderson_(darts_player)",
+  "imageLabel": "Portrait cropped for display"
+ },
+ "lukewoodhouse": {
+  "name": "Luke Woodhouse",
+  "image": "/portraits/player-lukewoodhouse.png",
+  "credit": "DARTS NOW",
+  "license": "CC BY 3.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by/3.0",
+  "source": "https://commons.wikimedia.org/wiki/File:Luke_Woodhouse_WDC_2024.png",
+  "article": "https://en.wikipedia.org/wiki/Luke_Woodhouse",
+  "imageLabel": "Portrait cropped for display"
+ },
+ "krzysztofratajski": {
+  "name": "Krzysztof Ratajski",
+  "image": "/portraits/player-krzysztofratajski.jpg",
+  "credit": "Sven Mandel",
+  "license": "CC BY-SA 4.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+  "source": "https://commons.wikimedia.org/wiki/File:Michael_van_Gerwen_6-5_Krzysztof_Ratajski_-_Krzysztof_Ratajski_-_2019251191220_2019-09-08_PDC_European_Darts_Matchplay_-_1685_-_AK8I9902_(cropped)_(cropped).jpg",
+  "article": "https://en.wikipedia.org/wiki/Krzysztof_Ratajski",
+  "imageLabel": "Portrait cropped for display"
+ },
+ "jermainewattimena": {
+  "name": "Jermaine Wattimena",
+  "image": "/portraits/player-jermainewattimena.png",
+  "credit": "DARTS NOW",
+  "license": "CC BY 3.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by/3.0",
+  "source": "https://commons.wikimedia.org/wiki/File:Jermaine_Wattimena_Grand_Slam_2024.png",
+  "article": "https://en.wikipedia.org/wiki/Jermaine_Wattimena",
+  "imageLabel": "Portrait cropped for display"
+ },
+ "martinschindler": {
+  "name": "Martin Schindler",
+  "image": "/portraits/player-martinschindler.png",
+  "credit": "DARTS NOW",
+  "license": "CC BY 3.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by/3.0",
+  "source": "https://commons.wikimedia.org/wiki/File:Martin_Schindler_2024_3.png",
+  "article": "https://en.wikipedia.org/wiki/Martin_Schindler",
+  "imageLabel": "Portrait cropped for display"
+ },
+ "damonheta": {
+  "name": "Damon Heta",
+  "image": "/portraits/player-damonheta.png",
+  "credit": "DARTS NOW",
+  "license": "CC BY 3.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by/3.0",
+  "source": "https://commons.wikimedia.org/wiki/File:Damon_Heta_2025.png",
+  "article": "https://en.wikipedia.org/wiki/Damon_Heta",
+  "imageLabel": "Portrait cropped for display"
+ },
+ "kevindoets": {
+  "name": "Kevin Doets",
+  "image": "/portraits/player-kevindoets.png",
+  "credit": "Oche180",
+  "license": "CC BY 4.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by/4.0",
+  "source": "https://commons.wikimedia.org/wiki/File:Kevin_Doets_2026.png",
+  "article": "https://en.wikipedia.org/wiki/Kevin_Doets",
+  "imageLabel": "Portrait cropped for display"
+ },
+ "dirkvanduijvenbode": {
+  "name": "Dirk van Duijvenbode",
+  "image": "/portraits/player-dirkvanduijvenbode.jpg",
+  "credit": "Sven Mandel",
+  "license": "CC BY-SA 4.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+  "source": "https://commons.wikimedia.org/wiki/File:Dirk_van_Duijvenbode_(cropped).jpg",
+  "article": "https://en.wikipedia.org/wiki/Dirk_van_Duijvenbode",
+  "imageLabel": "Portrait cropped for display"
+ },
+ "cameronmenzies": {
+  "name": "Cameron Menzies",
+  "image": "/portraits/player-cameronmenzies.png",
+  "credit": "Oche180",
+  "license": "CC BY 4.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by/4.0",
+  "source": "https://commons.wikimedia.org/wiki/File:Cameron_Menzies_2026.png",
+  "article": "https://en.wikipedia.org/wiki/Cameron_Menzies",
+  "imageLabel": "Portrait cropped for display"
+ },
+ "andrewgilding": {
+  "name": "Andrew Gilding",
+  "image": "/portraits/player-andrewgilding.png",
+  "credit": "DARTS NOW",
+  "license": "CC BY 3.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by/3.0",
+  "source": "https://commons.wikimedia.org/wiki/File:Andrew_Gilding_2025_World_Matchplay.png",
+  "article": "https://en.wikipedia.org/wiki/Andrew_Gilding",
+  "imageLabel": "Portrait cropped for display"
+ },
+ "nielszonneveld": {
+  "name": "Niels Zonneveld",
+  "image": "/portraits/player-nielszonneveld.png",
+  "credit": "Darts Actueel",
+  "license": "CC BY 3.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by/3.0",
+  "source": "https://commons.wikimedia.org/wiki/File:Niels_Zonneveld.png",
+  "article": "https://en.wikipedia.org/wiki/Niels_Zonneveld",
+  "imageLabel": "Portrait cropped for display"
+ },
+ "darylgurney": {
+  "name": "Daryl Gurney",
+  "image": "/portraits/player-darylgurney.jpg",
+  "credit": "Sven Mandel",
+  "license": "CC BY-SA 4.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+  "source": "https://commons.wikimedia.org/wiki/File:Daryl_Gurney_2019_PDC_European_Darts_Matchplay_(cropped).jpg",
+  "article": "https://en.wikipedia.org/wiki/Daryl_Gurney",
+  "imageLabel": "Portrait cropped for display"
+ },
+ "davechisnall": {
+  "name": "Dave Chisnall",
+  "image": "/portraits/player-davechisnall.jpg",
+  "credit": "Sven Mandel",
+  "license": "CC BY-SA 4.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+  "source": "https://commons.wikimedia.org/wiki/File:Dave_Chisnall_6-2_Ryan_Meikle_-_Dave_Chisnall_-_2019250131009_2019-09-07_PDC_European_Darts_Matchplay_-_0068_-_B70I6438_(cropped).jpg",
+  "article": "https://en.wikipedia.org/wiki/Dave_Chisnall",
+  "imageLabel": "Portrait cropped for display"
+ },
+ "joecullen": {
+  "name": "Joe Cullen",
+  "image": "/portraits/player-joecullen.jpg",
+  "credit": "Sandro Halank, Wikimedia Commons",
+  "license": "CC BY-SA 4.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+  "source": "https://commons.wikimedia.org/wiki/File:2022-06-13_Play-offs_(2022_Premier_League_Darts)_by_Sandro_Halank%E2%80%93053.jpg",
+  "article": "https://en.wikipedia.org/wiki/Joe_Cullen_(darts_player)",
+  "imageLabel": "Portrait cropped for display"
+ },
+ "nikospringer": {
+  "name": "Niko Springer",
+  "image": "/portraits/player-nikospringer.jpg",
+  "credit": "PhilippFips",
+  "license": "CC0",
+  "licenseUrl": "http://creativecommons.org/publicdomain/zero/1.0/deed.en",
+  "source": "https://commons.wikimedia.org/wiki/File:Niko_Springer_Dezember_2024.jpg",
+  "article": "https://en.wikipedia.org/wiki/Niko_Springer",
+  "imageLabel": "Portrait cropped for display"
+ },
+ "ricardopietreczko": {
+  "name": "Ricardo Pietreczko",
+  "image": "/portraits/player-ricardopietreczko.png",
+  "credit": "DARTS NOW",
+  "license": "CC BY 3.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by/3.0",
+  "source": "https://commons.wikimedia.org/wiki/File:Ricardo_Pietreczko_2025_(cropped).png",
+  "article": "https://en.wikipedia.org/wiki/Ricardo_Pietreczko",
+  "imageLabel": "Portrait cropped for display"
+ },
+ "mikededecker": {
+  "name": "Mike De Decker",
+  "image": "/portraits/player-mikededecker.png",
+  "credit": "DARTS NOW",
+  "license": "CC BY 3.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by/3.0",
+  "source": "https://commons.wikimedia.org/wiki/File:Mike_de_Decker_2024.png",
+  "article": "https://en.wikipedia.org/wiki/Mike_De_Decker",
+  "imageLabel": "Portrait cropped for display"
+ },
+ "peterwright": {
+  "name": "Peter Wright",
+  "image": "/portraits/player-peterwright.png",
+  "credit": "DARTS NOW",
+  "license": "CC BY 3.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by/3.0",
+  "source": "https://commons.wikimedia.org/wiki/File:Peter_Wright_2025.png",
+  "article": "https://en.wikipedia.org/wiki/Peter_Wright_(darts_player)",
+  "imageLabel": "Portrait cropped for display"
+ },
+ "michaelsmith": {
+  "name": "Michael Smith",
+  "image": "/portraits/player-michaelsmith.jpg",
+  "credit": "Sven Mandel",
+  "license": "CC BY-SA 4.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+  "source": "https://commons.wikimedia.org/wiki/File:Michael_Smith_6-3_Steve_Lennon_-_Michael_Smith_-_2019249215712_2019-09-06_PDC_European_Darts_Matchplay_-_1108_-_B70I6125_(cropped).jpg",
+  "article": "https://en.wikipedia.org/wiki/Michael_Smith_(darts_player)",
+  "imageLabel": "Portrait cropped for display"
+ },
+ "justinhood": {
+  "name": "Justin Hood",
+  "image": "/portraits/player-justinhood.png",
+  "credit": "Oche180",
+  "license": "CC BY 4.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by/4.0",
+  "source": "https://commons.wikimedia.org/wiki/File:Justin_Hood.png",
+  "article": "https://en.wikipedia.org/wiki/Justin_Hood_(darts_player)",
+  "imageLabel": "Portrait cropped for display"
+ },
+ "callanrydz": {
+  "name": "Callan Rydz",
+  "image": "/portraits/player-callanrydz.png",
+  "credit": "DARTS NOW",
+  "license": "CC BY 3.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by/3.0",
+  "source": "https://commons.wikimedia.org/wiki/File:Callan_Rydz_2024.png",
+  "article": "https://en.wikipedia.org/wiki/Callan_Rydz",
+  "imageLabel": "Portrait cropped for display"
+ },
+ "jeffreydegraaf": {
+  "name": "Jeffrey de Graaf",
+  "image": "/portraits/player-jeffreydegraaf.png",
+  "credit": "DARTS NOW",
+  "license": "CC BY 3.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by/3.0",
+  "source": "https://commons.wikimedia.org/wiki/File:Jeffrey_de_Graaf_-_2024-12-29.png",
+  "article": "https://en.wikipedia.org/wiki/Jeffrey_de_Graaf",
+  "imageLabel": "Portrait cropped for display"
+ },
+ "jameshurrell": {
+  "name": "James Hurrell",
+  "image": "/portraits/player-jameshurrell.png",
+  "credit": "DARTS NOW",
+  "license": "CC BY 3.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by/3.0",
+  "source": "https://commons.wikimedia.org/wiki/File:James_Hurrell.png",
+  "article": "https://en.wikipedia.org/wiki/James_Hurrell",
+  "imageLabel": "Portrait cropped for display"
+ },
+ "kimhuybrechts": {
+  "name": "Kim Huybrechts",
+  "image": "/portraits/player-kimhuybrechts.jpg",
+  "credit": "Sven Mandel",
+  "license": "CC BY-SA 4.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+  "source": "https://commons.wikimedia.org/wiki/File:Robert_Thornton_5-6_Kim_Huybrechts_-_Kim_Huybrechts_-_2019249214611_2019-09-06_PDC_European_Darts_Matchplay_-_0892_-_AK8I7790_(cropped).jpg",
+  "article": "https://en.wikipedia.org/wiki/Kim_Huybrechts",
+  "imageLabel": "Portrait cropped for display"
+ },
+ "rickyevans": {
+  "name": "Ricky Evans",
+  "image": "/portraits/player-rickyevans.png",
+  "credit": "Oche180",
+  "license": "CC BY 4.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by/4.0",
+  "source": "https://commons.wikimedia.org/wiki/File:Ricky_Evans_2026.png",
+  "article": "https://en.wikipedia.org/wiki/Ricky_Evans_(darts_player)",
+  "imageLabel": "Portrait cropped for display"
+ },
+ "brendandolan": {
+  "name": "Brendan Dolan",
+  "image": "/portraits/player-brendandolan.jpg",
+  "credit": "Kat1100",
+  "license": "CC BY-SA 4.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+  "source": "https://commons.wikimedia.org/wiki/File:BrendanDolan2019.jpg",
+  "article": "https://en.wikipedia.org/wiki/Brendan_Dolan",
+  "imageLabel": "Portrait cropped for display"
+ },
+ "madarsrazma": {
+  "name": "Madars Razma",
+  "image": "/portraits/player-madarsrazma.png",
+  "credit": "DARTS NOW",
+  "license": "CC BY 3.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by/3.0",
+  "source": "https://commons.wikimedia.org/wiki/File:Madars_Razma_2.png",
+  "article": "https://en.wikipedia.org/wiki/Madars_Razma",
+  "imageLabel": "Portrait cropped for display"
+ },
+ "raymondvanbarneveld": {
+  "name": "Raymond van Barneveld",
+  "image": "/portraits/player-raymondvanbarneveld.png",
+  "credit": "Darts Actueel on YouTube",
+  "license": "CC BY 3.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by/3.0",
+  "source": "https://commons.wikimedia.org/wiki/File:Raymond_van_Barneveld_in_2019.png",
+  "article": "https://en.wikipedia.org/wiki/Raymond_van_Barneveld",
+  "imageLabel": "Portrait cropped for display"
+ },
+ "gabrielclemens": {
+  "name": "Gabriel Clemens",
+  "image": "/portraits/player-gabrielclemens.jpg",
+  "credit": "Sven Mandel",
+  "license": "CC BY-SA 4.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+  "source": "https://commons.wikimedia.org/wiki/File:Gabriel_Clemens_2023_(cropped).jpg",
+  "article": "https://en.wikipedia.org/wiki/Gabriel_Clemens",
+  "imageLabel": "Portrait cropped for display"
+ },
+ "scottwilliams": {
+  "name": "Scott Williams",
+  "image": "/portraits/player-scottwilliams.png",
+  "credit": "DARTS NOW",
+  "license": "CC BY 3.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by/3.0",
+  "source": "https://commons.wikimedia.org/wiki/File:Scott_Williams_2024.png",
+  "article": "https://en.wikipedia.org/wiki/Scott_Williams_(darts_player)",
+  "imageLabel": "Portrait cropped for display"
+ },
+ "mickeymansell": {
+  "name": "Mickey Mansell",
+  "image": "/portraits/player-mickeymansell.png",
+  "credit": "DARTS NOW",
+  "license": "CC BY 3.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by/3.0",
+  "source": "https://commons.wikimedia.org/wiki/File:Mickey_Mansell.png",
+  "article": "https://en.wikipedia.org/wiki/Mickey_Mansell",
+  "imageLabel": "Portrait cropped for display"
+ },
+ "keanebarry": {
+  "name": "Keane Barry",
+  "image": "/portraits/player-keanebarry.png",
+  "credit": "DARTS NOW",
+  "license": "CC BY 3.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by/3.0",
+  "source": "https://commons.wikimedia.org/wiki/File:Keane_Barry_2025_(cropped).png",
+  "article": "https://en.wikipedia.org/wiki/Keane_Barry",
+  "imageLabel": "Portrait cropped for display"
+ },
+ "connorscutt": {
+  "name": "Connor Scutt",
+  "image": "/portraits/player-connorscutt.png",
+  "credit": "DARTS NOW",
+  "license": "CC BY 3.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by/3.0",
+  "source": "https://commons.wikimedia.org/wiki/File:Connor_Scutt_PC.png",
+  "article": "https://en.wikipedia.org/wiki/Connor_Scutt",
+  "imageLabel": "Portrait cropped for display"
+ },
+ "bradleybrooks": {
+  "name": "Bradley Brooks",
+  "image": "/portraits/player-bradleybrooks.jpg",
+  "credit": "Sven Mandel",
+  "license": "CC BY-SA 4.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+  "source": "https://commons.wikimedia.org/wiki/File:Bradley_Brooks_2019-09-07_PDC_European_Darts_Matchplay_(cropped).jpg",
+  "article": "https://en.wikipedia.org/wiki/Bradley_Brooks",
+  "imageLabel": "Portrait cropped for display"
+ },
+ "richardveenstra": {
+  "name": "Richard Veenstra",
+  "image": "/portraits/player-richardveenstra.jpg",
+  "credit": "Ruben Meijer",
+  "license": "CC BY-SA 4.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+  "source": "https://commons.wikimedia.org/wiki/File:Richard_veenstra-1520889677.jpeg",
+  "article": "https://en.wikipedia.org/wiki/Richard_Veenstra",
+  "imageLabel": "Portrait cropped for display"
+ },
+ "ianwhite": {
+  "name": "Ian White",
+  "image": "/portraits/player-ianwhite.jpg",
+  "credit": "Sven Mandel",
+  "license": "CC BY-SA 4.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+  "source": "https://commons.wikimedia.org/wiki/File:Ian_White_-_2017-09-10_PDC_German_Darts_Grand_Prix_(cropped).jpg",
+  "article": "https://en.wikipedia.org/wiki/Ian_White_(darts_player)",
+  "imageLabel": "Portrait cropped for display"
+ },
+ "ritchieedhouse": {
+  "name": "Ritchie Edhouse",
+  "image": "/portraits/player-ritchieedhouse.png",
+  "credit": "DARTS NOW",
+  "license": "CC BY 3.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by/3.0",
+  "source": "https://commons.wikimedia.org/wiki/File:Ritchie_Edhouse_2024_2.png",
+  "article": "https://en.wikipedia.org/wiki/Ritchie_Edhouse",
+  "imageLabel": "Portrait cropped for display"
+ },
+ "alansoutar": {
+  "name": "Alan Soutar",
+  "image": "/portraits/player-alansoutar.png",
+  "credit": "Oche180",
+  "license": "CC BY 4.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by/4.0",
+  "source": "https://commons.wikimedia.org/wiki/File:Alan_Soutar_2026_2.png",
+  "article": "https://en.wikipedia.org/wiki/Alan_Soutar",
+  "imageLabel": "Portrait cropped for display"
+ },
+ "dimitrivandenbergh": {
+  "name": "Dimitri Van den Bergh",
+  "image": "/portraits/player-dimitrivandenbergh.png",
+  "credit": "DARTS NOW",
+  "license": "CC BY 3.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by/3.0",
+  "source": "https://commons.wikimedia.org/wiki/File:Dimitri_Van_den_Bergh_2025.png",
+  "article": "https://en.wikipedia.org/wiki/Dimitri_Van_den_Bergh",
+  "imageLabel": "Portrait cropped for display"
+ },
+ "maxhopp": {
+  "name": "Max Hopp",
+  "image": "/portraits/player-maxhopp.jpg",
+  "credit": "Sandro Halank, Wikimedia Commons",
+  "license": "CC BY-SA 4.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+  "source": "https://commons.wikimedia.org/wiki/File:2026-03-26_Premier_League_Darts_%E2%80%93_Night_8_%E2%80%93_Berlin_2026_by_Sandro_Halank%E2%80%93123.jpg",
+  "article": "https://en.wikipedia.org/wiki/Max_Hopp",
+  "imageLabel": "Portrait cropped for display"
+ },
+ "nickkenny": {
+  "name": "Nick Kenny",
+  "image": "/portraits/player-nickkenny.png",
+  "credit": "Oche180",
+  "license": "CC BY 4.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by/4.0",
+  "source": "https://commons.wikimedia.org/wiki/File:Nick_Kenny_2026.png",
+  "article": "https://en.wikipedia.org/wiki/Nick_Kenny_(darts_player)",
+  "imageLabel": "Portrait cropped for display"
+ },
+ "martinlukeman": {
+  "name": "Martin Lukeman",
+  "image": "/portraits/player-martinlukeman.png",
+  "credit": "DARTS NOW",
+  "license": "CC BY 3.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by/3.0",
+  "source": "https://commons.wikimedia.org/wiki/File:Martin_Lukeman.png",
+  "article": "https://en.wikipedia.org/wiki/Martin_Lukeman",
+  "imageLabel": "Portrait cropped for display"
+ },
+ "ryanmeikle": {
+  "name": "Ryan Meikle",
+  "image": "/portraits/player-ryanmeikle.png",
+  "credit": "Sven Mandel (original file)",
+  "license": "CC BY-SA 4.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+  "source": "https://commons.wikimedia.org/wiki/File:Dave_Chisnall_6-2_Ryan_Meikle_-_Ryan_Meikle_-_2019250130327_2019-09-07_PDC_European_Darts_Matchplay_-_0082_-_AK8I8590_(cropped).png",
+  "article": "https://en.wikipedia.org/wiki/Ryan_Meikle",
+  "imageLabel": "Portrait cropped for display"
+ },
+ "mariovandenbogaerde": {
+  "name": "Mario Vandenbogaerde",
+  "image": "/portraits/player-mariovandenbogaerde.png",
+  "credit": "Darts Actueel",
+  "license": "CC BY 3.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by/3.0",
+  "source": "https://commons.wikimedia.org/wiki/File:Mario_Vandenbogaerde.png",
+  "article": "https://en.wikipedia.org/wiki/Mario_Vandenbogaerde",
+  "imageLabel": "Portrait cropped for display"
+ },
+ "maikkuivenhoven": {
+  "name": "Maik Kuivenhoven",
+  "image": "/portraits/player-maikkuivenhoven.jpg",
+  "credit": "Sven Mandel",
+  "license": "CC BY-SA 4.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+  "source": "https://commons.wikimedia.org/wiki/File:Maik_Kuivenhoven_2019-09-06_PDC_European_Darts_Matchplay_(cropped).jpg",
+  "article": "https://en.wikipedia.org/wiki/Maik_Kuivenhoven",
+  "imageLabel": "Portrait cropped for display"
+ },
+ "wesleyplaisier": {
+  "name": "Wesley Plaisier",
+  "image": "/portraits/player-wesleyplaisier.jpg",
+  "credit": "Sven Mandel",
+  "license": "CC BY-SA 4.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+  "source": "https://commons.wikimedia.org/wiki/File:Wesley_Plaisier_2019-09-06_PDC_European_Darts_Matchplay_(cropped).jpg",
+  "article": "https://en.wikipedia.org/wiki/Wesley_Plaisier",
+  "imageLabel": "Portrait cropped for display"
+ },
+ "thibaulttricole": {
+  "name": "Thibault Tricole",
+  "image": "/portraits/player-thibaulttricole.jpg",
+  "credit": "Dartiste56",
+  "license": "CC BY-SA 4.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+  "source": "https://commons.wikimedia.org/wiki/File:Thibault_Tricole_(cropped).jpg",
+  "article": "https://en.wikipedia.org/wiki/Thibault_Tricole",
+  "imageLabel": "Portrait cropped for display"
+ },
+ "beaugreaves": {
+  "name": "Beau Greaves",
+  "image": "/portraits/player-beaugreaves.png",
+  "credit": "Oche180",
+  "license": "CC BY 4.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by/4.0",
+  "source": "https://commons.wikimedia.org/wiki/File:Beau_Greaves_2026.png",
+  "article": "https://en.wikipedia.org/wiki/Beau_Greaves",
+  "imageLabel": "Portrait cropped for display"
+ },
+ "christiankist": {
+  "name": "Christian Kist",
+  "image": "/portraits/player-christiankist.jpg",
+  "credit": "Darts Actueel",
+  "license": "CC BY 3.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by/3.0",
+  "source": "https://commons.wikimedia.org/wiki/File:Christian_Kist_-_TOTO_Dutch_Open_Darts_2023.jpg",
+  "article": "https://en.wikipedia.org/wiki/Christian_Kist",
+  "imageLabel": "Portrait cropped for display"
+ },
+ "oskarlukasiak": {
+  "name": "Oskar Lukasiak",
+  "image": "/portraits/player-oskarlukasiak.png",
+  "credit": "DARTS NOW",
+  "license": "CC BY 3.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by/3.0",
+  "source": "https://commons.wikimedia.org/wiki/File:Oscar_Lukasiak.png",
+  "article": "https://en.wikipedia.org/wiki/Oskar_Lukasiak",
+  "imageLabel": "Portrait cropped for display"
+ },
+ "jimmyvanschie": {
+  "name": "Jimmy van Schie",
+  "image": "/portraits/player-jimmyvanschie.png",
+  "credit": "Darts Actueel",
+  "license": "CC BY 3.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by/3.0",
+  "source": "https://commons.wikimedia.org/wiki/File:Jimmy_van_Schie_(cropped).png",
+  "article": "https://en.wikipedia.org/wiki/Jimmy_van_Schie",
+  "imageLabel": "Portrait cropped for display"
+ },
+ "alexandermerkx": {
+  "name": "Alexander Merkx",
+  "image": "/portraits/player-alexandermerkx.png",
+  "credit": "DARTS NOW",
+  "license": "CC BY 3.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by/3.0",
+  "source": "https://commons.wikimedia.org/wiki/File:Alexander_Merkx.png",
+  "article": "https://en.wikipedia.org/wiki/Alexander_Merkx",
+  "imageLabel": "Portrait cropped for display"
+ },
+ "adamgawlas": {
+  "name": "Adam Gawlas",
+  "image": "/portraits/player-adamgawlas.jpg",
+  "credit": "DarthBob",
+  "license": "CC BY-SA 4.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+  "source": "https://commons.wikimedia.org/wiki/File:Adam_Gawlas.jpg",
+  "article": "https://en.wikipedia.org/wiki/Adam_Gawlas",
+  "imageLabel": "Portrait cropped for display"
+ },
+ "jurjenvandervelde": {
+  "name": "Jurjen van der Velde",
+  "image": "/portraits/player-jurjenvandervelde.png",
+  "credit": "Darts Actueel",
+  "license": "CC BY 3.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by/3.0",
+  "source": "https://commons.wikimedia.org/wiki/File:Jurjen_van_der_Velde.png",
+  "article": "https://en.wikipedia.org/wiki/Jurjen_van_der_Velde",
+  "imageLabel": "Portrait cropped for display"
+ },
+ "lisaashton": {
+  "name": "Lisa Ashton",
+  "image": "/portraits/player-lisaashton.png",
+  "credit": "DARTS NOW",
+  "license": "CC BY 3.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by/3.0",
+  "source": "https://commons.wikimedia.org/wiki/File:Lisa_Ashton_2025.png",
+  "article": "https://en.wikipedia.org/wiki/Lisa_Ashton",
+  "imageLabel": "Portrait cropped for display"
+ },
+ "paolonebrida": {
+  "name": "Paolo Nebrida",
+  "image": "/portraits/player-paolonebrida.png",
+  "credit": "DARTS NOW",
+  "license": "CC BY 3.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by/3.0",
+  "source": "https://commons.wikimedia.org/wiki/File:Paolo_Nebrida_-_22.12.2024.png",
+  "article": "https://en.wikipedia.org/wiki/Paolo_Nebrida",
+  "imageLabel": "Portrait cropped for display"
+ },
+ "wesselnijman": {
+  "name": "Wessel Nijman",
+  "image": "/portraits/player-wesselnijman.png",
+  "credit": "Darts Actueel",
+  "license": "CC BY 3.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by/3.0",
+  "source": "https://commons.wikimedia.org/wiki/File:Wessel_Nijman.png",
+  "imageLabel": "Portrait cropped for display"
+ },
+ "stephenbunting": {
+  "name": "Stephen Bunting",
+  "image": "/portraits/player-stephenbunting.jpg",
+  "credit": "Sandro Halank, Wikimedia Commons",
+  "license": "CC BY-SA 4.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+  "source": "https://commons.wikimedia.org/wiki/File:2025-04-03_Premier_League_Darts_Berlin_2025_by_Sandro_Halank%E2%80%93019.jpg",
+  "imageLabel": "Portrait cropped for display"
+ },
+ "ryansearle": {
+  "name": "Ryan Searle",
+  "image": "/portraits/player-ryansearle.jpg",
+  "credit": "Darts Actueel on YouTube",
+  "license": "CC BY 3.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by/3.0",
+  "source": "https://commons.wikimedia.org/wiki/File:Ryan_Searle_Darts_Actueel_2023.jpg",
+  "imageLabel": "Portrait cropped for display"
+ },
+ "robcross": {
+  "name": "Rob Cross",
+  "image": "/portraits/player-robcross.jpg",
+  "credit": "Sven Mandel",
+  "license": "CC BY-SA 4.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+  "source": "https://commons.wikimedia.org/wiki/File:Rob_Cross_(darts_player),_2017_(cropped).jpg",
+  "imageLabel": "Portrait cropped for display"
+ },
+ "ryanjoyce": {
+  "name": "Ryan Joyce",
+  "image": "/portraits/player-ryanjoyce.jpg",
+  "credit": "Darts Actueel",
+  "license": "CC BY 3.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by/3.0",
+  "source": "https://commons.wikimedia.org/wiki/File:Ryan_Joyce_Darts_Actueel_2022.jpg",
+  "imageLabel": "Portrait cropped for display"
+ },
+ "williamoconnor": {
+  "name": "William O'Connor",
+  "image": "/portraits/player-williamoconnor.jpg",
+  "credit": "Sven Mandel",
+  "license": "CC BY-SA 4.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+  "source": "https://commons.wikimedia.org/wiki/File:Max_Hopp_5-6_William_O%27Connor_-_William_O%27Connor_-_2019249222358_2019-09-06_PDC_European_Darts_Matchplay_-_1328_-_AK8I8226.jpg",
+  "imageLabel": "Portrait cropped for display"
+ },
+ "karelsedlacek": {
+  "name": "Karel Sedlacek",
+  "image": "/portraits/player-karelsedlacek.png",
+  "credit": "DARTS NOW",
+  "license": "CC BY 3.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by/3.0",
+  "source": "https://commons.wikimedia.org/wiki/File:Karel_Sedlacek_2025.png",
+  "imageLabel": "Portrait cropped for display"
+ },
+ "mensursuljovic": {
+  "name": "Mensur Suljovic",
+  "image": "/portraits/player-mensursuljovic.jpg",
+  "credit": "Greg Neate from Brighton, UK",
+  "license": "CC BY 2.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by/2.0",
+  "source": "https://commons.wikimedia.org/wiki/File:2009_World_Darts_Championship.jpg",
+  "imageLabel": "Portrait cropped for display"
+ },
+ "antonostlund": {
+  "name": "Anton Ostlund",
+  "image": "/portraits/player-antonostlund.jpg",
+  "credit": "JerryKB",
+  "license": "CC0",
+  "licenseUrl": "http://creativecommons.org/publicdomain/zero/1.0/deed.en",
+  "source": "https://commons.wikimedia.org/wiki/File:Anton_%C3%96stlund_svensk_dartspelare.jpg",
+  "imageLabel": "Portrait cropped for display"
+ }
+}

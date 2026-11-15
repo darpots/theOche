@@ -1,0 +1,44 @@
+name: Newsdesk
+
+on:
+  schedule:
+    - cron: '20 */3 * * *' # every 3 hours
+  workflow_dispatch:
+    inputs:
+      lookback_hours:
+        description: How far back to look for stories
+        default: '48'
+
+permissions:
+  contents: write
+  issues: write
+  models: read # free GitHub Models access using the built-in token
+
+concurrency:
+  group: data-commit
+  cancel-in-progress: false
+
+jobs:
+  news:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: Write new reports and remove ones older than 90 days
+        run: npm run news
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NEWS_LOOKBACK_HOURS: ${{ inputs.lookback_hours || '48' }}
+      - uses: ./.github/actions/commit
+        with:
+          message: 'news: newsdesk update'
+          paths: src/content/news
+      - if: failure()
+        uses: ./.github/actions/report-failure
+        with:
+          job: newsdesk

@@ -1,0 +1,34 @@
+---
+import Layout from '../layouts/Layout.astro';
+import portraits from '../data/portraits.json';
+const list = Object.values(portraits as Record<string, any>).sort((a, b) => a.name.localeCompare(b.name));
+---
+<Layout title="Credits" description="Photo credits and data sources for The Oche.">
+  <section class="hero wrap">
+    <span class="eyebrow">Credits</span>
+    <h1>Photos &amp; data</h1>
+    <p class="lede">Player photographs are reused under Creative Commons licences from Wikimedia Commons and cropped for display. Players without a verified free photo are shown with their initials.</p>
+  </section>
+  <section class="wrap">
+    <h2 class="h">Data sources</h2>
+    <ul class="src">
+      <li>Calendar, schedules, results, rankings and player profiles: the PDC's public tournament, rankings and participant feeds.</li>
+      <li>News research: BBC Sport, Dartsnews, Darts World and The Guardian (linked from every story).</li>
+    </ul>
+    <h2 class="h">Player photographs</h2>
+    <ul class="grid">
+      {list.map(p => (
+        <li class="card"><img src={p.image} alt={p.name} loading="lazy" /><div><strong>{p.name}</strong><span>{p.credit}</span><a href={p.licenseUrl} target="_blank" rel="noopener">{p.license}</a> · <a href={p.source} target="_blank" rel="noopener">Source</a></div></li>
+      ))}
+    </ul>
+  </section>
+</Layout>
+<style>
+  .h { font-size: 22px; margin: 28px 0 12px; }
+  .src { color: var(--ink-2); }
+  .grid { list-style: none; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 12px; }
+  .grid li { display: flex; gap: 12px; align-items: center; padding: 10px; font-size: 13px; }
+  .grid img { width: 56px; height: 56px; border-radius: 50%; object-fit: cover; object-position: 50% 18%; }
+  .grid div { display: flex; flex-direction: column; }
+  .grid span { color: var(--muted); }
+</style>

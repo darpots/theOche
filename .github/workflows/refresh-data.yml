@@ -1,0 +1,35 @@
+name: Refresh calendar, rankings & matches
+
+on:
+  schedule:
+    - cron: '7 * * * *' # hourly
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  issues: write
+
+concurrency:
+  group: data-commit
+  cancel-in-progress: false
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm run data:fast
+      - uses: ./.github/actions/commit
+        with:
+          message: 'data: refresh calendar, rankings and current tournament'
+          paths: src/data
+      - if: failure()
+        uses: ./.github/actions/report-failure
+        with:
+          job: calendar, rankings & matches

@@ -1,0 +1,1436 @@
+{
+ "updatedAt": "2026-11-15T11:06:42.317Z",
+ "tournament": {
+  "id": "10871",
+  "name": "Grand Slam of Darts",
+  "tag": null,
+  "fullName": "2026 Grand Slam of Darts",
+  "start": "2026-11-14",
+  "end": "2026-11-22",
+  "venue": "Aldersley Leisure Village, Wolverhampton",
+  "city": "Wolverhampton",
+  "typeId": "9",
+  "broadcaster": "sky",
+  "logo": "32ae9b40-6686-11f0-b0e1-2f7ff63d9a66.png",
+  "image": "e6b70870-be88-11f0-8ac7-3dbf71b97733.jpg",
+  "winner": null,
+  "stages": [
+   {
+    "name": "Group P",
+    "round": 20,
+    "sets": false,
+    "fixtures": [
+     {
+      "id": "517012",
+      "date": "2026-11-14",
+      "time": "15:58",
+      "status": "result",
+      "p1": {
+       "id": "11821",
+       "name": "Nathan Aspinall",
+       "nick": "The Asp",
+       "country": "GB-ENG",
+       "ranking": 12
+      },
+      "p2": {
+       "id": "33630",
+       "name": "Maik Kuivenhoven",
+       "nick": null,
+       "country": "NL",
+       "ranking": 71
+      },
+      "s1": 5,
+      "s2": 1,
+      "winner": "11821"
+     },
+     {
+      "id": "517014",
+      "date": "2026-11-15",
+      "time": "13:15",
+      "status": "upcoming",
+      "p1": {
+       "id": "2771",
+       "name": "Karel Sedlacek",
+       "nick": "Evil Charlie",
+       "country": "CZ",
+       "ranking": 42
+      },
+      "p2": {
+       "id": "33630",
+       "name": "Maik Kuivenhoven",
+       "nick": null,
+       "country": "NL",
+       "ranking": 71
+      },
+      "s1": 0,
+      "s2": 0,
+      "winner": null
+     },
+     {
+      "id": "517013",
+      "date": "2026-11-17",
+      "time": "19:00",
+      "status": "upcoming",
+      "p1": {
+       "id": "11821",
+       "name": "Nathan Aspinall",
+       "nick": "The Asp",
+       "country": "GB-ENG",
+       "ranking": 12
+      },
+      "p2": {
+       "id": "2771",
+       "name": "Karel Sedlacek",
+       "nick": "Evil Charlie",
+       "country": "CZ",
+       "ranking": 42
+      },
+      "s1": 0,
+      "s2": 0,
+      "winner": null
+     }
+    ]
+   },
+   {
+    "name": "Group O",
+    "round": 19,
+    "sets": false,
+    "fixtures": [
+     {
+      "id": "517009",
+      "date": "2026-11-14",
+      "time": "20:09",
+      "status": "result",
+      "p1": {
+       "id": "754",
+       "name": "Ross Smith",
+       "nick": "Smudger",
+       "country": "GB-ENG",
+       "ranking": 6
+      },
+      "p2": {
+       "id": "32107",
+       "name": "Rusty-Jake Rodriguez",
+       "nick": "RJR #3",
+       "country": "AT",
+       "ranking": 141
+      },
+      "s1": 3,
+      "s2": 5,
+      "winner": "32107"
+     },
+     {
+      "id": "517010",
+      "date": "2026-11-15",
+      "time": "22:30",
+      "status": "upcoming",
+      "p1": {
+       "id": "754",
+       "name": "Ross Smith",
+       "nick": "Smudger",
+       "country": "GB-ENG",
+       "ranking": 6
+      },
+      "p2": {
+       "id": "11156",
+       "name": "Gabriel Clemens",
+       "nick": "German Giant",
+       "country": "DE",
+       "ranking": 53
+      },
+      "s1": 0,
+      "s2": 0,
+      "winner": null
+     },
+     {
+      "id": "517011",
+      "date": "2026-11-17",
+      "time": "19:00",
+      "status": "upcoming",
+      "p1": {
+       "id": "11156",
+       "name": "Gabriel Clemens",
+       "nick": "German Giant",
+       "country": "DE",
+       "ranking": 53
+      },
+      "p2": {
+       "id": "32107",
+       "name": "Rusty-Jake Rodriguez",
+       "nick": "RJR #3",
+       "country": "AT",
+       "ranking": 141
+      },
+      "s1": 0,
+      "s2": 0,
+      "winner": null
+     }
+    ]
+   },
+   {
+    "name": "Group N",
+    "round": 18,
+    "sets": false,
+    "fixtures": [
+     {
+      "id": "517006",
+      "date": "2026-11-14",
+      "time": "22:32",
+      "status": "result",
+      "p1": {
+       "id": "11843",
+       "name": "Chris Dobey",
+       "nick": "Hollywood",
+       "country": "GB-ENG",
+       "ranking": 16
+      },
+      "p2": {
+       "id": "40703",
+       "name": "Jan Schmidt",
+       "nick": "Lightning",
+       "country": "DE",
+       "ranking": 146
+      },
+      "s1": 5,
+      "s2": 2,
+      "winner": "11843"
+     },
+     {
+      "id": "517008",
+      "date": "2026-11-15",
+      "time": "19:30",
+      "status": "upcoming",
+      "p1": {
+       "id": "11902",
+       "name": "Martin Schindler",
+       "nick": "The Wall",
+       "country": "DE",
+       "ranking": 20
+      },
+      "p2": {
+       "id": "40703",
+       "name": "Jan Schmidt",
+       "nick": "Lightning",
+       "country": "DE",
+       "ranking": 146
+      },
+      "s1": 0,
+      "s2": 0,
+      "winner": null
+     },
+     {
+      "id": "517007",
+      "date": "2026-11-17",
+      "time": "19:00",
+      "status": "upcoming",
+      "p1": {
+       "id": "11843",
+       "name": "Chris Dobey",
+       "nick": "Hollywood",
+       "country": "GB-ENG",
+       "ranking": 16
+      },
+      "p2": {
+       "id": "11902",
+       "name": "Martin Schindler",
+       "nick": "The Wall",
+       "country": "DE",
+       "ranking": 20
+      },
+      "s1": 0,
+      "s2": 0,
+      "winner": null
+     }
+    ]
+   },
+   {
+    "name": "Group M",
+    "round": 17,
+    "sets": false,
+    "fixtures": [
+     {
+      "id": "517003",
+      "date": "2026-11-14",
+      "time": "22:10",
+      "status": "result",
+      "p1": {
+       "id": "33091",
+       "name": "Gian van Veen",
+       "nick": "The Giant",
+       "country": "NL",
+       "ranking": 3
+      },
+      "p2": {
+       "id": "40143",
+       "name": "Carl Sneyd",
+       "nick": "Bomber",
+       "country": "GB-ENG",
+       "ranking": 129
+      },
+      "s1": 5,
+      "s2": 2,
+      "winner": "33091"
+     },
+     {
+      "id": "517005",
+      "date": "2026-11-15",
+      "time": "21:00",
+      "status": "upcoming",
+      "p1": {
+       "id": "32078",
+       "name": "Bradley Brooks",
+       "nick": "Bam Bam",
+       "country": "GB-ENG",
+       "ranking": 59
+      },
+      "p2": {
+       "id": "40143",
+       "name": "Carl Sneyd",
+       "nick": "Bomber",
+       "country": "GB-ENG",
+       "ranking": 129
+      },
+      "s1": 0,
+      "s2": 0,
+      "winner": null
+     },
+     {
+      "id": "517004",
+      "date": "2026-11-17",
+      "time": "19:00",
+      "status": "upcoming",
+      "p1": {
+       "id": "33091",
+       "name": "Gian van Veen",
+       "nick": "The Giant",
+       "country": "NL",
+       "ranking": 3
+      },
+      "p2": {
+       "id": "32078",
+       "name": "Bradley Brooks",
+       "nick": "Bam Bam",
+       "country": "GB-ENG",
+       "ranking": 59
+      },
+      "s1": 0,
+      "s2": 0,
+      "winner": null
+     }
+    ]
+   },
+   {
+    "name": "Group L",
+    "round": 16,
+    "sets": false,
+    "fixtures": [
+     {
+      "id": "517000",
+      "date": "2026-11-14",
+      "time": "20:43",
+      "status": "result",
+      "p1": {
+       "id": "19",
+       "name": "Michael van Gerwen",
+       "nick": "Mighty Mike",
+       "country": "NL",
+       "ranking": 11
+      },
+      "p2": {
+       "id": "39687",
+       "name": "Henry Coates",
+       "nick": null,
+       "country": "GB-ENG",
+       "ranking": 96
+      },
+      "s1": 5,
+      "s2": 4,
+      "winner": "19"
+     },
+     {
+      "id": "517002",
+      "date": "2026-11-15",
+      "time": "23:00",
+      "status": "upcoming",
+      "p1": {
+       "id": "31031",
+       "name": "Jeffrey De Graaf",
+       "nick": null,
+       "country": "SE",
+       "ranking": 39
+      },
+      "p2": {
+       "id": "39687",
+       "name": "Henry Coates",
+       "nick": null,
+       "country": "GB-ENG",
+       "ranking": 96
+      },
+      "s1": 0,
+      "s2": 0,
+      "winner": null
+     },
+     {
+      "id": "517001",
+      "date": "2026-11-17",
+      "time": "19:00",
+      "status": "upcoming",
+      "p1": {
+       "id": "19",
+       "name": "Michael van Gerwen",
+       "nick": "Mighty Mike",
+       "country": "NL",
+       "ranking": 11
+      },
+      "p2": {
+       "id": "31031",
+       "name": "Jeffrey De Graaf",
+       "nick": null,
+       "country": "SE",
+       "ranking": 39
+      },
+      "s1": 0,
+      "s2": 0,
+      "winner": null
+     }
+    ]
+   },
+   {
+    "name": "Group K",
+    "round": 15,
+    "sets": false,
+    "fixtures": [
+     {
+      "id": "516997",
+      "date": "2026-11-14",
+      "time": "19:45",
+      "status": "result",
+      "p1": {
+       "id": "22",
+       "name": "James Wade",
+       "nick": "The Machine",
+       "country": "GB-ENG",
+       "ranking": 7
+      },
+      "p2": {
+       "id": "38159",
+       "name": "Cam Crabtree",
+       "nick": "Shazam",
+       "country": "GB-ENG",
+       "ranking": 69
+      },
+      "s1": 5,
+      "s2": 1,
+      "winner": "22"
+     },
+     {
+      "id": "516999",
+      "date": "2026-11-15",
+      "time": "21:30",
+      "status": "upcoming",
+      "p1": {
+       "id": "271",
+       "name": "Ricky Evans",
+       "nick": "Rapid",
+       "country": "GB-ENG",
+       "ranking": 52
+      },
+      "p2": {
+       "id": "38159",
+       "name": "Cam Crabtree",
+       "nick": "Shazam",
+       "country": "GB-ENG",
+       "ranking": 69
+      },
+      "s1": 0,
+      "s2": 0,
+      "winner": null
+     },
+     {
+      "id": "516998",
+      "date": "2026-11-17",
+      "time": "19:00",
+      "status": "upcoming",
+      "p1": {
+       "id": "22",
+       "name": "James Wade",
+       "nick": "The Machine",
+       "country": "GB-ENG",
+       "ranking": 7
+      },
+      "p2": {
+       "id": "271",
+       "name": "Ricky Evans",
+       "nick": "Rapid",
+       "country": "GB-ENG",
+       "ranking": 52
+      },
+      "s1": 0,
+      "s2": 0,
+      "winner": null
+     }
+    ]
+   },
+   {
+    "name": "Group J",
+    "round": 14,
+    "sets": false,
+    "fixtures": [
+     {
+      "id": "516994",
+      "date": "2026-11-14",
+      "time": "13:19",
+      "status": "result",
+      "p1": {
+       "id": "11804",
+       "name": "Luke Woodhouse",
+       "nick": "Woody",
+       "country": "GB-ENG",
+       "ranking": 17
+      },
+      "p2": {
+       "id": "32627",
+       "name": "Tom Sykes",
+       "nick": "The Castleford Tiger",
+       "country": "GB-ENG",
+       "ranking": 81
+      },
+      "s1": 3,
+      "s2": 5,
+      "winner": "32627"
+     },
+     {
+      "id": "516995",
+      "date": "2026-11-15",
+      "time": "15:15",
+      "status": "upcoming",
+      "p1": {
+       "id": "11804",
+       "name": "Luke Woodhouse",
+       "nick": "Woody",
+       "country": "GB-ENG",
+       "ranking": 17
+      },
+      "p2": {
+       "id": "224",
+       "name": "Krzysztof Ratajski",
+       "nick": "The Polish Eagle",
+       "country": "PL",
+       "ranking": 19
+      },
+      "s1": 0,
+      "s2": 0,
+      "winner": null
+     },
+     {
+      "id": "516996",
+      "date": "2026-11-17",
+      "time": "19:00",
+      "status": "upcoming",
+      "p1": {
+       "id": "224",
+       "name": "Krzysztof Ratajski",
+       "nick": "The Polish Eagle",
+       "country": "PL",
+       "ranking": 19
+      },
+      "p2": {
+       "id": "32627",
+       "name": "Tom Sykes",
+       "nick": "The Castleford Tiger",
+       "country": "GB-ENG",
+       "ranking": 81
+      },
+      "s1": 0,
+      "s2": 0,
+      "winner": null
+     }
+    ]
+   },
+   {
+    "name": "Group I",
+    "round": 13,
+    "sets": false,
+    "fixtures": [
+     {
+      "id": "516991",
+      "date": "2026-11-14",
+      "time": "21:11",
+      "status": "result",
+      "p1": {
+       "id": "32102",
+       "name": "Luke Humphries",
+       "nick": "Cool Hand",
+       "country": "GB-ENG",
+       "ranking": 2
+      },
+      "p2": {
+       "id": "32736",
+       "name": "Paolo Nebrida",
+       "nick": "Pow",
+       "country": "PH",
+       "ranking": null
+      },
+      "s1": 5,
+      "s2": 3,
+      "winner": "32102"
+     },
+     {
+      "id": "516993",
+      "date": "2026-11-15",
+      "time": "20:00",
+      "status": "upcoming",
+      "p1": {
+       "id": "81",
+       "name": "Joe Cullen",
+       "nick": "The Rockstar",
+       "country": "GB-ENG",
+       "ranking": 32
+      },
+      "p2": {
+       "id": "32736",
+       "name": "Paolo Nebrida",
+       "nick": "Pow",
+       "country": "PH",
+       "ranking": null
+      },
+      "s1": 0,
+      "s2": 0,
+      "winner": null
+     },
+     {
+      "id": "516992",
+      "date": "2026-11-17",
+      "time": "19:00",
+      "status": "upcoming",
+      "p1": {
+       "id": "32102",
+       "name": "Luke Humphries",
+       "nick": "Cool Hand",
+       "country": "GB-ENG",
+       "ranking": 2
+      },
+      "p2": {
+       "id": "81",
+       "name": "Joe Cullen",
+       "nick": "The Rockstar",
+       "country": "GB-ENG",
+       "ranking": 32
+      },
+      "s1": 0,
+      "s2": 0,
+      "winner": null
+     }
+    ]
+   },
+   {
+    "name": "Group H",
+    "round": 12,
+    "sets": false,
+    "fixtures": [
+     {
+      "id": "516988",
+      "date": "2026-11-14",
+      "time": "15:32",
+      "status": "result",
+      "p1": {
+       "id": "32956",
+       "name": "Wessel Nijman",
+       "nick": null,
+       "country": "NL",
+       "ranking": 13
+      },
+      "p2": {
+       "id": "43097",
+       "name": "Adam Sevada",
+       "nick": "The Reaper",
+       "country": "US",
+       "ranking": null
+      },
+      "s1": 5,
+      "s2": 1,
+      "winner": "32956"
+     },
+     {
+      "id": "516990",
+      "date": "2026-11-15",
+      "time": "13:45",
+      "status": "upcoming",
+      "p1": {
+       "id": "34874",
+       "name": "Niko Springer",
+       "nick": "Meenzer Bub",
+       "country": "DE",
+       "ranking": 34
+      },
+      "p2": {
+       "id": "43097",
+       "name": "Adam Sevada",
+       "nick": "The Reaper",
+       "country": "US",
+       "ranking": null
+      },
+      "s1": 0,
+      "s2": 0,
+      "winner": null
+     },
+     {
+      "id": "516989",
+      "date": "2026-11-16",
+      "time": "19:00",
+      "status": "upcoming",
+      "p1": {
+       "id": "32956",
+       "name": "Wessel Nijman",
+       "nick": null,
+       "country": "NL",
+       "ranking": 13
+      },
+      "p2": {
+       "id": "34874",
+       "name": "Niko Springer",
+       "nick": "Meenzer Bub",
+       "country": "DE",
+       "ranking": 34
+      },
+      "s1": 0,
+      "s2": 0,
+      "winner": null
+     }
+    ]
+   },
+   {
+    "name": "Group G",
+    "round": 11,
+    "sets": false,
+    "fixtures": [
+     {
+      "id": "516985",
+      "date": "2026-11-14",
+      "time": "16:21",
+      "status": "result",
+      "p1": {
+       "id": "30859",
+       "name": "Jonny Clayton",
+       "nick": "The Ferret",
+       "country": "GB-WLS",
+       "ranking": 5
+      },
+      "p2": {
+       "id": "35046",
+       "name": "Anton Ostlund",
+       "nick": "One-Ton",
+       "country": "SE",
+       "ranking": 162
+      },
+      "s1": 4,
+      "s2": 5,
+      "winner": "35046"
+     },
+     {
+      "id": "516986",
+      "date": "2026-11-15",
+      "time": "16:15",
+      "status": "upcoming",
+      "p1": {
+       "id": "30859",
+       "name": "Jonny Clayton",
+       "nick": "The Ferret",
+       "country": "GB-WLS",
+       "ranking": 5
+      },
+      "p2": {
+       "id": "31041",
+       "name": "Rob Cross",
+       "nick": "Voltage",
+       "country": "GB-ENG",
+       "ranking": 24
+      },
+      "s1": 0,
+      "s2": 0,
+      "winner": null
+     },
+     {
+      "id": "516987",
+      "date": "2026-11-16",
+      "time": "19:00",
+      "status": "upcoming",
+      "p1": {
+       "id": "31041",
+       "name": "Rob Cross",
+       "nick": "Voltage",
+       "country": "GB-ENG",
+       "ranking": 24
+      },
+      "p2": {
+       "id": "35046",
+       "name": "Anton Ostlund",
+       "nick": "One-Ton",
+       "country": "SE",
+       "ranking": 162
+      },
+      "s1": 0,
+      "s2": 0,
+      "winner": null
+     }
+    ]
+   },
+   {
+    "name": "Group F",
+    "round": 10,
+    "sets": false,
+    "fixtures": [
+     {
+      "id": "516982",
+      "date": "2026-11-14",
+      "time": "14:45",
+      "status": "result",
+      "p1": {
+       "id": "32037",
+       "name": "Ryan Searle",
+       "nick": "Heavy Metal",
+       "country": "GB-ENG",
+       "ranking": 15
+      },
+      "p2": {
+       "id": "38279",
+       "name": "Charlie Manby",
+       "nick": "Champagne",
+       "country": "GB-ENG",
+       "ranking": 77
+      },
+      "s1": 5,
+      "s2": 4,
+      "winner": "32037"
+     },
+     {
+      "id": "516984",
+      "date": "2026-11-15",
+      "time": "15:45",
+      "status": "upcoming",
+      "p1": {
+       "id": "231",
+       "name": "Andrew Gilding",
+       "nick": "Goldfinger",
+       "country": "GB-ENG",
+       "ranking": 27
+      },
+      "p2": {
+       "id": "38279",
+       "name": "Charlie Manby",
+       "nick": "Champagne",
+       "country": "GB-ENG",
+       "ranking": 77
+      },
+      "s1": 0,
+      "s2": 0,
+      "winner": null
+     },
+     {
+      "id": "516983",
+      "date": "2026-11-16",
+      "time": "19:00",
+      "status": "upcoming",
+      "p1": {
+       "id": "32037",
+       "name": "Ryan Searle",
+       "nick": "Heavy Metal",
+       "country": "GB-ENG",
+       "ranking": 15
+      },
+      "p2": {
+       "id": "231",
+       "name": "Andrew Gilding",
+       "nick": "Goldfinger",
+       "country": "GB-ENG",
+       "ranking": 27
+      },
+      "s1": 0,
+      "s2": 0,
+      "winner": null
+     }
+    ]
+   },
+   {
+    "name": "Group E",
+    "round": 9,
+    "sets": false,
+    "fixtures": [
+     {
+      "id": "516979",
+      "date": "2026-11-14",
+      "time": "19:20",
+      "status": "result",
+      "p1": {
+       "id": "11788",
+       "name": "Gerwyn Price",
+       "nick": "The Iceman",
+       "country": "GB-WLS",
+       "ranking": 4
+      },
+      "p2": {
+       "id": "33558",
+       "name": "Joe Hunt",
+       "nick": "Joe Boy",
+       "country": "GB-ENG",
+       "ranking": 86
+      },
+      "s1": 5,
+      "s2": 3,
+      "winner": "11788"
+     },
+     {
+      "id": "516981",
+      "date": "2026-11-15",
+      "time": "20:30",
+      "status": "upcoming",
+      "p1": {
+       "id": "36287",
+       "name": "Sebastian Bialecki",
+       "nick": "The Bolt",
+       "country": "PL",
+       "ranking": 51
+      },
+      "p2": {
+       "id": "33558",
+       "name": "Joe Hunt",
+       "nick": "Joe Boy",
+       "country": "GB-ENG",
+       "ranking": 86
+      },
+      "s1": 0,
+      "s2": 0,
+      "winner": null
+     },
+     {
+      "id": "516980",
+      "date": "2026-11-16",
+      "time": "19:00",
+      "status": "upcoming",
+      "p1": {
+       "id": "11788",
+       "name": "Gerwyn Price",
+       "nick": "The Iceman",
+       "country": "GB-WLS",
+       "ranking": 4
+      },
+      "p2": {
+       "id": "36287",
+       "name": "Sebastian Bialecki",
+       "nick": "The Bolt",
+       "country": "PL",
+       "ranking": 51
+      },
+      "s1": 0,
+      "s2": 0,
+      "winner": null
+     }
+    ]
+   },
+   {
+    "name": "Group D",
+    "round": 8,
+    "sets": false,
+    "fixtures": [
+     {
+      "id": "516976",
+      "date": "2026-11-14",
+      "time": "14:13",
+      "status": "result",
+      "p1": {
+       "id": "876",
+       "name": "Stephen Bunting",
+       "nick": "The Bullet",
+       "country": "GB-ENG",
+       "ranking": 9
+      },
+      "p2": {
+       "id": "31498",
+       "name": "Raymond Smith",
+       "nick": "Guru",
+       "country": "AU",
+       "ranking": null
+      },
+      "s1": 5,
+      "s2": 4,
+      "winner": "876"
+     },
+     {
+      "id": "516978",
+      "date": "2026-11-15",
+      "time": "14:45",
+      "status": "upcoming",
+      "p1": {
+       "id": "2040",
+       "name": "Cameron Menzies",
+       "nick": "Cammy",
+       "country": "GB-SCT",
+       "ranking": 26
+      },
+      "p2": {
+       "id": "31498",
+       "name": "Raymond Smith",
+       "nick": "Guru",
+       "country": "AU",
+       "ranking": null
+      },
+      "s1": 0,
+      "s2": 0,
+      "winner": null
+     },
+     {
+      "id": "516977",
+      "date": "2026-11-16",
+      "time": "19:00",
+      "status": "upcoming",
+      "p1": {
+       "id": "876",
+       "name": "Stephen Bunting",
+       "nick": "The Bullet",
+       "country": "GB-ENG",
+       "ranking": 9
+      },
+      "p2": {
+       "id": "2040",
+       "name": "Cameron Menzies",
+       "nick": "Cammy",
+       "country": "GB-SCT",
+       "ranking": 26
+      },
+      "s1": 0,
+      "s2": 0,
+      "winner": null
+     }
+    ]
+   },
+   {
+    "name": "Group C",
+    "round": 7,
+    "sets": false,
+    "fixtures": [
+     {
+      "id": "516973",
+      "date": "2026-11-14",
+      "time": "15:12",
+      "status": "result",
+      "p1": {
+       "id": "38552",
+       "name": "Josh Rock",
+       "nick": null,
+       "country": "GB-NIR",
+       "ranking": 8
+      },
+      "p2": {
+       "id": "38498",
+       "name": "Tommy Morris",
+       "nick": "The Gun",
+       "country": "GB-ENG",
+       "ranking": 82
+      },
+      "s1": 2,
+      "s2": 5,
+      "winner": "38498"
+     },
+     {
+      "id": "516974",
+      "date": "2026-11-15",
+      "time": "16:45",
+      "status": "upcoming",
+      "p1": {
+       "id": "38552",
+       "name": "Josh Rock",
+       "nick": null,
+       "country": "GB-NIR",
+       "ranking": 8
+      },
+      "p2": {
+       "id": "32895",
+       "name": "Kevin Doets",
+       "nick": "Hawk Eye",
+       "country": "NL",
+       "ranking": 23
+      },
+      "s1": 0,
+      "s2": 0,
+      "winner": null
+     },
+     {
+      "id": "516975",
+      "date": "2026-11-16",
+      "time": "19:00",
+      "status": "upcoming",
+      "p1": {
+       "id": "32895",
+       "name": "Kevin Doets",
+       "nick": "Hawk Eye",
+       "country": "NL",
+       "ranking": 23
+      },
+      "p2": {
+       "id": "38498",
+       "name": "Tommy Morris",
+       "nick": "The Gun",
+       "country": "GB-ENG",
+       "ranking": 82
+      },
+      "s1": 0,
+      "s2": 0,
+      "winner": null
+     }
+    ]
+   },
+   {
+    "name": "Group B",
+    "round": 6,
+    "sets": false,
+    "fixtures": [
+     {
+      "id": "516970",
+      "date": "2026-11-14",
+      "time": "13:47",
+      "status": "result",
+      "p1": {
+       "id": "30844",
+       "name": "Jermaine Wattimena",
+       "nick": "The Machine Gun",
+       "country": "NL",
+       "ranking": 18
+      },
+      "p2": {
+       "id": "31491",
+       "name": "Lisa Ashton",
+       "nick": "The Lancashire Rose",
+       "country": "GB-ENG",
+       "ranking": null
+      },
+      "s1": 5,
+      "s2": 2,
+      "winner": "30844"
+     },
+     {
+      "id": "516972",
+      "date": "2026-11-15",
+      "time": "14:15",
+      "status": "upcoming",
+      "p1": {
+       "id": "37349",
+       "name": "Alan Soutar",
+       "nick": "Soots",
+       "country": "GB-SCT",
+       "ranking": 61
+      },
+      "p2": {
+       "id": "31491",
+       "name": "Lisa Ashton",
+       "nick": "The Lancashire Rose",
+       "country": "GB-ENG",
+       "ranking": null
+      },
+      "s1": 0,
+      "s2": 0,
+      "winner": null
+     },
+     {
+      "id": "516971",
+      "date": "2026-11-16",
+      "time": "19:00",
+      "status": "upcoming",
+      "p1": {
+       "id": "30844",
+       "name": "Jermaine Wattimena",
+       "nick": "The Machine Gun",
+       "country": "NL",
+       "ranking": 18
+      },
+      "p2": {
+       "id": "37349",
+       "name": "Alan Soutar",
+       "nick": "Soots",
+       "country": "GB-SCT",
+       "ranking": 61
+      },
+      "s1": 0,
+      "s2": 0,
+      "winner": null
+     }
+    ]
+   },
+   {
+    "name": "Group A",
+    "round": 5,
+    "sets": false,
+    "fixtures": [
+     {
+      "id": "516967",
+      "date": "2026-11-14",
+      "time": "21:45",
+      "status": "result",
+      "p1": {
+       "id": "40676",
+       "name": "Luke Littler",
+       "nick": "The Nuke",
+       "country": "GB-ENG",
+       "ranking": 1
+      },
+      "p2": {
+       "id": "36640",
+       "name": "Beau Greaves",
+       "nick": "Beau & Arrow",
+       "country": "GB-ENG",
+       "ranking": 74
+      },
+      "s1": 5,
+      "s2": 2,
+      "winner": "40676"
+     },
+     {
+      "id": "516969",
+      "date": "2026-11-15",
+      "time": "22:00",
+      "status": "upcoming",
+      "p1": {
+       "id": "33014",
+       "name": "Niels Zonneveld",
+       "nick": "Triple Z",
+       "country": "NL",
+       "ranking": 28
+      },
+      "p2": {
+       "id": "36640",
+       "name": "Beau Greaves",
+       "nick": "Beau & Arrow",
+       "country": "GB-ENG",
+       "ranking": 74
+      },
+      "s1": 0,
+      "s2": 0,
+      "winner": null
+     },
+     {
+      "id": "516968",
+      "date": "2026-11-16",
+      "time": "19:00",
+      "status": "upcoming",
+      "p1": {
+       "id": "40676",
+       "name": "Luke Littler",
+       "nick": "The Nuke",
+       "country": "GB-ENG",
+       "ranking": 1
+      },
+      "p2": {
+       "id": "33014",
+       "name": "Niels Zonneveld",
+       "nick": "Triple Z",
+       "country": "NL",
+       "ranking": 28
+      },
+      "s1": 0,
+      "s2": 0,
+      "winner": null
+     }
+    ]
+   },
+   {
+    "name": "Last 16",
+    "round": 4,
+    "sets": false,
+    "fixtures": [
+     {
+      "id": "517015",
+      "date": "2026-11-18",
+      "time": "19:15",
+      "status": "upcoming",
+      "p1": null,
+      "p2": null,
+      "s1": 0,
+      "s2": 0,
+      "winner": null
+     },
+     {
+      "id": "517016",
+      "date": "2026-11-18",
+      "time": "19:15",
+      "status": "upcoming",
+      "p1": null,
+      "p2": null,
+      "s1": 0,
+      "s2": 0,
+      "winner": null
+     },
+     {
+      "id": "517017",
+      "date": "2026-11-18",
+      "time": "19:15",
+      "status": "upcoming",
+      "p1": null,
+      "p2": null,
+      "s1": 0,
+      "s2": 0,
+      "winner": null
+     },
+     {
+      "id": "517018",
+      "date": "2026-11-18",
+      "time": "19:15",
+      "status": "upcoming",
+      "p1": null,
+      "p2": null,
+      "s1": 0,
+      "s2": 0,
+      "winner": null
+     },
+     {
+      "id": "517019",
+      "date": "2026-11-19",
+      "time": "19:15",
+      "status": "upcoming",
+      "p1": null,
+      "p2": null,
+      "s1": 0,
+      "s2": 0,
+      "winner": null
+     },
+     {
+      "id": "517020",
+      "date": "2026-11-19",
+      "time": "19:15",
+      "status": "upcoming",
+      "p1": null,
+      "p2": null,
+      "s1": 0,
+      "s2": 0,
+      "winner": null
+     },
+     {
+      "id": "517021",
+      "date": "2026-11-19",
+      "time": "19:15",
+      "status": "upcoming",
+      "p1": null,
+      "p2": null,
+      "s1": 0,
+      "s2": 0,
+      "winner": null
+     },
+     {
+      "id": "517022",
+      "date": "2026-11-19",
+      "time": "19:15",
+      "status": "upcoming",
+      "p1": null,
+      "p2": null,
+      "s1": 0,
+      "s2": 0,
+      "winner": null
+     }
+    ]
+   },
+   {
+    "name": "Quarter-Final",
+    "round": 3,
+    "sets": false,
+    "fixtures": [
+     {
+      "id": "517023",
+      "date": "2026-11-20",
+      "time": "19:15",
+      "status": "upcoming",
+      "p1": null,
+      "p2": null,
+      "s1": 0,
+      "s2": 0,
+      "winner": null
+     },
+     {
+      "id": "517024",
+      "date": "2026-11-20",
+      "time": "19:15",
+      "status": "upcoming",
+      "p1": null,
+      "p2": null,
+      "s1": 0,
+      "s2": 0,
+      "winner": null
+     },
+     {
+      "id": "517025",
+      "date": "2026-11-21",
+      "time": "19:15",
+      "status": "upcoming",
+      "p1": null,
+      "p2": null,
+      "s1": 0,
+      "s2": 0,
+      "winner": null
+     },
+     {
+      "id": "517026",
+      "date": "2026-11-21",
+      "time": "19:15",
+      "status": "upcoming",
+      "p1": null,
+      "p2": null,
+      "s1": 0,
+      "s2": 0,
+      "winner": null
+     }
+    ]
+   },
+   {
+    "name": "Semi-Final",
+    "round": 2,
+    "sets": false,
+    "fixtures": [
+     {
+      "id": "517027",
+      "date": "2026-11-22",
+      "time": "13:15",
+      "status": "upcoming",
+      "p1": null,
+      "p2": null,
+      "s1": 0,
+      "s2": 0,
+      "winner": null
+     },
+     {
+      "id": "517028",
+      "date": "2026-11-22",
+      "time": "13:15",
+      "status": "upcoming",
+      "p1": null,
+      "p2": null,
+      "s1": 0,
+      "s2": 0,
+      "winner": null
+     }
+    ]
+   },
+   {
+    "name": "Final",
+    "round": 1,
+    "sets": false,
+    "fixtures": [
+     {
+      "id": "517029",
+      "date": "2026-11-22",
+      "time": "19:45",
+      "status": "upcoming",
+      "p1": null,
+      "p2": null,
+      "s1": 0,
+      "s2": 0,
+      "winner": null
+     }
+    ]
+   }
+  ]
+ },
+ "next": {
+  "id": "10872",
+  "name": "Players Championship Finals",
+  "start": "2026-11-27",
+  "end": "2026-11-29",
+  "broadcaster": "itv"
+ }
+}

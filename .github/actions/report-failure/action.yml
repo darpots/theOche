@@ -1,0 +1,23 @@
+name: Report failure
+description: Opens (or comments on) a GitHub issue when a scheduled refresh fails, so problems are visible without anyone watching the Actions tab.
+inputs:
+  job:
+    description: Job name
+    required: true
+runs:
+  using: composite
+  steps:
+    - shell: bash
+      env:
+        GH_TOKEN: ${{ github.token }}
+      run: |
+        title="Automatic refresh failing: ${{ inputs.job }}"
+        url="${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+        existing=$(gh issue list --state open --search "in:title \"$title\"" --json number --jq '.[0].number')
+        if [ -n "$existing" ]; then
+          gh issue comment "$existing" --body "Failed again: $url"
+        else
+          gh issue create --title "$title" --body "The scheduled **${{ inputs.job }}** job failed. The site keeps serving the last good data until it recovers.
+
+        Run log: $url"
+        fi

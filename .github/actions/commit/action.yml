@@ -1,0 +1,31 @@
+name: Validate and commit data
+description: Builds the site to make sure new data is valid, then commits and pushes any changes (which triggers a Vercel deploy).
+inputs:
+  message:
+    description: Commit message
+    required: true
+  paths:
+    description: Paths to stage
+    required: true
+runs:
+  using: composite
+  steps:
+    - name: Build check
+      shell: bash
+      run: npm run build
+    - name: Commit and push if changed
+      shell: bash
+      run: |
+        git config user.name "oche-bot"
+        git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+        git add ${{ inputs.paths }}
+        if git diff --cached --quiet; then
+          echo "No data changes."
+          exit 0
+        fi
+        git commit -m "${{ inputs.message }}"
+        for i in 1 2 3; do
+          git pull --rebase --autostash origin main && git push origin HEAD:main && exit 0
+          sleep $((i * 10))
+        done
+        exit 1

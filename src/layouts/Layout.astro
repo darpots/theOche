@@ -1,0 +1,110 @@
+---
+import { ClientRouter } from 'astro:transitions';
+import '../styles/global.css';
+
+interface Props { title: string; description?: string; active?: 'calendar' | 'matches' | 'news' | 'rankings' }
+const { title, description = 'PDC darts on TV, live matches, news and world rankings.', active } = Astro.props;
+const nav = [
+  { key: 'calendar', href: '/', label: 'Calendar' },
+  { key: 'matches', href: '/matches', label: 'Matches' },
+  { key: 'news', href: '/news', label: 'News' },
+  { key: 'rankings', href: '/rankings', label: 'Rankings' },
+];
+const fullTitle = title === 'The Oche' ? title : `${title} · The Oche`;
+---
+<!doctype html>
+<html lang="en-GB">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{fullTitle}</title>
+    <meta name="description" content={description} />
+    <meta name="theme-color" content="#fbf8f2" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="website" />
+    <ClientRouter />
+  </head>
+  <body>
+    <header class="top" transition:persist>
+      <div class="wrap bar">
+        <a href="/" class="brand" aria-label="The Oche home">
+          <svg viewBox="0 0 40 40" width="34" height="34" aria-hidden="true">
+            <circle cx="20" cy="20" r="19" fill="#14161f" />
+            <circle cx="20" cy="20" r="14" fill="none" stroke="#d7263d" stroke-width="3" stroke-dasharray="4.4 4.4" />
+            <circle cx="20" cy="20" r="8.5" fill="#f3ead2" />
+            <circle cx="20" cy="20" r="4" fill="#0e8a5f" />
+            <circle cx="20" cy="20" r="1.8" fill="#d7263d" />
+          </svg>
+          <span>The&nbsp;Oche</span>
+        </a>
+        <nav aria-label="Main">
+          {nav.map(n => (
+            <a href={n.href} class:list={['nav', { on: active === n.key }]} aria-current={active === n.key ? 'page' : undefined} data-nav={n.key}>{n.label}</a>
+          ))}
+          <span class="pill" aria-hidden="true"></span>
+        </nav>
+      </div>
+    </header>
+
+    <main transition:animate="fade">
+      <slot />
+    </main>
+
+    <footer class="foot">
+      <div class="wrap">
+        <p><strong>The Oche</strong> is an independent fan site and is not affiliated with the PDC, Sky Sports or ITV.</p>
+        <p class="muted">Schedules, results, rankings and player details come from the PDC's public data feeds and update automatically. News reports are written by our AI-assisted newsdesk from linked sources. Player photos: <a href="/credits">Wikimedia Commons credits</a>.</p>
+      </div>
+    </footer>
+
+    <script>
+      // Scroll-reveal + nav pill, re-run after every view transition.
+      function init() {
+        const io = new IntersectionObserver(entries => {
+          for (const e of entries) if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); }
+        }, { rootMargin: '0px 0px -8% 0px' });
+        document.querySelectorAll('[data-reveal]:not(.in)').forEach(el => io.observe(el));
+
+        const path = location.pathname.replace(/\/$/, '') || '/';
+        const key = path === '/' ? 'calendar' : path.split('/')[1];
+        const nav = document.querySelector('.top nav');
+        const pill = nav?.querySelector<HTMLElement>('.pill');
+        nav?.querySelectorAll<HTMLAnchorElement>('a.nav').forEach(a => {
+          const on = a.dataset.nav === key;
+          a.classList.toggle('on', on);
+          if (on) a.setAttribute('aria-current', 'page'); else a.removeAttribute('aria-current');
+          if (on && pill) { pill.style.width = a.offsetWidth + 'px'; pill.style.transform = `translateX(${a.offsetLeft}px)`; pill.style.opacity = '1'; }
+        });
+      }
+      document.addEventListener('astro:page-load', init);
+      window.addEventListener('resize', () => init());
+    </script>
+  </body>
+</html>
+
+<style>
+  .top {
+    position: sticky; top: 0; z-index: 50;
+    background: rgba(251, 248, 242, .78); backdrop-filter: saturate(1.6) blur(14px); -webkit-backdrop-filter: saturate(1.6) blur(14px);
+    border-bottom: 1px solid rgba(232, 225, 211, .8);
+  }
+  .bar { display: flex; align-items: center; justify-content: space-between; gap: 16px; height: 68px; }
+  .brand { display: inline-flex; align-items: center; gap: 10px; text-decoration: none; font-family: var(--display); font-weight: 800; font-size: 22px; letter-spacing: -.03em; }
+  .brand svg { transition: transform .8s var(--spring); }
+  .brand:hover svg { transform: rotate(180deg) scale(1.08); }
+  nav { position: relative; display: flex; gap: 2px; background: var(--paper-2); padding: 4px; border-radius: 999px; border: 1px solid var(--line); }
+  .nav { position: relative; z-index: 1; padding: 8px 14px; border-radius: 999px; text-decoration: none; font-weight: 600; font-size: 14px; color: var(--muted); transition: color .3s; }
+  .nav:hover { color: var(--ink); }
+  .nav.on { color: #fff; }
+  .pill { position: absolute; z-index: 0; left: 0; top: 4px; bottom: 4px; border-radius: 999px; background: var(--ink); opacity: 0; transition: transform .45s var(--spring), width .45s var(--spring), opacity .2s; box-shadow: 0 6px 16px -6px rgba(20, 22, 31, .5); }
+  main { min-height: 70vh; }
+  .foot { margin-top: 96px; padding: 36px 0 48px; border-top: 1px solid var(--line); font-size: 14px; }
+  .foot p { margin: 0 0 6px; max-width: 760px; }
+  @media (max-width: 640px) {
+    .bar { height: auto; padding: 10px 0; flex-direction: column; gap: 10px; }
+    nav { width: 100%; justify-content: space-between; }
+    .nav { padding: 8px 10px; font-size: 13px; }
+  }
+</style>

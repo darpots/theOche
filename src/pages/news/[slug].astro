@@ -1,0 +1,68 @@
+---
+import { getCollection } from 'astro:content';
+import Layout from '../../layouts/Layout.astro';
+import NewsArt from '../../components/NewsArt.astro';
+
+export async function getStaticPaths() {
+  const cutoff = Date.now() - 90 * 864e5;
+  const all = (await getCollection('news')).map(s => s.data).filter(s => Date.parse(s.date) >= cutoff).sort((a, b) => b.date.localeCompare(a.date));
+  return all.map(story => ({ params: { slug: story.slug }, props: { story, more: all.filter(s => s.slug !== story.slug).slice(0, 3) } }));
+}
+const { story, more } = Astro.props;
+const published = new Date(story.date).toLocaleDateString('en-GB', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
+---
+<Layout title={story.headline} description={story.standfirst} active="news">
+  <article class="wrap article">
+    <a href="/news" class="back">← All news</a>
+    <header>
+      <div class="tags">{story.tags.map(t => <span>{t}</span>)}</div>
+      <h1 transition:name={`h-${story.slug}`}>{story.headline}</h1>
+      <p class="stand">{story.standfirst}</p>
+      <p class="byline muted">By The Oche newsdesk · <time datetime={story.date}>{published}</time></p>
+    </header>
+    <NewsArt seed={story.slug} class="cover" />
+    <div class="text">
+      {story.body.map((p, i) => <p data-reveal style={`--d:${Math.min(i, 3) * 60}ms`}>{p}</p>)}
+    </div>
+    <aside class="sources card">
+      <h2>Sources</h2>
+      <p class="muted">This report was written by our AI-assisted newsdesk from the coverage below. Read the originals for the full story.</p>
+      <ul>
+        {story.sources.map(s => <li><a href={s.url} target="_blank" rel="noopener">{s.title || s.name}</a> <span class="muted">— {s.name}</span></li>)}
+      </ul>
+    </aside>
+    {more.length > 0 && (
+      <section class="more">
+        <h2>More news</h2>
+        <div class="more-grid">
+          {more.map(s => <a class="card lift" href={`/news/${s.slug}`}><strong>{s.headline}</strong><span class="muted">{new Date(s.date).toLocaleDateString('en-GB', { day: 'numeric', month: 'short' })}</span></a>)}
+        </div>
+      </section>
+    )}
+  </article>
+</Layout>
+
+<style>
+  .article { max-width: 780px; padding-top: 40px; }
+  .back { text-decoration: none; font-weight: 700; color: var(--muted); }
+  .back:hover { color: var(--ink); }
+  header { margin: 22px 0 26px; }
+  .tags { display: flex; gap: 8px; flex-wrap: wrap; }
+  .tags span { font-size: 11px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; color: var(--red); background: var(--red-soft); padding: 4px 10px; border-radius: 999px; }
+  h1 { font-size: clamp(32px, 5vw, 54px); font-weight: 800; margin: 14px 0; }
+  .stand { font-size: 20px; color: var(--ink-2); margin: 0 0 12px; line-height: 1.45; }
+  .byline { font-size: 14px; margin: 0; }
+  .article :global(.cover) { border-radius: var(--radius); aspect-ratio: 16 / 7; box-shadow: var(--shadow); }
+  .text { margin-top: 30px; font-size: 18px; line-height: 1.75; }
+  .text p { margin: 0 0 1.1em; }
+  .text p:first-child::first-letter { font-family: var(--display); font-size: 3.4em; font-weight: 800; float: left; line-height: .9; margin: 6px 10px 0 0; color: var(--red); }
+  .sources { padding: 20px 22px; margin-top: 30px; }
+  .sources h2 { font-size: 18px; }
+  .sources p { font-size: 14px; margin: 6px 0 10px; }
+  .sources ul { margin: 0; padding-left: 18px; font-size: 15px; }
+  .sources li { margin: 4px 0; }
+  .more { margin-top: 48px; }
+  .more h2 { font-size: 24px; margin-bottom: 14px; }
+  .more-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 12px; }
+  .more-grid a { padding: 16px; text-decoration: none; display: flex; flex-direction: column; gap: 8px; }
+</style>
