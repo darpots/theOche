@@ -14,7 +14,7 @@ for (const e of events) {
   months.get(k)!.push(e);
 }
 const place = (e: { venue: string | null; city: string | null }) => (e.venue && e.city && e.venue.includes(e.city) ? e.venue : [e.venue, e.city].filter(Boolean).join(' · '));
-const kind = (e: Ev) => (e.name === 'Premier League' ? 'pl' : e.broadcaster);
+const kind = (e: Ev) => e.broadcaster;
 const lite = events.map(e => ({ id: e.id, name: e.name, tag: e.tag, start: e.start, end: e.end, b: e.broadcaster, city: e.city, venue: e.venue }));
 ---
 <Layout title="The Oche" description="Every PDC darts event on Sky Sports, ITV and PDCTV — dates, venues, broadcasters and winners." active="calendar">
@@ -36,7 +36,6 @@ const lite = events.map(e => ({ id: e.id, name: e.name, tag: e.tag, start: e.sta
       <button class="chip logo-chip" data-filter="sky" aria-pressed="false" aria-label="Sky Sports"><img src="/brand/sky-sports.svg" alt="" height="14" /></button>
       <button class="chip logo-chip" data-filter="itv" aria-pressed="false" aria-label="ITV"><img src="/brand/itv.svg" alt="" height="18" /></button>
       <button class="chip logo-chip" data-filter="pdctv" aria-pressed="false" aria-label="European Tour on PDCTV"><span class="pdc-mark"><img src="/brand/pdctv.png" alt="" height="12" /></span>European Tour</button>
-      <button class="chip" data-filter="pl" aria-pressed="false"><span class="dot" style="color:var(--gold)"></span>Premier League</button>
     </div>
     <label class="toggle">
       <input type="checkbox" id="showPast" />
