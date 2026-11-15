@@ -20,7 +20,7 @@ const published = new Date(story.date).toLocaleDateString('en-GB', { weekday: 'l
       <p class="stand">{story.standfirst}</p>
       <p class="byline muted">By The Oche newsdesk · <time datetime={story.date}>{published}</time></p>
     </header>
-    <NewsArt seed={story.slug} class="cover" players={story.players} />
+    <NewsArt seed={story.slug} class="cover" label={story.tags[0]} players={story.players} />
     <div class="text">
       {story.body.map((p, i) => <p data-reveal style={`--d:${Math.min(i, 3) * 60}ms`}>{p}</p>)}
     </div>

@@ -267,3 +267,20 @@ export function liveRace(official, current, previous) {
   list.forEach((p, i) => { if (p.money !== last) { rank = i + 1; last = p.money; } p.live = rank; p.move = p.pos ? p.pos - rank : null; });
   return list;
 }
+
+// ---------------------------------------------------------------------------
+// Match stats: the fixtures feed's timeline carries each player's averages,
+// 180s and checkouts (updated during the match).
+// ---------------------------------------------------------------------------
+export const fixtureStatsUrl = id => `https://fixtures.darts.web.gc.pdcservices.co.uk/v2/${id}/timeline`;
+
+/** Slim stats from a fixture timeline payload, or null when there are none yet. */
+export function slimStats(payload) {
+  const m = payload?.data?.attributes?.fixtureMeta;
+  const one = d => d && d.threeDartAverage != null ? {
+    avg: Number(d.threeDartAverage), f9: d.first9Average != null ? Number(d.first9Average) : null,
+    t80: d.score180 ?? 0, co: d.checkoutPercentage != null ? Number(d.checkoutPercentage) : null, hi: d.highestCheckout ?? null,
+  } : null;
+  const a = one(m?.participant1Data), b = one(m?.participant2Data);
+  return a || b ? [a, b] : null;
+}

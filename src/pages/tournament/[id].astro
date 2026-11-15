@@ -62,8 +62,8 @@ const prog = progress(t);
   <script is:inline type="application/json" id="t-data" set:html={JSON.stringify({ t, portraits })}></script>
 
   <script>
-    import { API, normaliseTournament } from '../../lib/pdc.mjs';
-    import { matchDays, renderDay, renderTabs, progress } from '../../lib/render-matches.mjs';
+    import { API, normaliseTournament, fixtureStatsUrl, slimStats } from '../../lib/pdc.mjs';
+    import { matchDays, renderDay, renderTabs, progress, fixtureRow } from '../../lib/render-matches.mjs';
 
     let poll: number | undefined;
     function init() {
@@ -72,6 +72,32 @@ const prog = progress(t);
       const { t: initial, portraits } = JSON.parse(document.getElementById('t-data')!.textContent!);
       const isComplete = initial.stages.length > 0 && initial.stages.every((s: any) => s.fixtures.every((f: any) => f.status === 'result'));
       let t = initial;
+      // Averages and 180s come from each match's timeline; finished matches are fetched once.
+      const statsCache = new Map<string, any>(initial.stages.flatMap((s: any) => s.fixtures).filter((f: any) => f.stats).map((f: any) => [f.id, f.stats]));
+      const merge = () => t.stages.forEach((s: any) => s.fixtures.forEach((f: any) => { if (statsCache.has(f.id)) f.stats = statsCache.get(f.id); }));
+      let loading = false;
+      async function loadStats() {
+        if (loading) return; loading = true;
+        try {
+          const shown = new Set([...board!.querySelectorAll<HTMLElement>('.fx')].map(li => li.dataset.id));
+          const want = t.stages.flatMap((s: any) => s.fixtures.map((f: any) => ({ f, stage: s.name, sets: s.sets })))
+            .filter(({ f }: any) => shown.has(f.id) && f.status !== 'upcoming' && (f.status === 'live' || !statsCache.has(f.id)));
+          let i = 0;
+          await Promise.all(Array.from({ length: 4 }, async () => {
+            while (i < want.length) {
+              const { f, stage, sets } = want[i++];
+              try {
+                const res = await fetch(fixtureStatsUrl(f.id), { cache: 'no-store' });
+                const st = res.ok ? slimStats(await res.json()) : null;
+                if (!st) continue;
+                statsCache.set(f.id, st); f.stats = st;
+                const li = board!.querySelector<HTMLElement>(`.fx[data-id="${f.id}"]`);
+                if (li) { const tmp = document.createElement('div'); tmp.innerHTML = fixtureRow({ ...f, stage, sets }, portraits).trim(); const n = tmp.firstElementChild as HTMLElement; n.classList.add('stats-in'); li.replaceWith(n); }
+              } catch { /* stats are optional */ }
+            }
+          }));
+        } finally { loading = false; }
+      }
       const today = new Date().toLocaleDateString('en-CA', { timeZone: 'Europe/London' });
       let { days, def } = matchDays(t, today);
       let current = def;
@@ -96,6 +122,7 @@ const prog = progress(t);
         document.getElementById('pdone')!.textContent = String(p.done);
         document.getElementById('ptotal')!.textContent = String(p.total);
         document.querySelector('#days .on')?.scrollIntoView({ inline: 'center', block: 'nearest', behavior: animate ? 'smooth' : 'auto' });
+        loadStats();
       };
       document.getElementById('days')!.addEventListener('click', e => {
         const b = (e.target as HTMLElement).closest<HTMLButtonElement>('[data-day]');
@@ -112,6 +139,7 @@ const prog = progress(t);
           const res = await fetch(`${API.tournaments}${t.id}`, { cache: 'no-store' });
           if (!res.ok) return;
           t = normaliseTournament(await res.json());
+          merge();
           ({ days } = matchDays(t, today));
           if (current !== 'all' && !days.includes(current)) current = matchDays(t, today).def;
           paint(true);
@@ -193,6 +221,19 @@ const prog = progress(t);
   .board :global(.pl.won b) { color: #075c3f; }
   .board :global(.pl.lost) { opacity: .62; }
   .board :global(.pl.tbc) { opacity: .55; }
+  .board :global(.avg) { margin-left: auto; flex: none; display: inline-flex; flex-direction: column; align-items: center; line-height: 1; padding: 6px 9px; border-radius: 10px; background: var(--paper-2); font-family: var(--display); font-weight: 800; font-size: 17px; font-variant-numeric: tabular-nums; color: var(--ink-2); }
+  .board :global(.pl.r .avg) { margin-left: 0; margin-right: auto; }
+  .board :global(.avg i) { font-style: normal; font-family: var(--body); font-size: 9px; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); margin-bottom: 3px; }
+  .board :global(.avg.best) { background: var(--ink); color: #fff; }
+  .board :global(.avg.best i) { color: rgba(255, 255, 255, .7); }
+  .board :global(.fx-stats) { grid-column: 1 / -1; display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; border-top: 1px dashed var(--line); padding-top: 9px; margin-top: 2px; }
+  .board :global(.sx) { display: grid; grid-template-columns: 1fr auto 1fr; align-items: baseline; gap: 6px; font-size: 13px; font-variant-numeric: tabular-nums; }
+  .board :global(.sx b) { font-weight: 700; color: var(--muted); text-align: right; }
+  .board :global(.sx b:last-child) { text-align: left; }
+  .board :global(.sx b.up) { color: var(--ink); }
+  .board :global(.sx span) { font-size: 10px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); white-space: nowrap; }
+  .board :global(.fx.stats-in .avg), .board :global(.fx.stats-in .fx-stats) { animation: statsin .6s var(--ease); }
+  @keyframes statsin { from { opacity: 0; transform: translateY(4px); } }
   .board :global(.wbadge) { font-style: normal; color: var(--green); font-weight: 800; margin-left: 4px; }
   .board :global(.mid) { text-align: center; min-width: 96px; }
   .board :global(.sc) { font-family: var(--display); font-size: 30px; font-weight: 800; color: var(--muted); font-variant-numeric: tabular-nums; }
@@ -210,5 +251,7 @@ const prog = progress(t);
     .board :global(.pl.r) { flex-direction: row; text-align: left; }
     .board :global(.mid) { text-align: left; display: flex; align-items: center; gap: 10px; padding-left: 10px; }
     .board :global(.sc) { font-size: 22px; }
+    .board :global(.pl.r .avg) { margin-left: auto; margin-right: 0; }
+    .board :global(.fx-stats) { grid-template-columns: repeat(2, 1fr); row-gap: 8px; }
   }
 </style>

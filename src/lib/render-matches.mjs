@@ -12,11 +12,30 @@ export function avatar(p, portraits, size = 44) {
   return `<span class="avatar" style="--size:${size}px;--c1:${c1};--c2:${c2}">${pic ? `<img src="${pic}" alt="" loading="lazy" decoding="async">` : esc(initials(p?.name || '?'))}</span>`;
 }
 
-function side(p, score, won, decided, portraits, align) {
+const fmt = (n, d = 2) => (n == null || Number.isNaN(n) ? '–' : Number(n).toFixed(d));
+
+function side(p, score, won, decided, portraits, align, st, best) {
   if (!p) return `<div class="pl ${align} tbc"><span class="avatar" style="--size:44px">?</span><span class="nm"><b>To be decided</b></span></div>`;
+  const avg = st ? `<span class="avg${best ? ' best' : ''}" title="Three-dart average"><i>avg</i>${fmt(st.avg)}</span>` : '';
   return `<div class="pl ${align}${won ? ' won' : decided ? ' lost' : ''}">
     ${avatar(p, portraits)}
     <span class="nm"><b>${esc(p.name)}</b><small>${flag(p.country)}${p.ranking ? ` #${p.ranking}` : ''}${won ? ' <em class="wbadge">Winner</em>' : ''}</small></span>
+    ${avg}
+  </div>`;
+}
+
+function statsStrip(st) {
+  const [a, b] = st;
+  const row = (label, x, y, d, hiGood = true) => {
+    const xa = x ?? null, ya = y ?? null;
+    const lead = xa == null || ya == null || xa === ya ? 0 : (xa > ya) === hiGood ? 1 : 2;
+    return `<div class="sx"><b class="${lead === 1 ? 'up' : ''}">${xa == null ? '–' : fmt(xa, d)}</b><span>${label}</span><b class="${lead === 2 ? 'up' : ''}">${ya == null ? '–' : fmt(ya, d)}</b></div>`;
+  };
+  return `<div class="fx-stats">
+    ${row('First 9 avg', a?.f9, b?.f9, 2)}
+    ${row('180s', a?.t80, b?.t80, 0)}
+    ${row('Checkout %', a?.co, b?.co, 1)}
+    ${row('High finish', a?.hi || null, b?.hi || null, 0)}
   </div>`;
 }
 
@@ -30,10 +49,13 @@ export function fixtureRow(f, portraits) {
     : `<span class="vs">${f.time ? esc(f.time) : 'vs'}</span>`;
   const group = /^group/i.test(f.stage || '') ? `${esc(f.stage)} · ` : '';
   const state = f.status === 'live' ? '<span class="live-dot">Live</span>' : `<span class="ft">${group}${f.status === 'result' ? 'Result' : f.time ? 'UK time' : 'Time TBC'}</span>`;
-  return `<li class="fx ${f.status}" data-id="${esc(f.id)}" data-sig="${esc(`${f.s1}-${f.s2}-${f.status}`)}">
-    ${side(f.p1, f.s1, w1, decided, portraits, 'l')}
+  const st = f.stats || null;
+  const best = st && st[0] && st[1] ? (st[0].avg > st[1].avg ? 1 : st[1].avg > st[0].avg ? 2 : 0) : 0;
+  return `<li class="fx ${f.status}${st ? ' has-stats' : ''}" data-id="${esc(f.id)}" data-sig="${esc(`${f.s1}-${f.s2}-${f.status}-${st ? st[0]?.avg + '/' + st[1]?.avg : ''}`)}">
+    ${side(f.p1, f.s1, w1, decided, portraits, 'l', st?.[0], best === 1)}
     <div class="mid">${mid}<div class="st">${state}</div></div>
-    ${side(f.p2, f.s2, w2, decided, portraits, 'r')}
+    ${side(f.p2, f.s2, w2, decided, portraits, 'r', st?.[1], best === 2)}
+    ${st ? statsStrip(st) : ''}
   </li>`;
 }
 

@@ -7,8 +7,8 @@ import { money, avatarColours, initials } from '../lib/format.mjs';
 
 const portraits = Object.fromEntries(Object.entries(portraitsRaw as Record<string, { image: string }>).map(([k, v]) => [k, v.image]));
 const prev = (data.previous || {}) as Record<string, number>;
-const players = data.players.map(p => ({ ...p, move: prev[p.id] ? prev[p.id] - p.pos : null }));
-const top3 = players.slice(0, 3);
+// Top 128 shown; a few more are rendered hidden so the live race can promote them.
+const players = data.players.filter(p => p.pos <= 150).map(p => ({ ...p, move: prev[p.id] ? prev[p.id] - p.pos : null }));
 const max = players[0]?.money || 1;
 const pic = (name: string) => portraits[keyName(name)];
 const av = (name: string) => { const [c1, c2] = avatarColours(name); return `--c1:${c1};--c2:${c2}`; };
@@ -17,23 +17,9 @@ const av = (name: string) => { const [c1, c2] = avatarColours(name); return `--c
   <section class="hero wrap">
     <span class="eyebrow">PDC Order of Merit</span>
     <h1>World <span class="accent">Rankings</span></h1>
-    <p class="lede">Ranked on prize money won over two years. Tap any player in the top 128 for their profile, season record and full tournament history.</p>
+    <p class="lede">The top 128, ranked on prize money won over two years. Tap any player for their profile, season record and full tournament history.</p>
   </section>
 
-  <section class="wrap podium">
-    {[top3[1], top3[0], top3[2]].filter(Boolean).map((p, i) => (
-      <button class={`pod pod-${p.pos}`} data-player={p.id} data-reveal style={`--d:${[150, 0, 300][i]}ms`}>
-        <span class="rank">{p.pos}</span>
-        <span class="avatar big" style={`--size:${p.pos === 1 ? 132 : 104}px;${av(p.name)}`}>
-          {pic(p.name) ? <img src={pic(p.name)} alt="" /> : initials(p.name)}
-        </span>
-        <strong>{p.name}</strong>
-        {p.nick && <em>“{p.nick}”</em>}
-        <span class="money tabular" data-money={p.money}>{money(p.money)}</span>
-        <span class="step" />
-      </button>
-    ))}
-  </section>
 
   <section class="wrap">
     <div class="tools" data-reveal>
@@ -45,7 +31,7 @@ const av = (name: string) => { const [c1, c2] = avatarColours(name); return `--c
         <button class="seg" data-mode="live" aria-pressed="true"><span class="ldot"></span>Live race</button>
         <button class="seg" data-mode="official" aria-pressed="false">Official</button>
       </div>
-      <span class="muted small" id="asof">{players.length} ranked players</span>
+      <span class="muted small" id="asof">Top 128 · official PDC list</span>
     </div>
     <p class="race-note" id="raceNote" hidden></p>
     <div class="table card" role="table" aria-label="PDC World Rankings">
@@ -53,7 +39,7 @@ const av = (name: string) => { const [c1, c2] = avatarColours(name); return `--c
         <span role="columnheader">#</span><span role="columnheader">Player</span><span role="columnheader" class="hide-s">Country</span><span role="columnheader" class="hide-s">Age</span><span role="columnheader" class="r">Prize money</span>
       </div>
       {players.map(p => (
-        <button class:list={['tr', { clickable: p.pos <= 128 }]} role="row" data-player={p.pos <= 128 ? p.id : undefined} disabled={p.pos > 128} data-search={`${p.name} ${p.nick || ''} ${countryName(p.country) || ''}`.toLowerCase()}>
+        <button class="tr clickable" role="row" data-player={p.id} hidden={p.pos > 128} data-search={`${p.name} ${p.nick || ''} ${countryName(p.country) || ''}`.toLowerCase()}>
           <span class="pos tabular" role="cell" data-pos={p.pos} data-move={p.move ?? ''}><b>{p.pos}</b>
             {p.move ? <i class={p.move > 0 ? 'up' : 'down'} title={`${p.move > 0 ? 'Up' : 'Down'} ${Math.abs(p.move)}`}>{p.move > 0 ? '▲' : '▼'}{Math.abs(p.move)}</i> : null}
           </span>
@@ -179,7 +165,7 @@ const av = (name: string) => { const [c1, c2] = avatarColours(name); return `--c
         }
       };
       document.querySelectorAll<HTMLElement>('[data-player]').forEach(el => el.addEventListener('click', () => {
-        const rank = el.classList.contains('pod') ? el.querySelector('.rank')!.textContent! : el.querySelector<HTMLElement>('.pos')!.dataset.pos!;
+        const rank = el.querySelector<HTMLElement>('.pos')!.dataset.pos!;
         open(el.dataset.player!, rank);
       }));
       dlg.addEventListener('click', e => {
@@ -198,21 +184,22 @@ const av = (name: string) => { const [c1, c2] = avatarColours(name); return `--c
       const q = document.getElementById('q') as HTMLInputElement;
       q.addEventListener('input', () => {
         const v = q.value.trim().toLowerCase();
-        document.querySelectorAll<HTMLElement>('.table .tr[data-search]').forEach(r => { r.hidden = !!v && !r.dataset.search!.includes(v); });
+        document.querySelectorAll<HTMLElement>('.table .tr[data-search]').forEach(r => r.classList.toggle('nomatch', !!v && !r.dataset.search!.includes(v)));
       });
 
       // ---- Official list, refreshed from the PDC feed, plus the live race ----
       const table = document.querySelector<HTMLElement>('.table')!;
-      const rows = new Map([...table.querySelectorAll<HTMLElement>('.tr[data-search]')].map(r => [r.dataset.player || r.querySelector('.who b')!.textContent!, r]));
+      const rows = new Map([...table.querySelectorAll<HTMLElement>('.tr[data-search]')].map(r => [r.dataset.player!, r]));
       const asof = document.getElementById('asof')!;
       const modeBox = document.getElementById('mode')!;
       const note = document.getElementById('raceNote')!;
       let official: any[] = [];
+      let full: any[] = [];
       let race: any[] | null = null;
       let event: any = null;
       let mode: 'live' | 'official' = 'live';
       const k = (n: number) => '£' + (n / 1000).toLocaleString('en-GB', { maximumFractionDigits: 2 }) + 'k';
-      const keyOf = (p: any) => (rows.has(p.id) ? p.id : p.name);
+      const keyOf = (p: any) => p.id;
 
       const paint = () => {
         const live = mode === 'live' && race;
@@ -237,12 +224,12 @@ const av = (name: string) => { const [c1, c2] = avatarColours(name); return `--c
           r.querySelector<HTMLElement>('.bar span')!.style.width = `${(p.money / max) * 100}%`;
           frag.appendChild(r);
         }
-        // Rows not in this list keep their place at the end.
-        rows.forEach(r => { if (!seen.has(r)) frag.appendChild(r); });
+        // Players outside this view's top 128 are hidden.
+        rows.forEach(r => { r.hidden = !seen.has(r); if (!seen.has(r)) frag.appendChild(r); });
         table.appendChild(frag);
         note.hidden = !live;
         if (live) note.innerHTML = `<span class="live-dot">Live</span> Projected standings during the <b>${esc(event.name.replace(/^\d{4}\s+/, ''))}</b>: prize money from the ${esc(String(Number(event.seasonID) - 2))} edition comes off (<span class="minus">−</span>) and money players have guaranteed so far is added (<span class="plus">+</span>). Positions settle when the PDC publishes the official list after the final.`;
-        asof.textContent = live ? `Movement shown against the official list` : `${official.length} ranked players · official PDC list`;
+        asof.textContent = live ? `Movement shown against the official list` : `Top ${official.length} · official PDC list`;
       };
 
       modeBox.addEventListener('click', e => {
@@ -270,11 +257,11 @@ const av = (name: string) => { const [c1, c2] = avatarColours(name); return `--c
       async function refresh() {
         try {
           const body = await json(`${API.rankings}2YEAR?page.size=500`);
-          if (body) official = normaliseRankings(body);
+          if (body) { full = normaliseRankings(body); official = full.filter((p: any) => p.pos <= 128); }
           if (found === null) found = (await findEvent()) || false;
           if (found && official.length) {
             const cur = (await json(API.tournaments + found.meta.id))?.data?.attributes;
-            if (cur) { event = { ...found.meta, ...cur }; race = liveRace(official, cur, found.prev); }
+            if (cur) { event = { ...found.meta, ...cur }; race = liveRace(full, cur, found.prev).filter((p: any) => p.live <= 128); }
           }
           modeBox.hidden = !race;
           paint();
@@ -288,19 +275,6 @@ const av = (name: string) => { const [c1, c2] = avatarColours(name); return `--c
 </Layout>
 
 <style>
-  .podium { display: grid; grid-template-columns: 1fr 1.15fr 1fr; align-items: end; gap: 16px; margin: 10px auto 36px; max-width: 860px; }
-  .pod { position: relative; display: flex; flex-direction: column; align-items: center; gap: 6px; background: none; border: 0; cursor: pointer; padding: 0; text-align: center; }
-  .pod .rank { font-family: var(--display); font-size: 15px; font-weight: 800; width: 34px; height: 34px; border-radius: 50%; display: grid; place-items: center; background: var(--ink); color: #fff; position: absolute; top: -6px; left: calc(50% + 30px); z-index: 2; box-shadow: var(--shadow); }
-  .pod-1 .rank { background: linear-gradient(135deg, #e8c766, var(--gold)); color: #3d2e05; left: calc(50% + 40px); }
-  .pod .big { transition: transform .5s var(--spring); }
-  .pod:hover .big { transform: translateY(-6px) scale(1.04) rotate(-2deg); }
-  .pod-1 .big { box-shadow: 0 0 0 5px #fff, 0 0 0 8px var(--gold), var(--shadow-lg); }
-  .pod strong { font-family: var(--display); font-size: 20px; margin-top: 8px; }
-  .pod em { color: var(--muted); font-size: 14px; }
-  .pod .money { font-weight: 700; font-size: 15px; }
-  .step { display: block; width: 100%; margin-top: 10px; border-radius: 16px 16px 6px 6px; background: linear-gradient(var(--card), var(--paper-2)); border: 1px solid var(--line); height: 70px; }
-  .pod-1 .step { height: 110px; background: linear-gradient(#fffaf0, var(--gold-soft)); border-color: #ecd9a0; }
-  .pod-3 .step { height: 48px; }
 
   .tools { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 12px; flex-wrap: wrap; }
   .search { display: flex; align-items: center; gap: 10px; background: var(--card); border: 1px solid var(--line); border-radius: 999px; padding: 0 16px; flex: 1; max-width: 420px; box-shadow: var(--shadow-sm); transition: box-shadow .2s, border-color .2s; }
@@ -310,6 +284,7 @@ const av = (name: string) => { const [c1, c2] = avatarColours(name); return `--c
   .table { overflow: hidden; }
   .tr { display: grid; grid-template-columns: 76px 1.6fr 1fr 60px 1.1fr; align-items: center; gap: 12px; padding: 10px 18px; width: 100%; border: 0; border-bottom: 1px solid var(--line); background: none; text-align: left; font: inherit; color: inherit; }
   .tr:last-child { border-bottom: 0; }
+  .tr.nomatch { display: none; }
   .th { font-size: 12px; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); background: var(--paper-2); }
   .tr.clickable { cursor: pointer; transition: background .2s, transform .25s var(--ease); }
   .tr.clickable:hover { background: #fffaf0; }
@@ -399,12 +374,7 @@ const av = (name: string) => { const [c1, c2] = avatarColours(name); return `--c
   .sheet :global(.src) { margin-top: 20px; font-size: 13px; }
 
   @media (max-width: 720px) {
-    .podium { gap: 8px; }
-    .pod strong { font-size: 15px; }
-    .pod em { display: none; }
-    .pod .big { --size: 84px !important; }
-    .pod-1 .big { --size: 100px !important; }
-    .tr { grid-template-columns: 58px 1fr auto; padding: 10px 12px; }
+              .tr { grid-template-columns: 58px 1fr auto; padding: 10px 12px; }
     .hide-s { display: none; }
     .bar { display: none; }
     .sheet { padding: 20px; }
