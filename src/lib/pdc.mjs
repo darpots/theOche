@@ -153,6 +153,7 @@ export function countryName(code) {
 /** Emoji flag (sub-national UK flags use tag sequences). */
 export function flag(code) {
   if (!code) return '';
+  if (code === 'GB-NIR') return '\u{1F1EC}\u{1F1E7}'; // no Northern Ireland emoji flag exists
   if (code.startsWith('GB-')) {
     const sub = code.slice(3).toLowerCase();
     return '\u{1F3F4}' + [...('gb' + sub)].map(c => String.fromCodePoint(0xE0000 + c.charCodeAt(0))).join('') + '\u{E007F}';
@@ -162,3 +163,107 @@ export function flag(code) {
 }
 
 export const keyName = s => s.normalize('NFKD').replace(/[̀-ͯ]/g, '').toLowerCase().replace(/[^a-z0-9]/g, '');
+
+// ---------------------------------------------------------------------------
+// Live race: the official list is only republished after each ranking event.
+// While one is being played, money from the same event two years ago is about
+// to expire and is replaced by what players have already guaranteed this time.
+// projected = official − previous edition prize + prize guaranteed so far.
+// ---------------------------------------------------------------------------
+
+/** Tournament types that count towards the PDC Order of Merit. */
+export const RANKED_TYPES = ['1', '4', '6', '7', '9', '14', '15', '29', '30'];
+
+// The feed gives each stage's prize for losing there, but not the winner's
+// prize. Known winner prizes are listed; anything else is estimated from the
+// runner-up prize with the usual ratio for that kind of event.
+const WINNER_PRIZE = {
+  '2024 Grand Slam of Darts': 150000,
+  '2025 Grand Slam of Darts': 150000,
+  '2024 World Championship': 500000,
+  '2025 World Championship': 500000,
+  '2026 World Championship': 1000000,
+  '2024 World Matchplay': 800000,
+  '2025 World Matchplay': 800000,
+  '2024 World Grand Prix': 120000,
+  '2024 European Championship': 120000,
+  '2024 Players Championship Finals': 120000,
+  '2024 UK Open': 110000,
+};
+const WINNER_RATIO = { '29': 1.5, '14': 2.5 };
+
+const stageOrder = s => (Number(s.cupRound) > 0 ? Number(s.cupRound) : 99); // lower = later round; groups first
+
+/**
+ * Prize money per player from a tournament payload's attributes.
+ * Completed rounds count in full; for an event in progress a player still in it
+ * is credited with the prize for the furthest round they are guaranteed.
+ * Returns Map<pid, { amount, round, alive }>.
+ */
+export function eventPrizes(a) {
+  const stages = [...(a.stages || [])].sort((x, y) => stageOrder(y) - stageOrder(x));
+  const byCup = new Map(stages.map(s => [stageOrder(s), s]));
+  const out = new Map();
+  for (const s of stages) {
+    const comp = Number(s.compensationValue) || 0;
+    for (const f of s.fixtures || []) {
+      for (const p of [f.participant1, f.participant2]) {
+        if (isPlaceholder(p)) continue;
+        const id = String(p.participantID);
+        const rec = out.get(id) || { amount: 0, round: s.stage?.name || '', order: 999, alive: true, name: playerName(p) };
+        const ord = stageOrder(s);
+        if (ord <= rec.order) {
+          rec.order = ord; rec.amount = Math.max(rec.amount, comp); rec.round = s.stage?.name || rec.round;
+          const decided = !!f.winnerParticipantID;
+          const won = decided && String(f.winnerParticipantID) === id;
+          rec.alive = !decided || won || ord === 99;
+          if (won && ord === 1) {
+            const runnerUp = comp;
+            rec.amount = WINNER_PRIZE[a.name] ?? Math.round(runnerUp * (WINNER_RATIO[a.type?.tournamentTypeID ?? a.tournamentTypeID] ?? 2));
+            rec.round = 'Winner'; rec.estimated = !(a.name in WINNER_PRIZE);
+          } else if (won && ord < 99 && !out.has('__next') && byCup.has(ord - 1)) {
+            // Won this round, next round not drawn yet: guaranteed the next round's prize.
+            const next = byCup.get(ord - 1);
+            if (!(next.fixtures || []).some(x => [x.participant1, x.participant2].some(q => String(q?.participantID) === id))) {
+              rec.amount = Math.max(rec.amount, Number(next.compensationValue) || 0); rec.round = next.stage?.name || rec.round;
+            }
+          }
+        }
+        out.set(id, rec);
+      }
+    }
+  }
+  return out;
+}
+
+const eventNumber = name => (name.match(/(?:Players Championship|ET)\s*(\d+)/i) || [])[1] || null;
+
+/** Find the edition two years earlier that this event's money replaces. */
+export function previousEdition(event, index) {
+  const type = event.tournamentTypeID ?? event.type?.tournamentTypeID;
+  const season = Number(event.seasonID) - 2;
+  const pool = index.filter(t => t.tournamentTypeID === type && Number(t.seasonID) === season && t.fixtureCount > 0);
+  if (pool.length <= 1) return pool[0] || null;
+  const n = eventNumber(event.name);
+  return pool.find(t => eventNumber(t.name) === n) || null;
+}
+
+/**
+ * Re-rank the official list for a ranked event in progress.
+ * official: normaliseRankings() output; current/previous: tournament attributes.
+ */
+export function liveRace(official, current, previous) {
+  const gain = eventPrizes(current);
+  const lose = previous ? eventPrizes(previous) : new Map();
+  const list = official.map(p => {
+    const g = gain.get(p.id), l = lose.get(p.id);
+    const plus = g?.amount || 0, minus = l?.amount || 0;
+    return { ...p, official: p.money, money: p.money - minus + plus, plus, minus, round: g?.round || null, alive: g ? g.alive : null, estimated: !!l?.estimated };
+  });
+  // Players who are not on the list yet but have earned money this event.
+  for (const [id, g] of gain) if (g.amount && !official.some(p => p.id === id)) list.push({ id, name: g.name, money: g.amount, official: 0, plus: g.amount, minus: 0, round: g.round, alive: g.alive, pos: null });
+  list.sort((x, y) => y.money - x.money || (x.pos ?? 1e9) - (y.pos ?? 1e9));
+  let rank = 0, last = null;
+  list.forEach((p, i) => { if (p.money !== last) { rank = i + 1; last = p.money; } p.live = rank; p.move = p.pos ? p.pos - rank : null; });
+  return list;
+}

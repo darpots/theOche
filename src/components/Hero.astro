@@ -61,7 +61,7 @@ const big = ev.name.replace(/ of Darts$| Darts$/i, '').toUpperCase();
 const place = ev.venue && ev.city && ev.venue.includes(ev.city) ? ev.venue : [ev.venue, ev.city].filter(Boolean).join(', ');
 const label = { live: 'Live now', soon: 'Starts soon', champion: 'Champion crowned', next: 'Next up' }[mode];
 ---
-<section class="stage-wrap wrap" aria-labelledby="hero-title">
+<section class="stage-wrap" aria-labelledby="hero-title">
   <div class="stage" data-mode={mode} data-start={ev.start} data-end={ev.end}>
     <div class="lights" aria-hidden="true"><span class="beam b1"></span><span class="beam b2"></span><span class="glow"></span></div>
     <svg class="rings" viewBox="-100 -100 200 200" aria-hidden="true">
@@ -80,7 +80,7 @@ const label = { live: 'Live now', soon: 'Starts soon', champion: 'Champion crown
       <div class="ctas">
         {mode === 'next'
           ? <div class="count" data-count={ev.start}>{['d', 'h', 'm'].map(u => <div><b data-u={u}>–</b><span>{{ d: 'days', h: 'hrs', m: 'mins' }[u]}</span></div>)}</div>
-          : <a class="cta" href="/matches">{mode === 'champion' ? 'See the results' : 'Follow the matches'} <span aria-hidden="true">→</span></a>}
+          : <a class="cta" href={`/tournament/${ev.id}`}>{mode === 'champion' ? 'See the results' : 'Follow the matches'} <span aria-hidden="true">→</span></a>}
         <a class="ghost" href="#months">Full calendar <span aria-hidden="true">↓</span></a>
       </div>
     </div>
@@ -150,16 +150,16 @@ const label = { live: 'Live now', soon: 'Starts soon', champion: 'Champion crown
 </script>
 
 <style>
-  .stage-wrap { padding-top: 22px; }
+  .stage-wrap { width: 100%; }
   .stage {
     --px: 0; --py: 0;
     position: relative; overflow: hidden; isolation: isolate;
-    min-height: 560px; border-radius: 30px; color: #fff;
+    min-height: min(680px, calc(100svh - 69px)); color: #fff;
+    padding-inline: max(16px, calc((100% - 1180px) / 2));
     background:
       radial-gradient(120% 90% at 75% 110%, #2a1420 0%, transparent 55%),
       radial-gradient(90% 80% at 10% -10%, #10261f 0%, transparent 60%),
       linear-gradient(160deg, #191b26, #0d0e14 70%);
-    box-shadow: var(--shadow-lg);
     display: grid; grid-template-columns: minmax(0, .9fr) minmax(0, 1.1fr);
   }
   /* floodlights */
@@ -180,7 +180,7 @@ const label = { live: 'Live now', soon: 'Starts soon', champion: 'Champion crown
   .bigword span { font-family: var(--display); font-weight: 800; font-size: clamp(110px, 17vw, 230px); letter-spacing: -.05em; line-height: .8; padding-right: .4em; color: transparent; -webkit-text-stroke: 1.5px rgba(255, 255, 255, .24); animation: drift 38s linear infinite; }
   @keyframes drift { to { transform: translateX(-100%); } }
 
-  .copy { position: relative; z-index: 3; padding: 56px 0 96px 52px; display: flex; flex-direction: column; justify-content: center; }
+  .copy { position: relative; z-index: 3; padding: 56px 0 104px; display: flex; flex-direction: column; justify-content: center; }
   .kicker { display: flex; align-items: center; gap: 12px; margin: 0 0 18px; }
   .state { font-size: 12px; font-weight: 800; letter-spacing: .16em; text-transform: uppercase; color: #f1c96b; display: inline-flex; align-items: center; gap: 8px; }
   .state.live { color: #ff6b7d; }
@@ -230,7 +230,7 @@ const label = { live: 'Live now', soon: 'Starts soon', champion: 'Champion crown
 
   @media (max-width: 900px) {
     .stage { grid-template-columns: 1fr; min-height: 0; }
-    .copy { padding: 36px 24px 8px; }
+    .copy { padding: 36px 0 8px; }
     h1 { max-width: none; }
     .players { height: 340px; padding: 0; margin-bottom: 52px; }
     .player { width: 42%; }

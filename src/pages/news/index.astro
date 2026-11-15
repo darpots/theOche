@@ -30,7 +30,7 @@ const tags = [...new Set(stories.flatMap(s => s.tags))].slice(0, 10);
         </div>
       )}
       <a href={`/news/${lead.slug}`} class="lead card lift" data-tags={lead.tags.join('|')} data-reveal>
-        <NewsArt seed={lead.slug} label={lead.tags[0]} class="lead-art" />
+        <NewsArt seed={lead.slug} label={lead.tags[0]} class="lead-art" players={lead.players} />
         <div class="lead-copy">
           <time datetime={lead.date}>{newsDate(lead.date)}</time>
           <h2 transition:name={`h-${lead.slug}`}>{lead.headline}</h2>
@@ -41,7 +41,7 @@ const tags = [...new Set(stories.flatMap(s => s.tags))].slice(0, 10);
       <div class="list">
         {rest.map((s, i) => (
           <a href={`/news/${s.slug}`} class="story card lift" data-tags={s.tags.join('|')} data-reveal style={`--d:${(i % 3) * 80}ms`}>
-            <NewsArt seed={s.slug} label={s.tags[0]} class="story-art" />
+            <NewsArt seed={s.slug} label={s.tags[0]} class="story-art" players={s.players} />
             <div class="story-copy">
               <time datetime={s.date}>{newsDate(s.date)}</time>
               <h3 transition:name={`h-${s.slug}`}>{s.headline}</h3>

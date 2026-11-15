@@ -1,0 +1,214 @@
+---
+// One page per calendar event: the full schedule and results, rendered at
+// build time when we have the data and kept up to date live from the PDC
+// feed while the event is on.
+import Layout from '../../layouts/Layout.astro';
+import data from '../../data/tournament.json';
+import calendar from '../../data/calendar.json';
+import portraitsRaw from '../../data/portraits.json';
+import { tvBadge } from '../../lib/pdc.mjs';
+import { dateRange } from '../../lib/format.mjs';
+import { matchDays, renderDay, renderTabs, progress } from '../../lib/render-matches.mjs';
+
+export function getStaticPaths() {
+  const seen = new Set<string>();
+  const list: { params: { id: string }; props: { ev: any } }[] = [];
+  const cur = data.tournament as any;
+  for (const e of [cur, ...(calendar.events as any[])]) {
+    if (!e || seen.has(e.id)) continue;
+    seen.add(e.id);
+    list.push({ params: { id: e.id }, props: { ev: e } });
+  }
+  return list;
+}
+
+const { ev } = Astro.props as { ev: any };
+const isCurrent = ev.id === (data.tournament as any).id;
+const t: any = isCurrent ? data.tournament : { ...ev, fullName: [ev.name, ev.tag].filter(Boolean).join(' '), stages: [] };
+const place = t.venue && t.city && t.venue.includes(t.city) ? t.venue : [t.venue, t.city].filter(Boolean).join(', ');
+const portraits = Object.fromEntries(Object.entries(portraitsRaw as Record<string, { image: string }>).map(([k, v]) => [k, v.image]));
+const buildDay = new Date().toISOString().slice(0, 10);
+const { days, def } = matchDays(t, buildDay);
+const prog = progress(t);
+---
+<Layout title={`${t.fullName || t.name}`} description={`Full schedule, live scores and results from the ${t.fullName || t.name}.`} active={isCurrent ? 'matches' : 'calendar'}>
+  <section class={`banner b-${t.broadcaster || 'none'}`}>
+    <svg class="brings" viewBox="-100 -100 200 200" aria-hidden="true"><circle r="96" /><circle r="80" /><circle r="58" /><circle r="40" /><circle r="12" /></svg>
+    <div class="wrap banner-in">
+      <a class="back" href="/#months">← Calendar</a>
+      <span class="eyebrow" id="phase">{isCurrent ? 'Current tournament' : 'Tournament'}</span>
+      <div class="title-row">
+        <h1>{t.name}{t.tag && <span class="tagline"> {t.tag}</span>}</h1>
+      </div>
+      <div class="meta">
+        {t.broadcaster && <Fragment set:html={tvBadge(t.broadcaster)} />}
+        <span>{dateRange(t.start, t.end)}</span>
+        {place && <span>· {place}</span>}
+        <span class="live-dot" id="liveflag" hidden>Live updates</span>
+      </div>
+      {t.winner && <p class="champ" id="champ">🏆 Won by <b>{t.winner.name}</b></p>}
+      <div class="progress" id="prog" hidden={!prog.total}>
+        <div class="pbar"><span id="pfill" style={`width:${prog.pct}%`}></span></div>
+        <p><b id="pdone">{prog.done}</b> of <b id="ptotal">{prog.total}</b> matches played <span id="updated"></span></p>
+      </div>
+    </div>
+  </section>
+
+  <section class="wrap">
+    <div class="days" id="days" role="group" aria-label="Choose a day" set:html={days.length ? renderTabs(days, def) : ''} />
+    <div id="board" class="board" data-day={def} set:html={days.length ? renderDay(t, def, portraits) : '<div class="empty" id="loading"><span class="spinner"></span><h3>Loading the schedule…</h3></div>'} />
+  </section>
+
+  <script is:inline type="application/json" id="t-data" set:html={JSON.stringify({ t, portraits })}></script>
+
+  <script>
+    import { API, normaliseTournament } from '../../lib/pdc.mjs';
+    import { matchDays, renderDay, renderTabs, progress } from '../../lib/render-matches.mjs';
+
+    let poll: number | undefined;
+    function init() {
+      const board = document.getElementById('board');
+      if (!board) { clearInterval(poll); return; }
+      const { t: initial, portraits } = JSON.parse(document.getElementById('t-data')!.textContent!);
+      const isComplete = initial.stages.length > 0 && initial.stages.every((s: any) => s.fixtures.every((f: any) => f.status === 'result'));
+      let t = initial;
+      const today = new Date().toLocaleDateString('en-CA', { timeZone: 'Europe/London' });
+      let { days, def } = matchDays(t, today);
+      let current = def;
+      const live = t.start <= today && t.end >= today;
+      document.getElementById('phase')!.textContent = live ? 'Tournament in progress' : t.end < today ? 'Completed' : 'Coming up';
+      const empty = () => t.start > today
+        ? `<div class="empty"><h3>The draw isn't out yet</h3><p>The full schedule appears here as soon as the PDC publishes the draw and order of play.</p></div>`
+        : `<div class="empty"><h3>No matches published</h3><p>The PDC hasn't published fixtures for this event.</p></div>`;
+
+      const paint = (animate = false) => {
+        if (!days.length) { document.getElementById('days')!.innerHTML = ''; board.innerHTML = empty(); return; }
+        const before = new Map([...board.querySelectorAll<HTMLElement>('.fx')].map(li => [li.dataset.id, li.dataset.sig]));
+        document.getElementById('days')!.innerHTML = (days.length > 1 ? `<button class="day all${current === 'all' ? ' on' : ''}" data-day="all" aria-pressed="${current === 'all'}"><span>Every</span><b>All days</b></button>` : '') + renderTabs(days, current);
+        board.innerHTML = current === 'all'
+          ? days.map(d => `<div class="dayblock"><h2 class="dayhead">${new Date(d + 'T12:00:00Z').toLocaleDateString('en-GB', { weekday: 'long', day: 'numeric', month: 'long' })}</h2>${renderDay(t, d, portraits)}</div>`).join('')
+          : renderDay(t, current, portraits);
+        board.querySelectorAll<HTMLElement>('.stage').forEach(s => requestAnimationFrame(() => s.classList.add('in')));
+        if (animate) board.querySelectorAll<HTMLElement>('.fx').forEach(li => { if (before.has(li.dataset.id) && before.get(li.dataset.id) !== li.dataset.sig) li.classList.add('flash'); });
+        const p = progress(t);
+        document.getElementById('prog')!.hidden = !p.total;
+        document.getElementById('pfill')!.style.width = p.pct + '%';
+        document.getElementById('pdone')!.textContent = String(p.done);
+        document.getElementById('ptotal')!.textContent = String(p.total);
+        document.querySelector('#days .on')?.scrollIntoView({ inline: 'center', block: 'nearest', behavior: animate ? 'smooth' : 'auto' });
+      };
+      document.getElementById('days')!.addEventListener('click', e => {
+        const b = (e.target as HTMLElement).closest<HTMLButtonElement>('[data-day]');
+        if (!b) return;
+        current = b.dataset.day!;
+        paint();
+      });
+      paint();
+
+      // Live refresh straight from the PDC feed while the event is on.
+      const refresh = async () => {
+        if (document.hidden) return;
+        try {
+          const res = await fetch(`${API.tournaments}${t.id}`, { cache: 'no-store' });
+          if (!res.ok) return;
+          t = normaliseTournament(await res.json());
+          ({ days } = matchDays(t, today));
+          if (current !== 'all' && !days.includes(current)) current = matchDays(t, today).def;
+          paint(true);
+          if (live) document.getElementById('updated')!.textContent = `· updated ${new Date().toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' })}`;
+        } catch { /* keep showing the last good data */ }
+      };
+      clearInterval(poll);
+      if (live) {
+        document.getElementById('liveflag')!.hidden = false;
+        refresh();
+        poll = window.setInterval(refresh, 30_000);
+      } else if (t.end >= today || !isComplete) refresh();
+    }
+    document.addEventListener('astro:page-load', init);
+  </script>
+</Layout>
+
+<style>
+  .banner {
+    position: relative; color: #fff; overflow: hidden; isolation: isolate; padding: 28px 0 34px;
+    background: linear-gradient(160deg, #191b26, #0d0e14 70%);
+  }
+  .banner::before { content: ''; position: absolute; inset: 0; z-index: -2; background: radial-gradient(70% 120% at 85% 120%, var(--glow, rgba(215, 38, 61, .5)), transparent 60%), radial-gradient(60% 90% at 0% -20%, rgba(14, 138, 95, .35), transparent 60%); }
+  .b-sky { --glow: rgba(43, 76, 255, .55); }
+  .b-itv { --glow: rgba(11, 160, 160, .5); }
+  .b-pdctv { --glow: rgba(215, 38, 61, .55); }
+  .brings { position: absolute; z-index: -1; right: -8%; top: 50%; translate: 0 -50%; width: min(620px, 70vw); fill: none; stroke: rgba(255, 255, 255, .08); stroke-width: 1.2; animation: spin 140s linear infinite; }
+  .brings circle:nth-child(2) { stroke: rgba(14, 138, 95, .4); stroke-width: 6; stroke-dasharray: 13 13; }
+  .brings circle:nth-child(4) { stroke: rgba(215, 38, 61, .4); stroke-width: 5; stroke-dasharray: 10 10; }
+  .back { display: block; width: fit-content; color: rgba(255, 255, 255, .7); text-decoration: none; font-weight: 600; font-size: 14px; margin-bottom: 18px; transition: color .2s, transform .3s var(--spring); }
+  .back:hover { color: #fff; transform: translateX(-3px); }
+  .banner .eyebrow { display: inline-flex; align-items: center; gap: 8px; font-size: 12px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: #ff6b7d; }
+  .banner .eyebrow::before { content: ''; width: 22px; height: 2px; background: currentColor; border-radius: 2px; }
+  .title-row { display: flex; align-items: center; gap: 18px; margin: 10px 0 12px; }
+  .banner h1 { font-size: clamp(36px, 5.6vw, 70px); font-weight: 800; letter-spacing: -.035em; }
+  .banner .meta { color: rgba(255, 255, 255, .78); }
+  .champ { margin: 16px 0 0; display: inline-flex; gap: 6px; background: linear-gradient(135deg, #f1c96b, var(--gold)); color: #2b1f02; padding: 6px 14px; border-radius: 999px; font-size: 15px; }
+  .banner .progress { margin-top: 22px; max-width: 520px; }
+  .banner .pbar { background: rgba(255, 255, 255, .14); }
+  .banner .progress p { color: rgba(255, 255, 255, .78); }
+  .board { margin-bottom: 20px; }
+  .days { margin-top: 18px; }
+  .dayhead { font-size: 15px; font-family: var(--body); font-weight: 800; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); display: flex; align-items: center; gap: 14px; margin-top: 34px; }
+  .dayhead::after { content: ''; flex: 1; height: 1px; background: var(--line); }
+  .board :global(.spinner) { display: inline-block; width: 26px; height: 26px; border-radius: 50%; border: 3px solid var(--line); border-top-color: var(--red); animation: spin .8s linear infinite; margin-bottom: 10px; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .tagline { color: var(--muted); font-size: .45em; letter-spacing: 0; }
+  .meta { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; color: var(--muted); font-weight: 500; }
+  .meta .live-dot { margin-left: 6px; }
+  .progress { padding: 0; }
+  .progress p { margin: 10px 0 0; font-size: 14px; }
+  .pbar { height: 10px; background: var(--paper-2); border-radius: 99px; overflow: hidden; }
+  .pbar span { display: block; height: 100%; border-radius: 99px; background: linear-gradient(90deg, var(--green), #3fbf8a); transition: width 1.2s var(--ease); }
+
+  .days { display: flex; gap: 8px; overflow-x: auto; padding: 8px 2px 14px; scroll-snap-type: x mandatory; scrollbar-width: thin; }
+  .days :global(.day) { scroll-snap-align: center; flex: none; display: flex; flex-direction: column; align-items: center; gap: 2px; padding: 10px 16px; border-radius: 14px; border: 1px solid var(--line); background: var(--card); cursor: pointer; transition: transform .3s var(--spring), background .2s, color .2s; }
+  .days :global(.day span) { font-size: 11px; text-transform: uppercase; letter-spacing: .1em; color: var(--muted); font-weight: 700; }
+  .days :global(.day b) { font-family: var(--display); font-size: 17px; }
+  .days :global(.day:hover) { transform: translateY(-2px); }
+  .days :global(.day.on) { background: var(--ink); color: #fff; border-color: var(--ink); }
+  .days :global(.day.on span) { color: rgba(255, 255, 255, .7); }
+
+  .board :global(.stage) { margin-top: 22px; opacity: 0; transform: translateY(12px); transition: opacity .6s var(--ease) var(--d), transform .6s var(--ease) var(--d); }
+  .board :global(.stage.in) { opacity: 1; transform: none; }
+  .board :global(.stage h3) { display: flex; align-items: baseline; gap: 10px; font-size: 20px; margin-bottom: 10px; }
+  .board :global(.stage h3 small) { font-family: var(--body); font-size: 13px; color: var(--muted); font-weight: 600; letter-spacing: 0; }
+  .board :global(.fixtures) { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
+  .board :global(.fx) { display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 12px; padding: 12px 16px; background: var(--card); border: 1px solid var(--line); border-radius: 16px; box-shadow: var(--shadow-sm); transition: transform .3s var(--ease), box-shadow .3s; }
+  .board :global(.fx:hover) { transform: translateY(-2px); box-shadow: var(--shadow); }
+  .board :global(.fx.live) { border-color: var(--red); box-shadow: 0 0 0 3px var(--red-soft); }
+  .board :global(.fx.flash) { animation: flash 1.6s var(--ease); }
+  @keyframes flash { 0% { background: var(--gold-soft); transform: scale(1.015); } 100% { background: var(--card); transform: none; } }
+  .board :global(.pl) { display: flex; align-items: center; gap: 12px; min-width: 0; padding: 6px 10px; border-radius: 12px; transition: background .3s; }
+  .board :global(.pl.r) { flex-direction: row-reverse; text-align: right; }
+  .board :global(.pl .nm) { display: flex; flex-direction: column; min-width: 0; }
+  .board :global(.pl b) { font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .board :global(.pl small) { color: var(--muted); font-size: 12px; font-weight: 600; }
+  .board :global(.pl.won) { background: var(--green-soft); }
+  .board :global(.pl.won b) { color: #075c3f; }
+  .board :global(.pl.lost) { opacity: .62; }
+  .board :global(.pl.tbc) { opacity: .55; }
+  .board :global(.wbadge) { font-style: normal; color: var(--green); font-weight: 800; margin-left: 4px; }
+  .board :global(.mid) { text-align: center; min-width: 96px; }
+  .board :global(.sc) { font-family: var(--display); font-size: 30px; font-weight: 800; color: var(--muted); font-variant-numeric: tabular-nums; }
+  .board :global(.sc.w) { color: var(--ink); }
+  .board :global(.dash) { margin: 0 6px; color: var(--line); font-size: 24px; }
+  .board :global(.vs) { font-family: var(--display); font-size: 20px; font-weight: 700; color: var(--ink-2); }
+  .board :global(.st) { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .08em; color: var(--muted); }
+  .board :global(.dayhead) { font-size: 15px; font-family: var(--body); font-weight: 800; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); display: flex; align-items: center; gap: 14px; margin-top: 34px; }
+  .board :global(.dayhead::after) { content: ''; flex: 1; height: 1px; background: var(--line); }
+  .days :global(.day.all) { background: var(--paper-2); }
+  .days :global(.day.all.on) { background: var(--ink); }
+
+  @media (max-width: 640px) {
+    .board :global(.fx) { grid-template-columns: 1fr; gap: 4px; padding: 10px; }
+    .board :global(.pl.r) { flex-direction: row; text-align: left; }
+    .board :global(.mid) { text-align: left; display: flex; align-items: center; gap: 10px; padding-left: 10px; }
+    .board :global(.sc) { font-size: 22px; }
+  }
+</style>

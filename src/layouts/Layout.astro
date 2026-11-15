@@ -2,12 +2,13 @@
 import { ClientRouter } from 'astro:transitions';
 import '../styles/global.css';
 import Logo from '../components/Logo.astro';
+import current from '../data/tournament.json';
 
 interface Props { title: string; description?: string; active?: 'calendar' | 'matches' | 'news' | 'rankings' }
 const { title, description = 'PDC darts on TV, live matches, news and world rankings.', active } = Astro.props;
 const nav = [
   { key: 'calendar', href: '/', label: 'Calendar' },
-  { key: 'matches', href: '/matches', label: 'Matches' },
+  { key: 'matches', href: `/tournament/${current.tournament.id}`, label: 'Matches' },
   { key: 'news', href: '/news', label: 'News' },
   { key: 'rankings', href: '/rankings', label: 'Rankings' },
 ];
@@ -28,10 +29,10 @@ const fullTitle = title === 'The Oche' ? title : `${title} · The Oche`;
     <ClientRouter />
   </head>
   <body>
-    <header class="top" transition:persist>
+    <header class="top" transition:persist transition:name="site-header" transition:animate="none">
       <div class="wrap bar">
         <a href="/" class="brand" aria-label="The Oche home"><Logo size={40} /></a>
-        <nav aria-label="Main">
+        <nav aria-label="Main" data-current={current.tournament.id}>
           {nav.map(n => (
             <a href={n.href} class:list={['nav', { on: active === n.key }]} aria-current={active === n.key ? 'page' : undefined} data-nav={n.key}>{n.label}</a>
           ))}
@@ -52,26 +53,61 @@ const fullTitle = title === 'The Oche' ? title : `${title} · The Oche`;
     </footer>
 
     <script>
-      // Scroll-reveal + nav pill, re-run after every view transition.
+      // Scroll-reveal + the sliding nav pill.
+      const keyFor = (path: string) => {
+        const p = path.replace(/\/$/, '') || '/';
+        if (p === '/') return 'calendar';
+        const [, a, b] = p.split('/');
+        if (a === 'tournament') return b === document.querySelector<HTMLElement>('.top nav')?.dataset.current ? 'matches' : 'calendar';
+        return a;
+      };
+      // The header is persisted across page swaps, and re-inserting it cancels
+      // CSS transitions, so the slide is driven with the Web Animations API
+      // after each swap, starting from where the pill was before navigation.
+      let last: { x: number; w: number } | null = null;
+      function setOn(key: string) {
+        document.querySelectorAll<HTMLAnchorElement>('.top a.nav').forEach(a => {
+          const on = a.dataset.nav === key;
+          a.classList.toggle('on', on);
+          if (on) a.setAttribute('aria-current', 'page'); else a.removeAttribute('aria-current');
+        });
+      }
+      function movePill(key: string, animate = true) {
+        const pill = document.querySelector<HTMLElement>('.top nav .pill');
+        const a = document.querySelector<HTMLAnchorElement>(`.top a.nav[data-nav="${key}"]`);
+        setOn(key);
+        if (!pill) return;
+        if (!a) { pill.style.opacity = '0'; last = null; return; }
+        const to = { x: a.offsetLeft, w: a.offsetWidth };
+        pill.style.transition = 'none';
+        pill.style.width = to.w + 'px';
+        pill.style.transform = `translateX(${to.x}px)`;
+        const appear = pill.style.opacity !== '1';
+        pill.style.opacity = '1';
+        const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+        if (animate && !reduce && last && (last.x !== to.x || last.w !== to.w)) {
+          pill.animate([
+            { transform: `translateX(${last.x}px)`, width: `${last.w}px` },
+            { transform: `translateX(${to.x + (to.x > last.x ? 6 : -6)}px)`, width: `${to.w}px`, offset: 0.7 },
+            { transform: `translateX(${to.x}px)`, width: `${to.w}px` },
+          ], { duration: 520, easing: 'cubic-bezier(.2,.8,.2,1)' });
+          pill.animate([{ scale: '1 1' }, { scale: '1.06 .84', offset: 0.35 }, { scale: '1 1' }], { duration: 520, easing: 'ease-out' });
+        } else if (appear && !reduce) {
+          pill.animate([{ opacity: 0, scale: '.9' }, { opacity: 1, scale: '1' }], { duration: 300, easing: 'ease-out' });
+        }
+        last = to;
+      }
       function init() {
         const io = new IntersectionObserver(entries => {
           for (const e of entries) if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); }
         }, { rootMargin: '0px 0px -8% 0px' });
         document.querySelectorAll('[data-reveal]:not(.in)').forEach(el => io.observe(el));
-
-        const path = location.pathname.replace(/\/$/, '') || '/';
-        const key = path === '/' ? 'calendar' : path.split('/')[1];
-        const nav = document.querySelector('.top nav');
-        const pill = nav?.querySelector<HTMLElement>('.pill');
-        nav?.querySelectorAll<HTMLAnchorElement>('a.nav').forEach(a => {
-          const on = a.dataset.nav === key;
-          a.classList.toggle('on', on);
-          if (on) a.setAttribute('aria-current', 'page'); else a.removeAttribute('aria-current');
-          if (on && pill) { pill.style.width = a.offsetWidth + 'px'; pill.style.transform = `translateX(${a.offsetLeft}px)`; pill.style.opacity = '1'; }
-        });
+        movePill(keyFor(location.pathname));
       }
       document.addEventListener('astro:page-load', init);
-      window.addEventListener('resize', () => init());
+      // Highlight the chosen link straight away; the pill slides once the page swaps.
+      document.addEventListener('astro:before-preparation', e => setOn(keyFor((e as any).to.pathname)));
+      window.addEventListener('resize', () => movePill(keyFor(location.pathname), false));
     </script>
   </body>
 </html>
@@ -88,7 +124,8 @@ const fullTitle = title === 'The Oche' ? title : `${title} · The Oche`;
   .nav { position: relative; z-index: 1; padding: 8px 14px; border-radius: 999px; text-decoration: none; font-weight: 600; font-size: 14px; color: var(--muted); transition: color .3s; }
   .nav:hover { color: var(--ink); }
   .nav.on { color: #fff; }
-  .pill { position: absolute; z-index: 0; left: 0; top: 4px; bottom: 4px; border-radius: 999px; background: var(--ink); opacity: 0; transition: transform .45s var(--spring), width .45s var(--spring), opacity .2s; box-shadow: 0 6px 16px -6px rgba(20, 22, 31, .5); }
+  .pill { position: absolute; z-index: 0; left: 0; top: 4px; bottom: 4px; border-radius: 999px; background: var(--ink); opacity: 0; transition: transform .55s var(--spring), width .55s var(--spring), opacity .2s; box-shadow: 0 6px 16px -6px rgba(20, 22, 31, .5); }
+  .nav { transition: color .3s .1s; }
   main { min-height: 70vh; }
   .foot { margin-top: 96px; padding: 36px 0 48px; border-top: 1px solid var(--line); font-size: 14px; }
   .foot p { margin: 0 0 6px; max-width: 760px; }

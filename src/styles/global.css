@@ -48,6 +48,7 @@ body {
   min-height: 100vh;
   overflow-x: hidden;
 }
+[hidden] { display: none !important; }
 img { max-width: 100%; display: block; }
 a { color: inherit; }
 button { font: inherit; color: inherit; }

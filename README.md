@@ -5,9 +5,9 @@ A fast, static PDC darts site built with [Astro](https://astro.build) and hosted
 | Page | What it shows | Where the data comes from |
 |---|---|---|
 | **Calendar** (`/`) | PDC events on Sky Sports, ITV (incl. World Series) and PDCTV (European Tour), plus every Premier League night | PDC tournaments feed, filtered by the broadcaster map in `src/lib/pdc.mjs` |
-| **Matches** (`/matches`) | Order of play and results for the tournament in progress (or the latest one) | PDC tournaments feed, refreshed **live in the browser every 30s** during an event |
+| **Tournament pages** (`/tournament/<id>`) | One page per calendar event with the full schedule, scores and results by day (or all days). The nav's Matches link (and `/matches`) goes to the current event | PDC tournaments feed, refreshed **live in the browser every 30s** during an event; other events load their schedule from the feed in the browser |
 | **News** (`/news`) | Original, dated reports (max 3 months old) that link to their sources | BBC Sport, Dartsnews, Darts World and Guardian RSS feeds → written up by a free-tier LLM (Google Gemini by default) |
-| **Rankings** (`/rankings`) | PDC Order of Merit; click a top-128 player for age, country, darts, season record and full tournament history | PDC rankings + participants feeds; history built from ~500 tournaments since 2005 |
+| **Rankings** (`/rankings`) | PDC Order of Merit, plus a **Live race** view while a ranking event is on; click a top-128 player for age, country, darts, season record and full tournament history | PDC rankings + participants feeds; history built from ~500 tournaments since 2005 |
 
 ## How it stays up to date
 
@@ -34,7 +34,8 @@ Reports are written by a scheduled Claude routine that follows [`NEWSDESK.md`](N
 
 - **Three-dart averages**: the PDC's free feed has no averages, and the sites that do (DartsDatabase, DartsOrakel) block automated access. Player pop-ups show the season win–loss record, legs won % and titles instead.
 - **Broadcasters**: the PDC feed says whether an event is televised, but not which channel shows it. Channels are mapped per event type in `src/lib/pdc.mjs`. If a new televised event type appears, the hourly job lists it in its run summary.
-- **Player photos**: only Creative Commons photos from Wikimedia Commons are used (`public/portraits`, credits at `/credits`). Other players show their initials. The homepage hero uses cut-outs of the same photos (`public/cutouts`), made on a Mac with `node scripts/make-cutouts.mjs` (macOS Vision subject lifting). Re-run it when new portraits are added.
+- **Player photos**: only Creative Commons photos from Wikimedia Commons are used (`public/portraits`, credits at `/credits`). Other players show their initials. The homepage hero uses cut-outs of the same photos (`public/cutouts`), made on a Mac with `node scripts/make-cutouts.mjs` (macOS Vision subject lifting). Re-run it when new portraits are added. It also records each face's position (`src/data/faces.json`, via `scripts/tools/faces.swift`), so the hero and news covers can crop around the face at any size. News covers show cut-outs of the first two players a story lists; stories about players without a photo use the generated artwork alone.
+- **Live race**: the PDC only republishes the official rankings after each event. While a ranking event is on, the Rankings page takes the official list, removes the prize money from the same event two years earlier (which is about to expire) and adds what each player has already guaranteed this time, then re-ranks. The feed doesn't include the winner's prize, so known winner prizes are listed in `WINNER_PRIZE` in `src/lib/pdc.mjs`; others are estimated from the runner-up prize (marked with *). Unofficial sites such as dartsrankings.com use their own prize databases and drop rules, so small differences are expected; the official list is the source of truth once the PDC publishes it.
 
 ## Local development
 

@@ -17,6 +17,8 @@ const BIN = `${TMP}cutout`;
 await mkdir(OUT, { recursive: true });
 await mkdir(TMP, { recursive: true });
 if (!existsSync(BIN)) execFileSync('swiftc', ['-O', `${ROOT}scripts/tools/cutout.swift`, '-o', BIN]);
+const FACES = `${TMP}faces`;
+if (!existsSync(FACES)) execFileSync('swiftc', ['-O', `${ROOT}scripts/tools/faces.swift`, '-o', FACES]);
 
 const portraits = JSON.parse(await readFile(`${ROOT}src/data/portraits.json`, 'utf8'));
 const only = process.argv.slice(2);
@@ -44,3 +46,13 @@ for (const [key, p] of Object.entries(portraits)) {
 const idxPath = `${ROOT}src/data/cutouts.json`;
 const prev = existsSync(idxPath) ? JSON.parse(await readFile(idxPath, 'utf8')) : {};
 await writeFile(idxPath, JSON.stringify({ ...prev, ...index }, null, 1) + '\n');
+
+// Face positions in every cut-out, so pages can crop around the face at any size.
+const files = Object.keys({ ...prev, ...index }).map(k => `${OUT}${k}.webp`).filter(existsSync);
+const faces = {};
+for (const line of execFileSync(FACES, files, { encoding: 'utf8' }).trim().split('\n')) {
+  const [file, x, y, h] = line.split('\t');
+  if (x !== '-') faces[file.split('/').pop().replace('.webp', '')] = { x: +x, y: +y, h: +h };
+}
+await writeFile(`${ROOT}src/data/faces.json`, JSON.stringify(faces, null, 1) + '\n');
+console.log(`faces: ${Object.keys(faces).length}/${files.length}`);
