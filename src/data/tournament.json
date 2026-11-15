@@ -1,5 +1,5 @@
 {
- "updatedAt": "2026-11-15T13:58:19.881Z",
+ "updatedAt": "2026-11-15T18:45:46.697Z",
  "tournament": {
   "id": "10871",
   "name": "Grand Slam of Darts",
@@ -154,7 +154,7 @@
      {
       "id": "517010",
       "date": "2026-11-15",
-      "time": "22:30",
+      "time": "22:15",
       "status": "upcoming",
       "p1": {
        "id": "754",
@@ -246,7 +246,7 @@
      {
       "id": "517008",
       "date": "2026-11-15",
-      "time": "19:30",
+      "time": "19:15",
       "status": "upcoming",
       "p1": {
        "id": "11902",
@@ -338,7 +338,7 @@
      {
       "id": "517005",
       "date": "2026-11-15",
-      "time": "21:00",
+      "time": "20:45",
       "status": "upcoming",
       "p1": {
        "id": "32078",
@@ -430,7 +430,7 @@
      {
       "id": "517002",
       "date": "2026-11-15",
-      "time": "23:00",
+      "time": "22:45",
       "status": "upcoming",
       "p1": {
        "id": "31031",
@@ -522,7 +522,7 @@
      {
       "id": "516999",
       "date": "2026-11-15",
-      "time": "21:30",
+      "time": "21:15",
       "status": "upcoming",
       "p1": {
        "id": "271",
@@ -614,8 +614,8 @@
      {
       "id": "516995",
       "date": "2026-11-15",
-      "time": "15:20",
-      "status": "upcoming",
+      "time": "15:10",
+      "status": "result",
       "p1": {
        "id": "11804",
        "name": "Luke Woodhouse",
@@ -630,9 +630,9 @@
        "country": "PL",
        "ranking": 19
       },
-      "s1": 0,
-      "s2": 0,
-      "winner": null
+      "s1": 1,
+      "s2": 5,
+      "winner": "224"
      },
      {
       "id": "516996",
@@ -706,7 +706,7 @@
      {
       "id": "516993",
       "date": "2026-11-15",
-      "time": "20:00",
+      "time": "19:45",
       "status": "upcoming",
       "p1": {
        "id": "81",
@@ -798,8 +798,8 @@
      {
       "id": "516990",
       "date": "2026-11-15",
-      "time": "13:45",
-      "status": "upcoming",
+      "time": "13:48",
+      "status": "result",
       "p1": {
        "id": "34874",
        "name": "Niko Springer",
@@ -814,9 +814,9 @@
        "country": "US",
        "ranking": null
       },
-      "s1": 0,
-      "s2": 0,
-      "winner": null
+      "s1": 5,
+      "s2": 1,
+      "winner": "34874"
      },
      {
       "id": "516989",
@@ -890,8 +890,8 @@
      {
       "id": "516986",
       "date": "2026-11-15",
-      "time": "16:20",
-      "status": "upcoming",
+      "time": "16:15",
+      "status": "result",
       "p1": {
        "id": "30859",
        "name": "Jonny Clayton",
@@ -906,9 +906,9 @@
        "country": "GB-ENG",
        "ranking": 24
       },
-      "s1": 0,
-      "s2": 0,
-      "winner": null
+      "s1": 1,
+      "s2": 5,
+      "winner": "31041"
      },
      {
       "id": "516987",
@@ -982,8 +982,8 @@
      {
       "id": "516984",
       "date": "2026-11-15",
-      "time": "15:50",
-      "status": "upcoming",
+      "time": "15:37",
+      "status": "result",
       "p1": {
        "id": "231",
        "name": "Andrew Gilding",
@@ -998,9 +998,9 @@
        "country": "GB-ENG",
        "ranking": 77
       },
-      "s1": 0,
-      "s2": 0,
-      "winner": null
+      "s1": 5,
+      "s2": 4,
+      "winner": "231"
      },
      {
       "id": "516983",
@@ -1074,7 +1074,7 @@
      {
       "id": "516981",
       "date": "2026-11-15",
-      "time": "20:30",
+      "time": "20:15",
       "status": "upcoming",
       "p1": {
        "id": "36287",
@@ -1166,8 +1166,8 @@
      {
       "id": "516978",
       "date": "2026-11-15",
-      "time": "14:50",
-      "status": "upcoming",
+      "time": "14:41",
+      "status": "result",
       "p1": {
        "id": "2040",
        "name": "Cameron Menzies",
@@ -1182,9 +1182,9 @@
        "country": "AU",
        "ranking": null
       },
-      "s1": 0,
-      "s2": 0,
-      "winner": null
+      "s1": 5,
+      "s2": 4,
+      "winner": "2040"
      },
      {
       "id": "516977",
@@ -1258,8 +1258,8 @@
      {
       "id": "516974",
       "date": "2026-11-15",
-      "time": "16:50",
-      "status": "upcoming",
+      "time": "16:38",
+      "status": "result",
       "p1": {
        "id": "38552",
        "name": "Josh Rock",
@@ -1274,9 +1274,9 @@
        "country": "NL",
        "ranking": 23
       },
-      "s1": 0,
-      "s2": 0,
-      "winner": null
+      "s1": 3,
+      "s2": 5,
+      "winner": "32895"
      },
      {
       "id": "516975",
@@ -1350,8 +1350,8 @@
      {
       "id": "516972",
       "date": "2026-11-15",
-      "time": "14:20",
-      "status": "upcoming",
+      "time": "14:12",
+      "status": "result",
       "p1": {
        "id": "37349",
        "name": "Alan Soutar",
@@ -1366,9 +1366,9 @@
        "country": "GB-ENG",
        "ranking": null
       },
-      "s1": 0,
-      "s2": 0,
-      "winner": null
+      "s1": 5,
+      "s2": 2,
+      "winner": "37349"
      },
      {
       "id": "516971",
@@ -1442,7 +1442,7 @@
      {
       "id": "516969",
       "date": "2026-11-15",
-      "time": "22:00",
+      "time": "21:45",
       "status": "upcoming",
       "p1": {
        "id": "33014",
