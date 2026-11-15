@@ -62,7 +62,6 @@ const lite = events.map(e => ({ id: e.id, name: e.name, tag: e.tag, start: e.sta
               <div class="body">
                 <div class="row">
                   <Fragment set:html={tvBadge(e.broadcaster)} />
-                  {e.major && <span class="major-tag">Major</span>}
                   <span class="status" data-status></span>
                 </div>
                 <h3>{e.name}</h3>
@@ -196,7 +195,6 @@ const lite = events.map(e => ({ id: e.id, name: e.name, tag: e.tag, start: e.sta
   .date .dn small { font-size: 13px; opacity: .8; }
   .body { min-width: 0; flex: 1; }
   .row { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-bottom: 6px; }
-  .major-tag { font-size: 11px; font-weight: 800; letter-spacing: .06em; text-transform: uppercase; color: #8a6a0f; background: var(--gold-soft); padding: 4px 9px; border-radius: 999px; }
   .status { margin-left: auto; font-size: 12px; font-weight: 700; color: var(--muted); }
   .status.soon { color: var(--green); }
   h3 { font-size: 20px; }
