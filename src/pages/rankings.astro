@@ -120,6 +120,15 @@ const av = (name: string) => { const [c1, c2] = avatarColours(name); return `--c
         </div>
         <section class="season">
           <h3>${s.year} season</h3>
+          ${s.stats ? `<div class="avgcard">
+            <div class="big"><span>Season average</span><b data-count="${s.stats.avg}">${s.stats.avg.toFixed(2)}</b><small>across ${s.stats.matches} matches</small></div>
+            <div class="minis">
+              <div><b>${s.stats.f9 != null ? s.stats.f9.toFixed(2) : '–'}</b><span>First 9 avg</span></div>
+              <div><b>${s.stats.t80}</b><span>180s</span></div>
+              <div><b>${s.stats.co != null ? s.stats.co.toFixed(1) + '%' : '–'}</b><span>Checkout</span></div>
+              <div><b>${s.stats.hi ?? '–'}</b><span>Best finish</span></div>
+            </div>
+          </div>` : ''}
           <div class="stats">
             <div class="ring" style="--p:${winPct}"><svg viewBox="0 0 36 36"><circle cx="18" cy="18" r="15.9" class="bg"/><circle cx="18" cy="18" r="15.9" class="fg" style="stroke-dasharray:${winPct} 100"/></svg><b>${winPct}%</b><span>Matches won</span></div>
             <div class="ring alt" style="--p:${legPct}"><svg viewBox="0 0 36 36"><circle cx="18" cy="18" r="15.9" class="bg"/><circle cx="18" cy="18" r="15.9" class="fg" style="stroke-dasharray:${legPct} 100"/></svg><b>${legPct}%</b><span>Legs won</span></div>
@@ -127,7 +136,7 @@ const av = (name: string) => { const [c1, c2] = avatarColours(name); return `--c
             <div class="num"><b>${s.titles.length}</b><span>Titles in ${s.year}</span></div>
           </div>
           ${s.titles.length ? `<p class="titles">🏆 ${s.titles.map(esc).join(' · ')}</p>` : ''}
-          <p class="note">Season record covers PDC main-tour events (majors, Premier League, World Series, European Tour and Players Championships). Leg counts exclude set-play matches. Three-dart averages aren't in the PDC's free data feed.</p>
+          <p class="note">Season record covers PDC main-tour events (majors, Premier League, World Series, European Tour and Players Championships). Leg counts exclude set-play matches. Averages are weighted by darts thrown and update daily.</p>
         </section>
         ${career.length ? `<section class="career"><h3>Career titles</h3><div class="bars">${career.map(([k, v]) => `<div><span>${esc(k.replace('Senior PDC Titles', 'All PDC titles'))}</span><i style="--w:${Math.min(100, (v / Math.max(...career.map(c => c[1]), 1)) * 100)}%"></i><b>${v}</b></div>`).join('')}</div></section>` : ''}
         <section class="history">
@@ -135,7 +144,7 @@ const av = (name: string) => { const [c1, c2] = avatarColours(name); return `--c
           <div class="hfilter">${groups.map((g, i) => `<button class="chip" data-g="${g.k}" aria-pressed="${i === 0}">${g.label}</button>`).join('')}</div>
           <div class="seasons">
             ${p.history.length ? [...bySeason.entries()].map(([yr, list]) => `
-              <div class="yr"><h4>${yr}</h4><ul>${list.map(h => `<li data-g="${groups.slice(1).filter(g => g.test!(h)).map(g => g.k).join(' ')}"><span class="ev">${esc(h.name)}${h.tag ? ` <small>${esc(h.tag)}</small>` : ''}</span><span class="fin ${finishClass(h.label)}">${esc(h.label)}</span></li>`).join('')}</ul></div>`).join('')
+              <div class="yr"><h4>${yr}</h4><ul>${list.map(h => `<li data-g="${groups.slice(1).filter(g => g.test!(h)).map(g => g.k).join(' ')}"><span class="ev">${esc(h.name)}${h.tag ? ` <small>${esc(h.tag)}</small>` : ''}</span><span class="hr">${h.avg ? `<i class="havg" title="Three-dart average">${h.avg.toFixed(2)}</i>` : ''}<span class="fin ${finishClass(h.label)}">${esc(h.label)}</span></span></li>`).join('')}</ul></div>`).join('')
               : '<p class="muted">No major, World Series or European Tour appearances recorded yet.</p>'}
           </div>
         </section>
@@ -160,6 +169,12 @@ const av = (name: string) => { const [c1, c2] = avatarColours(name); return `--c
           sheet.innerHTML = render({ ...cache.get(id), rank }, portraits);
           sheet.querySelectorAll<HTMLElement>('.bars i').forEach((el, i) => setTimeout(() => el.classList.add('go'), 150 + i * 80));
           sheet.querySelectorAll<HTMLElement>('.ring').forEach(el => requestAnimationFrame(() => el.classList.add('go')));
+          sheet.querySelectorAll<HTMLElement>('[data-count]').forEach(el => {
+            const end = Number(el.dataset.count); const t0 = performance.now();
+            if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+            const tick = (now: number) => { const k = Math.min(1, (now - t0) / 1100); el.textContent = (end * (1 - Math.pow(1 - k, 3))).toFixed(2); if (k < 1) requestAnimationFrame(tick); };
+            requestAnimationFrame(tick);
+          });
         } catch {
           sheet.innerHTML = '<button class="close" data-close aria-label="Close">✕</button><div class="loading">Profile unavailable right now. Please try again later.</div>';
         }
@@ -349,6 +364,18 @@ const av = (name: string) => { const [c1, c2] = avatarColours(name); return `--c
   .sheet :global(.ring b) { position: absolute; top: 40px; font-family: var(--display); font-size: 18px; }
   .sheet :global(.ring span), .sheet :global(.num span) { font-size: 12px; color: var(--muted); font-weight: 600; margin-top: 4px; }
   .sheet :global(.num b) { font-family: var(--display); font-size: 30px; }
+  .sheet :global(.avgcard) { display: grid; grid-template-columns: 1fr 1.4fr; gap: 10px; margin-bottom: 10px; }
+  .sheet :global(.avgcard .big) { background: var(--ink); color: #fff; border-radius: 18px; padding: 16px 18px; display: flex; flex-direction: column; justify-content: center; position: relative; overflow: hidden; }
+  .sheet :global(.avgcard .big::after) { content: ''; position: absolute; right: -62px; top: -62px; width: 120px; height: 120px; border-radius: 50%; border: 14px solid var(--red); box-shadow: 0 0 0 14px #14161f, 0 0 0 26px var(--green); }
+  .sheet :global(.avgcard .big span) { font-size: 11px; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; color: #ff8a98; }
+  .sheet :global(.avgcard .big b) { font-family: var(--display); font-size: 52px; font-weight: 800; letter-spacing: -.03em; line-height: 1; margin: 6px 0 4px; font-variant-numeric: tabular-nums; position: relative; z-index: 1; }
+  .sheet :global(.avgcard .big small) { color: rgba(255, 255, 255, .65); font-size: 12px; font-weight: 600; }
+  .sheet :global(.minis) { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
+  .sheet :global(.minis div) { background: var(--paper); border: 1px solid var(--line); border-radius: 14px; padding: 10px 14px; display: flex; flex-direction: column; justify-content: center; }
+  .sheet :global(.minis b) { font-family: var(--display); font-size: 22px; font-variant-numeric: tabular-nums; }
+  .sheet :global(.minis span) { font-size: 11px; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); }
+  .sheet :global(.hr) { display: inline-flex; align-items: center; gap: 8px; flex: none; }
+  .sheet :global(.havg) { font-style: normal; font-size: 12px; font-weight: 800; font-variant-numeric: tabular-nums; color: var(--ink-2); }
   .sheet :global(.titles) { margin: 12px 0 0; font-weight: 600; font-size: 14px; background: var(--gold-soft); border-radius: 12px; padding: 10px 14px; }
   .sheet :global(.note) { font-size: 12px; color: var(--muted); margin: 10px 0 0; }
   .sheet :global(.season), .sheet :global(.career), .sheet :global(.history) { margin-top: 26px; }
@@ -374,12 +401,13 @@ const av = (name: string) => { const [c1, c2] = avatarColours(name); return `--c
   .sheet :global(.src) { margin-top: 20px; font-size: 13px; }
 
   @media (max-width: 720px) {
-              .tr { grid-template-columns: 58px 1fr auto; padding: 10px 12px; }
+    .tr { grid-template-columns: 58px 1fr auto; padding: 10px 12px; }
     .hide-s { display: none; }
     .bar { display: none; }
     .sheet { padding: 20px; }
     .sheet :global(.ph) { margin: -20px -20px 0; padding: 26px 20px 20px; flex-direction: column; align-items: flex-start; }
     .sheet :global(.stats) { grid-template-columns: repeat(2, 1fr); }
+    .sheet :global(.avgcard) { grid-template-columns: 1fr; }
     .sheet :global(.bars > div) { grid-template-columns: 100px 1fr 32px; }
   }
 </style>

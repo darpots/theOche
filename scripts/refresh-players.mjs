@@ -6,11 +6,12 @@
 // Completed tournaments are summarised once into data/results-cache.json
 // (committed), so weekly runs only fetch new events.
 import { mkdir, writeFile, readdir, unlink } from 'node:fs/promises';
-import { API, cleanName, playerName, isPlaceholder } from '../src/lib/pdc.mjs';
+import { API, cleanName, playerName, isPlaceholder, fixtureStatsUrl } from '../src/lib/pdc.mjs';
 import { get, getAll, readJson, writeJsonIfChanged, pool, today, log, sleep } from './lib.mjs';
 
 const ROOT = new URL('..', import.meta.url).pathname;
 const CACHE = `${ROOT}data/results-cache.json`;
+const STATS = `${ROOT}data/stats-cache.json`;
 const OUTDIR = `${ROOT}public/data/players/`;
 const TOP = 128;
 const FIRST_SEASON = 2005;
@@ -44,19 +45,23 @@ for (const [id, sum] of Object.entries(cache)) {
   sum.c = a.tournamentCategoryID; sum.ty = a.tournamentTypeID;
   if (a.winnerParticipantID) sum.w = String(a.winnerParticipantID);
 }
-const todo = wanted.filter(a => !cache[a.id]);
+// This season's main-tour events also need their fixture ids (for averages).
+const isSeasonEvent = a => isSeason(a) && Number(a.seasonID) === season;
+const todo = wanted.filter(a => !cache[a.id] || (isSeasonEvent(a) && !cache[a.id].fx));
 log(`tournaments: ${wanted.length} relevant, ${todo.length} to fetch`);
 
 function summarise(payload, meta) {
   const a = { ...payload.data.attributes, ...meta };
   const players = {}; // pid -> [bestRound, won, lost, legsFor, legsAgainst]
   const rounds = {};
+  const fx = [];
   for (const s of a.stages || []) {
     rounds[s.roundNumber] = s.stage?.name || 'Round';
     const legs = !((s.numberOfSets || 0) > 1);
     for (const f of s.fixtures || []) {
       const sides = [[f.participant1, f.participant1Score, f.participant2Score], [f.participant2, f.participant2Score, f.participant1Score]];
       const done = f.winnerParticipantID || (/result/i.test(f.status || '') && f.participant1Score !== f.participant2Score);
+      if (done && !isPlaceholder(f.participant1) && !isPlaceholder(f.participant2)) fx.push(String(f.fixtureID));
       for (const [p, mine, theirs] of sides) {
         if (isPlaceholder(p)) continue;
         const id = String(p.participantID);
@@ -72,7 +77,7 @@ function summarise(payload, meta) {
   return {
     n: a.name, s: a.seasonID, d: a.startDate, e: a.endDate, ty: a.tournamentTypeID, c: a.tournamentCategoryID,
     w: a.winnerParticipantID ? String(a.winnerParticipantID) : null,
-    r: rounds, p: players,
+    r: rounds, p: players, fx,
   };
 }
 
@@ -91,7 +96,63 @@ const persistable = Object.fromEntries(Object.entries(cache).filter(([, v]) => v
 await mkdir(`${ROOT}data`, { recursive: true });
 await writeJsonIfChanged(CACHE, persistable);
 
-// ---- 3. Per-player profiles ----------------------------------------------
+// ---- 3. Season match stats -------------------------------------------------
+// Every finished main-tour match this season has a timeline with each visit.
+// Points and darts are summed from the visits, so season averages are
+// weighted by darts thrown (as the PDC's own averages are). Finished matches
+// never change, so each is fetched once and kept in data/stats-cache.json.
+// Per side: [pid, points, darts, first9 points, first9 darts, 180s, checkouts hit, checkout attempts, best checkout]
+const statsCache = (await readJson(STATS)) || {};
+const seasonEvents = Object.entries(cache).filter(([, sum]) => sum.s === season && sum.c !== '17' && ['2', '3', '4'].includes(sum.c) && sum.ty !== '17');
+const wantFx = new Map(seasonEvents.flatMap(([tid, sum]) => (sum.fx || []).map(f => [f, tid])));
+for (const id of Object.keys(statsCache)) if (!wantFx.has(id)) delete statsCache[id]; // last season's matches drop off
+const missing = [...wantFx.keys()].filter(id => !statsCache[id]);
+log(`match stats: ${wantFx.size} matches this season, ${missing.length} to fetch`);
+function sideStats(a, isP1, pid) {
+  const r = [pid, 0, 0, 0, 0, 0, 0, 0, 0];
+  for (const leg of a.legs || []) {
+    let n = 0;
+    for (const v of [...(leg.visits || [])].sort((x, y) => x.order - y.order)) {
+      if (v.isParticipant1 !== isP1) continue;
+      const pts = v.isBust ? 0 : v.score || 0, d = v.numberOfDartsThrown || 0;
+      r[1] += pts; r[2] += d;
+      if (n++ < 3) { r[3] += pts; r[4] += d; }
+    }
+  }
+  const m = a.fixtureMeta?.[isP1 ? 'participant1Data' : 'participant2Data'] || {};
+  r[5] = m.score180 || 0; r[6] = m.checkoutSuccesses ?? m.checkouts ?? 0; r[7] = m.checkoutAttempts || 0; r[8] = m.highestCheckout || 0;
+  if (typeof r[6] !== 'number') r[6] = Number(String(r[6]).split('/')[0]) || 0;
+  return r;
+}
+let got = 0;
+await pool(missing, 8, async id => {
+  try {
+    const a = (await get(fixtureStatsUrl(id))).data.attributes;
+    if (!a.legs?.length) return;
+    statsCache[id] = { t: wantFx.get(id), a: sideStats(a, true, String(a.participant1ID)), b: sideStats(a, false, String(a.participant2ID)) };
+    if (++got % 500 === 0) log(`  stats ${got}/${missing.length}`);
+  } catch { /* try again tomorrow */ }
+});
+await writeJsonIfChanged(STATS, statsCache);
+
+// Totals per player, overall and per tournament.
+const seasonStats = new Map(); // pid -> { all: totals, byT: Map<tid, totals> }
+const add = (t, r) => { for (let i = 1; i < 9; i++) t[i] = i === 8 ? Math.max(t[i], r[i]) : t[i] + r[i]; t[0]++; };
+for (const s of Object.values(statsCache)) for (const r of [s.a, s.b]) {
+  if (!r[2]) continue;
+  const e = seasonStats.get(r[0]) || { all: [0, 0, 0, 0, 0, 0, 0, 0, 0], byT: new Map() };
+  add(e.all, r);
+  if (!e.byT.has(s.t)) e.byT.set(s.t, [0, 0, 0, 0, 0, 0, 0, 0, 0]);
+  add(e.byT.get(s.t), r);
+  seasonStats.set(r[0], e);
+}
+const avgOf = t => (t[2] ? Math.round((t[1] / t[2]) * 300) / 100 : null);
+function summaryOf(t) {
+  if (!t || !t[2]) return null;
+  return { matches: t[0], avg: avgOf(t), f9: t[4] ? Math.round((t[3] / t[4]) * 300) / 100 : null, t80: t[5], co: t[7] ? Math.round((t[6] / t[7]) * 1000) / 10 : null, hi: t[8] || null };
+}
+
+// ---- 4. Per-player profiles ----------------------------------------------
 function finishLabel(sum, pid) {
   const best = sum.p[pid][0];
   if (sum.w === pid) return { label: 'Winner', rank: 0 };
@@ -115,7 +176,8 @@ await pool(top, 4, async row => {
     const isHist = (sum.c === '2' && !['3', '17'].includes(sum.ty)) || ['18', '14'].includes(sum.ty);
     if (isHist) {
       const { name, tag } = cleanName(sum.n);
-      history.push({ id, season: sum.s, date: sum.d, name, tag, ...finishLabel(sum, row.id), w: rec[1], l: rec[2] });
+      const ev = seasonStats.get(row.id)?.byT.get(id);
+      history.push({ id, season: sum.s, date: sum.d, name, tag, ...finishLabel(sum, row.id), w: rec[1], l: rec[2], ...(ev ? { avg: avgOf(ev) } : {}) });
     }
     if (sum.s === season && sum.c !== '17' && ['2', '3', '4'].includes(sum.c)) {
       seasonRec.won += rec[1]; seasonRec.lost += rec[2];
@@ -143,7 +205,7 @@ await pool(top, 4, async row => {
     tourCard: !!a.isCurrentTourCardHolder,
     nineDarters: a.statistics?.nineDartCount ?? null,
     career,
-    season: { year: season, ...seasonRec },
+    season: { year: season, ...seasonRec, stats: summaryOf(seasonStats.get(row.id)?.all) },
     history,
   };
   keep.add(`${row.id}.json`);
