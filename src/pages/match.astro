@@ -13,6 +13,12 @@ const portraits = Object.fromEntries(Object.entries(portraitsRaw as Record<strin
     <div class="wrap mh-in" id="mh"><div class="loading"><span class="spinner"></span>Loading match…</div></div>
   </section>
 
+  <section class="wrap tape" id="tape" hidden>
+    <h2>Season form</h2>
+    <p class="sub">How the two players have gone in PDC main-tour events this year.</p>
+    <div class="cmp" id="tp"></div>
+  </section>
+
   <div class="wrap mbody" id="mb" hidden>
     <section class="block">
       <h2>Match stats</h2>
@@ -181,6 +187,32 @@ const portraits = Object.fromEntries(Object.entries(portraitsRaw as Record<strin
       svg.addEventListener('pointerleave', () => { tip.hidden = true; xh.setAttribute('hidden', ''); });
     }
 
+    // Season form from the players' profile files (top 128 only).
+    async function tape(ps: any[]) {
+      const box = document.getElementById('tape'), tp = document.getElementById('tp');
+      if (!box || !tp) return;
+      const prof = await Promise.all(ps.map(p => fetch(`/data/players/${p?.participantID}.json`).then(r => (r.ok ? r.json() : null)).catch(() => null)));
+      if (!prof.some(Boolean)) { box.hidden = true; return; }
+      const st = prof.map(x => x?.season?.stats || null), se = prof.map(x => x?.season || null);
+      const form = (x: any) => (x?.form || []).slice(0, 5).map((m: any) => `<i class="fm ${m.won ? 'w' : 'l'}" title="${m.won ? 'Won' : 'Lost'} ${m.my}-${m.their} v ${esc(m.opp)}">${m.won ? 'W' : 'L'}</i>`).join('') || '–';
+      const rows: [string, number | null, number | null, (v: number) => string, boolean][] = [
+        ['World ranking', ps[0]?.ranking ?? null, ps[1]?.ranking ?? null, v => `#${v}`, false],
+        ['Season average', st[0]?.avg ?? null, st[1]?.avg ?? null, v => v.toFixed(2), true],
+        ['First 9 average', st[0]?.f9 ?? null, st[1]?.f9 ?? null, v => v.toFixed(2), true],
+        ['Checkout %', st[0]?.co ?? null, st[1]?.co ?? null, v => `${v.toFixed(1)}%`, true],
+        ['180s per match', st[0] ? st[0].t80 / st[0].matches : null, st[1] ? st[1].t80 / st[1].matches : null, v => v.toFixed(1), true],
+        ['Matches won', se[0]?.played ? (se[0].won / se[0].played) * 100 : null, se[1]?.played ? (se[1].won / se[1].played) * 100 : null, v => `${Math.round(v)}%`, true],
+      ];
+      const html = rows.filter(([, x, y]) => x != null || y != null).map(([label, x, y, fmt, hiGood]) => {
+        const X = x ?? 0, Y = y ?? 0, max = Math.max(X, Y, 1);
+        const better = x == null || y == null || X === Y ? 0 : (X > Y) === hiGood ? 1 : 2;
+        const bar = (v: number | null, k: number) => (v == null || !hiGood ? '' : `<i class="b${k}" style="width:${(v / max) * 100}%"></i>`);
+        return `<div class="cr"><span class="v l${better === 1 ? ' hi' : ''}">${x == null ? '–' : fmt(X)}</span><div class="bars">${bar(x, 0)}</div><span class="lab">${label}</span><div class="bars r">${bar(y, 1)}</div><span class="v r${better === 2 ? ' hi' : ''}">${y == null ? '–' : fmt(Y)}</span></div>`;
+      }).join('') + `<div class="cr"><span class="v l fms">${form(prof[0])}</span><div class="bars"></div><span class="lab">Last 5</span><div class="bars r"></div><span class="v r fms">${form(prof[1])}</span></div>`;
+      tp.innerHTML = html;
+      box.hidden = false;
+    }
+
     async function load() {
       const id = new URLSearchParams(location.search).get('id');
       const mh = document.getElementById('mh');
@@ -196,6 +228,9 @@ const portraits = Object.fromEntries(Object.entries(portraitsRaw as Record<strin
         const legs = t?.data ? legData(t.data.attributes) : [];
         const started = !/result|live|progress/i.test(a.attributes.status) && new Date(`${a.attributes.startDate}T${(a.attributes.startTime || '23:59').slice(0, 5)}:00`) <= new Date(new Date().toLocaleString('en-US', { timeZone: 'Europe/London' }));
         const noLegs = !(t?.data?.attributes?.legs?.length);
+        const isResult = /result/i.test(a.attributes.status);
+        if (isResult && noLegs) mh.insertAdjacentHTML('beforeend', `<p class="inplay"><b>Result confirmed.</b> The PDC adds averages and leg-by-leg stats a little later. This page checks again every two minutes and fills in on its own.</p>`);
+        if (!document.getElementById('tp')!.innerHTML) tape([a.attributes.participant1, a.attributes.participant2]);
         if (started && noLegs) mh.insertAdjacentHTML('beforeend', `<p class="inplay"><span class="live-dot">On now</span> This match should be under way. The PDC's public feed publishes scores when a match finishes, so this page fills in then. <a href="https://www.pdc.tv/matches/${esc(id)}" target="_blank" rel="noopener">Follow it dart by dart on pdc.tv ↗</a></p>`);
         document.getElementById('mb')!.hidden = !t?.data || noLegs;
         if (t?.data) {
@@ -207,7 +242,8 @@ const portraits = Object.fromEntries(Object.entries(portraitsRaw as Record<strin
           wireTip();
         }
         clearTimeout(timer);
-        if (/live|progress/i.test(a.attributes.status) || (!/result/i.test(a.attributes.status) && a.attributes.startDate <= new Date().toISOString().slice(0, 10))) timer = window.setTimeout(load, 15_000);
+        if (/live|progress/i.test(a.attributes.status) || (!isResult && a.attributes.startDate <= new Date().toISOString().slice(0, 10))) timer = window.setTimeout(load, 15_000);
+        else if (isResult && noLegs) timer = window.setTimeout(load, 120_000);
       } catch {
         mh.innerHTML = '<div class="loading">This match could not be loaded. Please try again shortly.</div>';
       }
@@ -251,6 +287,12 @@ const portraits = Object.fromEntries(Object.entries(portraitsRaw as Record<strin
   .mh-in :global(.inplay) { margin: 0 0 22px; font-size: 14px; color: rgba(255, 255, 255, .85); background: rgba(255, 255, 255, .08); border-radius: 12px; padding: 10px 14px; }
   .mh-in :global(.inplay a) { color: #fff; font-weight: 700; }
   .mh-in :global(.inplay .live-dot) { color: #ff8a98; margin-right: 6px; }
+  .tape { margin-top: 28px; }
+  .tape :global(.fms) { display: flex; gap: 4px; }
+  .tape :global(.v.l.fms) { justify-content: flex-end; }
+  .tape :global(.fm) { font-style: normal; width: 22px; height: 22px; border-radius: 6px; display: grid; place-items: center; font-size: 11px; font-weight: 800; color: #fff; }
+  .tape :global(.fm.w) { background: var(--green); }
+  .tape :global(.fm.l) { background: var(--red); }
   .mbody { margin-top: 28px; }
   .block + .block { margin-top: 36px; }
   h2 { font-size: 24px; margin-bottom: 8px; }
@@ -261,7 +303,7 @@ const portraits = Object.fromEntries(Object.entries(portraitsRaw as Record<strin
   .legend :global(i), .legs :global(i), .lt :global(.dot) { display: inline-block; width: 10px; height: 10px; border-radius: 3px; }
 
   .cmp { background: var(--card); border: 1px solid var(--line); border-radius: 18px; padding: 8px 18px; }
-  .cmp :global(.cr) { display: grid; grid-template-columns: 70px 1fr 150px 1fr 70px; align-items: center; gap: 12px; padding: 10px 0; border-top: 1px solid var(--line); font-variant-numeric: tabular-nums; }
+  .cmp :global(.cr) { display: grid; grid-template-columns: 130px 1fr 150px 1fr 130px; align-items: center; gap: 12px; padding: 10px 0; border-top: 1px solid var(--line); font-variant-numeric: tabular-nums; }
   .cmp :global(.cr:first-child) { border-top: 0; }
   .cmp :global(.v) { font-weight: 700; color: var(--muted); }
   .cmp :global(.v.l) { text-align: right; }
@@ -307,9 +349,9 @@ const portraits = Object.fromEntries(Object.entries(portraitsRaw as Record<strin
     .mh-in :global(.s1) { flex-direction: column; align-items: flex-end; }
     .mh-in :global(.who) { padding-bottom: 14px; }
     .mh-in :global(.score) { padding-bottom: 60px; }
-    .cmp :global(.cr) { grid-template-columns: 56px 1fr 56px; row-gap: 4px; }
+    .cmp :global(.cr) { grid-template-columns: 1fr 1fr; row-gap: 4px; }
     .cmp :global(.lab) { grid-column: 1 / -1; grid-row: 1; }
     .cmp :global(.bars) { display: none; }
-    .cmp :global(.v.r) { grid-column: 3; }
+    .cmp :global(.v.l) { text-align: left; } .cmp :global(.v.r) { grid-column: 2; text-align: right; } .tape :global(.v.l.fms) { justify-content: flex-start; } .tape :global(.v.r.fms) { justify-content: flex-end; }
   }
 </style>
