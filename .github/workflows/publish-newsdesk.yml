@@ -1,0 +1,51 @@
+name: Publish newsdesk branch
+
+# The Claude newsdesk routine may push to a claude/newsdesk-* branch.
+# This merges news-only changes into main (which triggers a Vercel deploy)
+# and deletes the branch. Anything touching other files is left for review.
+on:
+  push:
+    branches: ['claude/newsdesk-**', 'claude/**newsdesk**']
+
+permissions:
+  contents: write
+  issues: write
+
+concurrency:
+  group: data-commit
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - name: Check the branch only adds news
+        run: |
+          git fetch origin "${GITHUB_REF_NAME}"
+          changed=$(git diff --name-only origin/main...FETCH_HEAD)
+          echo "$changed"
+          if echo "$changed" | grep -vqE '^src/content/news/[^/]+\.json$'; then
+            echo "::error::Branch changes files outside src/content/news — not auto-publishing."
+            exit 1
+          fi
+          git checkout FETCH_HEAD -- $changed
+      - run: npm ci
+      - uses: ./.github/actions/commit
+        with:
+          message: 'news: publish newsdesk update'
+          paths: src/content/news
+      - name: Delete the branch
+        run: git push origin --delete "${GITHUB_REF_NAME}" || true
+      - if: failure()
+        uses: ./.github/actions/report-failure
+        with:
+          job: publish newsdesk branch
