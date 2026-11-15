@@ -2,7 +2,7 @@
 import Layout from '../layouts/Layout.astro';
 import data from '../data/tournament.json';
 import portraitsRaw from '../data/portraits.json';
-import { BROADCASTER_INFO } from '../lib/pdc.mjs';
+import { tvBadge } from '../lib/pdc.mjs';
 import { dateRange } from '../lib/format.mjs';
 import { matchDays, renderDay, renderTabs, progress } from '../lib/render-matches.mjs';
 
@@ -11,14 +11,13 @@ const portraits = Object.fromEntries(Object.entries(portraitsRaw as Record<strin
 const buildDay = new Date().toISOString().slice(0, 10);
 const { days, def } = matchDays(t, buildDay);
 const prog = progress(t);
-const tv = t.broadcaster ? BROADCASTER_INFO[t.broadcaster as keyof typeof BROADCASTER_INFO] : null;
 ---
 <Layout title={`${t.name} matches`} description={`Order of play and results from the ${t.fullName}.`} active="matches">
   <section class="hero wrap">
     <span class="eyebrow" id="phase">Current tournament</span>
     <h1>{t.name}{t.tag && <span class="tagline"> {t.tag}</span>}</h1>
     <div class="meta">
-      {tv && <span class={`tv tv-${t.broadcaster}`}>{tv.label}</span>}
+      {t.broadcaster && <Fragment set:html={tvBadge(t.broadcaster)} />}
       <span>{dateRange(t.start, t.end)}</span>
       {t.venue && <span>· {t.venue}</span>}
       <span class="live-dot" id="liveflag" hidden>Live updates</span>

@@ -2,7 +2,7 @@
 import Layout from '../layouts/Layout.astro';
 import Dartboard from '../components/Dartboard.astro';
 import calendar from '../data/calendar.json';
-import { BROADCASTER_INFO } from '../lib/pdc.mjs';
+import { tvBadge } from '../lib/pdc.mjs';
 import { dayNum, monthShort, monthLong, weekday, dateRange } from '../lib/format.mjs';
 
 type Ev = (typeof calendar.events)[number];
@@ -33,9 +33,9 @@ const lite = events.map(e => ({ id: e.id, name: e.name, tag: e.tag, start: e.sta
   <section class="wrap controls" data-reveal>
     <div class="chips" role="group" aria-label="Filter by broadcaster">
       <button class="chip" data-filter="all" aria-pressed="true">All events</button>
-      <button class="chip" data-filter="sky" aria-pressed="false" style="--c: var(--sky)"><span class="dot" style="color:var(--sky)"></span>Sky Sports</button>
-      <button class="chip" data-filter="itv" aria-pressed="false"><span class="dot" style="color:var(--itv)"></span>ITV</button>
-      <button class="chip" data-filter="pdctv" aria-pressed="false"><span class="dot" style="color:var(--pdctv)"></span>European Tour</button>
+      <button class="chip logo-chip" data-filter="sky" aria-pressed="false" aria-label="Sky Sports"><img src="/brand/sky-sports.svg" alt="" height="14" /></button>
+      <button class="chip logo-chip" data-filter="itv" aria-pressed="false" aria-label="ITV"><img src="/brand/itv.svg" alt="" height="18" /></button>
+      <button class="chip logo-chip" data-filter="pdctv" aria-pressed="false" aria-label="European Tour on PDCTV"><span class="pdc-mark"><img src="/brand/pdctv.png" alt="" height="12" /></span>European Tour</button>
       <button class="chip" data-filter="pl" aria-pressed="false"><span class="dot" style="color:var(--gold)"></span>Premier League</button>
     </div>
     <label class="toggle">
@@ -62,7 +62,7 @@ const lite = events.map(e => ({ id: e.id, name: e.name, tag: e.tag, start: e.sta
               </div>
               <div class="body">
                 <div class="row">
-                  <span class={`tv tv-${e.broadcaster}`}>{BROADCASTER_INFO[e.broadcaster as keyof typeof BROADCASTER_INFO].label}</span>
+                  <Fragment set:html={tvBadge(e.broadcaster)} />
                   {e.major && <span class="major-tag">Major</span>}
                   <span class="status" data-status></span>
                 </div>
@@ -83,7 +83,7 @@ const lite = events.map(e => ({ id: e.id, name: e.name, tag: e.tag, start: e.sta
   <script is:inline type="application/json" id="cal-data" set:html={JSON.stringify(lite)}></script>
 
   <script>
-    import { BROADCASTER_INFO } from '../lib/pdc.mjs';
+    import { tvBadge } from '../lib/pdc.mjs';
     import { dateRange } from '../lib/format.mjs';
 
     let timer: number | undefined;
@@ -129,9 +129,8 @@ const lite = events.map(e => ({ id: e.id, name: e.name, tag: e.tag, start: e.sta
       const next = live || data.find((e: any) => e.start > today);
       const box = document.getElementById('next')!;
       if (!next) { box.innerHTML = '<span class="muted">The new season calendar will appear here soon.</span>'; return; }
-      const info = BROADCASTER_INFO[next.b as keyof typeof BROADCASTER_INFO];
       box.innerHTML = `
-        <div class="nx-top">${live ? '<span class="live-dot">Live now</span>' : '<span class="nx-label">Next up</span>'}<span class="tv tv-${next.b}">${info.label}</span></div>
+        <div class="nx-top">${live ? '<span class="live-dot">Live now</span>' : '<span class="nx-label">Next up</span>'}${tvBadge(next.b)}</div>
         <h3>${next.name}${next.tag ? ` <small>${next.tag}</small>` : ''}</h3>
         <p class="muted">${dateRange(next.start, next.end)} · ${next.venue && next.city && next.venue.includes(next.city) ? next.venue : [next.venue, next.city].filter(Boolean).join(', ')}</p>
         ${live ? `<a class="cta" href="/matches">Follow the matches <span aria-hidden="true">→</span></a>` : `<div class="count" aria-live="off">${['d', 'h', 'm', 's'].map(u => `<div><b data-u="${u}">0</b><span>${{ d: 'days', h: 'hrs', m: 'mins', s: 'secs' }[u]}</span></div>`).join('')}</div>`}`;
@@ -169,6 +168,10 @@ const lite = events.map(e => ({ id: e.id, name: e.name, tag: e.tag, start: e.sta
 
   .controls { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 14px; padding: 16px 0 8px; position: sticky; top: 68px; z-index: 20; background: linear-gradient(var(--paper) 75%, transparent); }
   .chips { display: flex; flex-wrap: wrap; gap: 8px; }
+  .logo-chip { gap: 8px; }
+  .logo-chip img { width: auto; display: block; }
+  .logo-chip[aria-pressed='true'] { background: #fff; color: var(--ink); border-color: var(--ink); box-shadow: 0 0 0 2px var(--ink); }
+  .pdc-mark { background: #14161f; border-radius: 6px; padding: 3px 6px; display: inline-flex; }
   .toggle { display: inline-flex; align-items: center; gap: 10px; font-weight: 600; font-size: 14px; cursor: pointer; user-select: none; }
   .toggle input { position: absolute; opacity: 0; }
   .track { width: 42px; height: 24px; border-radius: 999px; background: #d9d2c4; position: relative; transition: background .25s; }

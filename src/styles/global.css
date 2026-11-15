@@ -78,13 +78,13 @@ h1, h2, h3, h4 { font-family: var(--display); letter-spacing: -.02em; line-heigh
 .chip .dot { width: 8px; height: 8px; border-radius: 50%; background: currentColor; }
 
 .tv {
-  display: inline-flex; align-items: center; gap: 6px; font-size: 11px; font-weight: 800; letter-spacing: .06em;
-  text-transform: uppercase; padding: 4px 9px; border-radius: 999px; white-space: nowrap;
+  display: inline-flex; align-items: center; justify-content: center; height: 28px; padding: 0 11px; border-radius: 999px;
+  background: #fff; border: 1px solid var(--line); box-shadow: var(--shadow-sm); flex: none;
 }
-.tv::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
-.tv-sky { color: var(--sky); background: var(--sky-soft); }
-.tv-itv { color: var(--itv); background: var(--itv-soft); }
-.tv-pdctv { color: var(--pdctv); background: var(--pdctv-soft); }
+.tv img { height: 15px; width: auto; display: block; }
+.tv-itv img { height: 18px; }
+.tv-pdctv { background: #14161f; border-color: #14161f; }
+.tv-pdctv img { height: 13px; }
 
 .live-dot { display: inline-flex; align-items: center; gap: 7px; color: var(--red); font-weight: 800; font-size: 12px; letter-spacing: .1em; text-transform: uppercase; }
 .live-dot::before { content: ''; width: 9px; height: 9px; border-radius: 50%; background: var(--red); box-shadow: 0 0 0 0 rgba(215, 38, 61, .6); animation: pulse 1.6s infinite; }

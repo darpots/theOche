@@ -33,8 +33,15 @@ export const BROADCASTERS = {
 export const BROADCASTER_INFO = {
   sky: { label: 'Sky Sports', short: 'Sky', logo: '/brand/sky-sports.svg' },
   itv: { label: 'ITV', short: 'ITV', logo: '/brand/itv.svg' },
-  pdctv: { label: 'PDCTV', short: 'PDCTV', logo: '/brand/pdctv.svg' },
+  pdctv: { label: 'PDCTV', short: 'PDCTV', logo: '/brand/pdctv.png' },
 };
+
+/** Broadcaster logo badge (HTML string), shared by build-time pages and browser scripts. */
+export function tvBadge(b) {
+  const info = BROADCASTER_INFO[b];
+  if (!info) return '';
+  return `<span class="tv tv-${b}" title="Live on ${info.label}"><img src="${info.logo}" alt="${info.label}" height="16" decoding="async"></span>`;
+}
 
 /** "2026 ET14 - Swiss Darts Trophy" -> { name: "Swiss Darts Trophy", tag: "European Tour 14" } */
 export function cleanName(raw = '') {
