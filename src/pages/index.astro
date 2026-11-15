@@ -1,6 +1,6 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import Dartboard from '../components/Dartboard.astro';
+import Hero from '../components/Hero.astro';
 import calendar from '../data/calendar.json';
 import { tvBadge } from '../lib/pdc.mjs';
 import { dayNum, monthShort, monthLong, weekday, dateRange } from '../lib/format.mjs';
@@ -15,19 +15,14 @@ for (const e of events) {
 }
 const place = (e: { venue: string | null; city: string | null }) => (e.venue && e.city && e.venue.includes(e.city) ? e.venue : [e.venue, e.city].filter(Boolean).join(' · '));
 const kind = (e: Ev) => e.broadcaster;
-const lite = events.map(e => ({ id: e.id, name: e.name, tag: e.tag, start: e.start, end: e.end, b: e.broadcaster, city: e.city, venue: e.venue }));
 ---
 <Layout title="The Oche" description="Every PDC darts event on Sky Sports, ITV and PDCTV — dates, venues, broadcasters and winners." active="calendar">
-  <section class="hero wrap cal-hero">
-    <div class="copy">
-      <span class="eyebrow">Season calendar</span>
-      <h1>Every big night<br />on <span class="accent">the oche.</span></h1>
-      <p class="lede">The PDC majors, Premier League nights and World Series events on Sky Sports and ITV, plus every European Tour event live on PDCTV.</p>
-      <div class="next card" id="next" data-reveal>
-        <span class="muted">Loading next event…</span>
-      </div>
-    </div>
-    <div class="art"><Dartboard size={440} /></div>
+  <Hero />
+
+  <section class="wrap cal-intro" data-reveal>
+    <span class="eyebrow">Season calendar</span>
+    <h2>Every big night on <span class="accent">the oche.</span></h2>
+    <p class="lede">The PDC majors, Premier League nights and World Series events on Sky Sports and ITV, plus every European Tour event live on PDCTV.</p>
   </section>
 
   <section class="wrap controls" data-reveal>
@@ -78,13 +73,9 @@ const lite = events.map(e => ({ id: e.id, name: e.name, tag: e.tag, start: e.sta
     <p class="empty" id="none" hidden>No events match this filter.</p>
   </section>
 
-  <script is:inline type="application/json" id="cal-data" set:html={JSON.stringify(lite)}></script>
 
   <script>
-    import { tvBadge } from '../lib/pdc.mjs';
-    import { dateRange } from '../lib/format.mjs';
 
-    let timer: number | undefined;
     function init() {
       const root = document.getElementById('months');
       if (!root) return;
@@ -121,49 +112,18 @@ const lite = events.map(e => ({ id: e.id, name: e.name, tag: e.tag, start: e.sta
       showPast.addEventListener('change', apply);
       apply();
 
-      // Featured "next up" card with a live countdown.
-      const data = JSON.parse(document.getElementById('cal-data')!.textContent!);
-      const live = data.find((e: any) => e.start <= today && e.end >= today);
-      const next = live || data.find((e: any) => e.start > today);
-      const box = document.getElementById('next')!;
-      if (!next) { box.innerHTML = '<span class="muted">The new season calendar will appear here soon.</span>'; return; }
-      box.innerHTML = `
-        <div class="nx-top">${live ? '<span class="live-dot">Live now</span>' : '<span class="nx-label">Next up</span>'}${tvBadge(next.b)}</div>
-        <h3>${next.name}${next.tag ? ` <small>${next.tag}</small>` : ''}</h3>
-        <p class="muted">${dateRange(next.start, next.end)} · ${next.venue && next.city && next.venue.includes(next.city) ? next.venue : [next.venue, next.city].filter(Boolean).join(', ')}</p>
-        ${live ? `<a class="cta" href="/matches">Follow the matches <span aria-hidden="true">→</span></a>` : `<div class="count" aria-live="off">${['d', 'h', 'm', 's'].map(u => `<div><b data-u="${u}">0</b><span>${{ d: 'days', h: 'hrs', m: 'mins', s: 'secs' }[u]}</span></div>`).join('')}</div>`}`;
-      clearInterval(timer);
-      if (!live) {
-        const target = Date.parse(next.start + 'T12:00:00Z');
-        const tick = () => {
-          let s = Math.max(0, Math.floor((target - Date.now()) / 1000));
-          const v = { d: Math.floor(s / 86400), h: Math.floor(s / 3600) % 24, m: Math.floor(s / 60) % 60, s: s % 60 } as Record<string, number>;
-          box.querySelectorAll<HTMLElement>('[data-u]').forEach(el => { const n = String(v[el.dataset.u!]).padStart(2, '0'); if (el.textContent !== n) { el.textContent = n; el.animate([{ transform: 'translateY(-30%)', opacity: 0 }, { transform: 'none', opacity: 1 }], { duration: 350, easing: 'cubic-bezier(.2,.8,.2,1)' }); } });
-        };
-        tick(); timer = window.setInterval(tick, 1000);
-      }
     }
     document.addEventListener('astro:page-load', init);
   </script>
 </Layout>
 
 <style>
-  .cal-hero { display: grid; grid-template-columns: 1.15fr .85fr; align-items: center; gap: 24px; }
-  .art { display: grid; place-items: center; }
-  .art :global(.board) { width: min(440px, 100%); }
-  .next { margin-top: 28px; padding: 20px 22px; max-width: 520px; box-shadow: var(--shadow); }
-  .next :global(.nx-top) { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
-  .next :global(.nx-label) { font-size: 12px; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); }
-  .next :global(h3) { font-size: 26px; }
-  .next :global(h3 small) { font-size: 15px; color: var(--muted); font-weight: 600; }
-  .next :global(p) { margin: 4px 0 14px; font-size: 14px; }
-  .next :global(.count) { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
-  .next :global(.count div) { background: var(--paper-2); border-radius: 12px; padding: 10px 6px; text-align: center; overflow: hidden; }
-  .next :global(.count b) { display: block; font-family: var(--display); font-size: 28px; font-variant-numeric: tabular-nums; }
-  .next :global(.count span) { font-size: 11px; text-transform: uppercase; letter-spacing: .1em; color: var(--muted); }
-  .next :global(.cta) { display: inline-flex; gap: 8px; background: var(--red); color: #fff; padding: 10px 16px; border-radius: 999px; font-weight: 700; text-decoration: none; transition: transform .3s var(--spring); }
-  .next :global(.cta:hover) { transform: translateX(4px); }
-
+  .cal-intro { padding: 64px 0 6px; }
+  .cal-intro .eyebrow { display: inline-flex; align-items: center; gap: 8px; font-size: 12px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: var(--red); }
+  .cal-intro .eyebrow::before { content: ''; width: 22px; height: 2px; background: currentColor; border-radius: 2px; }
+  .cal-intro h2 { font-size: clamp(32px, 4.4vw, 54px); font-weight: 800; margin: 10px 0; }
+  .cal-intro .accent { background: linear-gradient(100deg, var(--red), #f05d23 60%, var(--gold)); -webkit-background-clip: text; background-clip: text; color: transparent; }
+  .cal-intro .lede { color: var(--muted); max-width: 640px; margin: 0; font-size: 17px; }
   .controls { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 14px; padding: 16px 0 8px; position: sticky; top: 68px; z-index: 20; background: linear-gradient(var(--paper) 75%, transparent); }
   .chips { display: flex; flex-wrap: wrap; gap: 8px; }
   .logo-chip { gap: 8px; }
@@ -203,9 +163,6 @@ const lite = events.map(e => ({ id: e.id, name: e.name, tag: e.tag, start: e.sta
   .winner { margin: 8px 0 0; font-weight: 700; font-size: 14px; display: inline-flex; gap: 6px; background: var(--gold-soft); padding: 4px 10px; border-radius: 999px; }
 
   @media (max-width: 860px) {
-    .cal-hero { grid-template-columns: 1fr; }
-    .art { order: -1; }
-    .art :global(.board) { width: min(260px, 70vw); }
     .controls { top: 104px; }
   }
   @media (max-width: 400px) { .grid { grid-template-columns: 1fr; } }

@@ -34,7 +34,7 @@ Reports are written by a scheduled Claude routine that follows [`NEWSDESK.md`](N
 
 - **Three-dart averages**: the PDC's free feed has no averages, and the sites that do (DartsDatabase, DartsOrakel) block automated access. Player pop-ups show the season win–loss record, legs won % and titles instead.
 - **Broadcasters**: the PDC feed says whether an event is televised, but not which channel shows it. Channels are mapped per event type in `src/lib/pdc.mjs`. If a new televised event type appears, the hourly job lists it in its run summary.
-- **Player photos**: only Creative Commons photos from Wikimedia Commons are used (`public/portraits`, credits at `/credits`). Other players show their initials.
+- **Player photos**: only Creative Commons photos from Wikimedia Commons are used (`public/portraits`, credits at `/credits`). Other players show their initials. The homepage hero uses cut-outs of the same photos (`public/cutouts`), made on a Mac with `node scripts/make-cutouts.mjs` (macOS Vision subject lifting). Re-run it when new portraits are added.
 
 ## Local development
 
