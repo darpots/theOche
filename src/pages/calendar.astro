@@ -158,7 +158,7 @@ const kind = (e: Ev) => e.broadcaster;
   .month-title::after { content: ''; flex: 1; height: 1px; background: var(--line); }
   .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 18px; perspective: 1200px; }
   .ev {
-    --accent: var(--ink); --accent-2: #2b2f3c;
+    --accent: var(--ink); --accent-2: var(--ink);
     position: relative; display: flex; flex-direction: column; text-decoration: none; color: inherit;
     background: var(--card); border: 1px solid var(--line); border-radius: 22px; overflow: hidden; isolation: isolate;
     box-shadow: var(--shadow-sm);
@@ -185,7 +185,7 @@ const kind = (e: Ev) => e.broadcaster;
   .date { display: flex; flex-direction: column; line-height: 1; }
   .date .wd, .date .mo { font-size: 11px; font-weight: 800; letter-spacing: .14em; text-transform: uppercase; opacity: .8; }
   .date .mo small { font-size: 10px; letter-spacing: .06em; opacity: .85; }
-  .date .dn { font-family: var(--display); font-size: 44px; font-weight: 800; letter-spacing: -.04em; margin: 4px 0 3px; }
+  .date .dn { font-family: var(--poster); font-size: 54px; font-weight: 400; letter-spacing: 0; margin: 6px 0 4px; }
   .date .dn small { font-size: 24px; opacity: .85; }
   .tv-slot { position: absolute; top: 14px; right: 14px; z-index: 1; }
   .tv-slot :global(.tv) { box-shadow: 0 6px 16px -6px rgba(0, 0, 0, .4); border-color: transparent; }
@@ -199,7 +199,7 @@ const kind = (e: Ev) => e.broadcaster;
   .where svg { flex: none; opacity: .7; }
   .foot { margin-top: auto; padding-top: 14px; display: flex; align-items: center; justify-content: space-between; gap: 10px; }
   .status { font-size: 12px; font-weight: 800; color: var(--muted); letter-spacing: .02em; }
-  .status.soon { color: var(--green); background: var(--green-soft); padding: 4px 10px; border-radius: 999px; }
+  .status.soon { color: var(--ink); background: var(--volt); padding: 4px 10px; border-radius: 999px; }
   .status.done { background: var(--paper-2); padding: 4px 10px; border-radius: 999px; }
   .winner { display: inline-flex; align-items: center; gap: 9px; font-weight: 700; font-size: 14px; line-height: 1.15; }
   .winner small { display: block; font-size: 10px; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; color: var(--gold); }
@@ -211,7 +211,7 @@ const kind = (e: Ev) => e.broadcaster;
 
   /* live: glowing animated border */
   .ev.live { border-color: transparent; }
-  .ev.live .ticket { background: linear-gradient(135deg, var(--red), #8f1426); }
+  .ev.live .ticket { background: var(--red); }
   .ev.live::before {
     content: ''; position: absolute; inset: 0; z-index: 4; pointer-events: none; border-radius: inherit; padding: 2px;
     background: var(--red);

@@ -759,5 +759,77 @@
   "licenseUrl": "http://creativecommons.org/publicdomain/zero/1.0/deed.en",
   "source": "https://commons.wikimedia.org/wiki/File:Anton_%C3%96stlund_svensk_dartspelare.jpg",
   "imageLabel": "Portrait cropped for display"
+ },
+ "jeffreydezwaan": {
+  "name": "Jeffrey De Zwaan",
+  "image": "/portraits/player-jeffreydezwaan.jpg",
+  "credit": "Sven Mandel, Wikimedia Commons",
+  "license": "CC BY-SA 4.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+  "source": "https://commons.wikimedia.org/wiki/File:Jeffrey_de_Zwaan_PDC_European_Darts_Matchplay_2019_(cropped).jpg"
+ },
+ "kaigotthardt": {
+  "name": "Kai Gotthardt",
+  "image": "/portraits/player-kaigotthardt.jpg",
+  "credit": "DARTS NOW, Wikimedia Commons",
+  "license": "CC BY 4.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by/4.0",
+  "source": "https://commons.wikimedia.org/wiki/File:Kai_Gotthardt.png"
+ },
+ "chrislandman": {
+  "name": "Chris Landman",
+  "image": "/portraits/player-chrislandman.jpg",
+  "credit": "Darts Actueel, Wikimedia Commons",
+  "license": "CC BY 3.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by/3.0",
+  "source": "https://commons.wikimedia.org/wiki/File:Chris_Landman_Darts_Actueel_2023.jpg"
+ },
+ "mervynking": {
+  "name": "Mervyn King",
+  "image": "/portraits/player-mervynking.jpg",
+  "credit": "Darts Actueel on YouTube, Wikimedia Commons",
+  "license": "CC BY 3.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by/3.0",
+  "source": "https://commons.wikimedia.org/wiki/File:Mervyn_King_Darts_Actueel_2022_(cropped).jpg"
+ },
+ "benjaminpratnemer": {
+  "name": "Benjamin Pratnemer",
+  "image": "/portraits/player-benjaminpratnemer.jpg",
+  "credit": "Czech darts official Youtube channel, Wikimedia Commons",
+  "license": "CC BY 3.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by/3.0",
+  "source": "https://commons.wikimedia.org/wiki/File:Benjamin_Pratnemer_(horizontal).png"
+ },
+ "jeffreysparidaans": {
+  "name": "Jeffrey Sparidaans",
+  "image": "/portraits/player-jeffreysparidaans.jpg",
+  "credit": "Darts Actueel, Wikimedia Commons",
+  "license": "CC BY 3.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by/3.0",
+  "source": "https://commons.wikimedia.org/wiki/File:Jeffrey_Sparidaans.png"
+ },
+ "stefanbellmont": {
+  "name": "Stefan Bellmont",
+  "image": "/portraits/player-stefanbellmont.jpg",
+  "credit": "Icodense, Wikimedia Commons",
+  "license": "CC BY-SA 4.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+  "source": "https://commons.wikimedia.org/wiki/File:Stefan_Bellmont_2024_(cropped).jpg"
+ },
+ "scottwaites": {
+  "name": "Scott Waites",
+  "image": "/portraits/player-scottwaites.jpg",
+  "credit": "Darts Actueel, Wikimedia Commons",
+  "license": "CC BY 3.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by/3.0",
+  "source": "https://commons.wikimedia.org/wiki/File:Scott_Waites_2022.jpg"
+ },
+ "stevelennon": {
+  "name": "Steve Lennon",
+  "image": "/portraits/player-stevelennon.jpg",
+  "credit": "Sven Mandel, Wikimedia Commons",
+  "license": "CC BY-SA 4.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+  "source": "https://commons.wikimedia.org/wiki/File:Michael_Smith_6-3_Steve_Lennon_-_Steve_Lennon_-_2019249215215_2019-09-06_PDC_European_Darts_Matchplay_-_0982_-_AK8I7880_(cropped).jpg"
  }
 }

@@ -28,7 +28,7 @@ const fullTitle = title === 'The Oche' ? title : `${title} · The Oche`;
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{fullTitle}</title>
     <meta name="description" content={description} />
-    <meta name="theme-color" content="#fbf8f2" />
+    <meta name="theme-color" content="#0b0c10" />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <meta property="og:title" content={fullTitle} />
     <meta property="og:description" content={description} />
@@ -38,7 +38,7 @@ const fullTitle = title === 'The Oche' ? title : `${title} · The Oche`;
   <body>
     <header class="top" transition:persist transition:name="site-header" transition:animate="none">
       <div class="wrap bar">
-        <a href="/" class="brand" aria-label="The Oche home"><Logo size={40} /></a>
+        <a href="/" class="brand" aria-label="The Oche home"><Logo size={40} tone="light" /></a>
         <nav aria-label="Main" data-current={current.tournament.id}>
           {nav.map(n => (
             <a href={n.href} class:list={['nav', { on: active === n.key }]} aria-current={active === n.key ? 'page' : undefined} data-nav={n.key}>{n.label}</a>
@@ -191,6 +191,7 @@ const fullTitle = title === 'The Oche' ? title : `${title} · The Oche`;
         }
         tick();
         setInterval(tick, 30_000);
+        document.addEventListener('visibilitychange', () => { if (!document.hidden) tick(); });
       })();
 
       // ---- Search (⌘K / Ctrl+K) ------------------------------------------
@@ -242,24 +243,20 @@ const fullTitle = title === 'The Oche' ? title : `${title} · The Oche`;
 </html>
 
 <style>
-  .top {
-    position: sticky; top: 0; z-index: 50;
-    background: rgba(251, 248, 242, .78); backdrop-filter: saturate(1.6) blur(14px); -webkit-backdrop-filter: saturate(1.6) blur(14px);
-    border-bottom: 1px solid rgba(232, 225, 211, .8);
-  }
+  .top { position: sticky; top: 0; z-index: 50; background: var(--ink); color: #fff; }
   .bar { display: flex; align-items: center; justify-content: space-between; gap: 16px; height: 68px; }
   .brand { display: inline-flex; text-decoration: none; }
-  nav { position: relative; display: flex; gap: 2px; background: var(--paper-2); padding: 4px; border-radius: 999px; border: 1px solid var(--line); }
-  .nav { position: relative; z-index: 1; padding: 8px 14px; border-radius: 999px; text-decoration: none; font-weight: 600; font-size: 14px; color: var(--muted); transition: color .3s; }
-  .nav:hover { color: var(--ink); }
-  .nav.on { color: #fff; }
-  .pill { position: absolute; z-index: 0; left: 0; top: 4px; bottom: 4px; border-radius: 999px; background: var(--ink); opacity: 0; transition: transform .55s var(--spring), width .55s var(--spring), opacity .2s; box-shadow: 0 6px 16px -6px rgba(20, 22, 31, .5); }
+  nav { position: relative; display: flex; gap: 2px; padding: 4px; border-radius: 999px; }
+  .nav { position: relative; z-index: 1; padding: 10px 18px; border-radius: 999px; text-decoration: none; font-weight: 600; font-size: 14px; color: #fff; transition: color .3s; }
+  .nav:hover { color: var(--volt); }
+  .nav.on { color: var(--ink); font-weight: 800; }
+  .pill { position: absolute; z-index: 0; left: 0; top: 4px; bottom: 4px; border-radius: 999px; background: var(--volt); opacity: 0; transition: transform .55s var(--spring), width .55s var(--spring), opacity .2s; }
   .nav { transition: color .3s .1s; }
-  .searchbtn { display: inline-flex; align-items: center; gap: 8px; border: 1px solid var(--line); background: var(--card); color: var(--muted); border-radius: 999px; padding: 8px 10px 8px 14px; font-weight: 600; font-size: 14px; cursor: pointer; transition: border-color .2s, color .2s; }
-  .searchbtn:hover { border-color: var(--ink); color: var(--ink); }
-  .searchbtn kbd { font: inherit; font-size: 11px; background: var(--paper-2); border: 1px solid var(--line); border-radius: 6px; padding: 1px 6px; }
+  .searchbtn { display: inline-flex; align-items: center; gap: 8px; border: 0; background: var(--ink-3); color: var(--on-ink); border-radius: 999px; padding: 11px 12px 11px 16px; font-weight: 600; font-size: 14px; cursor: pointer; transition: color .2s, background .2s; }
+  .searchbtn:hover { color: #fff; background: var(--ink-2); }
+  .searchbtn kbd { font: inherit; font-size: 11px; background: var(--ink); border: 1px solid var(--ink-2); border-radius: 6px; padding: 1px 6px; }
 
-  .livebar { background: var(--ink); color: #fff; }
+  .livebar { background: var(--ink); color: #fff; border-top: 1px solid var(--ink-2); }
   .lb-in { display: flex; align-items: center; gap: 10px; height: 40px; overflow-x: auto; scrollbar-width: none; font-size: 13px; white-space: nowrap; }
   .lb-in :global(.lb-ev) { color: #fff; font-weight: 800; text-decoration: none; margin-right: 4px; }
   .lb-in :global(.lb-tag) { font-size: 11px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; background: rgba(255, 255, 255, .14); border-radius: 999px; padding: 2px 8px; }
@@ -267,8 +264,8 @@ const fullTitle = title === 'The Oche' ? title : `${title} · The Oche`;
   .lb-in :global(.lb-sep) { color: rgba(255, 255, 255, .55); font-size: 12px; margin-left: 6px; }
   .lb-in :global(.lb-m) { display: inline-flex; align-items: center; gap: 8px; color: rgba(255, 255, 255, .85); text-decoration: none; padding: 4px 10px; border-radius: 999px; transition: background .2s; }
   .lb-in :global(.lb-m:hover) { background: rgba(255, 255, 255, .1); color: #fff; }
-  .lb-in :global(.lb-m b) { font-family: var(--display); font-variant-numeric: tabular-nums; color: #fff; }
-  .lb-in :global(.lb-m.now b) { color: #ff8a98; }
+  .lb-in :global(.lb-m b) { font-family: var(--poster); font-weight: 400; font-size: 17px; font-variant-numeric: tabular-nums; color: #fff; }
+  .lb-in :global(.lb-m.now b) { color: var(--volt); }
   .lb-in :global(.lb-pdc) { color: rgba(255, 255, 255, .7); font-size: 12px; font-weight: 600; text-decoration: none; margin-left: 4px; }
   .lb-in :global(.lb-pdc:hover) { color: #fff; text-decoration: underline; }
 
@@ -295,13 +292,12 @@ const fullTitle = title === 'The Oche' ? title : `${title} · The Oche`;
     .bar { height: 58px; }
     .bar nav, .searchbtn { display: none; }
     .tabbar {
-      display: grid; grid-template-columns: repeat(5, 1fr); position: fixed; z-index: 60; left: 0; right: 0; bottom: 0;
-      background: rgba(251, 248, 242, .96); border-top: 1px solid var(--line); padding: 6px 4px calc(6px + env(safe-area-inset-bottom));
+      display: grid; grid-template-columns: repeat(5, 1fr); gap: 2px; position: fixed; z-index: 60; left: 10px; right: 10px; bottom: calc(10px + env(safe-area-inset-bottom));
+      background: var(--ink); border-radius: 24px; padding: 6px; box-shadow: 0 16px 40px -12px rgba(11, 12, 16, .55);
     }
-    .tab { display: flex; flex-direction: column; align-items: center; gap: 2px; padding: 4px 0; border: 0; background: none; color: var(--muted); text-decoration: none; font-size: 11px; font-weight: 700; cursor: pointer; }
-    .tab.on { color: var(--ink); }
-    .tab.on svg { color: var(--red); }
-    :global(body) { padding-bottom: calc(68px + env(safe-area-inset-bottom)); }
+    .tab { display: flex; flex-direction: column; align-items: center; gap: 2px; padding: 6px 0; border: 0; border-radius: 18px; background: none; color: var(--on-ink); text-decoration: none; font-size: 11px; font-weight: 700; cursor: pointer; }
+    .tab.on { color: var(--ink); background: var(--volt); }
+    :global(body) { padding-bottom: calc(90px + env(safe-area-inset-bottom)); }
     .search { margin-top: 8vh; }
   }
 </style>

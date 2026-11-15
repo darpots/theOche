@@ -49,7 +49,7 @@ const portraits = Object.fromEntries(Object.entries(portraitsRaw as Record<strin
     import { flag, keyName } from '../lib/pdc.mjs';
 
     const FX = 'https://fixtures.darts.web.gc.pdcservices.co.uk/v2/';
-    const C = ['#1d3fd6', '#d7263d']; // player 1 blue, player 2 red (validated pair)
+    const C = ['#2b4bff', '#e8362d']; // player 1 blue, player 2 red (validated pair)
     const esc = (s: unknown) => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]!);
     const name = (p: any) => [p?.firstName, p?.lastName].filter(Boolean).join(' ');
     const last = (p: any) => p?.lastName || name(p);
@@ -157,8 +157,9 @@ const portraits = Object.fromEntries(Object.entries(portraitsRaw as Record<strin
         const line = (path: number[], c: string) => `<polyline points="${path.map((v, i) => `${x(i)},${y(v)}`).join(' ')}" fill="none" stroke="${c}" stroke-width="2" stroke-linejoin="round"/>`;
         const w = l.winner;
         const darts = w == null ? '' : `${(w ? l.b : l.a).darts} darts${(w ? l.b : l.a).checkout ? ` · ${(w ? l.b : l.a).checkout} out` : ''}`;
-        return `<figure class="leg${w == null ? ' open' : ''}">
-          <figcaption><b>Leg ${l.n}${l.set > 1 || legs.some(x => x.set > 1) ? ` <small>Set ${l.set}</small>` : ''}</b><span>${w == null ? 'In play' : `<i style="background:${C[w]}"></i>${esc(names[w])}`}</span></figcaption>
+        const brk = w != null && w !== l.starter;
+        return `<figure class="leg${w == null ? ' open' : ''}${w === 1 ? ' p2' : ''}${brk ? ' brk' : ''}">
+          <figcaption><b>Leg ${l.n}${l.set > 1 || legs.some(x => x.set > 1) ? ` <small>Set ${l.set}</small>` : ''}${brk ? ' <em>Break</em>' : ''}</b><span>${w == null ? 'In play' : `<i style="background:${C[w]}"></i>${esc(names[w])}`}</span></figcaption>
           <svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Leg ${l.n}: ${w == null ? 'in play' : `${names[w]} won`}"><line x1="${P}" x2="${W - P}" y1="${y(0)}" y2="${y(0)}" class="gl"/>${line(l.a.path, C[0])}${line(l.b.path, C[1])}</svg>
           <small class="ld">${darts}${darts ? ' · ' : ''}${esc(names[l.starter])} threw first</small></figure>`;
       }).join('');
@@ -226,6 +227,15 @@ const portraits = Object.fromEntries(Object.entries(portraitsRaw as Record<strin
         document.title = `${name(a.attributes.participant1)} v ${name(a.attributes.participant2)} · The Oche`;
         mh.innerHTML = header(a, t?.data, data);
         const legs = t?.data ? legData(t.data.attributes) : [];
+        // Key numbers under the score: each player's average, best checkout, shortest leg.
+        const meta = t?.data?.attributes?.fixtureMeta;
+        if (meta?.participant1Data && legs.length) {
+          const won = legs.filter(l => l.winner != null).map(l => ({ l, s: l.winner ? l.b : l.a }));
+          const best = won.filter(x => x.s.checkout).sort((x, y) => y.s.checkout - x.s.checkout)[0];
+          const fast = won.slice().sort((x, y) => x.s.darts - y.s.darts)[0];
+          const kpi = (v: string, label: string, hi = false) => `<div><b class="poster-num${hi ? ' hi' : ''}">${v}</b><span class="lbl">${label}</span></div>`;
+          mh.insertAdjacentHTML('beforeend', `<div class="kpis">${kpi(Number(meta.participant1Data.threeDartAverage).toFixed(2), `${esc(names[0])} average`, meta.participant1Data.threeDartAverage >= meta.participant2Data.threeDartAverage)}${best ? kpi(String(best.s.checkout), `Best checkout · leg ${best.l.n} · ${esc(names[best.l.winner])}`) : ''}${fast ? kpi(String(fast.s.darts), `Shortest leg · darts · ${esc(names[fast.l.winner])}`) : ''}${kpi(Number(meta.participant2Data.threeDartAverage).toFixed(2), `${esc(names[1])} average`, meta.participant2Data.threeDartAverage > meta.participant1Data.threeDartAverage)}</div>`);
+        }
         const started = !/result|live|progress/i.test(a.attributes.status) && new Date(`${a.attributes.startDate}T${(a.attributes.startTime || '23:59').slice(0, 5)}:00`) <= new Date(new Date().toLocaleString('en-US', { timeZone: 'Europe/London' }));
         const noLegs = !(t?.data?.attributes?.legs?.length);
         const isResult = /result/i.test(a.attributes.status);
@@ -253,7 +263,7 @@ const portraits = Object.fromEntries(Object.entries(portraitsRaw as Record<strin
 </Layout>
 
 <style>
-  .mhead { color: #fff; background: radial-gradient(70% 120% at 85% 120%, rgba(215, 38, 61, .45), transparent 60%), radial-gradient(60% 120% at 15% 120%, rgba(29, 63, 214, .45), transparent 60%), linear-gradient(160deg, #191b26, #0d0e14 70%); }
+  .mhead { color: #fff; background: var(--ink); border-top: 1px solid var(--ink-2); }
   .mh-in { padding: 24px 0 0; min-height: 300px; }
   .mh-in :global(.loading) { padding: 80px 0; text-align: center; color: rgba(255, 255, 255, .75); }
   .mh-in :global(.spinner) { display: inline-block; width: 22px; height: 22px; border-radius: 50%; border: 3px solid rgba(255, 255, 255, .2); border-top-color: #fff; animation: rot .8s linear infinite; margin-right: 10px; vertical-align: middle; }
@@ -269,7 +279,8 @@ const portraits = Object.fromEntries(Object.entries(portraitsRaw as Record<strin
   .mh-in :global(.pic .por) { width: 120px; height: 120px; border-radius: 50%; object-fit: cover; margin-bottom: 30px; }
   .mh-in :global(.pic .ini) { width: 110px; height: 110px; border-radius: 50%; display: grid; place-items: center; background: rgba(255, 255, 255, .12); font-family: var(--display); font-size: 40px; font-weight: 800; margin-bottom: 30px; }
   .mh-in :global(.who) { display: flex; flex-direction: column; gap: 4px; padding-bottom: 26px; min-width: 0; }
-  .mh-in :global(.who a), .mh-in :global(.who > span) { font-family: var(--display); font-size: clamp(22px, 2.6vw, 32px); font-weight: 800; color: #fff; text-decoration: none; line-height: 1.05; }
+  .mh-in :global(.who a), .mh-in :global(.who > span) { font-family: var(--poster); text-transform: uppercase; font-size: clamp(30px, 4vw, 60px); font-weight: 400; color: #fff; text-decoration: none; line-height: .92; }
+  .mh-in :global(.side:not(.won) .who a) { color: var(--on-ink); }
   .mh-in :global(.who a:hover) { text-decoration: underline; }
   .mh-in :global(.who small) { color: rgba(255, 255, 255, .75); font-size: 13px; }
   .mh-in :global(.av) { display: inline-flex; flex-direction: column; align-self: flex-start; margin-top: 6px; background: #fff; color: var(--ink); border-radius: 12px; padding: 6px 12px; font-family: var(--display); font-size: 22px; font-weight: 800; font-variant-numeric: tabular-nums; }
@@ -278,9 +289,10 @@ const portraits = Object.fromEntries(Object.entries(portraitsRaw as Record<strin
   .mh-in :global(.s0 .av) { box-shadow: inset 4px 0 0 #1d3fd6; }
   .mh-in :global(.s1 .av) { box-shadow: inset -4px 0 0 #d7263d; }
   .mh-in :global(.score) { display: flex; align-items: baseline; gap: 10px; padding-bottom: 40px; font-family: var(--display); }
-  .mh-in :global(.score b) { font-size: clamp(56px, 8vw, 96px); font-weight: 800; line-height: 1; font-variant-numeric: tabular-nums; }
+  .mh-in :global(.score b) { font-family: var(--poster); font-weight: 400; font-size: clamp(110px, 16vw, 260px); line-height: .86; color: var(--volt); font-variant-numeric: tabular-nums; }
+  .mh-in :global(.score b.vs) { color: #fff; }
   .mh-in :global(.score .vs) { font-size: 56px; color: rgba(255, 255, 255, .5); }
-  .mh-in :global(.score span) { font-size: 48px; color: rgba(255, 255, 255, .4); }
+  .mh-in :global(.score span) { font-family: var(--poster); font-size: clamp(60px, 8vw, 140px); color: #3a3d47; }
   .mh-in :global(.score small) { position: absolute; }
   .mh-in :global(.score small) { display: none; }
 
@@ -293,16 +305,22 @@ const portraits = Object.fromEntries(Object.entries(portraitsRaw as Record<strin
   .tape :global(.fm) { font-style: normal; width: 22px; height: 22px; border-radius: 6px; display: grid; place-items: center; font-size: 11px; font-weight: 800; color: #fff; }
   .tape :global(.fm.w) { background: var(--green); }
   .tape :global(.fm.l) { background: var(--red); }
+  .mh-in :global(.kpis) { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); border-top: 1px solid var(--ink-2); }
+  .mh-in :global(.kpis > div) { padding: 20px 0; display: flex; flex-direction: column; gap: 8px; }
+  .mh-in :global(.kpis > div + div) { border-left: 1px solid var(--ink-2); padding-left: 22px; }
+  .mh-in :global(.kpis b) { font-size: clamp(34px, 4vw, 54px); }
+  .mh-in :global(.kpis b.hi) { color: var(--volt); }
+  .mh-in :global(.kpis .lbl) { color: var(--on-ink-2); }
   .mbody { margin-top: 28px; }
   .block + .block { margin-top: 36px; }
-  h2 { font-size: 24px; margin-bottom: 8px; }
+  h2 { font-size: 40px; margin-bottom: 8px; }
   .sub { margin: 0 0 14px; color: var(--muted); font-size: 14px; }
   .bh { display: flex; justify-content: space-between; align-items: baseline; flex-wrap: wrap; gap: 10px; }
   .legend { display: flex; gap: 16px; font-size: 13px; font-weight: 700; }
   .legend :global(span) { display: inline-flex; align-items: center; gap: 6px; }
   .legend :global(i), .legs :global(i), .lt :global(.dot) { display: inline-block; width: 10px; height: 10px; border-radius: 3px; }
 
-  .cmp { background: var(--card); border: 1px solid var(--line); border-radius: 18px; padding: 8px 18px; }
+  .cmp { background: var(--card); border-radius: var(--tile); padding: 10px 24px; }
   .cmp :global(.cr) { display: grid; grid-template-columns: 130px 1fr 150px 1fr 130px; align-items: center; gap: 12px; padding: 10px 0; border-top: 1px solid var(--line); font-variant-numeric: tabular-nums; }
   .cmp :global(.cr:first-child) { border-top: 0; }
   .cmp :global(.v) { font-weight: 700; color: var(--muted); }
@@ -315,7 +333,7 @@ const portraits = Object.fromEntries(Object.entries(portraitsRaw as Record<strin
   .cmp :global(.b0) { background: #1d3fd6; }
   .cmp :global(.b1) { background: #d7263d; }
 
-  .chart { background: var(--card); border: 1px solid var(--line); border-radius: 18px; padding: 14px; }
+  .chart { background: var(--card); border-radius: var(--tile); padding: 18px; }
   .chart :global(.svgwrap) { position: relative; }
   .chart :global(svg) { width: 100%; height: auto; display: block; }
   :global(.gl) { stroke: var(--line); stroke-width: 1; }
@@ -326,7 +344,12 @@ const portraits = Object.fromEntries(Object.entries(portraitsRaw as Record<strin
   .chart :global(.tip i) { width: 8px; height: 8px; border-radius: 2px; display: inline-block; }
 
   .legs { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 10px; }
-  .legs :global(.leg) { margin: 0; background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 10px 12px; }
+  .legs :global(.leg) { margin: 0; background: var(--card); border-radius: 20px; padding: 12px 14px; }
+  .legs :global(.leg.p2) { background: var(--red-soft); }
+  .legs :global(.leg.brk) { background: var(--ink); color: #fff; }
+  .legs :global(.leg.brk .ld), .legs :global(.leg.brk figcaption small) { color: var(--on-ink); }
+  .legs :global(.leg.brk .gl) { stroke: var(--ink-2); }
+  .legs :global(figcaption em) { font-style: normal; font-size: 10px; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; background: var(--volt); color: var(--ink); padding: 2px 6px; border-radius: 6px; margin-left: 4px; }
   .legs :global(.leg.open) { border-color: var(--red); }
   .legs :global(figcaption) { display: flex; justify-content: space-between; gap: 8px; font-size: 13px; }
   .legs :global(figcaption span) { display: inline-flex; align-items: center; gap: 6px; font-weight: 700; }
@@ -334,7 +357,7 @@ const portraits = Object.fromEntries(Object.entries(portraitsRaw as Record<strin
   .legs :global(svg) { width: 100%; height: auto; display: block; margin: 6px 0 4px; }
   .legs :global(.ld) { color: var(--muted); font-size: 12px; }
 
-  .tablewrap { overflow-x: auto; background: var(--card); border: 1px solid var(--line); border-radius: 18px; }
+  .tablewrap { overflow-x: auto; background: var(--card); border-radius: var(--tile); }
   .lt { width: 100%; border-collapse: collapse; font-size: 14px; font-variant-numeric: tabular-nums; }
   .lt :global(th) { text-align: left; font-size: 12px; color: var(--muted); font-weight: 700; padding: 10px 14px; border-bottom: 1px solid var(--line); white-space: nowrap; }
   .lt :global(td) { padding: 9px 14px; border-top: 1px solid var(--line); white-space: nowrap; }
@@ -343,6 +366,8 @@ const portraits = Object.fromEntries(Object.entries(portraitsRaw as Record<strin
   .lt :global(.brk) { font-size: 11px; font-weight: 800; color: var(--red); margin-left: 4px; }
 
   @media (max-width: 760px) {
+    .mh-in :global(.kpis) { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .mh-in :global(.kpis > div:nth-child(3)) { border-left: 0; padding-left: 0; }
     .mh-in :global(.pic) { width: 96px; height: 130px; }
     .mh-in :global(.pic .por), .mh-in :global(.pic .ini) { width: 72px; height: 72px; font-size: 26px; margin-bottom: 20px; }
     .mh-in :global(.side) { flex-direction: column; align-items: flex-start; gap: 6px; }

@@ -1,153 +1,231 @@
 ---
-// Matchday homepage: what's on now, the latest news, who's moving in the
-// rankings and what's coming up. The full season lives on /calendar.
+// Matchday homepage ("Floodlight Bento"): a big match tile, what's next,
+// today's results, news, the live race, a player spotlight and what's coming.
 import Layout from '../layouts/Layout.astro';
-import Hero from '../components/Hero.astro';
-import NewsArt from '../components/NewsArt.astro';
 import { getCollection } from 'astro:content';
 import calendar from '../data/calendar.json';
 import data from '../data/tournament.json';
 import rankings from '../data/rankings.json';
-import portraitsRaw from '../data/portraits.json';
-import { tvBadge, flag, keyName } from '../lib/pdc.mjs';
-import { newsDate, dayNum, monthShort, weekday, money, avatarColours, initials } from '../lib/format.mjs';
+import cutoutsRaw from '../data/cutouts.json';
+import { tvBadge, keyName, flag } from '../lib/pdc.mjs';
+import { newsDate, dayNum, monthShort, dateRange, money } from '../lib/format.mjs';
+import { matchday, featureTile, nextTileInner } from '../lib/feature.mjs';
+import { chooseCover } from '../lib/covers';
+import { loadProfile } from '../lib/players';
 
-const today = new Date().toLocaleDateString('en-CA', { timeZone: 'Europe/London' });
+const cutouts = cutoutsRaw as Record<string, string>;
 const t = data.tournament as any;
-const all = t.stages.flatMap((s: any) => s.fixtures.map((f: any) => ({ ...f, stage: /^group/i.test(s.name) ? 'Group stage' : s.name })))
-  .filter((f: any) => f.p1 && f.p2);
-const todays = all.filter((f: any) => f.date === today).sort((a: any, b: any) => (a.time || '99').localeCompare(b.time || '99'));
-const latest = all.filter((f: any) => f.status === 'result').sort((a: any, b: any) => `${b.date}${b.time}`.localeCompare(`${a.date}${a.time}`)).slice(0, 8);
-const strip = todays.length ? todays : latest;
-const stripTitle = todays.length ? 'Today’s order of play' : 'Latest results';
+const today = new Date().toLocaleDateString('en-CA', { timeZone: 'Europe/London' });
+const nowHHMM = new Date().toLocaleTimeString('en-GB', { timeZone: 'Europe/London', hour: '2-digit', minute: '2-digit', hour12: false });
+const isOn = t.start <= today && t.end >= today;
+const md = matchday(t, today, nowHHMM);
+const feature = isOn ? (md.now ? { f: md.now, mode: 'now' } : md.next ? { f: md.next, mode: 'next' } : md.results[0] ? { f: md.results[0], mode: 'result' } : null) : null;
+const nextUp = isOn ? (md.now ? md.next : md.next && feature?.f !== md.next ? md.next : md.todays.find(f => f.status !== 'result' && f !== feature?.f) || null) : null;
+const resultsList = (md.results.filter(f => f.date === today).length ? md.results.filter(f => f.date === today) : md.results).slice(0, 5);
 
-const news = (await getCollection('news')).map(n => n.data).sort((a, b) => b.date.localeCompare(a.date)).slice(0, 3);
-const upcoming = calendar.events.filter(e => e.start > today && e.id !== t.id).slice(0, 6);
-const portraits = portraitsRaw as Record<string, { image: string }>;
+const upcoming = calendar.events.filter(e => e.start > today && e.id !== t.id);
+const nextEvent = upcoming[0];
+const short = (n: string) => n.split(' ').slice(-1)[0];
+
+const news = (await getCollection('news')).map(n => n.data).sort((a, b) => b.date.localeCompare(a.date)).slice(0, 4);
+const bigFigure = (h: string) => (h.match(/£[\d,.]+(?:k|m)?|\b\d{1,2}-\d{1,2}\b|\b1\d\d\.\d\d\b/i) || [null])[0]?.replace(/,000$/, 'K').replace(/^(£\d+),(\d{3})$/, '$1K');
+
 const prev = (rankings.previous || {}) as Record<string, number>;
-const top = rankings.players.slice(0, 8).map(p => ({ ...p, move: prev[p.id] ? prev[p.id] - p.pos : 0 }));
-const pic = (n: string) => portraits[keyName(n)]?.image;
-const av = (n: string) => { const [c1, c2] = avatarColours(n); return `--c1:${c1};--c2:${c2}`; };
-const place = (e: { venue: string | null; city: string | null }) => (e.venue && e.city && e.venue.includes(e.city) ? e.venue : [e.venue, e.city].filter(Boolean).join(', '));
+const top = rankings.players.slice(0, 5).map(p => ({ ...p, move: prev[p.id] ? prev[p.id] - p.pos : 0 }));
+// Spotlight: the best-ranked player in today's matches, else world number one.
+const todayIds = new Set(md.todays.flatMap(f => [f.p1.id, f.p2.id]));
+const spotRank = rankings.players.find(p => todayIds.has(p.id) && cutouts[keyName(p.name)]) || rankings.players[0];
+const spot = loadProfile(spotRank.id);
 ---
-<Layout title="The Oche" description="PDC darts today: live scores, the latest news, live rankings and every event on Sky Sports, ITV and PDCTV.">
-  <Hero />
+<Layout title="The Oche" description="PDC darts today: the match on now, results, news, the live rankings race and every event on Sky Sports, ITV and PDCTV.">
+  <div class="wrap bento-wrap">
+    <div class="bento">
 
-  {strip.length > 0 && (
-    <section class="wrap sec" aria-labelledby="op">
-      <div class="sh"><h2 id="op">{stripTitle}</h2><a href={`/tournament/${t.id}`}>{t.name} schedule →</a></div>
-      <ol class="op" id="op-list" data-id={t.id}>
-        {strip.map((f: any) => {
-          const w1 = f.winner && f.winner === f.p1.id, w2 = f.winner && f.winner === f.p2.id;
-          return (
-            <li class={`opc ${f.status}`} data-fx={f.id}>
-              <a href={`/match?id=${f.id}`}>
-                <span class="opm">{f.stage}<b data-st>{f.status === 'result' ? 'Result' : f.status === 'live' ? 'Live' : f.time || 'TBC'}</b></span>
-                <span class:list={['opp', { w: w1 }]}><Fragment set:html={flag(f.p1.country)} /> {f.p1.name}<b data-s1>{f.status !== 'upcoming' ? f.s1 : ''}</b></span>
-                <span class:list={['opp', { w: w2 }]}><Fragment set:html={flag(f.p2.country)} /> {f.p2.name}<b data-s2>{f.status !== 'upcoming' ? f.s2 : ''}</b></span>
-              </a>
-            </li>
-          );
-        })}
-      </ol>
-    </section>
-  )}
-
-  <section class="wrap sec two">
-    <div>
-      <div class="sh"><h2>Latest news</h2><a href="/news">All news →</a></div>
-      <div class="nl">
-        {news.map((n, i) => (
-          <a class:list={['ni card', { lead: i === 0 }]} href={`/news/${n.slug}`}>
-            <NewsArt story={n} class="ni-art" eager={i === 0} />
-            <div class="ni-c"><time datetime={n.date}>{newsDate(n.date)}</time><h3>{n.headline}</h3>{i === 0 && <p>{n.standfirst}</p>}</div>
+      <section class="tile tile-ink feature" id="feature" data-id={t.id} data-name={t.name} data-on={isOn ? '1' : ''} aria-live="polite">
+        {feature ? (
+          <Fragment set:html={featureTile(feature.f, feature.mode, t.name, cutouts)} />
+        ) : nextEvent ? (
+          <a class="ne" href={`/tournament/${nextEvent.id}`}>
+            <span class="lbl ft-next">Next on the oche</span>
+            <h1 class="ne-name">{nextEvent.name}{nextEvent.tag && <small>{nextEvent.tag}</small>}</h1>
+            <p class="ne-meta">{dateRange(nextEvent.start, nextEvent.end)} · {nextEvent.venue || nextEvent.city}</p>
+            <div class="ne-count" data-count={nextEvent.start}>{['d', 'h', 'm'].map(u => <div><b class="poster-num" data-u={u}>–</b><span class="lbl">{{ d: 'Days', h: 'Hours', m: 'Mins' }[u]}</span></div>)}</div>
+            <span class="ne-tv"><Fragment set:html={tvBadge(nextEvent.broadcaster)} /></span>
           </a>
-        ))}
+        ) : null}
+      </section>
+
+      <div class="side">
+        {nextUp ? (
+          <a class="tile tile-volt nu" href={`/match?id=${nextUp.id}`} id="nextup" set:html={nextTileInner(nextUp, t.name)} />
+        ) : nextEvent && (
+          <a class="tile tile-volt nu" href={`/tournament/${nextEvent.id}`}>
+            <span class="lbl">Next event · {dayNum(nextEvent.start)} {monthShort(nextEvent.start)}</span>
+            <span class="poster nu-names">{nextEvent.name}</span>
+            <span class="nu-sub">{nextEvent.venue || nextEvent.city}</span>
+          </a>
+        )}
+        <section class="tile tile-card res">
+          <div class="th"><h2 class="lbl">{md.results.some(f => f.date === today) ? 'Today’s results' : 'Latest results'}</h2><a href={`/tournament/${t.id}`}>All →</a></div>
+          <ol id="results">
+            {resultsList.map(f => (
+              <li><a href={`/match?id=${f.id}`}>
+                <span class:list={['rn', { w: f.winner === f.p1.id }]}>{short(f.p1.name)}</span>
+                <span class="poster-num rs">{f.s1}–{f.s2}</span>
+                <span class:list={['rn', 'r', { w: f.winner === f.p2.id }]}>{short(f.p2.name)}</span>
+              </a></li>
+            ))}
+          </ol>
+        </section>
       </div>
-    </div>
-    <aside>
-      <div class="sh"><h2 id="rk-title">World rankings</h2><a href="/rankings">Top 128 →</a></div>
-      <ol class="rk card" id="rk">
-        {top.map(p => (
-          <li>
-            <a href={`/players/${p.slug}`}>
-              <span class="rp">{p.pos}</span>
-              <span class="avatar" style={`--size:34px;${av(p.name)}`}>{pic(p.name) ? <img src={pic(p.name)} alt="" loading="lazy" /> : initials(p.name)}</span>
-              <span class="rn"><Fragment set:html={flag(p.country)} /> {p.name}</span>
-              <span class="rm">{money(p.money)}</span>
-            </a>
-          </li>
-        ))}
-      </ol>
-      <p class="rk-note muted" id="rk-note">Official PDC Order of Merit.</p>
-    </aside>
-  </section>
 
-  <section class="wrap sec" aria-labelledby="cu">
-    <div class="sh"><h2 id="cu">Coming up</h2><a href="/calendar">Full calendar →</a></div>
-    <ol class="tl">
-      {upcoming.map(e => (
-        <li>
-          <a href={`/tournament/${e.id}`}>
-            <span class="td"><small>{weekday(e.start)}</small><b>{dayNum(e.start)}</b><small>{monthShort(e.start)}</small></span>
-            <span class="tn"><b>{e.name}</b>{e.tag && <small>{e.tag}</small>}<small class="muted">{place(e)}</small></span>
-            <span class="tb"><Fragment set:html={tvBadge(e.broadcaster)} /></span>
+      {news[0] && (() => {
+        const c = chooseCover(news[0])[0];
+        return (
+          <a class="tile tile-ink lead" href={`/news/${news[0].slug}`}>
+            <img class="photo" src={c.src.replace('.jpg', '-1200.webp')} srcset={`${c.src.replace('.jpg', '-600.webp')} 600w, ${c.src.replace('.jpg', '-1200.webp')} 1200w`} sizes="(max-width: 900px) 100vw, 680px" alt={c.alt} style={`object-position:${c.focus}`} />
+            <div class="lead-box">
+              <span class="lbl volt">{newsDate(news[0].date)} · {news[0].tags[0]}</span>
+              <h2>{news[0].headline}</h2>
+              <p>{news[0].standfirst}</p>
+            </div>
           </a>
-        </li>
-      ))}
-    </ol>
-  </section>
+        );
+      })()}
+
+      <div class="nsub">
+        {news[1] && (() => {
+          const c = chooseCover(news[1])[0];
+          return (
+            <a class="tile tile-card nc" href={`/news/${news[1].slug}`}>
+              <img class="photo" src={c.src.replace('.jpg', '-600.webp')} alt={c.alt} style={`object-position:${c.focus}`} loading="lazy" />
+              <div><span class="lbl red">{newsDate(news[1].date)}</span><h3>{news[1].headline}</h3></div>
+            </a>
+          );
+        })()}
+        {news[2] && (
+          <a class="tile nred" href={`/news/${news[2].slug}`}>
+            <span class="lbl">{newsDate(news[2].date)} · {news[2].tags[0]}</span>
+            <div>{bigFigure(news[2].headline) && <div class="poster-num big">{bigFigure(news[2].headline)}</div>}<h3>{news[2].headline}</h3></div>
+          </a>
+        )}
+        {news[3] && (
+          <a class="tile tile-card nwide" href={`/news/${news[3].slug}`}>
+            {bigFigure(news[3].headline) && <span class="poster-num big red">{bigFigure(news[3].headline)}</span>}
+            <div><span class="lbl muted">{newsDate(news[3].date)} · {news[3].tags[0]}</span><h3>{news[3].headline}</h3></div>
+          </a>
+        )}
+      </div>
+
+      <section class="tile tile-card race">
+        <div class="th"><h2 id="rk-title">World rankings</h2><a href="/rankings">Top 128 →</a></div>
+        <ol id="rk">
+          {top.map(p => (
+            <li><a href={`/players/${p.slug}`}><span class="poster-num rp">{p.pos}</span><b><Fragment set:html={flag(p.country)} /> {p.name}</b><span class="rm">{money(p.money)}</span></a></li>
+          ))}
+        </ol>
+        <p class="lbl muted" id="rk-note">Official PDC Order of Merit</p>
+      </section>
+
+      {spot && (
+        <a class="tile tile-ink spot" href={`/players/${spot.slug}`}>
+          {cutouts[keyName(spot.name)] && <img class="spot-cut photo" src={cutouts[keyName(spot.name)]} alt="" loading="lazy" />}
+          <div class="spot-top"><span class="lbl volt">Player spotlight · World #{spotRank.pos}</span><h2>{spot.name.split(' ')[0]}<br />{spot.name.split(' ').slice(1).join(' ')}</h2></div>
+          {spot.season?.stats && (
+            <div class="spot-bottom">
+              <div class="poster-num spot-avg">{spot.season.stats.avg.toFixed(2)}</div>
+              <div class="lbl">{spot.season.year} season average</div>
+              {spot.form?.length > 0 && (
+                <div class="fm" aria-label={`Last five: ${spot.form.slice(0, 5).map((m: any) => (m.won ? 'won' : 'lost')).join(', ')}`}>
+                  {spot.form.slice(0, 5).map((m: any) => <i class={m.won ? 'w' : 'l'} title={`${m.won ? 'Won' : 'Lost'} ${m.my}-${m.their} v ${m.opp}`}>{m.won ? 'W' : 'L'}</i>)}
+                </div>
+              )}
+            </div>
+          )}
+        </a>
+      )}
+
+      <section class="tile tile-card cu">
+        <div class="th"><h2 class="lbl">Coming up</h2><a href="/calendar">Calendar →</a></div>
+        {upcoming.slice(0, 3).map(e => (
+          <a class="cu-row" href={`/tournament/${e.id}`}>
+            <span class="cu-d"><b class="poster-num">{dayNum(e.start)}</b><span class="lbl">{monthShort(e.start)}</span></span>
+            <span class="cu-n"><b>{e.name}</b><small>{e.city || e.venue}{e.tag ? ` · ${e.tag}` : ''}</small></span>
+          </a>
+        ))}
+      </section>
+
+    </div>
+  </div>
+
+  <script is:inline type="application/json" id="home-data" set:html={JSON.stringify({ cutouts })}></script>
 
   <script>
-    import { loadLiveRace } from '../lib/pdc.mjs';
+    import { normaliseTournament, loadLiveRace } from '../lib/pdc.mjs';
+    import { matchday, featureTile, nextTileInner } from '../lib/feature.mjs';
     import { money } from '../lib/format.mjs';
 
     let timer: number | undefined;
     function init() {
-      const list = document.getElementById('op-list');
       clearInterval(timer);
-      const today = new Date().toLocaleDateString('en-CA', { timeZone: 'Europe/London' });
+      const box = document.getElementById('feature');
+      if (!box) return;
+      const { cutouts } = JSON.parse(document.getElementById('home-data')!.textContent!);
+      const today = () => new Date().toLocaleDateString('en-CA', { timeZone: 'Europe/London' });
+      const hhmm = () => new Date().toLocaleTimeString('en-GB', { timeZone: 'Europe/London', hour: '2-digit', minute: '2-digit', hour12: false });
 
-      // Keep today's scores current.
-      if (list) {
+      // Countdown to the next event when nothing is on.
+      const count = box.querySelector<HTMLElement>('[data-count]');
+      if (count) {
+        const target = Date.parse(count.dataset.count + 'T12:00:00Z');
+        const tick = () => {
+          const s = Math.max(0, (target - Date.now()) / 1000);
+          const v: Record<string, number> = { d: Math.floor(s / 86400), h: Math.floor(s / 3600) % 24, m: Math.floor(s / 60) % 60 };
+          count.querySelectorAll<HTMLElement>('[data-u]').forEach(el => { el.textContent = String(v[el.dataset.u!]).padStart(2, '0'); });
+        };
+        tick(); timer = window.setInterval(tick, 30_000);
+      }
+
+      // While the event is on: redraw the big tile and results every 30 seconds.
+      if (box.dataset.on) {
         const refresh = async () => {
           if (document.hidden) return;
           try {
-            const a = (await (await fetch(`https://tournaments.darts.web.gc.pdcservices.co.uk/v2/${list.dataset.id}`, { cache: 'no-store' })).json()).data.attributes;
-            const byId = new Map((a.stages || []).flatMap((s: any) => s.fixtures || []).map((f: any) => [String(f.fixtureID), f]));
-            list.querySelectorAll<HTMLElement>('[data-fx]').forEach(li => {
-              const f: any = byId.get(li.dataset.fx!); if (!f) return;
-              const st = /result/i.test(f.status) ? 'result' : /live|progress/i.test(f.status) ? 'live' : 'upcoming';
-              li.className = `opc ${st}`;
-              li.querySelector('[data-st]')!.textContent = st === 'result' ? 'Result' : st === 'live' ? 'Live' : (f.startTime || '').slice(0, 5) || 'TBC';
-              if (st !== 'upcoming') { li.querySelector('[data-s1]')!.textContent = String(f.participant1Score ?? 0); li.querySelector('[data-s2]')!.textContent = String(f.participant2Score ?? 0); }
-              const w = f.winnerParticipantID ? String(f.winnerParticipantID) : null;
-              const ps = li.querySelectorAll('.opp');
-              ps[0].classList.toggle('w', !!w && w === String(f.participant1?.participantID));
-              ps[1].classList.toggle('w', !!w && w === String(f.participant2?.participantID));
-            });
-          } catch { /* keep the build-time scores */ }
+            const t = normaliseTournament(await (await fetch(`https://tournaments.darts.web.gc.pdcservices.co.uk/v2/${box.dataset.id}`, { cache: 'no-store' })).json());
+            const md = matchday(t, today(), hhmm());
+            const pick = md.now ? [md.now, 'now'] : md.next ? [md.next, 'next'] : md.results[0] ? [md.results[0], 'result'] : null;
+            if (pick) box.innerHTML = featureTile(pick[0] as any, pick[1] as string, box.dataset.name!, cutouts);
+            const nu = document.getElementById('nextup') as HTMLAnchorElement | null;
+            const after = md.todays.find((f: any) => f.status !== 'result' && f !== pick?.[0] && (!md.now || f !== md.now) && f.time >= ((pick?.[0] as any)?.time || ''));
+            if (nu) {
+              if (after) { nu.innerHTML = nextTileInner(after, box.dataset.name!); nu.href = `/match?id=${after.id}`; nu.hidden = false; }
+              else nu.hidden = true;
+            }
+            const ol = document.getElementById('results');
+            if (ol) {
+              const todays = md.results.filter((f: any) => f.date === today());
+              const list = (todays.length ? todays : md.results).slice(0, 5);
+              const last = (n: string) => n.split(' ').slice(-1)[0];
+              const e = (x: unknown) => String(x ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]!);
+              ol.innerHTML = list.map((f: any) => `<li><a href="/match?id=${e(f.id)}"><span class="rn${f.winner === f.p1.id ? ' w' : ''}">${e(last(f.p1.name))}</span><span class="poster-num rs">${f.s1}–${f.s2}</span><span class="rn r${f.winner === f.p2.id ? ' w' : ''}">${e(last(f.p2.name))}</span></a></li>`).join('');
+            }
+          } catch { /* keep what we have */ }
         };
         refresh();
         timer = window.setInterval(refresh, 30_000);
       }
 
-      // During a ranking event, show the live race instead of the official order.
+      // During a ranking event the rankings tile shows the live race.
       const rk = document.getElementById('rk');
-      if (rk) loadLiveRace(today).then(res => {
+      if (rk) loadLiveRace(today()).then(res => {
         if (!res || !document.getElementById('rk')) return;
-        const top = res.race.slice(0, 8);
         const esc = (x: unknown) => String(x ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]!);
-        const old = new Map([...rk.querySelectorAll('li')].map(li => [li.querySelector('.rn')!.textContent!.trim(), li.innerHTML]));
-        rk.innerHTML = top.map((p: any) => {
-          const prev = old.get(p.name);
-          const tmp = document.createElement('div'); tmp.innerHTML = prev || '';
-          const avatar = tmp.querySelector('.avatar')?.outerHTML || '';
-          const mv = p.move ? `<i class="${p.move > 0 ? 'up' : 'down'}">${p.move > 0 ? '▲' : '▼'}${Math.abs(p.move)}</i>` : '';
-          return `<li><a href="/players/${esc((p.slug || ''))}"><span class="rp">${p.live}${mv}</span>${avatar}<span class="rn">${esc(p.name)}</span><span class="rm">${money(p.money)}</span></a></li>`;
-        }).join('');
+        const top = res.race.slice(0, 4);
+        const mover = res.race.slice(4, 32).filter((p: any) => p.move > 0).sort((a: any, b: any) => b.move - a.move)[0];
+        const row = (p: any, hi = false) => `<li${hi ? ' class="hi"' : ''}><a href="/players/${esc(p.slug)}"><span class="poster-num rp">${p.live}</span><b>${esc(p.name)}${p.move ? ` <i class="${p.move > 0 ? 'up' : 'down'}">${p.move > 0 ? '▲' : '▼'} ${Math.abs(p.move)}</i>` : ''}</b><span class="rm">${money(p.money)}</span></a></li>`;
+        rk.innerHTML = top.map((p: any) => row(p)).join('') + (mover ? row(mover, true) : '');
         document.getElementById('rk-title')!.textContent = 'Live race';
-        document.getElementById('rk-note')!.textContent = `Projected standings during the ${res.event.name.replace(/^\d{4}\s+/, '')}. Movement is against the official list.`;
+        document.getElementById('rk-note')!.textContent = `Projected after the ${res.event.name.replace(/^\d{4}\s+/, '')}`;
       });
     }
     document.addEventListener('astro:page-load', init);
@@ -155,65 +233,140 @@ const place = (e: { venue: string | null; city: string | null }) => (e.venue && 
 </Layout>
 
 <style>
-  .sec { margin-top: 44px; }
-  .sh { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; margin-bottom: 14px; }
-  .sh h2 { font-size: 26px; }
-  .sh a { font-weight: 700; font-size: 14px; text-decoration: none; color: var(--ink-2); white-space: nowrap; }
-  .sh a:hover { color: var(--red); }
+  .bento-wrap { padding-top: 28px; }
+  .bento { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: 16px; }
+  .lbl.volt { color: var(--volt); } .lbl.red { color: var(--red); } .lbl.muted { color: var(--muted); }
+  .th { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; margin-bottom: 8px; }
+  .th h2 { margin: 0; }
+  .th a { font-size: 13px; font-weight: 700; text-decoration: none; }
+  .th a:hover { color: var(--red); }
 
-  .op { list-style: none; margin: 0; padding: 2px 2px 10px; display: grid; grid-auto-flow: column; grid-auto-columns: minmax(250px, 1fr); gap: 12px; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: thin; }
-  .opc { scroll-snap-align: start; }
-  .opc a { display: flex; flex-direction: column; gap: 6px; padding: 14px 16px; height: 100%; background: var(--card); border: 1px solid var(--line); border-radius: 16px; text-decoration: none; transition: border-color .2s, transform .3s var(--ease); }
-  .opc a:hover { border-color: var(--ink); transform: translateY(-2px); }
-  .opc.live a { border-color: var(--red); box-shadow: 0 0 0 3px var(--red-soft); }
-  .opm { display: flex; justify-content: space-between; font-size: 12px; font-weight: 700; color: var(--muted); }
-  .opm b { color: var(--ink-2); font-variant-numeric: tabular-nums; }
-  .opc.live .opm b { color: var(--red); }
-  .opp { display: flex; align-items: center; gap: 8px; font-weight: 600; font-size: 15px; color: var(--muted); }
-  .opp b { margin-left: auto; font-family: var(--display); font-size: 20px; font-variant-numeric: tabular-nums; color: var(--muted); }
-  .opc.upcoming .opp, .opp.w { color: var(--ink); }
-  .opp.w b { color: var(--ink); }
-  .opc.live .opp b { color: var(--ink); }
+  /* feature */
+  .feature { grid-column: span 8; min-height: 520px; display: flex; flex-direction: column; }
+  .feature :global(.ft-link) { position: absolute; inset: 0; z-index: 3; border-radius: inherit; }
+  .feature :global(.ft-top) { position: relative; z-index: 2; display: flex; gap: 14px; flex-wrap: wrap; padding: 26px 30px 0; }
+  .feature :global(.ft-live), .feature :global(.ft-next) { color: var(--volt); }
+  .feature :global(.ft-res) { color: #fff; }
+  .feature :global(.ft-stage) { color: var(--on-ink-2); }
+  .feature :global(.ft-stage-row) { flex: 1; display: grid; grid-template-columns: 1fr auto 1fr; align-items: end; padding: 0 20px; }
+  .feature :global(.ft-p) { display: flex; height: 320px; align-items: flex-end; min-width: 0; overflow: hidden; }
+  .feature :global(.ft-p.r) { justify-content: flex-end; }
+  .feature :global(.ft-cut) { height: 100%; width: 100%; object-fit: contain; object-position: left bottom; filter: saturate(.88) contrast(1.06); }
+  .feature :global(.ft-cut.r) { object-position: right bottom; }
+  .feature :global(.ft-ini) { width: 210px; height: 280px; border-radius: 120px 120px 0 0; background: var(--ink-3); display: grid; place-items: center; }
+  .feature :global(.ft-ini span) { font-family: var(--poster); font-size: 90px; color: #3a3d47; }
+  .feature :global(.ft-mid) { text-align: center; padding-bottom: 64px; }
+  .feature :global(.ft-score) { font-size: clamp(110px, 13vw, 200px); color: var(--volt); }
+  .feature :global(.ft-score span) { color: #3a3d47; padding: 0 .08em; }
+  .feature :global(.ft-vs) { color: #fff; }
+  .feature :global(.ft-sub) { color: var(--on-ink-2); margin-top: 14px; }
+  .feature :global(.ft-bottom) { display: grid; grid-template-columns: 1fr 1fr; border-top: 1px solid var(--ink-2); }
+  .feature :global(.ft-who) { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 18px 30px; }
+  .feature :global(.ft-who.l) { border-right: 1px solid var(--ink-2); }
+  .feature :global(.ft-who.r) { flex-direction: row-reverse; text-align: right; }
+  .feature :global(.ft-who b) { display: block; font-size: 19px; }
+  .feature :global(.ft-who small) { color: var(--on-ink-2); font-size: 13px; }
+  .feature :global(.ft-who.won b) { color: var(--volt); }
+  .feature :global(.ft-avg) { display: flex; flex-direction: column; align-items: inherit; }
+  .feature :global(.ft-avg .poster-num) { font-size: 34px; }
+  .feature :global(.ft-avg small) { color: var(--on-ink-2); margin-top: 6px; }
+  .ne { display: flex; flex-direction: column; gap: 14px; padding: 30px; height: 100%; text-decoration: none; color: #fff; }
+  .ne-name { font-size: clamp(64px, 8vw, 120px); margin-top: auto; }
+  .ne-name small { display: block; font-size: .35em; color: var(--on-ink); margin-top: 8px; }
+  .ne-meta { margin: 0; color: var(--on-ink); font-weight: 600; }
+  .ne-count { display: flex; gap: 12px; }
+  .ne-count div { background: var(--ink-3); border-radius: 18px; padding: 12px 18px; text-align: center; min-width: 88px; }
+  .ne-count b { display: block; font-size: 56px; color: var(--volt); }
+  .ne-count span { color: var(--on-ink-2); }
 
-  .two { display: grid; grid-template-columns: minmax(0, 1.7fr) minmax(0, 1fr); gap: 32px; align-items: start; }
-  .nl { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
-  .ni { display: flex; flex-direction: column; overflow: hidden; text-decoration: none; }
-  .ni.lead { grid-column: 1 / -1; display: grid; grid-template-columns: 1.1fr 1fr; }
-  .ni :global(.ni-art) { aspect-ratio: 16 / 9; }
-  .ni.lead :global(.ni-art) { aspect-ratio: auto; height: 100%; min-height: 240px; }
-  .ni-c { padding: 14px 16px 18px; display: flex; flex-direction: column; gap: 6px; }
-  .ni.lead .ni-c { padding: 22px; justify-content: center; }
-  .ni time { font-size: 12px; font-weight: 800; color: var(--red); }
-  .ni h3 { font-size: 18px; line-height: 1.2; }
-  .ni.lead h3 { font-size: 26px; }
-  .ni p { margin: 0; color: var(--muted); }
-  .ni:hover h3 { color: var(--red); }
+  .side { grid-column: span 4; display: flex; flex-direction: column; gap: 16px; }
+  .nu[hidden] { display: none; }
+  .nu :global(.nu-names) { font-size: 60px; }
+  .nu :global(.nu-sub) { font-weight: 600; font-size: 14px; }
+  .nu { display: flex; flex-direction: column; gap: 10px; padding: 24px 26px; text-decoration: none; }
+  .nu-names { font-size: 60px; }
+  .nu-sub { font-weight: 600; font-size: 14px; }
+  .res { padding: 20px 22px; flex: 1; }
+  .res ol, .race ol { list-style: none; margin: 0; padding: 0; }
+  .res :global(li a) { display: grid; grid-template-columns: 1fr auto 1fr; gap: 10px; align-items: center; padding: 10px 0; border-top: 1px solid var(--line); text-decoration: none; }
+  .res :global(.rn) { color: var(--muted); }
+  .res :global(.rn.w) { color: var(--ink); font-weight: 700; }
+  .res :global(.rn.r) { text-align: right; }
+  .res :global(.rs) { font-size: 22px; }
 
-  .rk { list-style: none; margin: 0; padding: 6px; }
-  .rk :global(li a) { display: grid; grid-template-columns: 44px 34px 1fr auto; align-items: center; gap: 10px; padding: 8px 10px; border-radius: 12px; text-decoration: none; }
-  .rk :global(li a:hover) { background: var(--paper); }
-  .rk :global(.rp) { font-family: var(--display); font-weight: 800; font-size: 17px; display: flex; flex-direction: column; line-height: 1; }
-  .rk :global(.rp i) { font-style: normal; font-family: var(--body); font-size: 10px; font-weight: 800; margin-top: 2px; }
-  .rk :global(.up) { color: var(--green); } .rk :global(.down) { color: var(--red); }
-  .rk :global(.rn) { font-weight: 700; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-  .rk :global(.rm) { font-size: 13px; font-weight: 700; color: var(--muted); font-variant-numeric: tabular-nums; }
-  .rk-note { font-size: 12px; margin: 8px 4px 0; }
+  .lead { grid-column: span 6; min-height: 440px; display: flex; flex-direction: column; justify-content: flex-end; text-decoration: none; }
+  .lead img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+  .lead-box { position: relative; background: var(--ink); margin: 0 16px 16px; border-radius: 20px; padding: 22px 24px; }
+  .lead-box h2 { font-size: clamp(32px, 3.2vw, 46px); margin: 10px 0 8px; }
+  .lead-box p { margin: 0; color: var(--on-ink); font-size: 15px; }
+  .lead:hover h2 { color: var(--volt); }
+  .nsub { grid-column: span 6; display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .nc { display: flex; flex-direction: column; text-decoration: none; }
+  .nc img { width: 100%; height: 180px; object-fit: cover; }
+  .nc div { padding: 16px 20px 20px; }
+  .nc h3, .nred h3, .nwide h3 { font-size: 19px; line-height: 1.2; margin-top: 8px; }
+  .nc:hover h3, .nwide:hover h3 { color: var(--red); }
+  .nred { background: var(--red); color: #fff; padding: 22px; display: flex; flex-direction: column; justify-content: space-between; text-decoration: none; }
+  .big { font-size: 96px; }
+  .nwide { grid-column: span 2; display: flex; align-items: center; gap: 22px; padding: 20px 24px; text-decoration: none; }
+  .nwide .big { font-size: 64px; flex: none; }
+  .big.red { color: var(--red); }
 
-  .tl { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 10px; }
-  .tl a { display: grid; grid-template-columns: 56px 1fr auto; align-items: center; gap: 14px; padding: 10px 14px 10px 10px; background: var(--card); border: 1px solid var(--line); border-radius: 16px; text-decoration: none; transition: border-color .2s; }
-  .tl a:hover { border-color: var(--ink); }
-  .td { display: flex; flex-direction: column; align-items: center; background: var(--ink); color: #fff; border-radius: 12px; padding: 6px 0; line-height: 1.1; }
-  .td small { font-size: 10px; font-weight: 800; text-transform: uppercase; opacity: .75; }
-  .td b { font-family: var(--display); font-size: 22px; }
-  .tn { display: flex; flex-direction: column; min-width: 0; }
-  .tn b { font-family: var(--display); font-size: 17px; }
-  .tn small { font-size: 13px; color: var(--ink-2); }
-  .tn small.muted { color: var(--muted); }
+  .race { grid-column: span 5; padding: 22px 26px; }
+  .race h2 { font-size: 38px; }
+  .race :global(li a) { display: grid; grid-template-columns: 52px 1fr auto; align-items: center; gap: 12px; padding: 9px 0; border-top: 1px solid var(--line); text-decoration: none; }
+  .race :global(li.hi a) { background: var(--volt); border-radius: 14px; padding: 9px 12px; margin: 4px -12px 0; border: 0; }
+  .race :global(.rp) { font-size: 34px; }
+  .race :global(b) { font-size: 16px; }
+  .race :global(i) { font-style: normal; font-size: 12px; margin-left: 6px; }
+  .race :global(.up) { color: #0a7a3a; } .race :global(.down) { color: var(--red); }
+  .race :global(.hi .up) { color: var(--ink); }
+  .race :global(.rm) { font-weight: 700; font-variant-numeric: tabular-nums; }
+  #rk-note { margin: 12px 0 0; }
 
-  @media (max-width: 900px) {
-    .two { grid-template-columns: 1fr; }
-    .nl { grid-template-columns: 1fr; }
-    .ni.lead { grid-template-columns: 1fr; }
-    .ni.lead :global(.ni-art) { height: auto; aspect-ratio: 16 / 9; min-height: 0; }
+  .spot { grid-column: span 4; min-height: 420px; display: flex; flex-direction: column; justify-content: space-between; text-decoration: none; }
+  .spot-cut { position: absolute; right: -40px; bottom: 0; height: 88%; width: auto; max-width: none; }
+  .spot-top, .spot-bottom { position: relative; padding: 24px 26px; }
+  .spot-top h2 { font-size: 44px; margin-top: 10px; }
+  .spot-avg { font-size: 96px; color: var(--volt); }
+  .spot-bottom .lbl { color: var(--on-ink); margin-top: 8px; }
+  .fm { display: flex; gap: 6px; margin-top: 16px; }
+  .fm i { font-style: normal; width: 30px; height: 30px; border-radius: 9px; display: grid; place-items: center; font-weight: 800; font-size: 13px; }
+  .fm .w { background: var(--volt); color: var(--ink); }
+  .fm .l { background: var(--red); color: #fff; }
+
+  .cu { grid-column: span 3; padding: 20px 20px; display: flex; flex-direction: column; gap: 10px; }
+  .cu-row { display: flex; gap: 14px; align-items: center; padding: 10px; border-radius: 18px; background: var(--paper); text-decoration: none; }
+  .cu-row:hover { background: var(--paper-2); }
+  .cu-d { background: var(--ink); color: #fff; border-radius: 14px; width: 60px; flex: none; padding: 8px 0; text-align: center; display: flex; flex-direction: column; }
+  .cu-d b { font-size: 28px; }
+  .cu-d .lbl { font-size: 10px; }
+  .cu-n { display: flex; flex-direction: column; min-width: 0; }
+  .cu-n small { color: var(--muted); font-size: 13px; }
+
+  @media (max-width: 1100px) {
+    .bento { grid-template-columns: repeat(6, minmax(0, 1fr)); }
+    .feature, .side, .lead, .nsub, .race, .spot, .cu { grid-column: span 6; }
+  }
+  @media (max-width: 640px) {
+    .bento { gap: 12px; }
+    .feature { min-height: 0; }
+    .feature :global(.ft-p) { height: 170px; }
+    .feature :global(.ft-ini) { width: 96px; height: 130px; }
+    .feature :global(.ft-ini span) { font-size: 40px; }
+    .feature :global(.ft-mid) { padding-bottom: 30px; max-width: 120px; }
+    .feature :global(.ft-sub) { font-size: 10px; letter-spacing: .08em; }
+    .feature :global(.ft-score) { font-size: 96px; }
+    .feature :global(.ft-who) { padding: 12px 16px; flex-direction: column; align-items: flex-start; }
+    .feature :global(.ft-who.r) { flex-direction: column; align-items: flex-end; }
+    .feature :global(.ft-who b) { font-size: 15px; }
+    .feature :global(.ft-avg .poster-num) { font-size: 26px; }
+    .feature :global(.ft-top) { padding: 18px 18px 0; }
+    .nu :global(.nu-names) { font-size: 44px; }
+    .nsub { grid-template-columns: 1fr; }
+    .nwide { grid-column: auto; }
+    .lead { min-height: 380px; }
+    .spot { min-height: 360px; }
+    .ne-name { font-size: 56px; }
   }
 </style>

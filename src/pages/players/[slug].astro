@@ -226,7 +226,7 @@ const news = (await getCollection('news'))
 </Layout>
 
 <style>
-  .pbanner { position: relative; overflow: hidden; isolation: isolate; color: #fff; background: radial-gradient(70% 120% at 85% 120%, rgba(215, 38, 61, .5), transparent 60%), radial-gradient(60% 90% at 0% -20%, rgba(14, 138, 95, .35), transparent 60%), linear-gradient(160deg, #191b26, #0d0e14 70%); }
+  .pbanner { position: relative; overflow: hidden; isolation: isolate; color: #fff; background: var(--ink); border-top: 1px solid var(--ink-2); }
   .prings { position: absolute; z-index: -1; right: -6%; top: 55%; translate: 0 -50%; width: min(640px, 80vw); fill: none; stroke: rgba(255, 255, 255, .08); stroke-width: 1.2; }
   .prings circle:nth-child(2) { stroke: rgba(14, 138, 95, .4); stroke-width: 6; stroke-dasharray: 13 13; }
   .prings circle:nth-child(4) { stroke: rgba(215, 38, 61, .4); stroke-width: 5; stroke-dasharray: 10 10; }
@@ -236,14 +236,14 @@ const news = (await getCollection('news'))
   .back { display: block; width: fit-content; color: rgba(255, 255, 255, .7); text-decoration: none; font-weight: 600; font-size: 14px; margin-bottom: 18px; transition: color .2s, transform .3s var(--spring); }
   .back:hover { color: #fff; transform: translateX(-3px); }
   .kick { display: flex; gap: 8px; margin: 0 0 10px; }
-  .rk { background: #fff; color: var(--ink); font-weight: 800; font-size: 13px; padding: 4px 12px; border-radius: 999px; }
+  .rk { background: var(--volt); color: var(--ink); font-weight: 800; font-size: 13px; padding: 4px 12px; border-radius: 999px; }
   .tc { border: 1px solid rgba(255, 255, 255, .3); font-weight: 700; font-size: 12px; padding: 4px 10px; border-radius: 999px; }
-  h1 { font-size: clamp(42px, 6.4vw, 84px); font-weight: 800; letter-spacing: -.04em; line-height: .95; }
-  .nick { margin: 8px 0 0; font-family: var(--display); font-size: 22px; color: #ff8a98; font-weight: 700; }
+  h1 { font-size: clamp(58px, 8vw, 120px); }
+  .nick { margin: 10px 0 0; font-size: 20px; color: var(--volt); font-weight: 700; }
   .where { margin: 10px 0 0; color: rgba(255, 255, 255, .75); font-weight: 500; }
   .kpis { display: grid; grid-template-columns: repeat(4, auto); justify-content: start; gap: 10px 28px; margin: 26px 0 0; }
   .kpis dt { font-size: 11px; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; color: rgba(255, 255, 255, .6); }
-  .kpis dd { margin: 4px 0 0; font-family: var(--display); font-size: 26px; font-weight: 800; font-variant-numeric: tabular-nums; }
+  .kpis dd { margin: 6px 0 0; font-family: var(--poster); font-size: 40px; font-weight: 400; font-variant-numeric: tabular-nums; }
   .pb-pic { position: relative; align-self: stretch; display: flex; align-items: flex-end; justify-content: center; }
   .pb-pic .cut { height: 430px; width: auto; max-width: none; filter: drop-shadow(0 20px 30px rgba(0, 0, 0, .5)); animation: rise 1s var(--ease) both; }
   .pb-pic .avatar { margin-bottom: 40px; box-shadow: 0 0 0 6px rgba(255, 255, 255, .15); }
@@ -257,15 +257,15 @@ const news = (await getCollection('news'))
   .card.block h2 { font-size: 19px; }
 
   .avgcard { display: grid; grid-template-columns: 1fr 1.3fr; gap: 12px; margin-bottom: 12px; }
-  .big { background: var(--ink); color: #fff; border-radius: 20px; padding: 20px 22px; display: flex; flex-direction: column; justify-content: center; position: relative; overflow: hidden; }
+  .big { background: var(--ink); color: #fff; border-radius: var(--tile); padding: 20px 22px; display: flex; flex-direction: column; justify-content: center; position: relative; overflow: hidden; }
   .big::after { content: ''; position: absolute; right: -64px; top: -64px; width: 124px; height: 124px; border-radius: 50%; border: 14px solid var(--red); box-shadow: 0 0 0 14px #14161f, 0 0 0 26px var(--green); }
-  .big span { font-size: 11px; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; color: #ff8a98; }
-  .big b { font-family: var(--display); font-size: 60px; font-weight: 800; letter-spacing: -.03em; line-height: 1; margin: 8px 0 6px; font-variant-numeric: tabular-nums; }
+  .big span { font-size: 11px; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; color: var(--on-ink); }
+  .big b { font-family: var(--poster); font-size: 96px; font-weight: 400; line-height: .86; margin: 10px 0 8px; color: var(--volt); font-variant-numeric: tabular-nums; }
   .big small { color: rgba(255, 255, 255, .65); font-size: 12px; font-weight: 600; }
   .minis { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
-  .minis div, .ring, .num { background: var(--card); border: 1px solid var(--line); border-radius: 16px; padding: 14px 16px; }
+  .minis div, .ring, .num { background: var(--card); border: 0; border-radius: 22px; padding: 16px 18px; }
   .minis div { display: flex; flex-direction: column; justify-content: center; }
-  .minis b { font-family: var(--display); font-size: 26px; font-variant-numeric: tabular-nums; }
+  .minis b { font-family: var(--poster); font-weight: 400; font-size: 36px; font-variant-numeric: tabular-nums; }
   .minis span, .num span, .ring span { font-size: 11px; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); }
   .stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
   .ring, .num { display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; position: relative; }
@@ -276,7 +276,7 @@ const news = (await getCollection('news'))
   .ring.alt .fg { stroke: var(--red); }
   .ring.go .fg { stroke-dashoffset: 0; }
   .ring b { position: absolute; top: 44px; font-family: var(--display); font-size: 18px; }
-  .num b { font-family: var(--display); font-size: 30px; }
+  .num b { font-family: var(--poster); font-weight: 400; font-size: 40px; }
   .titles { margin: 12px 0 0; font-weight: 600; font-size: 14px; background: var(--gold-soft); border-radius: 12px; padding: 10px 14px; }
   .note { font-size: 12px; color: var(--muted); margin: 10px 0 0; }
 
@@ -303,7 +303,7 @@ const news = (await getCollection('news'))
 
   .fg { list-style: none; display: flex; gap: 6px; margin: 4px 0 14px; padding: 0; }
   .fg li { width: 34px; height: 34px; border-radius: 10px; display: grid; place-items: center; font-weight: 800; font-family: var(--display); color: #fff; }
-  .fg .w { background: var(--green); }
+  .fg .w { background: var(--volt); color: var(--ink); }
   .fg .l { background: var(--red); }
   .rm { list-style: none; margin: 0; padding: 0; background: var(--card); border: 1px solid var(--line); border-radius: 16px; overflow: hidden; }
   .rm li + li { border-top: 1px solid var(--line); }

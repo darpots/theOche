@@ -61,5 +61,20 @@ for (const line of execFileSync(FACES, files, { encoding: 'utf8' }).trim().split
 await writeFile(`${ROOT}src/data/photo-faces.json`, JSON.stringify(faces, null, 1) + '\n');
 console.log(`faces: ${Object.keys(faces).length}/${files.length}`);
 
+// Small 3:4 avatar crops centred on the face, for players without one yet.
+await mkdir(`${ROOT}public/portraits`, { recursive: true });
+for (const [key, p] of Object.entries(portraits)) {
+  const out = `${ROOT}public${p.image}`;
+  const src = `${ROOT}public/photos/${key}.jpg`;
+  if (existsSync(out) || !existsSync(src) || !faces[key]) continue;
+  const f = faces[key];
+  const meta = await sharp(src).metadata();
+  const h = Math.min(meta.height, Math.round((f.h * meta.height) / 0.38)), w = Math.min(meta.width, Math.round(h * 0.75));
+  const left = Math.max(0, Math.min(meta.width - w, Math.round(f.x * meta.width - w / 2)));
+  const top = Math.max(0, Math.min(meta.height - h, Math.round(f.y * meta.height - h * 0.42)));
+  await sharp(src).extract({ left, top, width: w, height: h }).resize(300, 400).jpeg({ quality: 80, mozjpeg: true }).toFile(out);
+  console.log('avatar', key);
+}
+
 // Responsive WebP copies for the site.
 execFileSync('node', [`${ROOT}scripts/make-image-sizes.mjs`], { stdio: 'inherit' });
