@@ -1,6 +1,8 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import portraits from '../data/portraits.json';
+import library from '../data/news-library.json';
+const lib = Object.entries(library as Record<string, any>);
 const list = Object.values(portraits as Record<string, any>).sort((a, b) => a.name.localeCompare(b.name));
 ---
 <Layout title="Credits" description="Photo credits and data sources for The Oche.">
@@ -21,6 +23,13 @@ const list = Object.values(portraits as Record<string, any>).sort((a, b) => a.na
         <li class="card"><img src={p.image} alt={p.name} loading="lazy" /><div><strong>{p.name}</strong><span>{p.credit}</span><a href={p.licenseUrl} target="_blank" rel="noopener">{p.license}</a> · <a href={p.source} target="_blank" rel="noopener">Source</a></div></li>
       ))}
     </ul>
+    <p class="src">News covers and player pages use these photos and larger versions of them, cropped to fit.</p>
+    <h2 class="h">News photographs</h2>
+    <ul class="grid">
+      {lib.map(([key, x]) => (
+        <li class="card"><img class="sq" src={`/news-img/${key}.jpg`} alt={x.alt} loading="lazy" /><div><strong>{x.alt}</strong><span>{x.credit}</span><a href={x.licenseUrl} target="_blank" rel="noopener">{x.license}</a> · <a href={`https://commons.wikimedia.org/wiki/${encodeURIComponent(x.file.replace(/ /g, '_'))}`} target="_blank" rel="noopener">Source</a></div></li>
+      ))}
+    </ul>
   </section>
 </Layout>
 <style>
@@ -29,6 +38,7 @@ const list = Object.values(portraits as Record<string, any>).sort((a, b) => a.na
   .grid { list-style: none; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 12px; }
   .grid li { display: flex; gap: 12px; align-items: center; padding: 10px; font-size: 13px; }
   .grid img { width: 56px; height: 56px; border-radius: 50%; object-fit: cover; object-position: 50% 18%; }
+  .grid img.sq { border-radius: 10px; object-position: 50% 50%; }
   .grid div { display: flex; flex-direction: column; }
   .grid span { color: var(--muted); }
 </style>

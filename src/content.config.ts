@@ -14,6 +14,12 @@ const news = defineCollection({
     sources: z.array(z.object({ name: z.string(), url: z.string().url(), title: z.string().optional() })).min(1),
     originalTitles: z.array(z.string()).optional(),
     writtenBy: z.string().optional(),
+    // 'recap' = a tournament round-up; kept while the event is on the calendar.
+    kind: z.enum(['report', 'recap']).default('report'),
+    // PDC tournament id the story belongs to (links it to the tournament page).
+    tournament: z.string().optional(),
+    // Cover: a key from src/data/news-library.json, 'player' for the main player's photo, or omit to choose automatically.
+    image: z.string().optional(),
   }),
 });
 

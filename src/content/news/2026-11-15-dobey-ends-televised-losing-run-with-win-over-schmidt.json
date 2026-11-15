@@ -10,11 +10,24 @@
   "He was also frank about the contest itself, crediting his win partly to the chances his opponent wasted. In the new three-player group format only the group winner progresses, so a first win is valuable.",
   "Dobey's next match is against Martin Schindler on Tuesday. A win there would take him into the last 16 whatever happens between Schindler and Schmidt."
  ],
- "tags": ["Grand Slam of Darts"],
- "players": ["Chris Dobey", "Jan Schmidt", "Martin Schindler"],
- "sources": [
-  { "name": "Dartsnews", "url": "https://dartsnews.com/pdc/its-a-lonely-place-chris-dobey-opens-up-on-tv-struggles-as-grand-slam-of-darts-win-ends-run-of-four-defeats", "title": "“It’s a lonely place” - Chris Dobey opens up on TV struggles as Grand Slam of Darts win ends run of four defeats" }
+ "tags": [
+  "Grand Slam of Darts"
  ],
- "originalTitles": ["“It’s a lonely place” - Chris Dobey opens up on TV struggles as Grand Slam of Darts win ends run of four defeats"],
- "writtenBy": "The Oche newsdesk (Claude)"
+ "players": [
+  "Chris Dobey",
+  "Jan Schmidt",
+  "Martin Schindler"
+ ],
+ "sources": [
+  {
+   "name": "Dartsnews",
+   "url": "https://dartsnews.com/pdc/its-a-lonely-place-chris-dobey-opens-up-on-tv-struggles-as-grand-slam-of-darts-win-ends-run-of-four-defeats",
+   "title": "“It’s a lonely place” - Chris Dobey opens up on TV struggles as Grand Slam of Darts win ends run of four defeats"
+  }
+ ],
+ "originalTitles": [
+  "“It’s a lonely place” - Chris Dobey opens up on TV struggles as Grand Slam of Darts win ends run of four defeats"
+ ],
+ "writtenBy": "The Oche newsdesk (Claude)",
+ "tournament": "10871"
 }

@@ -1,8 +1,8 @@
-name: Newsdesk (API writer + 90-day cleanup)
+name: Newsdesk (API writer + cleanup)
 
 on:
   schedule:
-    - cron: '20 5 * * *' # daily: prunes reports older than 90 days (writes only if NEWS_API_KEY is set)
+    - cron: '20 5 * * *' # daily: prunes reports older than a month (writes only if NEWS_API_KEY is set)
   workflow_dispatch:
     inputs:
       lookback_hours:
@@ -28,7 +28,7 @@ jobs:
           node-version: 22
           cache: npm
       - run: npm ci
-      - name: Write new reports and remove ones older than 90 days
+      - name: Write new reports and remove old ones
         run: npm run news
         env:
           NEWS_API_KEY: ${{ secrets.NEWS_API_KEY }}

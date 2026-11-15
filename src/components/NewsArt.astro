@@ -1,100 +1,26 @@
 ---
-// Cover art for a news story. Flat, solid colours in the site palette with
-// the story's two main players as "medallion" cut-outs: each player sits in a
-// solid disc with their head breaking out of the top, in front of the event
-// name set in big type. Cut-outs come from the licensed Wikimedia photos and
-// are placed by their detected face position (src/data/faces.json), so the
-// face stays in frame at every card shape and screen size. Stories about
-// players without a photo get a typographic cover.
-import cutouts from '../data/cutouts.json';
-import faces from '../data/faces.json';
-import { keyName } from '../lib/pdc.mjs';
+// Cover photo for a news story (see src/lib/covers.ts for how it is chosen).
+// One photo, or two side by side for a head-to-head. Faces stay in frame at
+// every size because each photo is positioned on its detected face.
+import { chooseCover } from '../lib/covers';
 
-interface Props { seed: string; label?: string; class?: string; players?: string[] }
-const { seed, label, class: cls = '', players = [] } = Astro.props;
-const cut = cutouts as Record<string, string>;
-const face = faces as Record<string, { x: number; y: number; h: number }>;
-
-let h = 2166136261;
-for (const c of seed) h = Math.imul(h ^ c.charCodeAt(0), 16777619);
-const palettes = [
-  { bg: '#14161f', disc: '#d7263d', ink: '#ffffff', word: '#22252f' },
-  { bg: '#d7263d', disc: '#14161f', ink: '#ffffff', word: '#c51f35' },
-  { bg: '#0e8a5f', disc: '#f3ead2', ink: '#ffffff', word: '#0c7d56' },
-  { bg: '#1d3fd6', disc: '#f3ead2', ink: '#ffffff', word: '#1937c4' },
-  { bg: '#f3ead2', disc: '#14161f', ink: '#14161f', word: '#e9dec2' },
-];
-const pal = palettes[(h >>> 0) % palettes.length];
-
-// Medallion geometry in container-height units (cqh): the disc is 72 tall,
-// the head can rise 18 above it, and the face centre sits 29 from the top
-// of the medallion so the head breaks out over the disc.
-const FACE_H = 30, FACE_Y = 29;
-const cast = [...new Set(players.slice(0, 2).map(keyName))] // the story's two main players only
-  .filter(k => cut[k] && face[k])
-  .map(k => {
-    const f = face[k];
-    const imgH = FACE_H / f.h;
-    return {
-      src: cut[k],
-      name: (players.find(p => keyName(p) === k) || '').split(' ').slice(1).join(' '),
-      style: `height:${imgH.toFixed(1)}cqh;top:${(FACE_Y - f.y * imgH).toFixed(1)}cqh;--fx:${(-f.x * 100).toFixed(1)}%`,
-    };
-  });
-const word = (label || 'Darts').split(' ')[0]; // first word of the event, e.g. GRAND, PREMIER, WORLD
+interface Props {
+  story: { slug: string; headline: string; tags: string[]; players: string[]; image?: string; kind?: string };
+  label?: string;
+  class?: string;
+  eager?: boolean;
+}
+const { story, label, class: cls = '', eager = false } = Astro.props;
+const shots = chooseCover(story);
 ---
-<div class:list={['art', cls, cast.length === 2 ? 'duo' : cast.length === 1 ? 'solo' : 'type']} style={`--bg:${pal.bg};--disc:${pal.disc};--ink:${pal.ink};--word:${pal.word}`} aria-hidden="true">
-  <span class="word">{word}</span>
-  {cast.map((c, i) => (
-    <span class:list={['med', `m${i + 1}`]}>
-      <img src={c.src} alt="" loading="lazy" decoding="async" style={c.style} />
-      <b class="plate">{c.name}</b>
-    </span>
-  ))}
-  {cast.length === 2 && <span class="vs">v</span>}
-  {cast.length === 0 && (
-    <svg class="mark" viewBox="-50 -50 100 100">
-      <circle r="48" fill="var(--disc)" /><circle r="38" fill="var(--bg)" /><circle r="30" fill="var(--disc)" /><circle r="20" fill="var(--bg)" /><circle r="9" fill="#0e8a5f" /><circle r="4" fill="#d7263d" />
-    </svg>
-  )}
+<div class:list={['art', cls, { split: shots.length > 1 }]}>
+  {shots.map(s => <img src={s.src} alt={s.alt} style={`object-position:${s.focus}`} loading={eager ? 'eager' : 'lazy'} decoding="async" />)}
   {label && <span class="lbl">{label}</span>}
 </div>
 <style>
-  .art { position: relative; overflow: hidden; isolation: isolate; container-type: size; background: var(--bg); }
-  .word {
-    position: absolute; z-index: 0; left: -2cqh; bottom: -6cqh; white-space: nowrap;
-    font-family: var(--display); font-weight: 800; font-size: 52cqh; line-height: .8; letter-spacing: -.05em; text-transform: uppercase;
-    color: var(--word); transition: translate 1.2s var(--ease);
-  }
-  :global(a:hover) .word { translate: -6cqh 0; }
-
-  .med {
-    position: absolute; z-index: 1; bottom: 5cqh; width: 72cqh; height: 90cqh; translate: -50% 0;
-    overflow: hidden; border-radius: 0 0 36cqh 36cqh;
-    transition: transform .6s var(--spring);
-  }
-  .med::before { content: ''; position: absolute; left: 0; right: 0; bottom: 0; aspect-ratio: 1; border-radius: 50%; background: var(--disc); }
-  .med img { position: absolute; left: 50%; width: auto; max-width: none; translate: var(--fx) 0; }
-  .solo .m1 { left: 70%; }
-  .duo .m1 { left: 27%; }
-  .duo .m2 { left: 73%; }
-  :global(a:hover) .med { transform: translateY(-2cqh); }
-  :global(a:hover) .m2 { transition-delay: .06s; }
-  .plate {
-    position: absolute; z-index: 2; left: 50%; bottom: 3cqh; translate: -50% 0;
-    background: var(--ink); color: var(--bg); font-family: var(--display); font-weight: 800; font-size: max(11px, 7cqh); letter-spacing: -.01em;
-    padding: .25em .75em; border-radius: 999px; white-space: nowrap;
-  }
-  .vs {
-    position: absolute; z-index: 3; left: 50%; top: 52%; translate: -50% -50%; width: 15cqh; height: 15cqh; min-width: 30px; min-height: 30px;
-    display: grid; place-items: center; border-radius: 50%; background: var(--ink); color: var(--bg);
-    font-family: var(--display); font-weight: 800; font-size: max(13px, 8cqh); line-height: 1; box-shadow: 0 0 0 1.2cqh var(--bg);
-  }
-  .mark { position: absolute; z-index: 1; right: 8%; top: 50%; translate: 0 -50%; height: 74cqh; transition: rotate 1.2s var(--ease); }
-  :global(a:hover) .mark { rotate: 90deg; }
-  .lbl {
-    position: absolute; z-index: 4; left: 14px; top: 12px; background: var(--ink); color: var(--bg);
-    font-size: 11px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; padding: 5px 10px; border-radius: 999px;
-  }
-  @media (prefers-reduced-motion: reduce) { .med, .word, .mark { transition: none; } }
+  .art { position: relative; overflow: hidden; display: flex; gap: 3px; background: var(--ink); }
+  .art img { flex: 1; min-width: 0; width: 100%; height: 100%; object-fit: cover; transition: transform 1s var(--ease); }
+  :global(a:hover) .art img { transform: scale(1.04); }
+  .lbl { position: absolute; z-index: 1; left: 14px; top: 12px; background: var(--ink); color: #fff; font-size: 11px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; padding: 5px 10px; border-radius: 999px; }
+  @media (prefers-reduced-motion: reduce) { .art img { transition: none; } }
 </style>

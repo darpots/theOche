@@ -10,11 +10,24 @@
   "Aspinall explained that the weekend coincided with his wife's birthday and that he wanted to spend it away together rather than practising. He also said he wanted to avoid negativity before the big televised events.",
   "With only one player from each three-man group advancing, the opening win puts him in a strong position. He plays Karel Sedláček in his final group match."
  ],
- "tags": ["Grand Slam of Darts"],
- "players": ["Nathan Aspinall", "Maik Kuivenhoven", "Karel Sedláček"],
- "sources": [
-  { "name": "Dartsnews", "url": "https://dartsnews.com/pdc/shes-spent-the-last-12-years-in-minehead-i-thought-you-know-what-well-have-a-weekend-away-nathan-aspinall-made-decision-to-celebrate-wifes-birthday-over-players-championship-finals-bid", "title": "Nathan Aspinall made decision to celebrate wife's birthday over Players Championship Finals bid" }
+ "tags": [
+  "Grand Slam of Darts"
  ],
- "originalTitles": ["\"She's spent the last 12 years in Minehead. I thought, 'You know what? We'll have a weekend away\": Nathan Aspinall made decision to celebrate wife's birthday over Players Championship Finals bid"],
- "writtenBy": "The Oche newsdesk (Claude)"
+ "players": [
+  "Nathan Aspinall",
+  "Maik Kuivenhoven",
+  "Karel Sedláček"
+ ],
+ "sources": [
+  {
+   "name": "Dartsnews",
+   "url": "https://dartsnews.com/pdc/shes-spent-the-last-12-years-in-minehead-i-thought-you-know-what-well-have-a-weekend-away-nathan-aspinall-made-decision-to-celebrate-wifes-birthday-over-players-championship-finals-bid",
+   "title": "Nathan Aspinall made decision to celebrate wife's birthday over Players Championship Finals bid"
+  }
+ ],
+ "originalTitles": [
+  "\"She's spent the last 12 years in Minehead. I thought, 'You know what? We'll have a weekend away\": Nathan Aspinall made decision to celebrate wife's birthday over Players Championship Finals bid"
+ ],
+ "writtenBy": "The Oche newsdesk (Claude)",
+ "tournament": "10871"
 }

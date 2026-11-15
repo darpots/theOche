@@ -24,20 +24,6 @@ function side(p, score, won, decided, portraits, align, st, best) {
   </div>`;
 }
 
-function statsStrip(st) {
-  const [a, b] = st;
-  const row = (label, x, y, d, hiGood = true) => {
-    const xa = x ?? null, ya = y ?? null;
-    const lead = xa == null || ya == null || xa === ya ? 0 : (xa > ya) === hiGood ? 1 : 2;
-    return `<div class="sx"><b class="${lead === 1 ? 'up' : ''}">${xa == null ? '–' : fmt(xa, d)}</b><span>${label}</span><b class="${lead === 2 ? 'up' : ''}">${ya == null ? '–' : fmt(ya, d)}</b></div>`;
-  };
-  return `<div class="fx-stats">
-    ${row('First 9 avg', a?.f9, b?.f9, 2)}
-    ${row('180s', a?.t80, b?.t80, 0)}
-    ${row('Checkout %', a?.co, b?.co, 1)}
-    ${row('High finish', a?.hi || null, b?.hi || null, 0)}
-  </div>`;
-}
 
 export function fixtureRow(f, portraits) {
   const decided = f.status === 'result' && !!f.winner;
@@ -55,7 +41,6 @@ export function fixtureRow(f, portraits) {
     ${side(f.p1, f.s1, w1, decided, portraits, 'l', st?.[0], best === 1)}
     <div class="mid">${mid}<div class="st">${state}</div></div>
     ${side(f.p2, f.s2, w2, decided, portraits, 'r', st?.[1], best === 2)}
-    ${st ? statsStrip(st) : ''}
   </li>`;
 }
 

@@ -1,0 +1,38 @@
+{
+ "kind": "recap",
+ "tournament": "10870",
+ "date": "2026-10-25T23:00:00.000Z",
+ "headline": "Ross Smith beats Schindler 11-8 to win the European Championship",
+ "standfirst": "Ross Smith won the European Championship in Dortmund, beating Germany's Martin Schindler 11-8 and hitting 35 maximums.",
+ "body": [
+  "Ross Smith won the 2026 European Championship at the Westfalenhalle in Dortmund, beating Martin Schindler 11-8 in the final. Smith averaged 92.92 and Schindler 91.49.",
+  "Smith's best performance came in the quarter-finals, where he averaged 107.00 to beat Luke Woodhouse 10-6. He also beat Karel Sedlacek 6-4 and Damon Heta 10-7, and then Gerwyn Price 11-7 in the semi-finals.",
+  "Schindler had a strong run on home soil. He averaged 103.16 to beat Jonny Clayton 10-1 in the quarter-finals, including a 167 checkout, the highest of the event. He then beat Krzysztof Ratajski 11-6 in the semi-finals.",
+  "Ratajski knocked out Luke Littler 10-6 in the quarter-finals. Littler had produced the best average of the tournament, 114.47, against Nathan Aspinall in the last 16.",
+  "Woodhouse hit a nine-dart finish in his first-round win over Dirk van Duijvenbode. Smith hit 35 maximums, well clear of Littler on 20.",
+  "Luke Humphries missed the event through illness and was replaced by Kim Huybrechts."
+ ],
+ "tags": [
+  "European Championship"
+ ],
+ "players": [
+  "Ross Smith",
+  "Martin Schindler",
+  "Luke Littler",
+  "Luke Woodhouse"
+ ],
+ "slug": "ross-smith-beats-schindler-11-8-to-win-the-european-championship",
+ "writtenBy": "The Oche newsdesk (Claude)",
+ "sources": [
+  {
+   "name": "PDC",
+   "url": "https://www.pdc.tv/tournament-hub/10870",
+   "title": "Tournament results and match statistics"
+  },
+  {
+   "name": "BBC Sport",
+   "url": "https://www.bbc.co.uk/sport/darts/articles/ck240lypjqvno",
+   "title": "Humphries withdraws from European Championship"
+  }
+ ]
+}

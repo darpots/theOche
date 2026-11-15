@@ -1,0 +1,32 @@
+{
+ "kind": "recap",
+ "tournament": "10823",
+ "date": "2026-10-11T22:00:00.000Z",
+ "headline": "Clayton beats Humphries to win the Swiss Darts Trophy in Basel",
+ "standfirst": "Jonny Clayton won European Tour 14, beating Luke Humphries 8-4 in a final where both players averaged over 101.",
+ "body": [
+  "Jonny Clayton won the Swiss Darts Trophy at the St. Jakobshalle in Basel, beating Luke Humphries 8-4 in the final. The averages were almost identical, 101.68 for Clayton and 101.75 for Humphries, but Clayton won the important legs.",
+  "Clayton was in excellent form all weekend. He averaged 108.81 against Maik Kuivenhoven in the last 32, then beat Rob Cross 6-4 and Karel Sedlacek 6-2. In the semi-finals he averaged 105.00 to beat Gian van Veen 7-4 and hit a 161 checkout, the best of the event.",
+  "Humphries produced the highest average of the tournament, 111.17, in his 7-4 semi-final win over Mensur Suljovic. Suljovic averaged 100.55 in that match after beating Dirk van Duijvenbode 6-1 in the quarter-finals.",
+  "Sedlacek hit the most maximums, 22, ahead of Clayton on 21 and Tom Bissell on 19. There were 388 maximums across the event."
+ ],
+ "tags": [
+  "European Tour",
+  "Swiss Darts Trophy"
+ ],
+ "players": [
+  "Jonny Clayton",
+  "Luke Humphries",
+  "Mensur Suljovic",
+  "Gian van Veen"
+ ],
+ "slug": "clayton-beats-humphries-to-win-the-swiss-darts-trophy-in-basel",
+ "writtenBy": "The Oche newsdesk (Claude)",
+ "sources": [
+  {
+   "name": "PDC",
+   "url": "https://www.pdc.tv/tournament-hub/10823",
+   "title": "Tournament results and match statistics"
+  }
+ ]
+}

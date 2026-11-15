@@ -3,11 +3,13 @@
 // build time when we have the data and kept up to date live from the PDC
 // feed while the event is on.
 import Layout from '../../layouts/Layout.astro';
+import NewsArt from '../../components/NewsArt.astro';
+import { getCollection } from 'astro:content';
 import data from '../../data/tournament.json';
 import calendar from '../../data/calendar.json';
 import portraitsRaw from '../../data/portraits.json';
 import { tvBadge } from '../../lib/pdc.mjs';
-import { dateRange } from '../../lib/format.mjs';
+import { dateRange, newsDate } from '../../lib/format.mjs';
 import { matchDays, renderDay, renderTabs, progress } from '../../lib/render-matches.mjs';
 
 export function getStaticPaths() {
@@ -30,6 +32,13 @@ const portraits = Object.fromEntries(Object.entries(portraitsRaw as Record<strin
 const buildDay = new Date().toISOString().slice(0, 10);
 const { days, def } = matchDays(t, buildDay);
 const prog = progress(t);
+
+// Stories about this event: tagged with its id, or (older reports) carrying the
+// event's name as a tag and dated around it.
+const shift = (d: string, n: number) => new Date(Date.parse(d) + n * 864e5).toISOString().slice(0, 10);
+const news = (await getCollection('news')).map(n => n.data)
+  .filter(n => n.tournament ? n.tournament === t.id : n.tags.some(tag => tag.toLowerCase() === String(t.name).toLowerCase()) && n.date.slice(0, 10) >= shift(t.start, -7) && n.date.slice(0, 10) <= shift(t.end, 3))
+  .sort((a, b) => (b.kind === 'recap' ? 1 : 0) - (a.kind === 'recap' ? 1 : 0) || b.date.localeCompare(a.date));
 ---
 <Layout title={`${t.fullName || t.name}`} description={`Full schedule, live scores and results from the ${t.fullName || t.name}.`} active={isCurrent ? 'matches' : 'calendar'}>
   <section class={`banner b-${t.broadcaster || 'none'}`}>
@@ -46,7 +55,10 @@ const prog = progress(t);
         {place && <span>· {place}</span>}
         <span class="live-dot" id="liveflag" hidden>Live updates</span>
       </div>
-      {t.winner && <p class="champ" id="champ">🏆 Won by <b>{t.winner.name}</b></p>}
+      <div class="bactions">
+        {t.winner && <p class="champ" id="champ">🏆 Won by <b>{t.winner.name}</b></p>}
+        <a class="newsbtn" href="#news" data-open-news>Tournament news <span>{news.length}</span></a>
+      </div>
       <div class="progress" id="prog" hidden={!prog.total}>
         <div class="pbar"><span id="pfill" style={`width:${prog.pct}%`}></span></div>
         <p><b id="pdone">{prog.done}</b> of <b id="ptotal">{prog.total}</b> matches played <span id="updated"></span></p>
@@ -54,7 +66,25 @@ const prog = progress(t);
     </div>
   </section>
 
-  <section class="wrap">
+  <div class="wrap viewtabs" role="tablist" aria-label="Tournament sections">
+    <button class="vt" role="tab" data-view="schedule" aria-selected="true">Schedule &amp; results</button>
+    <button class="vt" role="tab" data-view="news" aria-selected="false">News <span class="cnt">{news.length}</span></button>
+  </div>
+
+  <section class="wrap tnews" id="tnews" hidden>
+    {news.length ? (
+      <div class="tn-grid">
+        {news.map(n => (
+          <a class="tn card lift" href={`/news/${n.slug}`}>
+            <NewsArt story={n} class="tn-art" label={n.kind === 'recap' ? 'Round-up' : undefined} />
+            <div class="tn-copy"><time datetime={n.date}>{newsDate(n.date)}</time><h3>{n.headline}</h3><p>{n.standfirst}</p></div>
+          </a>
+        ))}
+      </div>
+    ) : <div class="empty"><h3>No stories yet</h3><p>Reports on this event appear here as the newsdesk publishes them.</p></div>}
+  </section>
+
+  <section class="wrap" id="tschedule">
     <div class="days" id="days" role="group" aria-label="Choose a day" set:html={days.length ? renderTabs(days, def) : ''} />
     <div id="board" class="board" data-day={def} set:html={days.length ? renderDay(t, def, portraits) : '<div class="empty" id="loading"><span class="spinner"></span><h3>Loading the schedule…</h3></div>'} />
   </section>
@@ -146,6 +176,17 @@ const prog = progress(t);
           if (live) document.getElementById('updated')!.textContent = `· updated ${new Date().toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' })}`;
         } catch { /* keep showing the last good data */ }
       };
+      // Schedule / News tabs (#news opens the news tab).
+      const tabs = document.querySelectorAll<HTMLButtonElement>('.vt');
+      const show = (v: string) => {
+        tabs.forEach(b => b.setAttribute('aria-selected', String(b.dataset.view === v)));
+        document.getElementById('tschedule')!.hidden = v !== 'schedule';
+        document.getElementById('tnews')!.hidden = v !== 'news';
+      };
+      tabs.forEach(b => b.addEventListener('click', () => { show(b.dataset.view!); history.replaceState(null, '', b.dataset.view === 'news' ? '#news' : location.pathname); }));
+      if (location.hash === '#news') show('news');
+      document.querySelector('[data-open-news]')?.addEventListener('click', e => { e.preventDefault(); show('news'); history.replaceState(null, '', '#news'); document.querySelector('.viewtabs')!.scrollIntoView({ behavior: 'smooth', block: 'start' }); });
+
       clearInterval(poll);
       if (live) {
         document.getElementById('liveflag')!.hidden = false;
@@ -176,12 +217,32 @@ const prog = progress(t);
   .title-row { display: flex; align-items: center; gap: 18px; margin: 10px 0 12px; }
   .banner h1 { font-size: clamp(36px, 5.6vw, 70px); font-weight: 800; letter-spacing: -.035em; }
   .banner .meta { color: rgba(255, 255, 255, .78); }
-  .champ { margin: 16px 0 0; display: inline-flex; gap: 6px; background: linear-gradient(135deg, #f1c96b, var(--gold)); color: #2b1f02; padding: 6px 14px; border-radius: 999px; font-size: 15px; }
+  .bactions { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; margin-top: 16px; }
+  .newsbtn { display: inline-flex; align-items: center; gap: 8px; background: #fff; color: var(--ink); text-decoration: none; font-weight: 800; font-size: 14px; padding: 8px 8px 8px 16px; border-radius: 999px; transition: transform .3s var(--spring), box-shadow .3s; }
+  .newsbtn:hover { transform: translateY(-2px); box-shadow: 0 10px 24px -10px rgba(0, 0, 0, .6); }
+  .newsbtn span { background: var(--red); color: #fff; border-radius: 999px; padding: 2px 9px; font-size: 12px; }
+  .viewtabs { scroll-margin-top: 80px; }
+  .champ { margin: 0; display: inline-flex; gap: 6px; background: linear-gradient(135deg, #f1c96b, var(--gold)); color: #2b1f02; padding: 6px 14px; border-radius: 999px; font-size: 15px; }
   .banner .progress { margin-top: 22px; max-width: 520px; }
   .banner .pbar { background: rgba(255, 255, 255, .14); }
   .banner .progress p { color: rgba(255, 255, 255, .78); }
   .board { margin-bottom: 20px; }
-  .days { margin-top: 18px; }
+  .viewtabs { display: flex; gap: 6px; margin-top: 18px; border-bottom: 1px solid var(--line); }
+  .vt { border: 0; background: none; padding: 12px 16px; font-weight: 800; font-size: 15px; color: var(--muted); cursor: pointer; position: relative; display: inline-flex; align-items: center; gap: 8px; }
+  .vt::after { content: ''; position: absolute; left: 10px; right: 10px; bottom: -1px; height: 3px; border-radius: 3px; background: var(--red); transform: scaleX(0); transition: transform .35s var(--spring); }
+  .vt[aria-selected='true'] { color: var(--ink); }
+  .vt[aria-selected='true']::after { transform: scaleX(1); }
+  .cnt { font-size: 12px; background: var(--paper-2); border-radius: 999px; padding: 1px 8px; color: var(--ink-2); }
+  .vt[aria-selected='true'] .cnt { background: var(--red); color: #fff; }
+  .tnews { padding-top: 22px; }
+  .tn-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 18px; }
+  .tn { display: flex; flex-direction: column; overflow: hidden; text-decoration: none; }
+  .tn :global(.tn-art) { aspect-ratio: 16 / 8; }
+  .tn-copy { padding: 16px 18px 20px; display: flex; flex-direction: column; gap: 6px; }
+  .tn time { font-size: 12px; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; color: var(--red); }
+  .tn h3 { font-size: 19px; }
+  .tn p { margin: 0; color: var(--muted); font-size: 14px; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+  .days { margin-top: 14px; }
   .dayhead { font-size: 15px; font-family: var(--body); font-weight: 800; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); display: flex; align-items: center; gap: 14px; margin-top: 34px; }
   .dayhead::after { content: ''; flex: 1; height: 1px; background: var(--line); }
   .board :global(.spinner) { display: inline-block; width: 26px; height: 26px; border-radius: 50%; border: 3px solid var(--line); border-top-color: var(--red); animation: spin .8s linear infinite; margin-bottom: 10px; }
@@ -226,13 +287,7 @@ const prog = progress(t);
   .board :global(.avg i) { font-style: normal; font-family: var(--body); font-size: 9px; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); margin-bottom: 3px; }
   .board :global(.avg.best) { background: var(--ink); color: #fff; }
   .board :global(.avg.best i) { color: rgba(255, 255, 255, .7); }
-  .board :global(.fx-stats) { grid-column: 1 / -1; display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; border-top: 1px dashed var(--line); padding-top: 9px; margin-top: 2px; }
-  .board :global(.sx) { display: grid; grid-template-columns: 1fr auto 1fr; align-items: baseline; gap: 6px; font-size: 13px; font-variant-numeric: tabular-nums; }
-  .board :global(.sx b) { font-weight: 700; color: var(--muted); text-align: right; }
-  .board :global(.sx b:last-child) { text-align: left; }
-  .board :global(.sx b.up) { color: var(--ink); }
-  .board :global(.sx span) { font-size: 10px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); white-space: nowrap; }
-  .board :global(.fx.stats-in .avg), .board :global(.fx.stats-in .fx-stats) { animation: statsin .6s var(--ease); }
+  .board :global(.fx.stats-in .avg) { animation: statsin .6s var(--ease); }
   @keyframes statsin { from { opacity: 0; transform: translateY(4px); } }
   .board :global(.wbadge) { font-style: normal; color: var(--green); font-weight: 800; margin-left: 4px; }
   .board :global(.mid) { text-align: center; min-width: 96px; }
@@ -252,6 +307,5 @@ const prog = progress(t);
     .board :global(.mid) { text-align: left; display: flex; align-items: center; gap: 10px; padding-left: 10px; }
     .board :global(.sc) { font-size: 22px; }
     .board :global(.pl.r .avg) { margin-left: auto; margin-right: 0; }
-    .board :global(.fx-stats) { grid-template-columns: repeat(2, 1fr); row-gap: 8px; }
-  }
+    }
 </style>

@@ -1,0 +1,33 @@
+{
+ "kind": "recap",
+ "tournament": "10868",
+ "date": "2026-09-20T22:00:00.000Z",
+ "headline": "Ross Smith beats Price 11-5 to win the World Series of Darts Finals",
+ "standfirst": "Ross Smith won the World Series Finals in Amsterdam with a 103.89 average in the final and a tournament-high 29 maximums.",
+ "body": [
+  "Ross Smith won the World Series of Darts Finals at AFAS Live in Amsterdam, beating Gerwyn Price 11-5 in the final. Smith averaged 103.89 to Price's 97.28.",
+  "Smith beat Kevin Doets 6-3 with a 102.98 average, then Daryl Gurney 10-5 and Josh Rock 10-7. He was below his best in the semi-finals but still beat Gian van Veen 11-8.",
+  "Price had been the player in form before the final. He averaged 103.86 to beat James Wade 10-7, including a 170 checkout, and 104.07 in an 11-7 semi-final win over Jonny Clayton. That was the highest average of the tournament.",
+  "Clayton beat Luke Littler 10-4 in the quarter-finals. Gurney also hit a 170 checkout, against Michael van Gerwen in the last 32.",
+  "Smith hit 29 of the event's 242 maximums. Price hit 25 and Dirk van Duijvenbode 22."
+ ],
+ "tags": [
+  "World Series",
+  "World Series of Darts Finals"
+ ],
+ "players": [
+  "Ross Smith",
+  "Gerwyn Price",
+  "Jonny Clayton",
+  "Gian van Veen"
+ ],
+ "slug": "ross-smith-beats-price-11-5-to-win-the-world-series-of-darts-finals",
+ "writtenBy": "The Oche newsdesk (Claude)",
+ "sources": [
+  {
+   "name": "PDC",
+   "url": "https://www.pdc.tv/tournament-hub/10868",
+   "title": "Tournament results and match statistics"
+  }
+ ]
+}

@@ -1,6 +1,6 @@
 {
   "name": "the-oche",
-  "description": "The Oche — PDC darts calendar, matches, news and rankings",
+  "description": "The Oche \u2014 PDC darts calendar, matches, news and rankings",
   "scripts": {
     "dev": "astro dev",
     "build": "astro build",
@@ -11,7 +11,8 @@
     "data:players": "node scripts/refresh-players.mjs",
     "data:fast": "node scripts/refresh-calendar.mjs && node scripts/refresh-rankings.mjs && node scripts/refresh-tournament.mjs",
     "news": "node scripts/news/run.mjs",
-    "test": "node --test tests/"
+    "test": "node --test tests/",
+    "recap-facts": "node scripts/news/recap-facts.mjs"
   },
   "type": "module",
   "dependencies": {

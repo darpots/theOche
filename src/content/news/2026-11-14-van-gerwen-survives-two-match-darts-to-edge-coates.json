@@ -10,13 +10,34 @@
   "The match was one of the best of the opening night, with nine maximums between the two players.",
   "Van Gerwen had spoken before the tournament about his recent weight loss and his determination not to slip back into old habits. After the match he described the last spell as one of the toughest of his life, but said he was relishing the fight, according to Dartsnews."
  ],
- "tags": ["Grand Slam of Darts"],
- "players": ["Michael van Gerwen", "Henry Coates"],
- "sources": [
-  { "name": "Dartsnews", "url": "https://dartsnews.com/pdc/one-of-the-toughest-periods-in-my-life-michael-van-gerwen-relishes-the-fight-after-surviving-two-match-darts-at-grand-slam-of-darts", "title": "“One of the toughest periods in my life” - Michael van Gerwen relishes the fight after surviving two match darts" },
-  { "name": "Dartsnews", "url": "https://dartsnews.com/pdc/i-dont-want-to-go-back-to-the-old-michael-michael-van-gerwen-reflects-on-weight-loss-as-he-bids-to-end-tv-losing-run-at-grand-slam-of-darts", "title": "“I don’t want to go back to the old Michael” - Michael van Gerwen reflects on weight loss" },
-  { "name": "Darts World", "url": "https://dartsworld.com/2026/11/littler-extends-wolverhampton-unbeaten-run-with-greaves-win/", "title": "Littler Extends Wolverhampton Unbeaten Run With Greaves Win" }
+ "tags": [
+  "Grand Slam of Darts"
  ],
- "originalTitles": ["“One of the toughest periods in my life” - Michael van Gerwen relishes the fight after surviving two match darts at Grand Slam of Darts", "“I don’t want to go back to the old Michael” - Michael van Gerwen reflects on weight loss as he bids to end TV losing run at Grand Slam of Darts"],
- "writtenBy": "The Oche newsdesk (launch edition)"
+ "players": [
+  "Michael van Gerwen",
+  "Henry Coates"
+ ],
+ "sources": [
+  {
+   "name": "Dartsnews",
+   "url": "https://dartsnews.com/pdc/one-of-the-toughest-periods-in-my-life-michael-van-gerwen-relishes-the-fight-after-surviving-two-match-darts-at-grand-slam-of-darts",
+   "title": "“One of the toughest periods in my life” - Michael van Gerwen relishes the fight after surviving two match darts"
+  },
+  {
+   "name": "Dartsnews",
+   "url": "https://dartsnews.com/pdc/i-dont-want-to-go-back-to-the-old-michael-michael-van-gerwen-reflects-on-weight-loss-as-he-bids-to-end-tv-losing-run-at-grand-slam-of-darts",
+   "title": "“I don’t want to go back to the old Michael” - Michael van Gerwen reflects on weight loss"
+  },
+  {
+   "name": "Darts World",
+   "url": "https://dartsworld.com/2026/11/littler-extends-wolverhampton-unbeaten-run-with-greaves-win/",
+   "title": "Littler Extends Wolverhampton Unbeaten Run With Greaves Win"
+  }
+ ],
+ "originalTitles": [
+  "“One of the toughest periods in my life” - Michael van Gerwen relishes the fight after surviving two match darts at Grand Slam of Darts",
+  "“I don’t want to go back to the old Michael” - Michael van Gerwen reflects on weight loss as he bids to end TV losing run at Grand Slam of Darts"
+ ],
+ "writtenBy": "The Oche newsdesk (launch edition)",
+ "tournament": "10871"
 }

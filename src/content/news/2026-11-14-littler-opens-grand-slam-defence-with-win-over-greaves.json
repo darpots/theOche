@@ -11,12 +11,32 @@
   "Elsewhere on the opening night, World Grand Prix champion Luke Humphries averaged 105.70 in a 5-3 win over Paolo Nebrida, and Gian van Veen posted 110.51 in beating Carl Sneyd 5-2. James Wade, Gerwyn Price and Chris Dobey also won their openers.",
   "The tournament has been expanded this year, with 48 group matches across the first three days. Greaves meets Niels Zonneveld in her second group game on Sunday."
  ],
- "tags": ["Grand Slam of Darts"],
- "players": ["Luke Littler", "Beau Greaves", "Luke Humphries", "Gian van Veen"],
- "sources": [
-  { "name": "BBC Sport", "url": "https://www.bbc.co.uk/sport/darts/articles/c61mdlgd94zno", "title": "Littler beats Greaves to start Grand Slam defence" },
-  { "name": "Darts World", "url": "https://dartsworld.com/2026/11/littler-extends-wolverhampton-unbeaten-run-with-greaves-win/", "title": "Littler Extends Wolverhampton Unbeaten Run With Greaves Win" }
+ "tags": [
+  "Grand Slam of Darts"
  ],
- "originalTitles": ["Littler beats Greaves to start Grand Slam defence", "Littler Extends Wolverhampton Unbeaten Run With Greaves Win", "“He’s ten times better than me” – Beau Greaves admits Luke Littler differential ahead of standout Grand Slam tie"],
- "writtenBy": "The Oche newsdesk (launch edition)"
+ "players": [
+  "Luke Littler",
+  "Beau Greaves",
+  "Luke Humphries",
+  "Gian van Veen"
+ ],
+ "sources": [
+  {
+   "name": "BBC Sport",
+   "url": "https://www.bbc.co.uk/sport/darts/articles/c61mdlgd94zno",
+   "title": "Littler beats Greaves to start Grand Slam defence"
+  },
+  {
+   "name": "Darts World",
+   "url": "https://dartsworld.com/2026/11/littler-extends-wolverhampton-unbeaten-run-with-greaves-win/",
+   "title": "Littler Extends Wolverhampton Unbeaten Run With Greaves Win"
+  }
+ ],
+ "originalTitles": [
+  "Littler beats Greaves to start Grand Slam defence",
+  "Littler Extends Wolverhampton Unbeaten Run With Greaves Win",
+  "“He’s ten times better than me” – Beau Greaves admits Luke Littler differential ahead of standout Grand Slam tie"
+ ],
+ "writtenBy": "The Oche newsdesk (launch edition)",
+ "tournament": "10871"
 }

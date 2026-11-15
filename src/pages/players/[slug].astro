@@ -1,0 +1,298 @@
+---
+// A full profile page for each of the top 128: season stats (darts-weighted
+// average, first 9, 180s, checkout), record, career titles, tournament
+// history and the latest news about the player.
+import Layout from '../../layouts/Layout.astro';
+import { getCollection } from 'astro:content';
+import cutouts from '../../data/cutouts.json';
+import portraitsRaw from '../../data/portraits.json';
+import { rankedProfiles, playerHref } from '../../lib/players';
+import { flag, countryName, age, keyName } from '../../lib/pdc.mjs';
+import { money, avatarColours, initials, newsDate } from '../../lib/format.mjs';
+
+export function getStaticPaths() {
+  const list = rankedProfiles();
+  return list.map(({ rank, profile }, i) => ({
+    params: { slug: profile.slug },
+    props: { rank, profile, prev: list[i - 1]?.profile ?? null, next: list[i + 1]?.profile ?? null },
+  }));
+}
+
+const { rank, profile: p, prev, next } = Astro.props as any;
+const cut = (cutouts as Record<string, string>)[keyName(p.name)];
+const portrait = (portraitsRaw as Record<string, { image: string }>)[keyName(p.name)]?.image;
+const [c1, c2] = avatarColours(p.name);
+const s = p.season;
+const st = s.stats;
+const winPct = s.played ? Math.round((s.won / s.played) * 100) : 0;
+const legPct = s.legsFor + s.legsAgainst ? Math.round((s.legsFor / (s.legsFor + s.legsAgainst)) * 100) : 0;
+const career = Object.entries(p.career || {}) as [string, number][];
+const careerMax = Math.max(1, ...career.map(c => c[1]));
+const yrs = age(p.dob);
+
+const groups = [
+  { k: 'major', label: 'Majors', test: (h: any) => !h.tag && !/masters$|world series/i.test(h.name) },
+  { k: 'ws', label: 'World Series', test: (h: any) => /masters$|world series/i.test(h.name) && !/^the masters$/i.test(h.name) },
+  { k: 'et', label: 'European Tour', test: (h: any) => /^European Tour/.test(h.tag || '') },
+];
+const finishClass = (label: string) => label === 'Winner' ? 'f-win' : label === 'Runner-up' ? 'f-ru' : /semi/i.test(label) ? 'f-sf' : /quarter/i.test(label) ? 'f-qf' : '';
+const bySeason = new Map<number, any[]>();
+for (const h of p.history) { if (!bySeason.has(h.season)) bySeason.set(h.season, []); bySeason.get(h.season)!.push(h); }
+const titles = p.history.filter((h: any) => h.label === 'Winner').length;
+const finals = p.history.filter((h: any) => h.label === 'Winner' || h.label === 'Runner-up').length;
+
+const facts = [
+  ['Age', yrs != null ? `${yrs}` : null],
+  ['Born', p.dob ? new Date(p.dob + 'T12:00:00Z').toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' }) : null],
+  ['Hometown', p.hometown],
+  ['Darts', p.darts],
+  ['Walk-on', p.walkOn],
+  ['Throws', p.leftHanded ? 'Left-handed' : 'Right-handed'],
+  ['Started playing', p.started],
+  ['Nine-darters', p.nineDarters],
+  ['Tour Card', p.tourCard ? 'Yes' : 'No'],
+].filter(([, v]) => v != null && v !== '');
+
+const news = (await getCollection('news'))
+  .filter(n => n.data.players.some(x => keyName(x) === keyName(p.name)))
+  .sort((a, b) => b.data.date.localeCompare(a.data.date))
+  .slice(0, 4);
+---
+<Layout title={p.name} description={`${p.name}: world ranking, ${s.year} season average, darts, titles and full PDC tournament history.`} active="rankings">
+  <section class="pbanner">
+    <svg class="prings" viewBox="-100 -100 200 200" aria-hidden="true"><circle r="96" /><circle r="80" /><circle r="58" /><circle r="40" /><circle r="12" /></svg>
+    <div class="wrap pb-in">
+      <div class="pb-copy">
+        <a class="back" href="/rankings">← Rankings</a>
+        <p class="kick"><span class="rk">World #{rank.pos}</span>{p.tourCard && <span class="tc">Tour Card</span>}</p>
+        <h1>{p.name}</h1>
+        {p.nick && <p class="nick">“{p.nick}”</p>}
+        <p class="where">{flag(p.country)} {countryName(p.country)}{p.hometown && <> · {p.hometown}</>}</p>
+        <dl class="kpis">
+          <div><dt>Prize money (2 yrs)</dt><dd>{money(rank.money)}</dd></div>
+          <div><dt>{s.year} average</dt><dd>{st ? st.avg.toFixed(2) : '–'}</dd></div>
+          <div><dt>{s.year} titles</dt><dd>{s.titles.length}</dd></div>
+          <div><dt>Win rate</dt><dd>{s.played ? `${winPct}%` : '–'}</dd></div>
+        </dl>
+      </div>
+      <div class="pb-pic" aria-hidden="true">
+        {cut ? <img class="cut" src={cut} alt="" /> : <span class="avatar big" style={`--size:220px;--c1:${c1};--c2:${c2}`}>{portrait ? <img src={portrait} alt="" /> : initials(p.name)}</span>}
+      </div>
+    </div>
+  </section>
+
+  <div class="wrap page">
+    <main class="col-main">
+      <section class="block" data-reveal>
+        <h2>{s.year} season</h2>
+        {st ? (
+          <div class="avgcard">
+            <div class="big"><span>Season average</span><b data-count={st.avg}>{st.avg.toFixed(2)}</b><small>across {st.matches} matches, weighted by darts thrown</small></div>
+            <div class="minis">
+              <div><b>{st.f9 != null ? st.f9.toFixed(2) : '–'}</b><span>First 9 avg</span></div>
+              <div><b>{st.t80}</b><span>180s</span></div>
+              <div><b>{st.co != null ? `${st.co.toFixed(1)}%` : '–'}</b><span>Checkout</span></div>
+              <div><b>{st.hi ?? '–'}</b><span>Best finish</span></div>
+            </div>
+          </div>
+        ) : <p class="muted">No main-tour matches with stats yet this season.</p>}
+        <div class="stats">
+          <div class="ring"><svg viewBox="0 0 36 36"><circle cx="18" cy="18" r="15.9" class="bg" /><circle cx="18" cy="18" r="15.9" class="fg" style={`stroke-dasharray:${winPct} 100`} /></svg><b>{winPct}%</b><span>Matches won</span></div>
+          <div class="ring alt"><svg viewBox="0 0 36 36"><circle cx="18" cy="18" r="15.9" class="bg" /><circle cx="18" cy="18" r="15.9" class="fg" style={`stroke-dasharray:${legPct} 100`} /></svg><b>{legPct}%</b><span>Legs won</span></div>
+          <div class="num"><b>{s.won}–{s.lost}</b><span>Win–loss</span></div>
+          <div class="num"><b>{s.titles.length}</b><span>Titles</span></div>
+        </div>
+        {s.titles.length > 0 && <p class="titles">🏆 {s.titles.join(' · ')}</p>}
+        <p class="note">Covers PDC main-tour events: majors, Premier League, World Series, European Tour and Players Championships. Leg counts exclude set-play matches. Updated daily.</p>
+      </section>
+
+      <section class="block" data-reveal>
+        <div class="hh"><h2>Tournament history</h2><p class="muted">{p.history.length} events · {finals} finals · {titles} titles</p></div>
+        <div class="hfilter" role="group" aria-label="Filter history">
+          <button class="chip" data-g="all" aria-pressed="true">All</button>
+          {groups.map(g => <button class="chip" data-g={g.k} aria-pressed="false">{g.label}</button>)}
+        </div>
+        <div class="seasons">
+          {p.history.length ? [...bySeason.entries()].map(([yr, list]) => (
+            <div class="yr">
+              <h3>{yr}</h3>
+              <ul>
+                {list.map((h: any) => (
+                  <li data-g={groups.filter(g => g.test(h)).map(g => g.k).join(' ')}>
+                    <a class="ev" href={`/tournament/${h.id}`}>{h.name}{h.tag && <small> {h.tag}</small>}</a>
+                    <span class="hr">{h.avg && <i class="havg" title="Three-dart average">{h.avg.toFixed(2)}</i>}<span class={`fin ${finishClass(h.label)}`}>{h.label}</span></span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )) : <p class="muted">No major, World Series or European Tour appearances recorded yet.</p>}
+        </div>
+      </section>
+    </main>
+
+    <aside class="col-side">
+      <section class="block card facts" data-reveal>
+        <h2>Profile</h2>
+        <dl>{facts.map(([k, v]) => <div><dt>{k}</dt><dd>{v}</dd></div>)}</dl>
+        <a class="ext" href={`https://www.pdc.tv/players/${p.slug}`} target="_blank" rel="noopener">Official PDC profile ↗</a>
+      </section>
+
+      {career.length > 0 && (
+        <section class="block card" data-reveal>
+          <h2>Career titles</h2>
+          <div class="bars">
+            {career.map(([k, v]) => <div><span>{k.replace('Senior PDC Titles', 'All PDC titles')}</span><i style={`--w:${(v / careerMax) * 100}%`}></i><b>{v}</b></div>)}
+          </div>
+        </section>
+      )}
+
+      {news.length > 0 && (
+        <section class="block card" data-reveal>
+          <h2>In the news</h2>
+          <ul class="pnews">
+            {news.map(n => <li><a href={`/news/${n.data.slug}`}><time>{newsDate(n.data.date)}</time><span>{n.data.headline}</span></a></li>)}
+          </ul>
+        </section>
+      )}
+
+      <nav class="pn" aria-label="More players">
+        {prev && <a href={playerHref(prev.slug)}><small>← #{rank.pos - 1}</small>{prev.name}</a>}
+        {next && <a class="nx" href={playerHref(next.slug)}><small>#{rank.pos + 1} →</small>{next.name}</a>}
+      </nav>
+    </aside>
+  </div>
+
+  <script>
+    function init() {
+      const root = document.querySelector('.page');
+      if (!root) return;
+      root.querySelectorAll<HTMLElement>('.ring').forEach(el => requestAnimationFrame(() => el.classList.add('go')));
+      root.querySelectorAll<HTMLElement>('.bars i').forEach((el, i) => setTimeout(() => el.classList.add('go'), 200 + i * 80));
+      if (!matchMedia('(prefers-reduced-motion: reduce)').matches) root.querySelectorAll<HTMLElement>('[data-count]').forEach(el => {
+        const end = Number(el.dataset.count), t0 = performance.now();
+        const tick = (now: number) => { const k = Math.min(1, (now - t0) / 1200); el.textContent = (end * (1 - Math.pow(1 - k, 3))).toFixed(2); if (k < 1) requestAnimationFrame(tick); };
+        requestAnimationFrame(tick);
+      });
+      const chips = root.querySelectorAll<HTMLButtonElement>('.hfilter .chip');
+      chips.forEach(b => b.addEventListener('click', () => {
+        chips.forEach(c => c.setAttribute('aria-pressed', String(c === b)));
+        const k = b.dataset.g!;
+        root.querySelectorAll<HTMLElement>('.seasons li').forEach(li => { li.hidden = k !== 'all' && !li.dataset.g!.split(' ').includes(k); });
+        root.querySelectorAll<HTMLElement>('.seasons .yr').forEach(y => { y.hidden = !y.querySelector('li:not([hidden])'); });
+      }));
+    }
+    document.addEventListener('astro:page-load', init);
+  </script>
+</Layout>
+
+<style>
+  .pbanner { position: relative; overflow: hidden; isolation: isolate; color: #fff; background: radial-gradient(70% 120% at 85% 120%, rgba(215, 38, 61, .5), transparent 60%), radial-gradient(60% 90% at 0% -20%, rgba(14, 138, 95, .35), transparent 60%), linear-gradient(160deg, #191b26, #0d0e14 70%); }
+  .prings { position: absolute; z-index: -1; right: -6%; top: 55%; translate: 0 -50%; width: min(640px, 80vw); fill: none; stroke: rgba(255, 255, 255, .08); stroke-width: 1.2; animation: spin 140s linear infinite; }
+  .prings circle:nth-child(2) { stroke: rgba(14, 138, 95, .4); stroke-width: 6; stroke-dasharray: 13 13; }
+  .prings circle:nth-child(4) { stroke: rgba(215, 38, 61, .4); stroke-width: 5; stroke-dasharray: 10 10; }
+  @keyframes spin { to { rotate: 360deg; } }
+  .pb-in { display: grid; grid-template-columns: 1.2fr 1fr; align-items: end; gap: 20px; min-height: 440px; }
+  .pb-copy { padding: 28px 0 36px; align-self: center; }
+  .back { display: block; width: fit-content; color: rgba(255, 255, 255, .7); text-decoration: none; font-weight: 600; font-size: 14px; margin-bottom: 18px; transition: color .2s, transform .3s var(--spring); }
+  .back:hover { color: #fff; transform: translateX(-3px); }
+  .kick { display: flex; gap: 8px; margin: 0 0 10px; }
+  .rk { background: #fff; color: var(--ink); font-weight: 800; font-size: 13px; padding: 4px 12px; border-radius: 999px; }
+  .tc { border: 1px solid rgba(255, 255, 255, .3); font-weight: 700; font-size: 12px; padding: 4px 10px; border-radius: 999px; }
+  h1 { font-size: clamp(42px, 6.4vw, 84px); font-weight: 800; letter-spacing: -.04em; line-height: .95; }
+  .nick { margin: 8px 0 0; font-family: var(--display); font-size: 22px; color: #ff8a98; font-weight: 700; }
+  .where { margin: 10px 0 0; color: rgba(255, 255, 255, .75); font-weight: 500; }
+  .kpis { display: grid; grid-template-columns: repeat(4, auto); justify-content: start; gap: 10px 28px; margin: 26px 0 0; }
+  .kpis dt { font-size: 11px; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; color: rgba(255, 255, 255, .6); }
+  .kpis dd { margin: 4px 0 0; font-family: var(--display); font-size: 26px; font-weight: 800; font-variant-numeric: tabular-nums; }
+  .pb-pic { position: relative; align-self: stretch; display: flex; align-items: flex-end; justify-content: center; }
+  .pb-pic .cut { height: 430px; width: auto; max-width: none; filter: drop-shadow(0 20px 30px rgba(0, 0, 0, .5)); animation: rise 1s var(--ease) both; }
+  .pb-pic .avatar { margin-bottom: 40px; box-shadow: 0 0 0 6px rgba(255, 255, 255, .15); }
+  @keyframes rise { from { opacity: 0; transform: translateY(40px); } }
+
+  .page { display: grid; grid-template-columns: minmax(0, 1.75fr) minmax(0, 1fr); gap: 28px; margin-top: 30px; align-items: start; }
+  .block + .block { margin-top: 30px; }
+  .col-side .block + .block { margin-top: 18px; }
+  h2 { font-size: 24px; margin-bottom: 14px; }
+  .card.block { padding: 20px; }
+  .card.block h2 { font-size: 19px; }
+
+  .avgcard { display: grid; grid-template-columns: 1fr 1.3fr; gap: 12px; margin-bottom: 12px; }
+  .big { background: var(--ink); color: #fff; border-radius: 20px; padding: 20px 22px; display: flex; flex-direction: column; justify-content: center; position: relative; overflow: hidden; }
+  .big::after { content: ''; position: absolute; right: -64px; top: -64px; width: 124px; height: 124px; border-radius: 50%; border: 14px solid var(--red); box-shadow: 0 0 0 14px #14161f, 0 0 0 26px var(--green); }
+  .big span { font-size: 11px; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; color: #ff8a98; }
+  .big b { font-family: var(--display); font-size: 60px; font-weight: 800; letter-spacing: -.03em; line-height: 1; margin: 8px 0 6px; font-variant-numeric: tabular-nums; }
+  .big small { color: rgba(255, 255, 255, .65); font-size: 12px; font-weight: 600; }
+  .minis { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
+  .minis div, .ring, .num { background: var(--card); border: 1px solid var(--line); border-radius: 16px; padding: 14px 16px; }
+  .minis div { display: flex; flex-direction: column; justify-content: center; }
+  .minis b { font-family: var(--display); font-size: 26px; font-variant-numeric: tabular-nums; }
+  .minis span, .num span, .ring span { font-size: 11px; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); }
+  .stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+  .ring, .num { display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; position: relative; }
+  .ring svg { width: 76px; height: 76px; transform: rotate(-90deg); }
+  .ring circle { fill: none; stroke-width: 3.4; }
+  .ring .bg { stroke: var(--paper-2); }
+  .ring .fg { stroke: var(--green); stroke-linecap: round; stroke-dashoffset: 100; transition: stroke-dashoffset 1.4s var(--ease); }
+  .ring.alt .fg { stroke: var(--red); }
+  .ring.go .fg { stroke-dashoffset: 0; }
+  .ring b { position: absolute; top: 44px; font-family: var(--display); font-size: 18px; }
+  .num b { font-family: var(--display); font-size: 30px; }
+  .titles { margin: 12px 0 0; font-weight: 600; font-size: 14px; background: var(--gold-soft); border-radius: 12px; padding: 10px 14px; }
+  .note { font-size: 12px; color: var(--muted); margin: 10px 0 0; }
+
+  .hh { display: flex; justify-content: space-between; align-items: baseline; flex-wrap: wrap; gap: 8px; }
+  .hh h2 { margin: 0; }
+  .hh p { margin: 0; font-size: 13px; }
+  .hfilter { display: flex; gap: 6px; flex-wrap: wrap; margin: 12px 0 8px; }
+  .hfilter .chip { padding: 6px 12px; font-size: 13px; }
+  .yr { display: grid; grid-template-columns: 64px 1fr; gap: 12px; padding: 12px 0; border-top: 1px solid var(--line); }
+  .yr h3 { font-size: 18px; color: var(--muted); padding-top: 4px; }
+  .yr ul { list-style: none; margin: 0; padding: 0; }
+  .yr li { display: flex; justify-content: space-between; align-items: center; gap: 10px; padding: 6px 8px; margin: 0 -8px; border-radius: 10px; font-size: 15px; transition: background .2s; }
+  .yr li:hover { background: var(--card); }
+  .ev { text-decoration: none; font-weight: 600; }
+  .ev:hover { color: var(--red); }
+  .ev small { color: var(--muted); font-weight: 500; }
+  .hr { display: inline-flex; align-items: center; gap: 10px; flex: none; }
+  .havg { font-style: normal; font-size: 13px; font-weight: 800; font-variant-numeric: tabular-nums; color: var(--ink-2); }
+  .fin { font-size: 12px; font-weight: 700; padding: 2px 10px; border-radius: 99px; background: var(--paper-2); color: var(--ink-2); }
+  .f-win { background: linear-gradient(135deg, #e8c766, var(--gold)); color: #3d2e05; }
+  .f-ru { background: #e9ecf2; color: #39404f; }
+  .f-sf { background: var(--green-soft); color: #075c3f; }
+  .f-qf { background: var(--sky-soft); color: #1b2f8f; }
+
+  .facts dl { margin: 0; }
+  .facts dl div { display: flex; justify-content: space-between; gap: 12px; padding: 8px 0; border-top: 1px solid var(--line); font-size: 14px; }
+  .facts dl div:first-child { border-top: 0; }
+  .facts dt { color: var(--muted); font-weight: 600; }
+  .facts dd { margin: 0; font-weight: 700; text-align: right; }
+  .ext { display: inline-block; margin-top: 12px; font-size: 13px; font-weight: 700; color: var(--red); text-decoration: none; }
+  .bars > div { display: grid; grid-template-columns: 110px 1fr 32px; align-items: center; gap: 10px; margin: 8px 0; font-size: 13px; font-weight: 600; }
+  .bars i { height: 10px; border-radius: 9px; background: var(--paper-2); position: relative; overflow: hidden; }
+  .bars i::after { content: ''; position: absolute; inset: 0; width: 0; background: linear-gradient(90deg, var(--gold), #e8c766); border-radius: 9px; transition: width 1s var(--ease); }
+  .bars i.go::after { width: var(--w); }
+  .bars b { text-align: right; font-family: var(--display); }
+  .pnews { list-style: none; margin: 0; padding: 0; }
+  .pnews li + li { border-top: 1px solid var(--line); }
+  .pnews a { display: flex; flex-direction: column; gap: 2px; padding: 10px 0; text-decoration: none; }
+  .pnews time { font-size: 11px; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; color: var(--red); }
+  .pnews span { font-weight: 700; font-size: 15px; line-height: 1.3; }
+  .pnews a:hover span { color: var(--red); }
+  .pn { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 18px; }
+  .pn a { display: flex; flex-direction: column; padding: 12px 14px; border-radius: 14px; border: 1px solid var(--line); background: var(--card); text-decoration: none; font-weight: 700; font-size: 14px; transition: transform .3s var(--spring), border-color .2s; }
+  .pn a:hover { transform: translateY(-2px); border-color: var(--ink); }
+  .pn small { font-size: 11px; color: var(--muted); font-weight: 800; letter-spacing: .08em; }
+  .pn .nx { text-align: right; grid-column: 2; }
+
+  @media (max-width: 900px) {
+    .pb-in { grid-template-columns: 1fr; min-height: 0; }
+    .pb-pic { order: -1; height: 300px; margin-top: 16px; }
+    .pb-pic .cut { height: 300px; }
+    .pb-copy { padding-top: 0; }
+    .kpis { grid-template-columns: repeat(2, auto); }
+    .page { grid-template-columns: 1fr; }
+    .avgcard { grid-template-columns: 1fr; }
+    .stats { grid-template-columns: repeat(2, 1fr); }
+  }
+  @media (max-width: 900px) { .back { position: absolute; top: 16px; } }
+</style>

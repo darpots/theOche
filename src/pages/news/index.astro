@@ -4,7 +4,9 @@ import Layout from '../../layouts/Layout.astro';
 import NewsArt from '../../components/NewsArt.astro';
 import { newsDate } from '../../lib/format.mjs';
 
-const cutoff = Date.now() - 90 * 864e5;
+// The news page shows the last month. (Tournament round-ups stay longer and
+// are listed on their tournament's page.)
+const cutoff = Date.now() - 31 * 864e5;
 const stories = (await getCollection('news'))
   .map(s => s.data)
   .filter(s => Date.parse(s.date) >= cutoff)
@@ -16,7 +18,7 @@ const tags = [...new Set(stories.flatMap(s => s.tags))].slice(0, 10);
   <section class="hero wrap">
     <span class="eyebrow">Newsdesk</span>
     <h1>The latest from <span class="accent">the tour.</span></h1>
-    <p class="lede">Original reports on the PDC, refreshed through the day. Every story is dated and links to its sources, and nothing stays longer than three months.</p>
+    <p class="lede">Original reports on the PDC, refreshed through the day. Every story is dated and links to its sources, and the page covers the last month.</p>
   </section>
 
   {!lead ? (
@@ -30,7 +32,7 @@ const tags = [...new Set(stories.flatMap(s => s.tags))].slice(0, 10);
         </div>
       )}
       <a href={`/news/${lead.slug}`} class="lead card lift" data-tags={lead.tags.join('|')} data-reveal>
-        <NewsArt seed={lead.slug} label={lead.tags[0]} class="lead-art" players={lead.players} />
+        <NewsArt story={lead} label={lead.tags[0]} class="lead-art" eager />
         <div class="lead-copy">
           <time datetime={lead.date}>{newsDate(lead.date)}</time>
           <h2 transition:name={`h-${lead.slug}`}>{lead.headline}</h2>
@@ -41,7 +43,7 @@ const tags = [...new Set(stories.flatMap(s => s.tags))].slice(0, 10);
       <div class="list">
         {rest.map((s, i) => (
           <a href={`/news/${s.slug}`} class="story card lift" data-tags={s.tags.join('|')} data-reveal style={`--d:${(i % 3) * 80}ms`}>
-            <NewsArt seed={s.slug} label={s.tags[0]} class="story-art" players={s.players} />
+            <NewsArt story={s} label={s.tags[0]} class="story-art" />
             <div class="story-copy">
               <time datetime={s.date}>{newsDate(s.date)}</time>
               <h3 transition:name={`h-${s.slug}`}>{s.headline}</h3>

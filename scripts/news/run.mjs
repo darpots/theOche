@@ -4,7 +4,8 @@
 //     published (same source URL, or same players + event within a few days).
 //  3. Ask a free-tier LLM to write an ORIGINAL report from the
 //     source material (and to flag anything that duplicates a recent report).
-//  4. Save to src/content/news/*.json and delete reports older than 90 days.
+//  4. Save to src/content/news/*.json and delete old reports (31 days; tournament
+//     round-ups are kept for 200 days so tournament pages can show them).
 //
 // Runs in GitHub Actions using the NEWS_API_KEY repository secret (free
 // Google Gemini key by default). Without a key it only prints what it would write.
@@ -15,7 +16,8 @@ import { keyName } from '../../src/lib/pdc.mjs';
 
 const ROOT = new URL('../../', import.meta.url).pathname;
 const DIR = `${ROOT}src/content/news/`;
-const MAX_AGE_DAYS = 90;
+const MAX_AGE_DAYS = 31;
+const RECAP_MAX_AGE_DAYS = 200;
 const LOOKBACK_HOURS = Number(process.env.NEWS_LOOKBACK_HOURS || 48);
 const MAX_NEW = Number(process.env.NEWS_MAX_NEW || 6);
 // Any OpenAI-compatible chat API works. Defaults to Google Gemini's free tier.
@@ -52,7 +54,7 @@ const now = Date.now();
 for (const f of await readdir(DIR)) {
   if (!f.endsWith('.json')) continue;
   const a = JSON.parse(await readFile(DIR + f, 'utf8'));
-  if ((now - Date.parse(a.date)) / 864e5 > MAX_AGE_DAYS) { await unlink(DIR + f); log(`pruned ${f}`); continue; }
+  if ((now - Date.parse(a.date)) / 864e5 > (a.kind === 'recap' ? RECAP_MAX_AGE_DAYS : MAX_AGE_DAYS)) { await unlink(DIR + f); log(`pruned ${f}`); continue; }
   published.push({ file: f, ...a });
 }
 const usedUrls = new Set(published.flatMap(a => a.sources.map(s => s.url)));

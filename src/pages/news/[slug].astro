@@ -4,9 +4,12 @@ import Layout from '../../layouts/Layout.astro';
 import NewsArt from '../../components/NewsArt.astro';
 
 export async function getStaticPaths() {
-  const cutoff = Date.now() - 90 * 864e5;
-  const all = (await getCollection('news')).map(s => s.data).filter(s => Date.parse(s.date) >= cutoff).sort((a, b) => b.date.localeCompare(a.date));
-  return all.map(story => ({ params: { slug: story.slug }, props: { story, more: all.filter(s => s.slug !== story.slug).slice(0, 3) } }));
+  const all = (await getCollection('news')).map(s => s.data).sort((a, b) => b.date.localeCompare(a.date));
+  const related = (story: (typeof all)[number]) => {
+    const same = all.filter(s => s.slug !== story.slug && story.tournament && s.tournament === story.tournament);
+    return [...same, ...all.filter(s => s.slug !== story.slug && !same.includes(s))].slice(0, 3);
+  };
+  return all.map(story => ({ params: { slug: story.slug }, props: { story, more: related(story) } }));
 }
 const { story, more } = Astro.props;
 const published = new Date(story.date).toLocaleDateString('en-GB', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
@@ -20,7 +23,7 @@ const published = new Date(story.date).toLocaleDateString('en-GB', { weekday: 'l
       <p class="stand">{story.standfirst}</p>
       <p class="byline muted">By The Oche newsdesk · <time datetime={story.date}>{published}</time></p>
     </header>
-    <NewsArt seed={story.slug} class="cover" label={story.tags[0]} players={story.players} />
+    <NewsArt story={story} class="cover" eager />
     <div class="text">
       {story.body.map((p, i) => <p data-reveal style={`--d:${Math.min(i, 3) * 60}ms`}>{p}</p>)}
     </div>

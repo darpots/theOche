@@ -9,12 +9,28 @@
   "Despite the win, Rodriguez admitted his immediate future is uncertain. Speaking after the match, he said he expects to have to return to Qualifying School to fight for his Tour Card, according to Dartsnews.",
   "For Smith, a two-time major winner, the defeat leaves him needing to respond in his remaining group matches to reach the last 16."
  ],
- "tags": ["Grand Slam of Darts"],
- "players": ["Rusty-Jake Rodriguez", "Ross Smith"],
- "sources": [
-  { "name": "Dartsnews", "url": "https://dartsnews.com/pdc/i-need-to-go-back-to-q-school-rusty-jake-rodriguez-faces-fight-for-his-tour-card-despite-stunning-ross-smith-at-grand-slam-of-darts", "title": "“I need to go back to Q-School” - Rusty-Jake Rodriguez faces fight for his Tour Card" },
-  { "name": "BBC Sport", "url": "https://www.bbc.co.uk/sport/darts/articles/c61mdlgd94zno", "title": "Littler beats Greaves to start Grand Slam defence" }
+ "tags": [
+  "Grand Slam of Darts"
  ],
- "originalTitles": ["“I need to go back to Q-School” - Rusty-Jake Rodriguez faces fight for his Tour Card despite stunning Ross Smith at Grand Slam of Darts"],
- "writtenBy": "The Oche newsdesk (launch edition)"
+ "players": [
+  "Rusty-Jake Rodriguez",
+  "Ross Smith"
+ ],
+ "sources": [
+  {
+   "name": "Dartsnews",
+   "url": "https://dartsnews.com/pdc/i-need-to-go-back-to-q-school-rusty-jake-rodriguez-faces-fight-for-his-tour-card-despite-stunning-ross-smith-at-grand-slam-of-darts",
+   "title": "“I need to go back to Q-School” - Rusty-Jake Rodriguez faces fight for his Tour Card"
+  },
+  {
+   "name": "BBC Sport",
+   "url": "https://www.bbc.co.uk/sport/darts/articles/c61mdlgd94zno",
+   "title": "Littler beats Greaves to start Grand Slam defence"
+  }
+ ],
+ "originalTitles": [
+  "“I need to go back to Q-School” - Rusty-Jake Rodriguez faces fight for his Tour Card despite stunning Ross Smith at Grand Slam of Darts"
+ ],
+ "writtenBy": "The Oche newsdesk (launch edition)",
+ "tournament": "10871"
 }

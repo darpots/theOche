@@ -59,6 +59,7 @@ const fullTitle = title === 'The Oche' ? title : `${title} · The Oche`;
         if (p === '/') return 'calendar';
         const [, a, b] = p.split('/');
         if (a === 'tournament') return b === document.querySelector<HTMLElement>('.top nav')?.dataset.current ? 'matches' : 'calendar';
+        if (a === 'players') return 'rankings';
         return a;
       };
       // The header is persisted across page swaps, and re-inserting it cancels
