@@ -2,12 +2,12 @@
 //  1. Discover recent darts stories from free RSS feeds.
 //  2. Group feed items that cover the same story, and drop stories already
 //     published (same source URL, or same players + event within a few days).
-//  3. Ask a free GitHub Models LLM to write an ORIGINAL report from the
+//  3. Ask a free-tier LLM to write an ORIGINAL report from the
 //     source material (and to flag anything that duplicates a recent report).
 //  4. Save to src/content/news/*.json and delete reports older than 90 days.
 //
-// Runs in GitHub Actions with the built-in GITHUB_TOKEN (permissions: models: read).
-// Without a token it only prints what it would write (`--dry`).
+// Runs in GitHub Actions using the NEWS_API_KEY repository secret (free
+// Google Gemini key by default). Without a key it only prints what it would write.
 import { readdir, readFile, writeFile, unlink, mkdir } from 'node:fs/promises';
 import { XMLParser } from 'fast-xml-parser';
 import { get, log, sleep } from '../lib.mjs';
@@ -18,9 +18,12 @@ const DIR = `${ROOT}src/content/news/`;
 const MAX_AGE_DAYS = 90;
 const LOOKBACK_HOURS = Number(process.env.NEWS_LOOKBACK_HOURS || 48);
 const MAX_NEW = Number(process.env.NEWS_MAX_NEW || 6);
-const MODEL = process.env.NEWS_MODEL || 'openai/gpt-4.1-mini';
-const TOKEN = process.env.GITHUB_TOKEN || process.env.GH_MODELS_TOKEN;
+// Any OpenAI-compatible chat API works. Defaults to Google Gemini's free tier.
+const API_URL = process.env.NEWS_API_URL || 'https://generativelanguage.googleapis.com/v1beta/openai/chat/completions';
+const MODEL = process.env.NEWS_MODEL || 'gemini-2.5-flash';
+const TOKEN = process.env.NEWS_API_KEY;
 const DRY = process.argv.includes('--dry') || !TOKEN;
+if (!TOKEN && !process.argv.includes('--dry')) console.warn('NEWS_API_KEY not set: running in dry mode (old reports are still pruned).');
 const DUMP = process.argv.find(a => a.startsWith('--dump='))?.slice(7);
 const dumped = [];
 
@@ -111,17 +114,20 @@ async function sourceText(url) {
 
 async function llm(messages) {
   for (let attempt = 0; attempt < 3; attempt++) {
-    const res = await fetch('https://models.github.ai/inference/chat/completions', {
+    const res = await fetch(API_URL, {
       method: 'POST',
       headers: { authorization: `Bearer ${TOKEN}`, 'content-type': 'application/json', accept: 'application/json' },
       body: JSON.stringify({ model: MODEL, messages, temperature: 0.5, response_format: { type: 'json_object' } }),
     });
     if (res.status === 429) { await sleep(20_000 * (attempt + 1)); continue; }
-    if (!res.ok) throw new Error(`GitHub Models ${res.status}: ${await res.text()}`);
-    const body = await res.json();
-    return JSON.parse(body.choices[0].message.content);
+    const raw = await res.text();
+    if (!res.ok) throw new Error(`News model API ${res.status}: ${raw.slice(0, 300)}`);
+    let body;
+    try { body = JSON.parse(raw); } catch { throw new Error(`News model API returned non-JSON: ${raw.slice(0, 120)}`); }
+    const content = body.choices?.[0]?.message?.content || '';
+    return JSON.parse(content.replace(/^```(?:json)?\s*|\s*```$/g, ''));
   }
-  throw new Error('GitHub Models rate limit');
+  throw new Error('News model API rate limit');
 }
 
 const SYSTEM = `You are a sports journalist for "The Oche", an independent PDC darts news site.
