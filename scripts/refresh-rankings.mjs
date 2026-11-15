@@ -18,5 +18,15 @@ if (prev?.players && order(prev.players) !== order(players)) {
   changedAt = new Date().toISOString();
 }
 
-const changed = await writeJsonIfChanged(OUT, { changedAt, players, previous });
+// Rank history for sparklines: one snapshot each time the official order
+// changes (after each ranking event), positions for the top 150, last 26 kept.
+let history = prev?.history ?? [];
+const snap = Object.fromEntries(players.filter(p => p.pos <= 150).map(p => [p.id, p.pos]));
+if (!history.length || order(players) !== (prev?.players ? order(prev.players) : '')) {
+  if (!history.length && prev?.previous) history.push({ d: prev.changedAt?.slice(0, 10) ?? null, pos: prev.previous });
+  if (!history.length || JSON.stringify(history[history.length - 1].pos) !== JSON.stringify(snap)) history.push({ d: new Date().toISOString().slice(0, 10), pos: snap });
+}
+history = history.slice(-26);
+
+const changed = await writeJsonIfChanged(OUT, { changedAt, players, previous, history });
 log(`rankings: ${players.length} players (${changed ? 'updated' : 'unchanged'})`);

@@ -7,11 +7,18 @@ import current from '../data/tournament.json';
 interface Props { title: string; description?: string; active?: 'calendar' | 'matches' | 'news' | 'rankings' }
 const { title, description = 'PDC darts on TV, live matches, news and world rankings.', active } = Astro.props;
 const nav = [
-  { key: 'calendar', href: '/', label: 'Calendar' },
+  { key: 'calendar', href: '/calendar', label: 'Calendar' },
   { key: 'matches', href: `/tournament/${current.tournament.id}`, label: 'Matches' },
   { key: 'news', href: '/news', label: 'News' },
   { key: 'rankings', href: '/rankings', label: 'Rankings' },
 ];
+const t = current.tournament;
+const icons: Record<string, string> = {
+  calendar: '<rect x="3" y="5" width="18" height="16" rx="3"/><path d="M3 10h18M8 3v4M16 3v4"/>',
+  matches: '<circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.5" fill="currentColor"/>',
+  news: '<rect x="4" y="4" width="16" height="16" rx="3"/><path d="M8 9h8M8 13h8M8 17h5"/>',
+  rankings: '<path d="M5 20V11M12 20V5M19 20v-6"/>',
+};
 const fullTitle = title === 'The Oche' ? title : `${title} · The Oche`;
 ---
 <!doctype html>
@@ -38,8 +45,38 @@ const fullTitle = title === 'The Oche' ? title : `${title} · The Oche`;
           ))}
           <span class="pill" aria-hidden="true"></span>
         </nav>
+        <button class="searchbtn" type="button" data-open-search aria-label="Search players, events and news">
+          <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><circle cx="11" cy="11" r="7" fill="none" stroke="currentColor" stroke-width="2" /><path d="M20 20l-4-4" stroke="currentColor" stroke-width="2" stroke-linecap="round" /></svg>
+          <span>Search</span><kbd>⌘K</kbd>
+        </button>
+      </div>
+      <!-- Live bar: shown site-wide while the current event has matches on today -->
+      <div class="livebar" id="livebar" hidden data-id={t.id} data-start={t.start} data-end={t.end} data-name={t.name}>
+        <div class="wrap lb-in" aria-live="polite"></div>
       </div>
     </header>
+
+    <nav class="tabbar" aria-label="Main">
+      {nav.map(n => (
+        <a href={n.href} class:list={['tab', { on: active === n.key }]} data-tab={n.key}>
+          <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" set:html={icons[n.key]} />
+          <span>{n.label}</span>
+        </a>
+      ))}
+      <button class="tab" type="button" data-open-search>
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7" /><path d="M20 20l-4-4" /></svg>
+        <span>Search</span>
+      </button>
+    </nav>
+
+    <dialog class="search" id="search" aria-label="Search">
+      <div class="s-box">
+        <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><circle cx="11" cy="11" r="7" fill="none" stroke="currentColor" stroke-width="2" /><path d="M20 20l-4-4" stroke="currentColor" stroke-width="2" stroke-linecap="round" /></svg>
+        <input id="sq" type="search" placeholder="Search players, events and news" autocomplete="off" aria-controls="sr" />
+        <button type="button" class="s-close" data-close-search aria-label="Close search">Esc</button>
+      </div>
+      <ul id="sr" class="s-res" role="listbox"></ul>
+    </dialog>
 
     <main transition:animate="fade">
       <slot />
@@ -56,7 +93,7 @@ const fullTitle = title === 'The Oche' ? title : `${title} · The Oche`;
       // Scroll-reveal + the sliding nav pill.
       const keyFor = (path: string) => {
         const p = path.replace(/\/$/, '') || '/';
-        if (p === '/') return 'calendar';
+        if (p === '/') return 'home';
         const [, a, b] = p.split('/');
         if (a === 'tournament') return b === document.querySelector<HTMLElement>('.top nav')?.dataset.current ? 'matches' : 'calendar';
         if (a === 'players') return 'rankings';
@@ -67,6 +104,7 @@ const fullTitle = title === 'The Oche' ? title : `${title} · The Oche`;
       // after each swap, starting from where the pill was before navigation.
       let last: { x: number; w: number } | null = null;
       function setOn(key: string) {
+        document.querySelectorAll<HTMLAnchorElement>('.tabbar .tab[data-tab]').forEach(a => a.classList.toggle('on', a.dataset.tab === key));
         document.querySelectorAll<HTMLAnchorElement>('.top a.nav').forEach(a => {
           const on = a.dataset.nav === key;
           a.classList.toggle('on', on);
@@ -109,6 +147,91 @@ const fullTitle = title === 'The Oche' ? title : `${title} · The Oche`;
       // Highlight the chosen link straight away; the pill slides once the page swaps.
       document.addEventListener('astro:before-preparation', e => setOn(keyFor((e as any).to.pathname)));
       window.addEventListener('resize', () => movePill(keyFor(location.pathname), false));
+
+      // Expose the header height (it grows when the live bar shows) for sticky elements.
+      const hdr = document.querySelector<HTMLElement>('header.top');
+      if (hdr) new ResizeObserver(() => document.documentElement.style.setProperty('--hdr', `${hdr.offsetHeight}px`)).observe(hdr);
+
+      // ---- Live bar ------------------------------------------------------
+      // While the current event is on, show live scores (or what's next today)
+      // under the menu on every page, refreshed every 30 seconds.
+      (() => {
+        const bar = document.getElementById('livebar');
+        if (!bar) return;
+        const inner = bar.querySelector<HTMLElement>('.lb-in')!;
+        const { id, start = '', end = '', name = '' } = bar.dataset;
+        const today = () => new Date().toLocaleDateString('en-CA', { timeZone: 'Europe/London' });
+        if (!(start <= today() && end >= today())) return;
+        const esc = (x: unknown) => String(x ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]!);
+        const surname = (p: any) => p?.lastName || '';
+        async function tick() {
+          if (document.hidden) return;
+          try {
+            const a = (await (await fetch(`https://tournaments.darts.web.gc.pdcservices.co.uk/v2/${id}`, { cache: 'no-store' })).json()).data.attributes;
+            const fx = (a.stages || []).flatMap((s: any) => (s.fixtures || []).map((f: any) => ({ ...f, stage: s.stage?.name })))
+              .filter((f: any) => f.participant1?.lastName && f.participant2?.lastName && !/to be confirmed/i.test(f.participant1.lastName + f.participant2.lastName));
+            const d = today();
+            const live = fx.filter((f: any) => /live|progress/i.test(f.status));
+            const upcoming = fx.filter((f: any) => f.startDate === d && !/result/i.test(f.status) && !/live|progress/i.test(f.status)).sort((x: any, y: any) => (x.startTime || '').localeCompare(y.startTime || ''));
+            const done = fx.filter((f: any) => /result/i.test(f.status)).sort((x: any, y: any) => `${y.startDate}${y.startTime}`.localeCompare(`${x.startDate}${x.startTime}`));
+            const chip = (f: any, kind: string) => `<a class="lb-m ${kind}" href="/match?id=${f.fixtureID}"><span>${esc(surname(f.participant1))}</span><b>${kind === 'next' ? esc((f.startTime || '').slice(0, 5) || 'vs') : `${f.participant1Score ?? 0}–${f.participant2Score ?? 0}`}</b><span>${esc(surname(f.participant2))}</span></a>`;
+            let html = '';
+            if (live.length) html = `<span class="lb-tag live">Live</span>${live.slice(0, 3).map((f: any) => chip(f, 'now')).join('')}`;
+            else if (upcoming.length) html = `<span class="lb-tag">Next</span>${chip(upcoming[0], 'next')}${done[0] ? `<span class="lb-sep">Latest</span>${chip(done[0], 'done')}` : ''}`;
+            else if (done[0] && done[0].startDate === d) html = `<span class="lb-tag">Latest</span>${chip(done[0], 'done')}`;
+            if (!html) { bar.hidden = true; return; }
+            inner.innerHTML = `<a class="lb-ev" href="/tournament/${id}">${esc(name)}</a>${html}`;
+            bar.hidden = false;
+          } catch { /* keep the last state */ }
+        }
+        tick();
+        setInterval(tick, 30_000);
+      })();
+
+      // ---- Search (⌘K / Ctrl+K) ------------------------------------------
+      let index: any[] | null = null;
+      const kind: Record<string, string> = { p: 'Player', e: 'Event', n: 'News' };
+      function openSearch() {
+        const dlg = document.getElementById('search') as HTMLDialogElement;
+        const q = document.getElementById('sq') as HTMLInputElement;
+        if (!dlg.open) dlg.showModal();
+        q.value = ''; render('');
+        q.focus();
+        if (!index) fetch('/search.json').then(r => r.json()).then(d => { index = d; render(q.value); });
+      }
+      function render(v: string) {
+        const ul = document.getElementById('sr')!;
+        const esc = (x: unknown) => String(x ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]!);
+        const terms = v.trim().toLowerCase().split(/\s+/).filter(Boolean);
+        if (!index) { ul.innerHTML = '<li class="s-empty">Loading…</li>'; return; }
+        if (!terms.length) { ul.innerHTML = '<li class="s-empty">Try a player (“Littler”), an event (“Matchplay”) or a city.</li>'; return; }
+        const hits = index.filter(x => terms.every(t => x.k.includes(t)))
+          .map(x => ({ x, r: 'pen'.indexOf(x.t) * 10 + (x.k.split(/\s+/).some((w: string) => w.startsWith(terms[0])) ? 0 : 5) }))
+          .sort((a, b) => a.r - b.r).map(({ x }) => x).slice(0, 12);
+        ul.innerHTML = hits.length ? hits.map((x, i) => `<li role="option" aria-selected="${i === 0}"><a href="${x.u}"><span class="s-k s-${x.t}">${kind[x.t]}</span><span class="s-t"><span class="s-n">${x.c ? `<img class="flag" src="/flags/${String(x.c).toLowerCase()}.svg" alt="" width="16" height="12"> ` : ''}${esc(x.n)}</span><span class="s-s">${esc(x.s)}</span></span></a></li>`).join('') : '<li class="s-empty">No matches.</li>';
+      }
+      document.addEventListener('click', e => {
+        const t = e.target as HTMLElement;
+        if (t.closest('[data-open-search]')) { e.preventDefault(); openSearch(); }
+        const dlg = document.getElementById('search') as HTMLDialogElement;
+        if (t === dlg || t.closest('[data-close-search]')) dlg.close();
+        if (t.closest('#sr a')) dlg.close();
+      });
+      document.addEventListener('keydown', e => {
+        if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') { e.preventDefault(); openSearch(); }
+        const dlg = document.getElementById('search') as HTMLDialogElement;
+        if (!dlg?.open) return;
+        const items = [...document.querySelectorAll<HTMLElement>('#sr li[role=option]')];
+        const cur = items.findIndex(li => li.getAttribute('aria-selected') === 'true');
+        if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
+          e.preventDefault();
+          const n = Math.max(0, Math.min(items.length - 1, cur + (e.key === 'ArrowDown' ? 1 : -1)));
+          items.forEach((li, i) => li.setAttribute('aria-selected', String(i === n)));
+          items[n]?.scrollIntoView({ block: 'nearest' });
+        }
+        if (e.key === 'Enter' && items[cur]) { e.preventDefault(); items[cur].querySelector('a')!.click(); }
+      });
+      document.addEventListener('input', e => { if ((e.target as HTMLElement).id === 'sq') render((e.target as HTMLInputElement).value); });
     </script>
   </body>
 </html>
@@ -127,12 +250,51 @@ const fullTitle = title === 'The Oche' ? title : `${title} · The Oche`;
   .nav.on { color: #fff; }
   .pill { position: absolute; z-index: 0; left: 0; top: 4px; bottom: 4px; border-radius: 999px; background: var(--ink); opacity: 0; transition: transform .55s var(--spring), width .55s var(--spring), opacity .2s; box-shadow: 0 6px 16px -6px rgba(20, 22, 31, .5); }
   .nav { transition: color .3s .1s; }
+  .searchbtn { display: inline-flex; align-items: center; gap: 8px; border: 1px solid var(--line); background: var(--card); color: var(--muted); border-radius: 999px; padding: 8px 10px 8px 14px; font-weight: 600; font-size: 14px; cursor: pointer; transition: border-color .2s, color .2s; }
+  .searchbtn:hover { border-color: var(--ink); color: var(--ink); }
+  .searchbtn kbd { font: inherit; font-size: 11px; background: var(--paper-2); border: 1px solid var(--line); border-radius: 6px; padding: 1px 6px; }
+
+  .livebar { background: var(--ink); color: #fff; }
+  .lb-in { display: flex; align-items: center; gap: 10px; height: 40px; overflow-x: auto; scrollbar-width: none; font-size: 13px; white-space: nowrap; }
+  .lb-in :global(.lb-ev) { color: #fff; font-weight: 800; text-decoration: none; margin-right: 4px; }
+  .lb-in :global(.lb-tag) { font-size: 11px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; background: rgba(255, 255, 255, .14); border-radius: 999px; padding: 2px 8px; }
+  .lb-in :global(.lb-tag.live) { background: var(--red); }
+  .lb-in :global(.lb-sep) { color: rgba(255, 255, 255, .55); font-size: 12px; margin-left: 6px; }
+  .lb-in :global(.lb-m) { display: inline-flex; align-items: center; gap: 8px; color: rgba(255, 255, 255, .85); text-decoration: none; padding: 4px 10px; border-radius: 999px; transition: background .2s; }
+  .lb-in :global(.lb-m:hover) { background: rgba(255, 255, 255, .1); color: #fff; }
+  .lb-in :global(.lb-m b) { font-family: var(--display); font-variant-numeric: tabular-nums; color: #fff; }
+  .lb-in :global(.lb-m.now b) { color: #ff8a98; }
+
+  .tabbar { display: none; }
+
+  .search { border: 0; padding: 0; width: min(620px, 100% - 24px); margin-top: 12vh; border-radius: 20px; background: var(--card); color: var(--ink); box-shadow: var(--shadow-lg); }
+  .search::backdrop { background: rgba(20, 22, 31, .5); }
+  .s-box { display: flex; align-items: center; gap: 10px; padding: 14px 16px; border-bottom: 1px solid var(--line); color: var(--muted); }
+  .s-box input { flex: 1; border: 0; outline: 0; font: inherit; font-size: 17px; background: none; color: var(--ink); }
+  .s-close { border: 1px solid var(--line); background: var(--paper-2); border-radius: 6px; font-size: 12px; padding: 2px 8px; cursor: pointer; }
+  .s-res { list-style: none; margin: 0; padding: 6px; max-height: 56vh; overflow-y: auto; }
+  .s-res :global(li a) { display: grid; grid-template-columns: 64px 1fr; align-items: center; gap: 10px; padding: 10px; border-radius: 12px; text-decoration: none; }
+  .s-res :global(li[aria-selected='true'] a), .s-res :global(li a:hover) { background: var(--paper-2); }
+  .s-res :global(.s-k) { font-size: 11px; font-weight: 800; color: var(--muted); text-transform: uppercase; letter-spacing: .06em; }
+  .s-res :global(.s-n) { font-weight: 700; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .s-res :global(.s-t) { display: flex; flex-direction: column; min-width: 0; }
+  .s-res :global(.s-s) { font-size: 12px; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .s-res :global(.s-empty) { padding: 18px; color: var(--muted); font-size: 14px; }
+
   main { min-height: 70vh; }
   .foot { margin-top: 96px; padding: 36px 0 48px; border-top: 1px solid var(--line); font-size: 14px; }
   .foot p { margin: 0 0 6px; max-width: 760px; }
   @media (max-width: 640px) {
-    .bar { height: auto; padding: 10px 0; flex-direction: column; gap: 10px; }
-    nav { width: 100%; justify-content: space-between; }
-    .nav { padding: 8px 10px; font-size: 13px; }
+    .bar { height: 58px; }
+    .bar nav, .searchbtn { display: none; }
+    .tabbar {
+      display: grid; grid-template-columns: repeat(5, 1fr); position: fixed; z-index: 60; left: 0; right: 0; bottom: 0;
+      background: rgba(251, 248, 242, .96); border-top: 1px solid var(--line); padding: 6px 4px calc(6px + env(safe-area-inset-bottom));
+    }
+    .tab { display: flex; flex-direction: column; align-items: center; gap: 2px; padding: 4px 0; border: 0; background: none; color: var(--muted); text-decoration: none; font-size: 11px; font-weight: 700; cursor: pointer; }
+    .tab.on { color: var(--ink); }
+    .tab.on svg { color: var(--red); }
+    :global(body) { padding-bottom: calc(68px + env(safe-area-inset-bottom)); }
+    .search { margin-top: 8vh; }
   }
 </style>

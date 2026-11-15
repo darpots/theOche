@@ -7,7 +7,7 @@
   --card: #ffffff;
   --ink: #14161f;
   --ink-2: #2b2f3c;
-  --muted: #646b7a;
+  --muted: #5b6170;
   --line: #e8e1d3;
   --red: #d7263d;
   --red-soft: #fde8eb;
@@ -113,6 +113,12 @@ h1, h2, h3, h4 { font-family: var(--display); letter-spacing: -.02em; line-heigh
 .empty h3 { color: var(--ink); font-size: 22px; margin-bottom: 6px; }
 
 .muted { color: var(--muted); }
+
+/* SVG flags */
+.flag { display: inline-block; width: 1.15em; height: auto; aspect-ratio: 4 / 3; border-radius: 2px; vertical-align: -0.14em; box-shadow: 0 0 0 1px rgba(20, 22, 31, .12); object-fit: cover; }
+
+/* One grade for every photo, so images from different photographers sit together */
+.photo { filter: saturate(.88) contrast(1.06); }
 .tabular { font-variant-numeric: tabular-nums; }
 
 @media (prefers-reduced-motion: reduce) {

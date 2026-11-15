@@ -150,18 +150,13 @@ export function countryName(code) {
   if (SUBDIVISIONS[code]) return SUBDIVISIONS[code];
   try { return new Intl.DisplayNames(['en-GB'], { type: 'region' }).of(code) || code; } catch { return code; }
 }
-/** Emoji flag (sub-national UK flags use tag sequences). */
+/** Flag image (HTML string). SVG flags from the flag-icons project (MIT), in /public/flags. */
 export function flag(code) {
   if (!code) return '';
-  if (code === 'GB-NIR') return '\u{1F1EC}\u{1F1E7}'; // no Northern Ireland emoji flag exists
-  if (code.startsWith('GB-')) {
-    const sub = code.slice(3).toLowerCase();
-    return '\u{1F3F4}' + [...('gb' + sub)].map(c => String.fromCodePoint(0xE0000 + c.charCodeAt(0))).join('') + '\u{E007F}';
-  }
-  if (code.length !== 2) return '';
-  return [...code.toUpperCase()].map(c => String.fromCodePoint(0x1F1E6 + c.charCodeAt(0) - 65)).join('');
+  const c = code.toLowerCase();
+  if (!/^[a-z]{2}(-[a-z]{3})?$/.test(c)) return '';
+  return `<img class="flag" src="/flags/${c}.svg" alt="" width="16" height="12" loading="lazy" decoding="async">`;
 }
-
 export const keyName = s => s.normalize('NFKD').replace(/[̀-ͯ]/g, '').toLowerCase().replace(/[^a-z0-9]/g, '');
 
 // ---------------------------------------------------------------------------
@@ -283,4 +278,28 @@ export function slimStats(payload) {
   } : null;
   const a = one(m?.participant1Data), b = one(m?.participant2Data);
   return a || b ? [a, b] : null;
+}
+
+/** Browser helper: find a ranking event in progress and its previous edition. */
+export async function findLiveRaceEvent(today) {
+  const json = u => fetch(u).then(r => (r.ok ? r.json() : null)).catch(() => null);
+  const list = async season => ((await json(`${API.tournaments}?seasonID=${season}&page.size=500`))?.data || []).map(d => ({ id: d.id, ...d.attributes }));
+  const y = Number(today.slice(0, 4));
+  const idx = (await Promise.all([y, y + 1].map(list))).flat();
+  const live = idx.find(t => RANKED_TYPES.includes(t.tournamentTypeID) && t.fixtureCount > 0 && t.startDate <= today && t.endDate >= today && !/test/i.test(t.name));
+  if (!live) return null;
+  const prevMeta = previousEdition(live, await list(Number(live.seasonID) - 2));
+  const prev = prevMeta ? (await json(API.tournaments + prevMeta.id))?.data?.attributes : null;
+  return { meta: live, prev };
+}
+
+/** Browser helper: the live race for the event in progress, or null. */
+export async function loadLiveRace(today, found) {
+  const json = u => fetch(u).then(r => (r.ok ? r.json() : null)).catch(() => null);
+  found ??= await findLiveRaceEvent(today);
+  if (!found) return null;
+  const [rk, cur] = await Promise.all([json(`${API.rankings}2YEAR?page.size=500`), json(API.tournaments + found.meta.id)]);
+  if (!rk || !cur) return null;
+  const full = normaliseRankings(rk);
+  return { found, full, event: { ...found.meta, ...cur.data.attributes }, race: liveRace(full, cur.data.attributes, found.prev) };
 }

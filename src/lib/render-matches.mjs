@@ -41,6 +41,7 @@ export function fixtureRow(f, portraits) {
     ${side(f.p1, f.s1, w1, decided, portraits, 'l', st?.[0], best === 1)}
     <div class="mid">${mid}<div class="st">${state}</div></div>
     ${side(f.p2, f.s2, w2, decided, portraits, 'r', st?.[1], best === 2)}
+    ${f.p1 && f.p2 ? `<a class="fx-link" href="/match?id=${esc(f.id)}" aria-label="${esc(`${f.p1.name} v ${f.p2.name}: match centre`)}"></a>` : ''}
   </li>`;
 }
 

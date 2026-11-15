@@ -1,0 +1,308 @@
+---
+// Match centre: /match?id=<fixtureId>. Rendered in the browser from the PDC
+// fixture feed (players, score) and its timeline (every visit), refreshed
+// every 15 seconds while the match is live.
+import Layout from '../layouts/Layout.astro';
+import cutouts from '../data/cutouts.json';
+import portraitsRaw from '../data/portraits.json';
+
+const portraits = Object.fromEntries(Object.entries(portraitsRaw as Record<string, { image: string }>).map(([k, v]) => [k, v.image]));
+---
+<Layout title="Match centre" description="Live score, leg-by-leg breakdown and statistics for a PDC darts match.">
+  <section class="mhead" aria-live="polite">
+    <div class="wrap mh-in" id="mh"><div class="loading"><span class="spinner"></span>Loading match…</div></div>
+  </section>
+
+  <div class="wrap mbody" id="mb" hidden>
+    <section class="block">
+      <h2>Match stats</h2>
+      <div class="cmp" id="cmp"></div>
+    </section>
+
+    <section class="block">
+      <div class="bh"><h2>Average through the match</h2><div class="legend" id="lg1"></div></div>
+      <p class="sub">Each player's running three-dart average after every leg (legs along the bottom).</p>
+      <div class="chart" id="runavg"></div>
+    </section>
+
+    <section class="block">
+      <div class="bh"><h2>Leg by leg</h2><div class="legend" id="lg2"></div></div>
+      <p class="sub">Score remaining after each visit. The leg goes to whoever reaches zero first.</p>
+      <div class="legs" id="legs"></div>
+    </section>
+
+    <section class="block">
+      <h2>Leg table</h2>
+      <div class="tablewrap"><table class="lt" id="lt"></table></div>
+    </section>
+  </div>
+
+  <script is:inline type="application/json" id="m-data" set:html={JSON.stringify({ cutouts, portraits })}></script>
+
+  <script>
+    import { flag, keyName } from '../lib/pdc.mjs';
+
+    const FX = 'https://fixtures.darts.web.gc.pdcservices.co.uk/v2/';
+    const C = ['#1d3fd6', '#d7263d']; // player 1 blue, player 2 red (validated pair)
+    const esc = (s: unknown) => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]!);
+    const name = (p: any) => [p?.firstName, p?.lastName].filter(Boolean).join(' ');
+    const last = (p: any) => p?.lastName || name(p);
+    let timer: number | undefined;
+
+    function legData(t: any) {
+      return (t.legs || []).slice().sort((a: any, b: any) => (a.setNumber ?? 1) - (b.setNumber ?? 1) || a.legNumber - b.legNumber).map((leg: any) => {
+        const v = (leg.visits || []).slice().sort((a: any, b: any) => a.order - b.order);
+        const side = (p1: boolean) => {
+          const mine = v.filter((x: any) => x.isParticipant1 === p1);
+          const pts = mine.reduce((n: number, x: any) => n + (x.isBust ? 0 : x.score || 0), 0);
+          const darts = mine.reduce((n: number, x: any) => n + (x.numberOfDartsThrown || 0), 0);
+          const won = mine.some((x: any) => x.remaining === 0);
+          return { pts, darts, won, path: [501, ...mine.map((x: any) => x.remaining)], checkout: won ? mine[mine.length - 1].score : null };
+        };
+        const a = side(true), b = side(false);
+        return { set: leg.setNumber ?? 1, n: leg.legNumber, starter: v[0]?.isParticipant1 ? 0 : 1, a, b, winner: a.won ? 0 : b.won ? 1 : null };
+      });
+    }
+
+    function header(f: any, t: any, data: any) {
+      const a = f.attributes, ps = [a.participant1, a.participant2];
+      const status = /result/i.test(a.status) ? 'Result' : /live|progress/i.test(a.status) ? 'Live' : 'Upcoming';
+      const m = t?.attributes?.fixtureMeta;
+      const avg = [m?.participant1Data?.threeDartAverage, m?.participant2Data?.threeDartAverage];
+      const pic = (p: any) => {
+        const k = keyName(name(p));
+        if (data.cutouts[k]) return `<img class="cut photo" src="${data.cutouts[k]}" alt="">`;
+        if (data.portraits[k]) return `<img class="por photo" src="${data.portraits[k]}" alt="">`;
+        return `<span class="ini">${esc((p?.firstName?.[0] || '') + (p?.lastName?.[0] || ''))}</span>`;
+      };
+      const side = (i: number) => {
+        const p = ps[i]; const won = a.winnerParticipantID && String(a.winnerParticipantID) === String(p?.participantID);
+        const href = p?.participantSlug ? `/players/${p.participantSlug}` : null;
+        return `<div class="side s${i}${won ? ' won' : ''}">
+          <div class="pic">${pic(p)}</div>
+          <div class="who">${href ? `<a href="${href}">${esc(name(p))}</a>` : `<span>${esc(name(p))}</span>`}
+            <small>${flag(p?.countryCode)} ${p?.ranking ? `World #${p.ranking}` : ''}${won ? ' · <b>Winner</b>' : ''}</small>
+            ${avg[i] != null ? `<div class="av"><i>Average</i>${Number(avg[i]).toFixed(2)}</div>` : ''}
+          </div></div>`;
+      };
+      const tour = a.tournament;
+      const when = new Date(`${a.startDate}T${(a.startTime || '00:00').slice(0, 5)}:00Z`);
+      return `
+        <a class="back" href="/tournament/${tour?.tournamentID}">← ${esc((tour?.name || 'Tournament').replace(/^\d{4}\s+/, ''))}</a>
+        <p class="stg">${esc(a.tournamentStage?.stage?.name || '')}${status === 'Live' ? ' · <span class="live-dot">Live</span>' : ` · ${status === 'Result' ? 'Result' : when.toLocaleString('en-GB', { weekday: 'short', day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit', timeZone: 'Europe/London' })}`}</p>
+        <div class="duel">${side(0)}
+          <div class="score"><b>${a.participant1Score ?? 0}</b><span>–</span><b>${a.participant2Score ?? 0}</b><small>${(a.tournamentStage?.numberOfSets || 1) > 1 ? 'sets' : 'legs'}</small></div>
+          ${side(1)}</div>`;
+    }
+
+    function compare(f: any, t: any) {
+      const m = t.attributes.fixtureMeta;
+      if (!m?.participant1Data) return '<p class="muted">Stats appear once the match starts.</p>';
+      const a = m.participant1Data, b = m.participant2Data;
+      const rows: [string, string, number, number, (v: number) => string][] = [
+        ['Three-dart average', 'threeDartAverage', a.threeDartAverage, b.threeDartAverage, v => v.toFixed(2)],
+        ['First 9 average', 'first9Average', a.first9Average, b.first9Average, v => v.toFixed(2)],
+        ['180s', 'score180', a.score180, b.score180, v => String(v)],
+        ['140+', 'score140plus', a.score140plus ?? a.score140Plus, b.score140plus ?? b.score140Plus, v => String(v)],
+        ['100+', 'score100plus', a.score100plus ?? a.score100Plus, b.score100plus ?? b.score100Plus, v => String(v)],
+        ['Checkout %', 'checkoutPercentage', a.checkoutPercentage, b.checkoutPercentage, v => `${Number(v).toFixed(1)}%`],
+        ['Highest checkout', 'highestCheckout', a.highestCheckout, b.highestCheckout, v => String(v || '–')],
+      ];
+      return rows.map(([label, , x, y, fmt]) => {
+        const X = Number(x) || 0, Y = Number(y) || 0, max = Math.max(X, Y, 1);
+        return `<div class="cr"><span class="v l${X > Y ? ' hi' : ''}">${fmt(X)}</span>
+          <div class="bars"><i class="b0" style="width:${(X / max) * 100}%"></i></div>
+          <span class="lab">${label}</span>
+          <div class="bars r"><i class="b1" style="width:${(Y / max) * 100}%"></i></div>
+          <span class="v r${Y > X ? ' hi' : ''}">${fmt(Y)}</span></div>`;
+      }).join('');
+    }
+
+    function legend(names: string[]) {
+      return names.map((n, i) => `<span><i style="background:${C[i]}"></i>${esc(n)}</span>`).join('');
+    }
+
+    // Running average after each leg: one line per player, crosshair tooltip.
+    function runAvg(legs: any[], names: string[]) {
+      if (!legs.length) return '<p class="muted">No legs completed yet.</p>';
+      const pts = [0, 1].map(i => { let p = 0, d = 0; return legs.map(l => { const s = i ? l.b : l.a; p += s.pts; d += s.darts; return d ? (p / d) * 3 : null; }); });
+      const all = pts.flat().filter((v): v is number => v != null);
+      const lo = Math.floor((Math.min(...all) - 3) / 5) * 5, hi = Math.ceil((Math.max(...all) + 3) / 5) * 5;
+      const W = 720, H = 240, L = 40, R = 16, T = 12, B = 28;
+      const x = (i: number) => L + (legs.length === 1 ? (W - L - R) / 2 : (i / (legs.length - 1)) * (W - L - R));
+      const y = (v: number) => T + (1 - (v - lo) / (hi - lo)) * (H - T - B);
+      const ticks = []; for (let v = lo; v <= hi; v += (hi - lo) / 4) ticks.push(v);
+      const grid = ticks.map(v => `<line x1="${L}" x2="${W - R}" y1="${y(v)}" y2="${y(v)}" class="gl"/><text x="${L - 8}" y="${y(v) + 4}" class="ax" text-anchor="end">${Math.round(v)}</text>`).join('');
+      const xl = legs.map((l, i) => (legs.length <= 14 || i % Math.ceil(legs.length / 14) === 0) ? `<text x="${x(i)}" y="${H - 8}" class="ax" text-anchor="middle">${i + 1}</text>` : '').join('');
+      const lines = pts.map((s, k) => `<polyline points="${s.map((v, i) => v == null ? '' : `${x(i)},${y(v)}`).join(' ')}" fill="none" stroke="${C[k]}" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>`).join('');
+      const endLabels = pts.map((s, k) => { const v = s[s.length - 1]; return v == null ? '' : `<circle cx="${x(s.length - 1)}" cy="${y(v)}" r="4" fill="${C[k]}" stroke="#fff" stroke-width="2"/>`; }).join('');
+      const hits = legs.map((_, i) => `<rect x="${x(i) - (W - L - R) / Math.max(legs.length, 2) / 2}" y="${T}" width="${(W - L - R) / Math.max(legs.length, 2)}" height="${H - T - B}" fill="transparent" data-i="${i}"/>`).join('');
+      return `<div class="svgwrap"><svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Running three-dart average by leg">${grid}${xl}${lines}${endLabels}<line class="xh" x1="0" x2="0" y1="${T}" y2="${H - B}" hidden/>${hits}</svg><div class="tip" hidden></div></div>`
+        + `<script type="application/json" class="rd">${JSON.stringify({ pts, names, W, L, R, n: legs.length })}<\/script>`;
+    }
+
+    // Small multiple per leg: remaining score after each visit.
+    function legCharts(legs: any[], names: string[]) {
+      return legs.map(l => {
+        const W = 200, H = 110, P = 8;
+        const n = Math.max(l.a.path.length, l.b.path.length, 2);
+        const x = (i: number) => P + (i / (n - 1)) * (W - 2 * P);
+        const y = (v: number) => P + (1 - v / 501) * (H - 2 * P);
+        const line = (path: number[], c: string) => `<polyline points="${path.map((v, i) => `${x(i)},${y(v)}`).join(' ')}" fill="none" stroke="${c}" stroke-width="2" stroke-linejoin="round"/>`;
+        const w = l.winner;
+        const darts = w == null ? '' : `${(w ? l.b : l.a).darts} darts${(w ? l.b : l.a).checkout ? ` · ${(w ? l.b : l.a).checkout} out` : ''}`;
+        return `<figure class="leg${w == null ? ' open' : ''}">
+          <figcaption><b>Leg ${l.n}${l.set > 1 || legs.some(x => x.set > 1) ? ` <small>Set ${l.set}</small>` : ''}</b><span>${w == null ? 'In play' : `<i style="background:${C[w]}"></i>${esc(names[w])}`}</span></figcaption>
+          <svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Leg ${l.n}: ${w == null ? 'in play' : `${names[w]} won`}"><line x1="${P}" x2="${W - P}" y1="${y(0)}" y2="${y(0)}" class="gl"/>${line(l.a.path, C[0])}${line(l.b.path, C[1])}</svg>
+          <small class="ld">${darts}${darts ? ' · ' : ''}${esc(names[l.starter])} threw first</small></figure>`;
+      }).join('');
+    }
+
+    function legTable(legs: any[], names: string[]) {
+      const avg = (s: any) => (s.darts ? ((s.pts / s.darts) * 3).toFixed(1) : '–');
+      return `<thead><tr><th>Leg</th><th>Threw first</th><th>Winner</th><th class="n">Darts</th><th class="n">Checkout</th><th class="n">${esc(names[0])} avg</th><th class="n">${esc(names[1])} avg</th></tr></thead><tbody>${legs.map(l => {
+        const w = l.winner, ws = w == null ? null : w ? l.b : l.a;
+        return `<tr><td>${legs.some(x => x.set > 1) ? `${l.set}.` : ''}${l.n}</td><td>${esc(names[l.starter])}</td><td>${w == null ? 'In play' : `<i class="dot" style="background:${C[w]}"></i>${esc(names[w])}${w !== l.starter ? ' <span class="brk">break</span>' : ''}`}</td><td class="n">${ws?.darts ?? '–'}</td><td class="n">${ws?.checkout ?? '–'}</td><td class="n">${avg(l.a)}</td><td class="n">${avg(l.b)}</td></tr>`;
+      }).join('')}</tbody>`;
+    }
+
+    function wireTip() {
+      const wrap = document.querySelector<HTMLElement>('#runavg .svgwrap'); if (!wrap) return;
+      const d = JSON.parse(document.querySelector('#runavg .rd')!.textContent!);
+      const svg = wrap.querySelector('svg')!, tip = wrap.querySelector<HTMLElement>('.tip')!, xh = svg.querySelector<SVGLineElement>('.xh')!;
+      svg.querySelectorAll<SVGRectElement>('rect[data-i]').forEach(r => {
+        r.addEventListener('pointerenter', () => {
+          const i = Number(r.dataset.i); const cx = d.L + (d.n === 1 ? (d.W - d.L - d.R) / 2 : (i / (d.n - 1)) * (d.W - d.L - d.R));
+          xh.setAttribute('x1', String(cx)); xh.setAttribute('x2', String(cx)); xh.removeAttribute('hidden');
+          tip.innerHTML = `<b>After leg ${i + 1}</b>${d.names.map((n: string, k: number) => `<span><i style="background:${C[k]}"></i>${esc(n)} ${d.pts[k][i] != null ? d.pts[k][i].toFixed(2) : '–'}</span>`).join('')}`;
+          tip.hidden = false; tip.style.left = `${(cx / d.W) * 100}%`;
+        });
+      });
+      svg.addEventListener('pointerleave', () => { tip.hidden = true; xh.setAttribute('hidden', ''); });
+    }
+
+    async function load() {
+      const id = new URLSearchParams(location.search).get('id');
+      const mh = document.getElementById('mh');
+      if (!mh) return;
+      if (!id) { mh.innerHTML = '<div class="loading">No match selected. Open a match from a tournament page.</div>'; return; }
+      const data = JSON.parse(document.getElementById('m-data')!.textContent!);
+      try {
+        const [f, t] = await Promise.all([fetch(FX + id, { cache: 'no-store' }).then(r => r.json()), fetch(`${FX}${id}/timeline`, { cache: 'no-store' }).then(r => (r.ok ? r.json() : null))]);
+        const a = f.data;
+        const names = [last(a.attributes.participant1), last(a.attributes.participant2)];
+        document.title = `${name(a.attributes.participant1)} v ${name(a.attributes.participant2)} · The Oche`;
+        mh.innerHTML = header(a, t?.data, data);
+        const legs = t?.data ? legData(t.data.attributes) : [];
+        document.getElementById('mb')!.hidden = !t?.data;
+        if (t?.data) {
+          document.getElementById('cmp')!.innerHTML = compare(a, t.data);
+          document.getElementById('lg1')!.innerHTML = document.getElementById('lg2')!.innerHTML = legend(names);
+          document.getElementById('runavg')!.innerHTML = runAvg(legs.filter(l => l.winner != null), names);
+          document.getElementById('legs')!.innerHTML = legCharts(legs, names) || '<p class="muted">No legs yet.</p>';
+          document.getElementById('lt')!.innerHTML = legTable(legs, names);
+          wireTip();
+        }
+        clearTimeout(timer);
+        if (/live|progress/i.test(a.attributes.status) || (!/result/i.test(a.attributes.status) && a.attributes.startDate <= new Date().toISOString().slice(0, 10))) timer = window.setTimeout(load, 15_000);
+      } catch {
+        mh.innerHTML = '<div class="loading">This match could not be loaded. Please try again shortly.</div>';
+      }
+    }
+    document.addEventListener('astro:page-load', () => { clearTimeout(timer); if (document.getElementById('mh')) load(); });
+  </script>
+</Layout>
+
+<style>
+  .mhead { color: #fff; background: radial-gradient(70% 120% at 85% 120%, rgba(215, 38, 61, .45), transparent 60%), radial-gradient(60% 120% at 15% 120%, rgba(29, 63, 214, .45), transparent 60%), linear-gradient(160deg, #191b26, #0d0e14 70%); }
+  .mh-in { padding: 24px 0 0; min-height: 300px; }
+  .mh-in :global(.loading) { padding: 80px 0; text-align: center; color: rgba(255, 255, 255, .75); }
+  .mh-in :global(.spinner) { display: inline-block; width: 22px; height: 22px; border-radius: 50%; border: 3px solid rgba(255, 255, 255, .2); border-top-color: #fff; animation: rot .8s linear infinite; margin-right: 10px; vertical-align: middle; }
+  @keyframes rot { to { transform: rotate(360deg); } }
+  .mh-in :global(.back) { color: rgba(255, 255, 255, .75); text-decoration: none; font-weight: 600; font-size: 14px; }
+  .mh-in :global(.back:hover) { color: #fff; }
+  .mh-in :global(.stg) { margin: 10px 0 0; font-weight: 700; color: rgba(255, 255, 255, .8); }
+  .mh-in :global(.duel) { display: grid; grid-template-columns: 1fr auto 1fr; align-items: end; gap: 16px; margin-top: 8px; }
+  .mh-in :global(.side) { display: flex; align-items: flex-end; gap: 16px; min-width: 0; }
+  .mh-in :global(.s1) { flex-direction: row-reverse; text-align: right; }
+  .mh-in :global(.pic) { width: 170px; height: 210px; flex: none; display: flex; align-items: flex-end; justify-content: center; overflow: hidden; }
+  .mh-in :global(.pic .cut) { height: 100%; width: auto; max-width: none; }
+  .mh-in :global(.pic .por) { width: 120px; height: 120px; border-radius: 50%; object-fit: cover; margin-bottom: 30px; }
+  .mh-in :global(.pic .ini) { width: 110px; height: 110px; border-radius: 50%; display: grid; place-items: center; background: rgba(255, 255, 255, .12); font-family: var(--display); font-size: 40px; font-weight: 800; margin-bottom: 30px; }
+  .mh-in :global(.who) { display: flex; flex-direction: column; gap: 4px; padding-bottom: 26px; min-width: 0; }
+  .mh-in :global(.who a), .mh-in :global(.who > span) { font-family: var(--display); font-size: clamp(22px, 2.6vw, 32px); font-weight: 800; color: #fff; text-decoration: none; line-height: 1.05; }
+  .mh-in :global(.who a:hover) { text-decoration: underline; }
+  .mh-in :global(.who small) { color: rgba(255, 255, 255, .75); font-size: 13px; }
+  .mh-in :global(.av) { display: inline-flex; flex-direction: column; align-self: flex-start; margin-top: 6px; background: #fff; color: var(--ink); border-radius: 12px; padding: 6px 12px; font-family: var(--display); font-size: 22px; font-weight: 800; font-variant-numeric: tabular-nums; }
+  .mh-in :global(.s1 .av) { align-self: flex-end; }
+  .mh-in :global(.av i) { font-style: normal; font-family: var(--body); font-size: 10px; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); }
+  .mh-in :global(.s0 .av) { box-shadow: inset 4px 0 0 #1d3fd6; }
+  .mh-in :global(.s1 .av) { box-shadow: inset -4px 0 0 #d7263d; }
+  .mh-in :global(.score) { display: flex; align-items: baseline; gap: 10px; padding-bottom: 40px; font-family: var(--display); }
+  .mh-in :global(.score b) { font-size: clamp(56px, 8vw, 96px); font-weight: 800; line-height: 1; font-variant-numeric: tabular-nums; }
+  .mh-in :global(.score span) { font-size: 48px; color: rgba(255, 255, 255, .4); }
+  .mh-in :global(.score small) { position: absolute; }
+  .mh-in :global(.score small) { display: none; }
+
+  .mbody { margin-top: 28px; }
+  .block + .block { margin-top: 36px; }
+  h2 { font-size: 24px; margin-bottom: 8px; }
+  .sub { margin: 0 0 14px; color: var(--muted); font-size: 14px; }
+  .bh { display: flex; justify-content: space-between; align-items: baseline; flex-wrap: wrap; gap: 10px; }
+  .legend { display: flex; gap: 16px; font-size: 13px; font-weight: 700; }
+  .legend :global(span) { display: inline-flex; align-items: center; gap: 6px; }
+  .legend :global(i), .legs :global(i), .lt :global(.dot) { display: inline-block; width: 10px; height: 10px; border-radius: 3px; }
+
+  .cmp { background: var(--card); border: 1px solid var(--line); border-radius: 18px; padding: 8px 18px; }
+  .cmp :global(.cr) { display: grid; grid-template-columns: 70px 1fr 150px 1fr 70px; align-items: center; gap: 12px; padding: 10px 0; border-top: 1px solid var(--line); font-variant-numeric: tabular-nums; }
+  .cmp :global(.cr:first-child) { border-top: 0; }
+  .cmp :global(.v) { font-weight: 700; color: var(--muted); }
+  .cmp :global(.v.l) { text-align: right; }
+  .cmp :global(.v.hi) { color: var(--ink); font-weight: 800; }
+  .cmp :global(.lab) { text-align: center; font-size: 13px; font-weight: 700; color: var(--ink-2); }
+  .cmp :global(.bars) { height: 8px; display: flex; justify-content: flex-end; }
+  .cmp :global(.bars.r) { justify-content: flex-start; }
+  .cmp :global(.bars i) { height: 100%; border-radius: 4px; transition: width .6s var(--ease); }
+  .cmp :global(.b0) { background: #1d3fd6; }
+  .cmp :global(.b1) { background: #d7263d; }
+
+  .chart { background: var(--card); border: 1px solid var(--line); border-radius: 18px; padding: 14px; }
+  .chart :global(.svgwrap) { position: relative; }
+  .chart :global(svg) { width: 100%; height: auto; display: block; }
+  :global(.gl) { stroke: var(--line); stroke-width: 1; }
+  :global(.ax) { fill: var(--muted); font-size: 11px; font-family: var(--body); }
+  .chart :global(.xh) { stroke: var(--ink-2); stroke-width: 1; stroke-dasharray: 3 3; }
+  .chart :global(.tip) { position: absolute; top: 8px; transform: translateX(-50%); background: var(--ink); color: #fff; border-radius: 10px; padding: 8px 10px; font-size: 12px; display: flex; flex-direction: column; gap: 3px; pointer-events: none; white-space: nowrap; }
+  .chart :global(.tip span) { display: inline-flex; align-items: center; gap: 6px; font-variant-numeric: tabular-nums; }
+  .chart :global(.tip i) { width: 8px; height: 8px; border-radius: 2px; display: inline-block; }
+
+  .legs { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 10px; }
+  .legs :global(.leg) { margin: 0; background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 10px 12px; }
+  .legs :global(.leg.open) { border-color: var(--red); }
+  .legs :global(figcaption) { display: flex; justify-content: space-between; gap: 8px; font-size: 13px; }
+  .legs :global(figcaption span) { display: inline-flex; align-items: center; gap: 6px; font-weight: 700; }
+  .legs :global(figcaption small) { color: var(--muted); font-weight: 600; }
+  .legs :global(svg) { width: 100%; height: auto; display: block; margin: 6px 0 4px; }
+  .legs :global(.ld) { color: var(--muted); font-size: 12px; }
+
+  .tablewrap { overflow-x: auto; background: var(--card); border: 1px solid var(--line); border-radius: 18px; }
+  .lt { width: 100%; border-collapse: collapse; font-size: 14px; font-variant-numeric: tabular-nums; }
+  .lt :global(th) { text-align: left; font-size: 12px; color: var(--muted); font-weight: 700; padding: 10px 14px; border-bottom: 1px solid var(--line); white-space: nowrap; }
+  .lt :global(td) { padding: 9px 14px; border-top: 1px solid var(--line); white-space: nowrap; }
+  .lt :global(.n) { text-align: right; }
+  .lt :global(.dot) { margin-right: 6px; }
+  .lt :global(.brk) { font-size: 11px; font-weight: 800; color: var(--red); margin-left: 4px; }
+
+  @media (max-width: 760px) {
+    .mh-in :global(.pic) { width: 96px; height: 130px; }
+    .mh-in :global(.pic .por), .mh-in :global(.pic .ini) { width: 72px; height: 72px; font-size: 26px; margin-bottom: 20px; }
+    .mh-in :global(.side) { flex-direction: column; align-items: flex-start; gap: 6px; }
+    .mh-in :global(.s1) { flex-direction: column; align-items: flex-end; }
+    .mh-in :global(.who) { padding-bottom: 14px; }
+    .mh-in :global(.score) { padding-bottom: 60px; }
+    .cmp :global(.cr) { grid-template-columns: 56px 1fr 56px; row-gap: 4px; }
+    .cmp :global(.lab) { grid-column: 1 / -1; grid-row: 1; }
+    .cmp :global(.bars) { display: none; }
+    .cmp :global(.v.r) { grid-column: 3; }
+  }
+</style>

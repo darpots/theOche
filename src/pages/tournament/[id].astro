@@ -44,7 +44,7 @@ const news = (await getCollection('news')).map(n => n.data)
   <section class={`banner b-${t.broadcaster || 'none'}`}>
     <svg class="brings" viewBox="-100 -100 200 200" aria-hidden="true"><circle r="96" /><circle r="80" /><circle r="58" /><circle r="40" /><circle r="12" /></svg>
     <div class="wrap banner-in">
-      <a class="back" href="/#months">← Calendar</a>
+      <a class="back" href="/calendar">← Calendar</a>
       <span class="eyebrow" id="phase">{isCurrent ? 'Current tournament' : 'Tournament'}</span>
       <div class="title-row">
         <h1>{t.name}{t.tag && <span class="tagline"> {t.tag}</span>}</h1>
@@ -207,7 +207,7 @@ const news = (await getCollection('news')).map(n => n.data)
   .b-sky { --glow: rgba(43, 76, 255, .55); }
   .b-itv { --glow: rgba(11, 160, 160, .5); }
   .b-pdctv { --glow: rgba(215, 38, 61, .55); }
-  .brings { position: absolute; z-index: -1; right: -8%; top: 50%; translate: 0 -50%; width: min(620px, 70vw); fill: none; stroke: rgba(255, 255, 255, .08); stroke-width: 1.2; animation: spin 140s linear infinite; }
+  .brings { position: absolute; z-index: -1; right: -8%; top: 50%; translate: 0 -50%; width: min(620px, 70vw); fill: none; stroke: rgba(255, 255, 255, .08); stroke-width: 1.2; }
   .brings circle:nth-child(2) { stroke: rgba(14, 138, 95, .4); stroke-width: 6; stroke-dasharray: 13 13; }
   .brings circle:nth-child(4) { stroke: rgba(215, 38, 61, .4); stroke-width: 5; stroke-dasharray: 10 10; }
   .back { display: block; width: fit-content; color: rgba(255, 255, 255, .7); text-decoration: none; font-weight: 600; font-size: 14px; margin-bottom: 18px; transition: color .2s, transform .3s var(--spring); }
@@ -269,6 +269,9 @@ const news = (await getCollection('news')).map(n => n.data)
   .board :global(.stage h3 small) { font-family: var(--body); font-size: 13px; color: var(--muted); font-weight: 600; letter-spacing: 0; }
   .board :global(.fixtures) { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
   .board :global(.fx) { display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 12px; padding: 12px 16px; background: var(--card); border: 1px solid var(--line); border-radius: 16px; box-shadow: var(--shadow-sm); transition: transform .3s var(--ease), box-shadow .3s; }
+  .board :global(.fx) { position: relative; }
+  .board :global(.fx-link) { position: absolute; inset: 0; border-radius: inherit; z-index: 1; }
+  .board :global(.fx-link:focus-visible) { outline: 3px solid var(--sky); outline-offset: 2px; }
   .board :global(.fx:hover) { transform: translateY(-2px); box-shadow: var(--shadow); }
   .board :global(.fx.live) { border-color: var(--red); box-shadow: 0 0 0 3px var(--red-soft); }
   .board :global(.fx.flash) { animation: flash 1.6s var(--ease); }

@@ -1,0 +1,227 @@
+---
+import Layout from '../layouts/Layout.astro';
+import calendar from '../data/calendar.json';
+import portraitsRaw from '../data/portraits.json';
+import { tvBadge, keyName } from '../lib/pdc.mjs';
+import { dayNum, monthShort, monthLong, weekday, dateRange, initials, avatarColours } from '../lib/format.mjs';
+
+const portraits = portraitsRaw as Record<string, { image: string }>;
+const pic = (name: string) => portraits[keyName(name)]?.image;
+const av = (name: string) => { const [c1, c2] = avatarColours(name); return `--c1:${c1};--c2:${c2}`; };
+const days = (e: { start: string; end: string }) => Math.round((Date.parse(e.end) - Date.parse(e.start)) / 864e5) + 1;
+
+type Ev = (typeof calendar.events)[number];
+const events = calendar.events as Ev[];
+const months = new Map<string, Ev[]>();
+for (const e of events) {
+  const k = e.start.slice(0, 7);
+  if (!months.has(k)) months.set(k, []);
+  months.get(k)!.push(e);
+}
+const place = (e: { venue: string | null; city: string | null }) => (e.venue && e.city && e.venue.includes(e.city) ? e.venue : [e.venue, e.city].filter(Boolean).join(' · '));
+const kind = (e: Ev) => e.broadcaster;
+---
+<Layout title="Calendar" description="Every PDC darts event on Sky Sports, ITV and PDCTV: dates, venues, broadcasters and winners." active="calendar">
+
+  <section class="wrap cal-intro">
+    <span class="eyebrow">Sky Sports · ITV · PDCTV</span>
+    <h1>Season calendar</h1>
+    <p class="lede">The PDC majors, Premier League nights and World Series events on Sky Sports and ITV, plus every European Tour event live on PDCTV.</p>
+  </section>
+
+  <section class="wrap controls" data-reveal>
+    <div class="chips" role="group" aria-label="Filter by broadcaster">
+      <button class="chip" data-filter="all" aria-pressed="true">All events</button>
+      <button class="chip logo-chip" data-filter="sky" aria-pressed="false" aria-label="Sky Sports"><img src="/brand/sky-sports.svg" alt="" height="14" /></button>
+      <button class="chip logo-chip" data-filter="itv" aria-pressed="false" aria-label="ITV"><img src="/brand/itv.svg" alt="" height="18" /></button>
+      <button class="chip logo-chip" data-filter="pdctv" aria-pressed="false" aria-label="European Tour on PDCTV"><span class="pdc-mark"><img src="/brand/pdctv.png" alt="" height="12" /></span>European Tour</button>
+    </div>
+    <label class="toggle">
+      <input type="checkbox" id="showPast" />
+      <span class="track"><span class="thumb"></span></span>
+      Show completed
+    </label>
+  </section>
+
+  <section class="wrap months" id="months">
+    {[...months.entries()].map(([k, list]) => (
+      <div class="month" data-month={k}>
+        <h2 class="month-title"><span>{monthLong(k + '-01')}</span></h2>
+        <div class="grid">
+          {list.map((e, i) => (
+            <a
+              href={`/tournament/${e.id}`}
+              class={`ev ev-${e.broadcaster}`}
+              data-kind={kind(e)} data-start={e.start} data-end={e.end}
+              data-reveal style={`--d:${Math.min(i, 6) * 60}ms`}>
+              <div class="ticket">
+                <svg class="board" viewBox="-50 -50 100 100" aria-hidden="true">
+                  <circle r="48" class="r0" /><circle r="40" class="r1" /><circle r="28" class="r2" /><circle r="20" class="r3" /><circle r="6" class="r4" /><circle r="2.4" class="r5" />
+                </svg>
+                <div class="date">
+                  <span class="wd">{weekday(e.start)}</span>
+                  <span class="dn">{dayNum(e.start)}{e.end !== e.start && <small>–{dayNum(e.end)}</small>}</span>
+                  <span class="mo">{monthShort(e.start)}{e.end.slice(0, 7) !== e.start.slice(0, 7) && `–${monthShort(e.end)}`}</span>
+                </div>
+                <div class="tv-slot"><Fragment set:html={tvBadge(e.broadcaster)} /></div>
+                <span class="len">{days(e) === 1 ? 'One night' : `${days(e)} days`}</span>
+              </div>
+              <div class="body">
+                <h3>{e.name}</h3>
+                {e.tag && <p class="tag">{e.tag}</p>}
+                <p class="where"><svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true"><path d="M12 22s7-6.2 7-12a7 7 0 1 0-14 0c0 5.8 7 12 7 12z" fill="none" stroke="currentColor" stroke-width="2" /><circle cx="12" cy="10" r="2.5" fill="currentColor" /></svg>{place(e) || 'Venue to be announced'}</p>
+                <p class="when sr-only">{dateRange(e.start, e.end)}</p>
+                <div class="foot">
+                  {e.winner
+                    ? <span class="winner"><span class="avatar" style={`--size:30px;${av(e.winner.name)}`}>{pic(e.winner.name) ? <img src={pic(e.winner.name)} alt="" loading="lazy" /> : initials(e.winner.name)}</span><span><small>Winner</small>{e.winner.name}</span></span>
+                    : <span class="status" data-status></span>}
+                  <span class="go">Schedule <span aria-hidden="true">→</span></span>
+                </div>
+              </div>
+            </a>
+          ))}
+        </div>
+      </div>
+    ))}
+    <p class="empty" id="none" hidden>No events match this filter.</p>
+  </section>
+
+
+  <script>
+
+    function init() {
+      const root = document.getElementById('months');
+      if (!root) return;
+      const today = new Date().toLocaleDateString('en-CA', { timeZone: 'Europe/London' });
+      const cards = [...root.querySelectorAll<HTMLElement>('.ev')];
+      for (const c of cards) {
+        const { start = '', end = '' } = c.dataset;
+        const s = c.querySelector<HTMLElement>('[data-status]');
+        const set = (cls: string, txt: string) => { if (s) { s.className = cls; s.textContent = txt; } };
+        if (start <= today && end >= today) { c.classList.add('live'); set('status live-dot', 'On now'); }
+        else if (end < today) { c.classList.add('past'); set('status done', 'Completed'); }
+        else {
+          const days = Math.round((Date.parse(start) - Date.parse(today)) / 864e5);
+          set('status soon', days === 1 ? 'Tomorrow' : days <= 60 ? `In ${days} days` : 'Coming up');
+          if (days <= 60) c.style.setProperty('--soon', String(1 - days / 60));
+        }
+      }
+
+      let filter = 'all';
+      const showPast = document.getElementById('showPast') as HTMLInputElement;
+      const apply = () => {
+        let shown = 0;
+        for (const c of cards) {
+          const ok = (filter === 'all' || c.dataset.kind === filter) && (showPast.checked || !c.classList.contains('past'));
+          c.hidden = !ok; if (ok) shown++;
+        }
+        root.querySelectorAll<HTMLElement>('.month').forEach(m => { m.hidden = !m.querySelector('.ev:not([hidden])'); });
+        document.getElementById('none')!.hidden = shown > 0;
+        root.querySelectorAll('[data-reveal]:not(.in)').forEach(el => el.classList.add('in'));
+      };
+      document.querySelectorAll<HTMLButtonElement>('[data-filter]').forEach(b => b.addEventListener('click', () => {
+        filter = b.dataset.filter!;
+        document.querySelectorAll('[data-filter]').forEach(x => x.setAttribute('aria-pressed', String(x === b)));
+        apply();
+      }));
+      showPast.addEventListener('change', apply);
+      apply();
+
+    }
+    document.addEventListener('astro:page-load', init);
+  </script>
+</Layout>
+
+<style>
+  .cal-intro { padding: 48px 0 6px; }
+  .cal-intro .eyebrow { display: inline-flex; align-items: center; gap: 8px; font-size: 12px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: var(--red); }
+  .cal-intro .eyebrow::before { content: ''; width: 22px; height: 2px; background: currentColor; border-radius: 2px; }
+  .cal-intro h1 { font-size: clamp(36px, 5vw, 60px); font-weight: 800; margin: 10px 0; }
+  .cal-intro .accent { background: linear-gradient(100deg, var(--red), #f05d23 60%, var(--gold)); -webkit-background-clip: text; background-clip: text; color: transparent; }
+  .cal-intro .lede { color: var(--muted); max-width: 640px; margin: 0; font-size: 17px; }
+  .controls { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 14px; padding: 16px 0 8px; position: sticky; top: var(--hdr, 68px); z-index: 20; background: linear-gradient(var(--paper) 75%, transparent); }
+  .chips { display: flex; flex-wrap: wrap; gap: 8px; }
+  .logo-chip { gap: 8px; }
+  .logo-chip img { width: auto; display: block; }
+  .logo-chip[aria-pressed='true'] { background: #fff; color: var(--ink); border-color: var(--ink); box-shadow: 0 0 0 2px var(--ink); }
+  .pdc-mark { background: #14161f; border-radius: 6px; padding: 3px 6px; display: inline-flex; }
+  .toggle { display: inline-flex; align-items: center; gap: 10px; font-weight: 600; font-size: 14px; cursor: pointer; user-select: none; }
+  .toggle input { position: absolute; opacity: 0; }
+  .track { width: 42px; height: 24px; border-radius: 999px; background: #d9d2c4; position: relative; transition: background .25s; }
+  .thumb { position: absolute; top: 3px; left: 3px; width: 18px; height: 18px; border-radius: 50%; background: #fff; box-shadow: var(--shadow-sm); transition: transform .35s var(--spring); }
+  .toggle input:checked + .track { background: var(--green); }
+  .toggle input:checked + .track .thumb { transform: translateX(18px); }
+  .toggle input:focus-visible + .track { outline: 3px solid var(--sky); outline-offset: 2px; }
+
+  .month { margin-top: 36px; }
+  .month-title { font-size: 15px; font-family: var(--body); font-weight: 800; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); display: flex; align-items: center; gap: 14px; margin-bottom: 14px; }
+  .month-title::after { content: ''; flex: 1; height: 1px; background: var(--line); }
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 18px; perspective: 1200px; }
+  .ev {
+    --accent: var(--ink); --accent-2: #2b2f3c;
+    position: relative; display: flex; flex-direction: column; text-decoration: none; color: inherit;
+    background: var(--card); border: 1px solid var(--line); border-radius: 22px; overflow: hidden; isolation: isolate;
+    box-shadow: var(--shadow-sm);
+    transition: transform .35s var(--ease), box-shadow .35s var(--ease), border-color .3s, opacity .3s;
+  }
+  .ev:hover { transform: translateY(-3px); box-shadow: var(--shadow); border-color: #d9cfbb; }
+
+  .ticket {
+    position: relative; overflow: hidden; display: flex; align-items: flex-end; gap: 14px; padding: 16px 16px 14px; min-height: 112px; color: #fff;
+    background: linear-gradient(135deg, var(--accent), var(--accent-2));
+  }
+  .ticket::after { /* tear-off edge */
+    content: ''; position: absolute; left: 0; right: 0; bottom: -6px; height: 12px;
+    background: radial-gradient(circle at 6px 0, transparent 5px, var(--card) 5.5px) 0 0 / 12px 12px repeat-x;
+  }
+  .board { position: absolute; right: -34px; top: -34px; width: 150px; height: 150px; opacity: .6; fill: none; }
+  .board circle { stroke-width: 6; }
+  .board .r0 { stroke: rgba(255, 255, 255, .08); stroke-width: 1.5; }
+  .board .r1 { stroke: rgba(255, 255, 255, .22); stroke-dasharray: 6.28 6.28; }
+  .board .r2 { stroke: rgba(255, 255, 255, .1); stroke-width: 14; }
+  .board .r3 { stroke: rgba(255, 255, 255, .26); stroke-dasharray: 3.14 3.14; }
+  .board .r4 { fill: rgba(255, 255, 255, .25); stroke: none; }
+  .board .r5 { fill: #fff; stroke: none; }
+  .date { display: flex; flex-direction: column; line-height: 1; }
+  .date .wd, .date .mo { font-size: 11px; font-weight: 800; letter-spacing: .14em; text-transform: uppercase; opacity: .8; }
+  .date .mo small { font-size: 10px; letter-spacing: .06em; opacity: .85; }
+  .date .dn { font-family: var(--display); font-size: 44px; font-weight: 800; letter-spacing: -.04em; margin: 4px 0 3px; }
+  .date .dn small { font-size: 24px; opacity: .85; }
+  .tv-slot { position: absolute; top: 14px; right: 14px; z-index: 1; }
+  .tv-slot :global(.tv) { box-shadow: 0 6px 16px -6px rgba(0, 0, 0, .4); border-color: transparent; }
+  .len { margin-left: auto; position: relative; z-index: 1; font-size: 11px; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; background: rgba(255, 255, 255, .16); border: 1px solid rgba(255, 255, 255, .22); padding: 4px 9px; border-radius: 999px; backdrop-filter: blur(6px); }
+
+  .body { display: flex; flex-direction: column; flex: 1; padding: 16px 18px 16px; min-width: 0; }
+  h3 { font-size: 21px; transition: color .25s; }
+  .ev:hover h3 { color: var(--red); }
+  .tag { margin: 3px 0 0; font-weight: 700; font-size: 14px; color: var(--red); }
+  .where { margin: 8px 0 0; font-size: 13px; color: var(--muted); display: flex; gap: 6px; align-items: center; }
+  .where svg { flex: none; opacity: .7; }
+  .foot { margin-top: auto; padding-top: 14px; display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+  .status { font-size: 12px; font-weight: 800; color: var(--muted); letter-spacing: .02em; }
+  .status.soon { color: var(--green); background: var(--green-soft); padding: 4px 10px; border-radius: 999px; }
+  .status.done { background: var(--paper-2); padding: 4px 10px; border-radius: 999px; }
+  .winner { display: inline-flex; align-items: center; gap: 9px; font-weight: 700; font-size: 14px; line-height: 1.15; }
+  .winner small { display: block; font-size: 10px; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; color: var(--gold); }
+  .winner .avatar { box-shadow: 0 0 0 2px #fff, 0 0 0 4px var(--gold); }
+  .go { font-size: 13px; font-weight: 800; color: var(--ink); display: inline-flex; gap: 6px; opacity: .55; transform: translateX(-6px); transition: opacity .3s, transform .35s var(--spring); }
+  .go span { transition: transform .35s var(--spring); }
+  .ev:hover .go { opacity: 1; transform: none; }
+  .ev:hover .go span { transform: translateX(4px); }
+
+  /* live: glowing animated border */
+  .ev.live { border-color: transparent; }
+  .ev.live .ticket { background: linear-gradient(135deg, var(--red), #8f1426); }
+  .ev.live::before {
+    content: ''; position: absolute; inset: 0; z-index: 4; pointer-events: none; border-radius: inherit; padding: 2px;
+    background: var(--red);
+    -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); -webkit-mask-composite: xor; mask-composite: exclude;
+  }
+  .ev.live { box-shadow: 0 20px 40px -18px rgba(215, 38, 61, .55); }
+  .ev.past { opacity: .78; filter: saturate(.75); }
+  .ev.past:hover { opacity: 1; filter: none; }
+
+
+  @media (max-width: 400px) { .grid { grid-template-columns: 1fr; } }
+
+</style>

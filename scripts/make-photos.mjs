@@ -60,3 +60,6 @@ for (const line of execFileSync(FACES, files, { encoding: 'utf8' }).trim().split
 }
 await writeFile(`${ROOT}src/data/photo-faces.json`, JSON.stringify(faces, null, 1) + '\n');
 console.log(`faces: ${Object.keys(faces).length}/${files.length}`);
+
+// Responsive WebP copies for the site.
+execFileSync('node', [`${ROOT}scripts/make-image-sizes.mjs`], { stdio: 'inherit' });

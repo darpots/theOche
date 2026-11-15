@@ -1,6 +1,6 @@
 {
   "name": "the-oche",
-  "description": "The Oche \u2014 PDC darts calendar, matches, news and rankings",
+  "description": "The Oche — PDC darts calendar, matches, news and rankings",
   "scripts": {
     "dev": "astro dev",
     "build": "astro build",

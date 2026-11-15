@@ -5,6 +5,9 @@ A fast, static PDC darts site built with [Astro](https://astro.build) and hosted
 | Page | What it shows | Where the data comes from |
 |---|---|---|
 | **Calendar** (`/`) | PDC events on Sky Sports, ITV (incl. World Series) and PDCTV (European Tour), plus every Premier League night | PDC tournaments feed, filtered by the broadcaster map in `src/lib/pdc.mjs` |
+| **Home** (`/`) | Matchday page: hero, today's order of play (live scores), latest news, live race or rankings, what's coming up | Build-time data, refreshed in the browser |
+| **Calendar** (`/calendar`) | Every Sky Sports, ITV and PDCTV event, filterable by broadcaster | `calendar.json` |
+| **Match centre** (`/match?id=<fixture>`) | Score, averages, stat comparison, running-average chart, remaining-score chart per leg, leg table; refreshes every 15s while live | PDC fixtures feed + timeline (every visit), in the browser |
 | **Tournament pages** (`/tournament/<id>`) | One page per calendar event with the full schedule, scores and results by day (or all days). The nav's Matches link (and `/matches`) goes to the current event | PDC tournaments feed, refreshed **live in the browser every 30s** during an event; other events load their schedule from the feed in the browser |
 | **News** (`/news`) | Original, dated reports (the page covers the last month; tournament round-ups stay on their tournament page for longer) that link to their sources | BBC Sport, Dartsnews, Darts World and Guardian RSS feeds → written up by a free-tier LLM (Google Gemini by default) |
 | **Player pages** (`/players/<slug>`) | A profile page for each of the top 128: season average, first-9 average, 180s, checkout %, record, career titles, tournament history (linked to tournament pages) and the latest news | Generated at build from `public/data/players/*.json` |
@@ -51,3 +54,12 @@ npm test
 ```
 
 To run the newsdesk locally for real, set `NEWS_API_KEY` (and optionally `NEWS_API_URL` / `NEWS_MODEL`).
+
+## Site-wide features
+
+- **Live bar**: while the current event is on, a bar under the menu shows live scores (or the next match today) on every page, refreshed every 30 seconds, linking to the match centre.
+- **Search** (⌘K / Ctrl+K, or the search tab on phones): players, events and news from `/search.json`, built at deploy.
+- **Phones**: a bottom tab bar replaces the top menu.
+- **Flags**: SVG flags from flag-icons (MIT) in `public/flags`.
+- **Images**: cover photos have 600px and 1200px WebP copies (`scripts/make-image-sizes.mjs`) served with `srcset`.
+- **Player pages** add a form guide, recent matches (linked to the match centre), an average-by-event chart and a world-ranking chart. Ranking history builds up in `rankings.json` (`history`), one snapshot per change in the official order, so that chart and the rankings-table trend lines appear after the next ranking update.

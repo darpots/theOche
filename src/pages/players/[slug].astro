@@ -3,6 +3,8 @@
 // average, first 9, 180s, checkout), record, career titles, tournament
 // history and the latest news about the player.
 import Layout from '../../layouts/Layout.astro';
+import LineChart from '../../components/LineChart.astro';
+import rankings from '../../data/rankings.json';
 import { getCollection } from 'astro:content';
 import cutouts from '../../data/cutouts.json';
 import portraitsRaw from '../../data/portraits.json';
@@ -53,6 +55,14 @@ const facts = [
   ['Tour Card', p.tourCard ? 'Yes' : 'No'],
 ].filter(([, v]) => v != null && v !== '');
 
+const shortDate = (d: string) => new Date(d + 'T12:00:00Z').toLocaleDateString('en-GB', { day: 'numeric', month: 'short' });
+// Average at each event this season, oldest first.
+const evAvg = p.history.filter((h: any) => h.season === s.year && h.avg).slice().reverse()
+  .map((h: any) => ({ x: shortDate(h.date), y: h.avg, tip: `${h.name}${h.tag ? ` (${h.tag})` : ''}: ${h.avg.toFixed(2)} · ${h.label}` }));
+// World ranking at each update we've recorded.
+const rankHist = ((rankings as any).history || []).map((h: any) => ({ d: h.d, pos: h.pos[p.id] })).filter((h: any) => h.pos)
+  .map((h: any) => ({ x: h.d ? shortDate(h.d) : '', y: h.pos, tip: `${h.d ? shortDate(h.d) : ''}: world #${h.pos}` }));
+const form = (p.form || []) as any[];
 const news = (await getCollection('news'))
   .filter(n => n.data.players.some(x => keyName(x) === keyName(p.name)))
   .sort((a, b) => b.data.date.localeCompare(a.data.date))
@@ -67,7 +77,7 @@ const news = (await getCollection('news'))
         <p class="kick"><span class="rk">World #{rank.pos}</span>{p.tourCard && <span class="tc">Tour Card</span>}</p>
         <h1>{p.name}</h1>
         {p.nick && <p class="nick">“{p.nick}”</p>}
-        <p class="where">{flag(p.country)} {countryName(p.country)}{p.hometown && <> · {p.hometown}</>}</p>
+        <p class="where"><Fragment set:html={flag(p.country)} /> {countryName(p.country)}{p.hometown && <> · {p.hometown}</>}</p>
         <dl class="kpis">
           <div><dt>Prize money (2 yrs)</dt><dd>{money(rank.money)}</dd></div>
           <div><dt>{s.year} average</dt><dd>{st ? st.avg.toFixed(2) : '–'}</dd></div>
@@ -76,7 +86,7 @@ const news = (await getCollection('news'))
         </dl>
       </div>
       <div class="pb-pic" aria-hidden="true">
-        {cut ? <img class="cut" src={cut} alt="" /> : <span class="avatar big" style={`--size:220px;--c1:${c1};--c2:${c2}`}>{portrait ? <img src={portrait} alt="" /> : initials(p.name)}</span>}
+        {cut ? <img class="cut photo" src={cut} alt="" /> : <span class="avatar big" style={`--size:220px;--c1:${c1};--c2:${c2}`}>{portrait ? <img src={portrait} alt="" /> : initials(p.name)}</span>}
       </div>
     </div>
   </section>
@@ -105,6 +115,41 @@ const news = (await getCollection('news'))
         {s.titles.length > 0 && <p class="titles">🏆 {s.titles.join(' · ')}</p>}
         <p class="note">Covers PDC main-tour events: majors, Premier League, World Series, European Tour and Players Championships. Leg counts exclude set-play matches. Updated daily.</p>
       </section>
+
+      {form.length > 0 && (
+        <section class="block" data-reveal>
+          <div class="hh"><h2>Form</h2><p class="muted">Last {Math.min(5, form.length)} matches, newest first</p></div>
+          <ol class="fg" aria-label="Form guide">
+            {form.slice(0, 5).map(m => <li class={m.won ? 'w' : 'l'} title={`${m.won ? 'Won' : 'Lost'} ${m.my}-${m.their} v ${m.opp}, ${m.event}`}>{m.won ? 'W' : 'L'}</li>)}
+          </ol>
+          <ul class="rm">
+            {form.map(m => (
+              <li>
+                <a href={`/match?id=${m.id}`}>
+                  <span class="rm-d">{shortDate(m.date)}</span>
+                  <span class="rm-e"><b>v {m.opp}</b><small>{m.event}{m.tag ? ` · ${m.tag}` : ''} · {m.stage}</small></span>
+                  <span class={`rm-s ${m.won ? 'w' : 'l'}`}>{m.won ? 'W' : 'L'} {m.my}–{m.their}</span>
+                  <span class="rm-a">{m.avg ? m.avg.toFixed(2) : '–'}</span>
+                </a>
+              </li>
+            ))}
+          </ul>
+        </section>
+      )}
+
+      {evAvg.length > 1 && (
+        <section class="block" data-reveal>
+          <div class="hh"><h2>Average by event</h2><p class="muted">{s.year} majors, World Series and European Tour</p></div>
+          <LineChart points={evAvg} label={`${p.name}'s three-dart average at each ${s.year} event`} refY={st?.avg} refLabel={st ? `Season ${st.avg.toFixed(2)}` : undefined} />
+        </section>
+      )}
+
+      {rankHist.length > 1 && (
+        <section class="block" data-reveal>
+          <div class="hh"><h2>World ranking</h2><p class="muted">After each ranking event</p></div>
+          <LineChart points={rankHist} label={`${p.name}'s world ranking over time`} invert fmt="rank" height={160} />
+        </section>
+      )}
 
       <section class="block" data-reveal>
         <div class="hh"><h2>Tournament history</h2><p class="muted">{p.history.length} events · {finals} finals · {titles} titles</p></div>
@@ -168,11 +213,6 @@ const news = (await getCollection('news'))
       if (!root) return;
       root.querySelectorAll<HTMLElement>('.ring').forEach(el => requestAnimationFrame(() => el.classList.add('go')));
       root.querySelectorAll<HTMLElement>('.bars i').forEach((el, i) => setTimeout(() => el.classList.add('go'), 200 + i * 80));
-      if (!matchMedia('(prefers-reduced-motion: reduce)').matches) root.querySelectorAll<HTMLElement>('[data-count]').forEach(el => {
-        const end = Number(el.dataset.count), t0 = performance.now();
-        const tick = (now: number) => { const k = Math.min(1, (now - t0) / 1200); el.textContent = (end * (1 - Math.pow(1 - k, 3))).toFixed(2); if (k < 1) requestAnimationFrame(tick); };
-        requestAnimationFrame(tick);
-      });
       const chips = root.querySelectorAll<HTMLButtonElement>('.hfilter .chip');
       chips.forEach(b => b.addEventListener('click', () => {
         chips.forEach(c => c.setAttribute('aria-pressed', String(c === b)));
@@ -187,7 +227,7 @@ const news = (await getCollection('news'))
 
 <style>
   .pbanner { position: relative; overflow: hidden; isolation: isolate; color: #fff; background: radial-gradient(70% 120% at 85% 120%, rgba(215, 38, 61, .5), transparent 60%), radial-gradient(60% 90% at 0% -20%, rgba(14, 138, 95, .35), transparent 60%), linear-gradient(160deg, #191b26, #0d0e14 70%); }
-  .prings { position: absolute; z-index: -1; right: -6%; top: 55%; translate: 0 -50%; width: min(640px, 80vw); fill: none; stroke: rgba(255, 255, 255, .08); stroke-width: 1.2; animation: spin 140s linear infinite; }
+  .prings { position: absolute; z-index: -1; right: -6%; top: 55%; translate: 0 -50%; width: min(640px, 80vw); fill: none; stroke: rgba(255, 255, 255, .08); stroke-width: 1.2; }
   .prings circle:nth-child(2) { stroke: rgba(14, 138, 95, .4); stroke-width: 6; stroke-dasharray: 13 13; }
   .prings circle:nth-child(4) { stroke: rgba(215, 38, 61, .4); stroke-width: 5; stroke-dasharray: 10 10; }
   @keyframes spin { to { rotate: 360deg; } }
@@ -261,6 +301,21 @@ const news = (await getCollection('news'))
   .f-sf { background: var(--green-soft); color: #075c3f; }
   .f-qf { background: var(--sky-soft); color: #1b2f8f; }
 
+  .fg { list-style: none; display: flex; gap: 6px; margin: 4px 0 14px; padding: 0; }
+  .fg li { width: 34px; height: 34px; border-radius: 10px; display: grid; place-items: center; font-weight: 800; font-family: var(--display); color: #fff; }
+  .fg .w { background: var(--green); }
+  .fg .l { background: var(--red); }
+  .rm { list-style: none; margin: 0; padding: 0; background: var(--card); border: 1px solid var(--line); border-radius: 16px; overflow: hidden; }
+  .rm li + li { border-top: 1px solid var(--line); }
+  .rm a { display: grid; grid-template-columns: 56px 1fr auto 56px; align-items: center; gap: 12px; padding: 10px 14px; text-decoration: none; font-variant-numeric: tabular-nums; }
+  .rm a:hover { background: var(--paper); }
+  .rm-d { font-size: 12px; font-weight: 700; color: var(--muted); }
+  .rm-e { display: flex; flex-direction: column; min-width: 0; }
+  .rm-e b { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .rm-e small { color: var(--muted); font-size: 12px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .rm-s { font-weight: 800; font-size: 14px; }
+  .rm-s.w { color: var(--green); } .rm-s.l { color: var(--red); }
+  .rm-a { text-align: right; font-weight: 700; color: var(--ink-2); }
   .facts dl { margin: 0; }
   .facts dl div { display: flex; justify-content: space-between; gap: 12px; padding: 8px 0; border-top: 1px solid var(--line); font-size: 14px; }
   .facts dl div:first-child { border-top: 0; }

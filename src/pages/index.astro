@@ -1,253 +1,219 @@
 ---
+// Matchday homepage: what's on now, the latest news, who's moving in the
+// rankings and what's coming up. The full season lives on /calendar.
 import Layout from '../layouts/Layout.astro';
 import Hero from '../components/Hero.astro';
+import NewsArt from '../components/NewsArt.astro';
+import { getCollection } from 'astro:content';
 import calendar from '../data/calendar.json';
+import data from '../data/tournament.json';
+import rankings from '../data/rankings.json';
 import portraitsRaw from '../data/portraits.json';
-import { tvBadge, keyName } from '../lib/pdc.mjs';
-import { dayNum, monthShort, monthLong, weekday, dateRange, initials, avatarColours } from '../lib/format.mjs';
+import { tvBadge, flag, keyName } from '../lib/pdc.mjs';
+import { newsDate, dayNum, monthShort, weekday, money, avatarColours, initials } from '../lib/format.mjs';
 
+const today = new Date().toLocaleDateString('en-CA', { timeZone: 'Europe/London' });
+const t = data.tournament as any;
+const all = t.stages.flatMap((s: any) => s.fixtures.map((f: any) => ({ ...f, stage: /^group/i.test(s.name) ? 'Group stage' : s.name })))
+  .filter((f: any) => f.p1 && f.p2);
+const todays = all.filter((f: any) => f.date === today).sort((a: any, b: any) => (a.time || '99').localeCompare(b.time || '99'));
+const latest = all.filter((f: any) => f.status === 'result').sort((a: any, b: any) => `${b.date}${b.time}`.localeCompare(`${a.date}${a.time}`)).slice(0, 8);
+const strip = todays.length ? todays : latest;
+const stripTitle = todays.length ? 'Today’s order of play' : 'Latest results';
+
+const news = (await getCollection('news')).map(n => n.data).sort((a, b) => b.date.localeCompare(a.date)).slice(0, 3);
+const upcoming = calendar.events.filter(e => e.start > today && e.id !== t.id).slice(0, 6);
 const portraits = portraitsRaw as Record<string, { image: string }>;
-const pic = (name: string) => portraits[keyName(name)]?.image;
-const av = (name: string) => { const [c1, c2] = avatarColours(name); return `--c1:${c1};--c2:${c2}`; };
-const days = (e: { start: string; end: string }) => Math.round((Date.parse(e.end) - Date.parse(e.start)) / 864e5) + 1;
-
-type Ev = (typeof calendar.events)[number];
-const events = calendar.events as Ev[];
-const months = new Map<string, Ev[]>();
-for (const e of events) {
-  const k = e.start.slice(0, 7);
-  if (!months.has(k)) months.set(k, []);
-  months.get(k)!.push(e);
-}
-const place = (e: { venue: string | null; city: string | null }) => (e.venue && e.city && e.venue.includes(e.city) ? e.venue : [e.venue, e.city].filter(Boolean).join(' · '));
-const kind = (e: Ev) => e.broadcaster;
+const prev = (rankings.previous || {}) as Record<string, number>;
+const top = rankings.players.slice(0, 8).map(p => ({ ...p, move: prev[p.id] ? prev[p.id] - p.pos : 0 }));
+const pic = (n: string) => portraits[keyName(n)]?.image;
+const av = (n: string) => { const [c1, c2] = avatarColours(n); return `--c1:${c1};--c2:${c2}`; };
+const place = (e: { venue: string | null; city: string | null }) => (e.venue && e.city && e.venue.includes(e.city) ? e.venue : [e.venue, e.city].filter(Boolean).join(', '));
 ---
-<Layout title="The Oche" description="Every PDC darts event on Sky Sports, ITV and PDCTV — dates, venues, broadcasters and winners." active="calendar">
+<Layout title="The Oche" description="PDC darts today: live scores, the latest news, live rankings and every event on Sky Sports, ITV and PDCTV.">
   <Hero />
 
-  <section class="wrap cal-intro" data-reveal>
-    <span class="eyebrow">Season calendar</span>
-    <h2>Every big night on <span class="accent">the oche.</span></h2>
-    <p class="lede">The PDC majors, Premier League nights and World Series events on Sky Sports and ITV, plus every European Tour event live on PDCTV.</p>
-  </section>
+  {strip.length > 0 && (
+    <section class="wrap sec" aria-labelledby="op">
+      <div class="sh"><h2 id="op">{stripTitle}</h2><a href={`/tournament/${t.id}`}>{t.name} schedule →</a></div>
+      <ol class="op" id="op-list" data-id={t.id}>
+        {strip.map((f: any) => {
+          const w1 = f.winner && f.winner === f.p1.id, w2 = f.winner && f.winner === f.p2.id;
+          return (
+            <li class={`opc ${f.status}`} data-fx={f.id}>
+              <a href={`/match?id=${f.id}`}>
+                <span class="opm">{f.stage}<b data-st>{f.status === 'result' ? 'Result' : f.status === 'live' ? 'Live' : f.time || 'TBC'}</b></span>
+                <span class:list={['opp', { w: w1 }]}><Fragment set:html={flag(f.p1.country)} /> {f.p1.name}<b data-s1>{f.status !== 'upcoming' ? f.s1 : ''}</b></span>
+                <span class:list={['opp', { w: w2 }]}><Fragment set:html={flag(f.p2.country)} /> {f.p2.name}<b data-s2>{f.status !== 'upcoming' ? f.s2 : ''}</b></span>
+              </a>
+            </li>
+          );
+        })}
+      </ol>
+    </section>
+  )}
 
-  <section class="wrap controls" data-reveal>
-    <div class="chips" role="group" aria-label="Filter by broadcaster">
-      <button class="chip" data-filter="all" aria-pressed="true">All events</button>
-      <button class="chip logo-chip" data-filter="sky" aria-pressed="false" aria-label="Sky Sports"><img src="/brand/sky-sports.svg" alt="" height="14" /></button>
-      <button class="chip logo-chip" data-filter="itv" aria-pressed="false" aria-label="ITV"><img src="/brand/itv.svg" alt="" height="18" /></button>
-      <button class="chip logo-chip" data-filter="pdctv" aria-pressed="false" aria-label="European Tour on PDCTV"><span class="pdc-mark"><img src="/brand/pdctv.png" alt="" height="12" /></span>European Tour</button>
-    </div>
-    <label class="toggle">
-      <input type="checkbox" id="showPast" />
-      <span class="track"><span class="thumb"></span></span>
-      Show completed
-    </label>
-  </section>
-
-  <section class="wrap months" id="months">
-    {[...months.entries()].map(([k, list]) => (
-      <div class="month" data-month={k}>
-        <h2 class="month-title"><span>{monthLong(k + '-01')}</span></h2>
-        <div class="grid">
-          {list.map((e, i) => (
-            <a
-              href={`/tournament/${e.id}`}
-              class={`ev ev-${e.broadcaster}`}
-              data-kind={kind(e)} data-start={e.start} data-end={e.end}
-              data-reveal style={`--d:${Math.min(i, 6) * 60}ms`}>
-              <div class="ticket">
-                <svg class="board" viewBox="-50 -50 100 100" aria-hidden="true">
-                  <circle r="48" class="r0" /><circle r="40" class="r1" /><circle r="28" class="r2" /><circle r="20" class="r3" /><circle r="6" class="r4" /><circle r="2.4" class="r5" />
-                </svg>
-                <div class="date">
-                  <span class="wd">{weekday(e.start)}</span>
-                  <span class="dn">{dayNum(e.start)}{e.end !== e.start && <small>–{dayNum(e.end)}</small>}</span>
-                  <span class="mo">{monthShort(e.start)}{e.end.slice(0, 7) !== e.start.slice(0, 7) && `–${monthShort(e.end)}`}</span>
-                </div>
-                <div class="tv-slot"><Fragment set:html={tvBadge(e.broadcaster)} /></div>
-                <span class="len">{days(e) === 1 ? 'One night' : `${days(e)} days`}</span>
-              </div>
-              <div class="body">
-                <h3>{e.name}</h3>
-                {e.tag && <p class="tag">{e.tag}</p>}
-                <p class="where"><svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true"><path d="M12 22s7-6.2 7-12a7 7 0 1 0-14 0c0 5.8 7 12 7 12z" fill="none" stroke="currentColor" stroke-width="2" /><circle cx="12" cy="10" r="2.5" fill="currentColor" /></svg>{place(e) || 'Venue to be announced'}</p>
-                <p class="when sr-only">{dateRange(e.start, e.end)}</p>
-                <div class="foot">
-                  {e.winner
-                    ? <span class="winner"><span class="avatar" style={`--size:30px;${av(e.winner.name)}`}>{pic(e.winner.name) ? <img src={pic(e.winner.name)} alt="" loading="lazy" /> : initials(e.winner.name)}</span><span><small>Winner</small>{e.winner.name}</span></span>
-                    : <span class="status" data-status></span>}
-                  <span class="go">Schedule <span aria-hidden="true">→</span></span>
-                </div>
-              </div>
-            </a>
-          ))}
-        </div>
+  <section class="wrap sec two">
+    <div>
+      <div class="sh"><h2>Latest news</h2><a href="/news">All news →</a></div>
+      <div class="nl">
+        {news.map((n, i) => (
+          <a class:list={['ni card', { lead: i === 0 }]} href={`/news/${n.slug}`}>
+            <NewsArt story={n} class="ni-art" eager={i === 0} />
+            <div class="ni-c"><time datetime={n.date}>{newsDate(n.date)}</time><h3>{n.headline}</h3>{i === 0 && <p>{n.standfirst}</p>}</div>
+          </a>
+        ))}
       </div>
-    ))}
-    <p class="empty" id="none" hidden>No events match this filter.</p>
+    </div>
+    <aside>
+      <div class="sh"><h2 id="rk-title">World rankings</h2><a href="/rankings">Top 128 →</a></div>
+      <ol class="rk card" id="rk">
+        {top.map(p => (
+          <li>
+            <a href={`/players/${p.slug}`}>
+              <span class="rp">{p.pos}</span>
+              <span class="avatar" style={`--size:34px;${av(p.name)}`}>{pic(p.name) ? <img src={pic(p.name)} alt="" loading="lazy" /> : initials(p.name)}</span>
+              <span class="rn"><Fragment set:html={flag(p.country)} /> {p.name}</span>
+              <span class="rm">{money(p.money)}</span>
+            </a>
+          </li>
+        ))}
+      </ol>
+      <p class="rk-note muted" id="rk-note">Official PDC Order of Merit.</p>
+    </aside>
   </section>
 
+  <section class="wrap sec" aria-labelledby="cu">
+    <div class="sh"><h2 id="cu">Coming up</h2><a href="/calendar">Full calendar →</a></div>
+    <ol class="tl">
+      {upcoming.map(e => (
+        <li>
+          <a href={`/tournament/${e.id}`}>
+            <span class="td"><small>{weekday(e.start)}</small><b>{dayNum(e.start)}</b><small>{monthShort(e.start)}</small></span>
+            <span class="tn"><b>{e.name}</b>{e.tag && <small>{e.tag}</small>}<small class="muted">{place(e)}</small></span>
+            <span class="tb"><Fragment set:html={tvBadge(e.broadcaster)} /></span>
+          </a>
+        </li>
+      ))}
+    </ol>
+  </section>
 
   <script>
+    import { loadLiveRace } from '../lib/pdc.mjs';
+    import { money } from '../lib/format.mjs';
 
+    let timer: number | undefined;
     function init() {
-      const root = document.getElementById('months');
-      if (!root) return;
+      const list = document.getElementById('op-list');
+      clearInterval(timer);
       const today = new Date().toLocaleDateString('en-CA', { timeZone: 'Europe/London' });
-      const cards = [...root.querySelectorAll<HTMLElement>('.ev')];
-      for (const c of cards) {
-        const { start = '', end = '' } = c.dataset;
-        const s = c.querySelector<HTMLElement>('[data-status]');
-        const set = (cls: string, txt: string) => { if (s) { s.className = cls; s.textContent = txt; } };
-        if (start <= today && end >= today) { c.classList.add('live'); set('status live-dot', 'On now'); }
-        else if (end < today) { c.classList.add('past'); set('status done', 'Completed'); }
-        else {
-          const days = Math.round((Date.parse(start) - Date.parse(today)) / 864e5);
-          set('status soon', days === 1 ? 'Tomorrow' : days <= 60 ? `In ${days} days` : 'Coming up');
-          if (days <= 60) c.style.setProperty('--soon', String(1 - days / 60));
-        }
+
+      // Keep today's scores current.
+      if (list) {
+        const refresh = async () => {
+          if (document.hidden) return;
+          try {
+            const a = (await (await fetch(`https://tournaments.darts.web.gc.pdcservices.co.uk/v2/${list.dataset.id}`, { cache: 'no-store' })).json()).data.attributes;
+            const byId = new Map((a.stages || []).flatMap((s: any) => s.fixtures || []).map((f: any) => [String(f.fixtureID), f]));
+            list.querySelectorAll<HTMLElement>('[data-fx]').forEach(li => {
+              const f: any = byId.get(li.dataset.fx!); if (!f) return;
+              const st = /result/i.test(f.status) ? 'result' : /live|progress/i.test(f.status) ? 'live' : 'upcoming';
+              li.className = `opc ${st}`;
+              li.querySelector('[data-st]')!.textContent = st === 'result' ? 'Result' : st === 'live' ? 'Live' : (f.startTime || '').slice(0, 5) || 'TBC';
+              if (st !== 'upcoming') { li.querySelector('[data-s1]')!.textContent = String(f.participant1Score ?? 0); li.querySelector('[data-s2]')!.textContent = String(f.participant2Score ?? 0); }
+              const w = f.winnerParticipantID ? String(f.winnerParticipantID) : null;
+              const ps = li.querySelectorAll('.opp');
+              ps[0].classList.toggle('w', !!w && w === String(f.participant1?.participantID));
+              ps[1].classList.toggle('w', !!w && w === String(f.participant2?.participantID));
+            });
+          } catch { /* keep the build-time scores */ }
+        };
+        refresh();
+        timer = window.setInterval(refresh, 30_000);
       }
 
-      let filter = 'all';
-      const showPast = document.getElementById('showPast') as HTMLInputElement;
-      const apply = () => {
-        let shown = 0;
-        for (const c of cards) {
-          const ok = (filter === 'all' || c.dataset.kind === filter) && (showPast.checked || !c.classList.contains('past'));
-          c.hidden = !ok; if (ok) shown++;
-        }
-        root.querySelectorAll<HTMLElement>('.month').forEach(m => { m.hidden = !m.querySelector('.ev:not([hidden])'); });
-        document.getElementById('none')!.hidden = shown > 0;
-        root.querySelectorAll('[data-reveal]:not(.in)').forEach(el => el.classList.add('in'));
-      };
-      document.querySelectorAll<HTMLButtonElement>('[data-filter]').forEach(b => b.addEventListener('click', () => {
-        filter = b.dataset.filter!;
-        document.querySelectorAll('[data-filter]').forEach(x => x.setAttribute('aria-pressed', String(x === b)));
-        apply();
-      }));
-      showPast.addEventListener('change', apply);
-      apply();
-
-      // Gentle tilt and spotlight that follows the pointer.
-      if (matchMedia('(hover: hover) and (prefers-reduced-motion: no-preference)').matches) {
-        for (const c of cards) {
-          c.addEventListener('pointermove', e => {
-            const r = c.getBoundingClientRect();
-            const x = (e.clientX - r.left) / r.width, y = (e.clientY - r.top) / r.height;
-            c.style.setProperty('--mx', `${x * 100}%`); c.style.setProperty('--my', `${y * 100}%`);
-            c.style.setProperty('--rx', `${(0.5 - y) * 6}deg`); c.style.setProperty('--ry', `${(x - 0.5) * 8}deg`);
-          });
-          c.addEventListener('pointerleave', () => { c.style.setProperty('--rx', '0deg'); c.style.setProperty('--ry', '0deg'); });
-        }
-      }
-
+      // During a ranking event, show the live race instead of the official order.
+      const rk = document.getElementById('rk');
+      if (rk) loadLiveRace(today).then(res => {
+        if (!res || !document.getElementById('rk')) return;
+        const top = res.race.slice(0, 8);
+        const esc = (x: unknown) => String(x ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]!);
+        const old = new Map([...rk.querySelectorAll('li')].map(li => [li.querySelector('.rn')!.textContent!.trim(), li.innerHTML]));
+        rk.innerHTML = top.map((p: any) => {
+          const prev = old.get(p.name);
+          const tmp = document.createElement('div'); tmp.innerHTML = prev || '';
+          const avatar = tmp.querySelector('.avatar')?.outerHTML || '';
+          const mv = p.move ? `<i class="${p.move > 0 ? 'up' : 'down'}">${p.move > 0 ? '▲' : '▼'}${Math.abs(p.move)}</i>` : '';
+          return `<li><a href="/players/${esc((p.slug || ''))}"><span class="rp">${p.live}${mv}</span>${avatar}<span class="rn">${esc(p.name)}</span><span class="rm">${money(p.money)}</span></a></li>`;
+        }).join('');
+        document.getElementById('rk-title')!.textContent = 'Live race';
+        document.getElementById('rk-note')!.textContent = `Projected standings during the ${res.event.name.replace(/^\d{4}\s+/, '')}. Movement is against the official list.`;
+      });
     }
     document.addEventListener('astro:page-load', init);
   </script>
 </Layout>
 
 <style>
-  .cal-intro { padding: 64px 0 6px; }
-  .cal-intro .eyebrow { display: inline-flex; align-items: center; gap: 8px; font-size: 12px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: var(--red); }
-  .cal-intro .eyebrow::before { content: ''; width: 22px; height: 2px; background: currentColor; border-radius: 2px; }
-  .cal-intro h2 { font-size: clamp(32px, 4.4vw, 54px); font-weight: 800; margin: 10px 0; }
-  .cal-intro .accent { background: linear-gradient(100deg, var(--red), #f05d23 60%, var(--gold)); -webkit-background-clip: text; background-clip: text; color: transparent; }
-  .cal-intro .lede { color: var(--muted); max-width: 640px; margin: 0; font-size: 17px; }
-  .controls { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 14px; padding: 16px 0 8px; position: sticky; top: 68px; z-index: 20; background: linear-gradient(var(--paper) 75%, transparent); }
-  .chips { display: flex; flex-wrap: wrap; gap: 8px; }
-  .logo-chip { gap: 8px; }
-  .logo-chip img { width: auto; display: block; }
-  .logo-chip[aria-pressed='true'] { background: #fff; color: var(--ink); border-color: var(--ink); box-shadow: 0 0 0 2px var(--ink); }
-  .pdc-mark { background: #14161f; border-radius: 6px; padding: 3px 6px; display: inline-flex; }
-  .toggle { display: inline-flex; align-items: center; gap: 10px; font-weight: 600; font-size: 14px; cursor: pointer; user-select: none; }
-  .toggle input { position: absolute; opacity: 0; }
-  .track { width: 42px; height: 24px; border-radius: 999px; background: #d9d2c4; position: relative; transition: background .25s; }
-  .thumb { position: absolute; top: 3px; left: 3px; width: 18px; height: 18px; border-radius: 50%; background: #fff; box-shadow: var(--shadow-sm); transition: transform .35s var(--spring); }
-  .toggle input:checked + .track { background: var(--green); }
-  .toggle input:checked + .track .thumb { transform: translateX(18px); }
-  .toggle input:focus-visible + .track { outline: 3px solid var(--sky); outline-offset: 2px; }
+  .sec { margin-top: 44px; }
+  .sh { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; margin-bottom: 14px; }
+  .sh h2 { font-size: 26px; }
+  .sh a { font-weight: 700; font-size: 14px; text-decoration: none; color: var(--ink-2); white-space: nowrap; }
+  .sh a:hover { color: var(--red); }
 
-  .month { margin-top: 36px; }
-  .month-title { font-size: 15px; font-family: var(--body); font-weight: 800; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); display: flex; align-items: center; gap: 14px; margin-bottom: 14px; }
-  .month-title::after { content: ''; flex: 1; height: 1px; background: var(--line); }
-  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 18px; perspective: 1200px; }
-  .ev {
-    --accent: var(--ink); --accent-2: #3a3f52; --rx: 0deg; --ry: 0deg; --mx: 50%; --my: 0%;
-    position: relative; display: flex; flex-direction: column; text-decoration: none; color: inherit;
-    background: var(--card); border: 1px solid var(--line); border-radius: 22px; overflow: hidden; isolation: isolate;
-    box-shadow: var(--shadow-sm);
-    transform: rotateX(var(--rx)) rotateY(var(--ry));
-    transition: transform .5s var(--ease), box-shadow .4s var(--ease), border-color .3s, opacity .3s;
-  }
-  .ev:hover { transform: translateY(-6px) rotateX(var(--rx)) rotateY(var(--ry)); box-shadow: 0 26px 50px -22px color-mix(in srgb, var(--accent) 55%, transparent), var(--shadow); border-color: color-mix(in srgb, var(--accent) 35%, var(--line)); transition: transform .15s linear, box-shadow .4s var(--ease), border-color .3s; }
-  .ev::after { content: ''; position: absolute; inset: 0; z-index: 3; pointer-events: none; border-radius: inherit; background: radial-gradient(420px circle at var(--mx) var(--my), rgba(255, 255, 255, .22), transparent 45%); opacity: 0; transition: opacity .3s; }
-  .ev:hover::after { opacity: 1; }
-  .ev-sky { --accent: #1d3fd6; --accent-2: #0b1b6e; }
-  .ev-itv { --accent: #0b8a8f; --accent-2: #064e52; }
-  .ev-pdctv { --accent: #c4162e; --accent-2: #4a0912; }
+  .op { list-style: none; margin: 0; padding: 2px 2px 10px; display: grid; grid-auto-flow: column; grid-auto-columns: minmax(250px, 1fr); gap: 12px; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: thin; }
+  .opc { scroll-snap-align: start; }
+  .opc a { display: flex; flex-direction: column; gap: 6px; padding: 14px 16px; height: 100%; background: var(--card); border: 1px solid var(--line); border-radius: 16px; text-decoration: none; transition: border-color .2s, transform .3s var(--ease); }
+  .opc a:hover { border-color: var(--ink); transform: translateY(-2px); }
+  .opc.live a { border-color: var(--red); box-shadow: 0 0 0 3px var(--red-soft); }
+  .opm { display: flex; justify-content: space-between; font-size: 12px; font-weight: 700; color: var(--muted); }
+  .opm b { color: var(--ink-2); font-variant-numeric: tabular-nums; }
+  .opc.live .opm b { color: var(--red); }
+  .opp { display: flex; align-items: center; gap: 8px; font-weight: 600; font-size: 15px; color: var(--muted); }
+  .opp b { margin-left: auto; font-family: var(--display); font-size: 20px; font-variant-numeric: tabular-nums; color: var(--muted); }
+  .opc.upcoming .opp, .opp.w { color: var(--ink); }
+  .opp.w b { color: var(--ink); }
+  .opc.live .opp b { color: var(--ink); }
 
-  .ticket {
-    position: relative; overflow: hidden; display: flex; align-items: flex-end; gap: 14px; padding: 16px 16px 14px; min-height: 112px; color: #fff;
-    background: radial-gradient(120% 140% at 100% 0%, color-mix(in srgb, var(--accent) 85%, #fff 15%), transparent 60%), linear-gradient(135deg, var(--accent), var(--accent-2));
-  }
-  .ticket::after { /* tear-off edge */
-    content: ''; position: absolute; left: 0; right: 0; bottom: -6px; height: 12px;
-    background: radial-gradient(circle at 6px 0, transparent 5px, var(--card) 5.5px) 0 0 / 12px 12px repeat-x;
-  }
-  .board { position: absolute; right: -34px; top: -34px; width: 150px; height: 150px; opacity: .9; transition: transform 1.2s var(--ease); fill: none; }
-  .board circle { stroke-width: 6; }
-  .board .r0 { stroke: rgba(255, 255, 255, .08); stroke-width: 1.5; }
-  .board .r1 { stroke: rgba(255, 255, 255, .22); stroke-dasharray: 6.28 6.28; }
-  .board .r2 { stroke: rgba(255, 255, 255, .1); stroke-width: 14; }
-  .board .r3 { stroke: rgba(255, 255, 255, .26); stroke-dasharray: 3.14 3.14; }
-  .board .r4 { fill: rgba(255, 255, 255, .25); stroke: none; }
-  .board .r5 { fill: #fff; stroke: none; }
-  .ev:hover .board { transform: rotate(72deg) scale(1.08); }
-  .date { display: flex; flex-direction: column; line-height: 1; }
-  .date .wd, .date .mo { font-size: 11px; font-weight: 800; letter-spacing: .14em; text-transform: uppercase; opacity: .8; }
-  .date .mo small { font-size: 10px; letter-spacing: .06em; opacity: .85; }
-  .date .dn { font-family: var(--display); font-size: 44px; font-weight: 800; letter-spacing: -.04em; margin: 4px 0 3px; }
-  .date .dn small { font-size: 24px; opacity: .85; }
-  .tv-slot { position: absolute; top: 14px; right: 14px; z-index: 1; }
-  .tv-slot :global(.tv) { box-shadow: 0 6px 16px -6px rgba(0, 0, 0, .4); border-color: transparent; }
-  .len { margin-left: auto; position: relative; z-index: 1; font-size: 11px; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; background: rgba(255, 255, 255, .16); border: 1px solid rgba(255, 255, 255, .22); padding: 4px 9px; border-radius: 999px; backdrop-filter: blur(6px); }
+  .two { display: grid; grid-template-columns: minmax(0, 1.7fr) minmax(0, 1fr); gap: 32px; align-items: start; }
+  .nl { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  .ni { display: flex; flex-direction: column; overflow: hidden; text-decoration: none; }
+  .ni.lead { grid-column: 1 / -1; display: grid; grid-template-columns: 1.1fr 1fr; }
+  .ni :global(.ni-art) { aspect-ratio: 16 / 9; }
+  .ni.lead :global(.ni-art) { aspect-ratio: auto; height: 100%; min-height: 240px; }
+  .ni-c { padding: 14px 16px 18px; display: flex; flex-direction: column; gap: 6px; }
+  .ni.lead .ni-c { padding: 22px; justify-content: center; }
+  .ni time { font-size: 12px; font-weight: 800; color: var(--red); }
+  .ni h3 { font-size: 18px; line-height: 1.2; }
+  .ni.lead h3 { font-size: 26px; }
+  .ni p { margin: 0; color: var(--muted); }
+  .ni:hover h3 { color: var(--red); }
 
-  .body { display: flex; flex-direction: column; flex: 1; padding: 16px 18px 16px; min-width: 0; }
-  h3 { font-size: 21px; transition: color .25s; }
-  .ev:hover h3 { color: var(--accent); }
-  .tag { margin: 3px 0 0; font-weight: 700; font-size: 14px; color: var(--accent); }
-  .where { margin: 8px 0 0; font-size: 13px; color: var(--muted); display: flex; gap: 6px; align-items: center; }
-  .where svg { flex: none; opacity: .7; }
-  .foot { margin-top: auto; padding-top: 14px; display: flex; align-items: center; justify-content: space-between; gap: 10px; }
-  .status { font-size: 12px; font-weight: 800; color: var(--muted); letter-spacing: .02em; }
-  .status.soon { color: var(--green); background: var(--green-soft); padding: 4px 10px; border-radius: 999px; }
-  .status.done { background: var(--paper-2); padding: 4px 10px; border-radius: 999px; }
-  .winner { display: inline-flex; align-items: center; gap: 9px; font-weight: 700; font-size: 14px; line-height: 1.15; }
-  .winner small { display: block; font-size: 10px; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; color: var(--gold); }
-  .winner .avatar { box-shadow: 0 0 0 2px #fff, 0 0 0 4px var(--gold); }
-  .go { font-size: 13px; font-weight: 800; color: var(--accent); display: inline-flex; gap: 6px; opacity: .55; transform: translateX(-6px); transition: opacity .3s, transform .35s var(--spring); }
-  .go span { transition: transform .35s var(--spring); }
-  .ev:hover .go { opacity: 1; transform: none; }
-  .ev:hover .go span { transform: translateX(4px); }
+  .rk { list-style: none; margin: 0; padding: 6px; }
+  .rk :global(li a) { display: grid; grid-template-columns: 44px 34px 1fr auto; align-items: center; gap: 10px; padding: 8px 10px; border-radius: 12px; text-decoration: none; }
+  .rk :global(li a:hover) { background: var(--paper); }
+  .rk :global(.rp) { font-family: var(--display); font-weight: 800; font-size: 17px; display: flex; flex-direction: column; line-height: 1; }
+  .rk :global(.rp i) { font-style: normal; font-family: var(--body); font-size: 10px; font-weight: 800; margin-top: 2px; }
+  .rk :global(.up) { color: var(--green); } .rk :global(.down) { color: var(--red); }
+  .rk :global(.rn) { font-weight: 700; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .rk :global(.rm) { font-size: 13px; font-weight: 700; color: var(--muted); font-variant-numeric: tabular-nums; }
+  .rk-note { font-size: 12px; margin: 8px 4px 0; }
 
-  /* live: glowing animated border */
-  .ev.live { border-color: transparent; }
-  .ev.live::before {
-    content: ''; position: absolute; inset: 0; z-index: 4; pointer-events: none; border-radius: inherit; padding: 2px;
-    background: conic-gradient(from var(--spin, 0deg), var(--red), #ffb347, var(--red), var(--accent), var(--red));
-    -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); -webkit-mask-composite: xor; mask-composite: exclude;
-    animation: spinb 3s linear infinite;
-  }
-  @property --spin { syntax: '<angle>'; inherits: false; initial-value: 0deg; }
-  @keyframes spinb { to { --spin: 360deg; } }
-  .ev.live { box-shadow: 0 20px 40px -18px rgba(215, 38, 61, .55); }
-  .ev.past { opacity: .78; filter: saturate(.75); }
-  .ev.past:hover { opacity: 1; filter: none; }
+  .tl { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 10px; }
+  .tl a { display: grid; grid-template-columns: 56px 1fr auto; align-items: center; gap: 14px; padding: 10px 14px 10px 10px; background: var(--card); border: 1px solid var(--line); border-radius: 16px; text-decoration: none; transition: border-color .2s; }
+  .tl a:hover { border-color: var(--ink); }
+  .td { display: flex; flex-direction: column; align-items: center; background: var(--ink); color: #fff; border-radius: 12px; padding: 6px 0; line-height: 1.1; }
+  .td small { font-size: 10px; font-weight: 800; text-transform: uppercase; opacity: .75; }
+  .td b { font-family: var(--display); font-size: 22px; }
+  .tn { display: flex; flex-direction: column; min-width: 0; }
+  .tn b { font-family: var(--display); font-size: 17px; }
+  .tn small { font-size: 13px; color: var(--ink-2); }
+  .tn small.muted { color: var(--muted); }
 
-  @media (max-width: 860px) {
-    .controls { top: 104px; }
+  @media (max-width: 900px) {
+    .two { grid-template-columns: 1fr; }
+    .nl { grid-template-columns: 1fr; }
+    .ni.lead { grid-template-columns: 1fr; }
+    .ni.lead :global(.ni-art) { height: auto; aspect-ratio: 16 / 9; min-height: 0; }
   }
-  @media (max-width: 400px) { .grid { grid-template-columns: 1fr; } }
-  @media (prefers-reduced-motion: reduce) { .ev { transform: none !important; } }
 </style>

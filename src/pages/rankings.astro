@@ -10,6 +10,15 @@ const prev = (data.previous || {}) as Record<string, number>;
 // Top 128 shown; a few more are rendered hidden so the live race can promote them.
 const players = data.players.filter(p => p.pos <= 150).map(p => ({ ...p, move: prev[p.id] ? prev[p.id] - p.pos : null }));
 const max = players[0]?.money || 1;
+// Ranking trend from the snapshots kept after each ranking event.
+const hist = ((data as any).history || []) as { d: string; pos: Record<string, number> }[];
+const trend = (id: string) => {
+  const v = hist.map(h => h.pos[id]).filter(Boolean) as number[];
+  if (v.length < 2) return null;
+  const lo = Math.min(...v), hi = Math.max(...v), W = 64, H = 20;
+  const pts = v.map((r, i) => `${((i / (v.length - 1)) * (W - 4) + 2).toFixed(1)},${(hi === lo ? H / 2 : 2 + ((r - lo) / (hi - lo)) * (H - 4)).toFixed(1)}`).join(' ');
+  return `<svg class="spark" viewBox="0 0 ${W} ${H}" width="${W}" height="${H}" role="img" aria-label="Ranking trend: ${v.map(r => '#' + r).join(', ')}"><polyline points="${pts}" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg>`;
+};
 const pic = (name: string) => portraits[keyName(name)];
 const av = (name: string) => { const [c1, c2] = avatarColours(name); return `--c1:${c1};--c2:${c2}`; };
 ---
@@ -31,6 +40,7 @@ const av = (name: string) => { const [c1, c2] = avatarColours(name); return `--c
         <button class="seg" data-mode="live" aria-pressed="true"><span class="ldot"></span>Live race</button>
         <button class="seg" data-mode="official" aria-pressed="false">Official</button>
       </div>
+      <label class="onlyev" id="onlyev" hidden><input type="checkbox" id="onlyevcb" /> In this event only</label>
       <span class="muted small" id="asof">Top 128 · official PDC list</span>
     </div>
     <p class="race-note" id="raceNote" hidden></p>
@@ -47,8 +57,8 @@ const av = (name: string) => { const [c1, c2] = avatarColours(name); return `--c
             <span class="avatar" style={`--size:38px;${av(p.name)}`}>{pic(p.name) ? <img src={pic(p.name)} alt="" loading="lazy" /> : initials(p.name)}</span>
             <span><b>{p.name}</b>{p.nick && <small>{p.nick}</small>}</span>
           </span>
-          <span class="hide-s" role="cell">{flag(p.country)} {countryName(p.country)}</span>
-          <span class="hide-s tabular" role="cell">{age(p.dob) ?? '–'}</span>
+          <span class="hide-s" role="cell"><Fragment set:html={flag(p.country)} /> {countryName(p.country)}</span>
+          <span class="hide-s tabular" role="cell">{age(p.dob) ?? '–'}{trend(p.id) && <Fragment set:html={trend(p.id)} />}</span>
           <span class="r money-cell" role="cell">
             <span class="tabular" data-money={p.money}>{money(p.money)}</span>
             <small class="delta" hidden></small>
@@ -61,7 +71,7 @@ const av = (name: string) => { const [c1, c2] = avatarColours(name); return `--c
 
 
   <script>
-    import { API, normaliseRankings, RANKED_TYPES, liveRace, previousEdition } from '../lib/pdc.mjs';
+    import { API, normaliseRankings, liveRace, findLiveRaceEvent } from '../lib/pdc.mjs';
     import { money } from '../lib/format.mjs';
 
     const esc = (s: unknown) => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]!);
@@ -92,7 +102,8 @@ const av = (name: string) => { const [c1, c2] = avatarColours(name); return `--c
 
       const paint = () => {
         const live = mode === 'live' && race;
-        const list = live ? race! : official;
+        const onlyEv = (document.getElementById('onlyevcb') as HTMLInputElement)?.checked;
+        const list = live ? race!.filter((p: any) => !onlyEv || p.round) : official;
         if (!list.length) return;
         const max = list[0].money || 1;
         const frag = document.createDocumentFragment();
@@ -117,10 +128,12 @@ const av = (name: string) => { const [c1, c2] = avatarColours(name); return `--c
         rows.forEach(r => { r.hidden = !seen.has(r); if (!seen.has(r)) frag.appendChild(r); });
         table.appendChild(frag);
         note.hidden = !live;
+        document.getElementById('onlyev')!.hidden = !race || mode !== 'live';
         if (live) note.innerHTML = `<span class="live-dot">Live</span> Projected standings during the <b>${esc(event.name.replace(/^\d{4}\s+/, ''))}</b>: prize money from the ${esc(String(Number(event.seasonID) - 2))} edition comes off (<span class="minus">−</span>) and money players have guaranteed so far is added (<span class="plus">+</span>). Positions settle when the PDC publishes the official list after the final.`;
         asof.textContent = live ? `Movement shown against the official list` : `Top ${official.length} · official PDC list`;
       };
 
+      document.getElementById('onlyevcb')!.addEventListener('change', () => { if (mode !== 'live') return; table.classList.add('shuffle'); setTimeout(() => table.classList.remove('shuffle'), 500); paint(); });
       modeBox.addEventListener('click', e => {
         const b = (e.target as HTMLElement).closest<HTMLElement>('[data-mode]'); if (!b) return;
         mode = b.dataset.mode as any;
@@ -131,28 +144,18 @@ const av = (name: string) => { const [c1, c2] = avatarColours(name); return `--c
 
       const json = (u: string) => fetch(u).then(r => (r.ok ? r.json() : null));
       const todayLdn = new Date().toLocaleDateString('en-CA', { timeZone: 'Europe/London' });
-      async function findEvent() {
-        const y = Number(todayLdn.slice(0, 4));
-        const lists = await Promise.all([y, y + 1].map(s => json(`${API.tournaments}?seasonID=${s}&page.size=500`)));
-        const idx = lists.flatMap(l => (l?.data || []).map((d: any) => ({ id: d.id, ...d.attributes })));
-        const live = idx.find((t: any) => RANKED_TYPES.includes(t.tournamentTypeID) && t.fixtureCount > 0 && t.startDate <= todayLdn && t.endDate >= todayLdn && !/test/i.test(t.name));
-        if (!live) return null;
-        const prevMeta = previousEdition(live, await Promise.all([Number(live.seasonID) - 2].map(s => json(`${API.tournaments}?seasonID=${s}&page.size=500`))).then(l => l.flatMap(x => (x?.data || []).map((d: any) => ({ id: d.id, ...d.attributes })))));
-        const prev = prevMeta ? (await json(API.tournaments + prevMeta.id))?.data?.attributes : null;
-        return { meta: live, prev };
-      }
-
       let found: any = null;
       async function refresh() {
         try {
           const body = await json(`${API.rankings}2YEAR?page.size=500`);
           if (body) { full = normaliseRankings(body); official = full.filter((p: any) => p.pos <= 128); }
-          if (found === null) found = (await findEvent()) || false;
+          if (found === null) found = (await findLiveRaceEvent(todayLdn)) || false;
           if (found && official.length) {
             const cur = (await json(API.tournaments + found.meta.id))?.data?.attributes;
             if (cur) { event = { ...found.meta, ...cur }; race = liveRace(full, cur, found.prev).filter((p: any) => p.live <= 128); }
           }
           modeBox.hidden = !race;
+          document.getElementById('onlyev')!.hidden = !race;
           paint();
           if (race && document.querySelector('.table')) setTimeout(refresh, 60_000);
         } catch { /* keep the build-time list */ }
@@ -193,6 +196,9 @@ const av = (name: string) => { const [c1, c2] = avatarColours(name); return `--c
   .mode { display: inline-flex; padding: 4px; gap: 2px; background: var(--paper-2); border: 1px solid var(--line); border-radius: 999px; }
   .seg { border: 0; background: none; padding: 7px 14px; border-radius: 999px; font-weight: 700; font-size: 13px; cursor: pointer; display: inline-flex; align-items: center; gap: 7px; color: var(--muted); transition: background .25s, color .25s, box-shadow .25s; }
   .seg[aria-pressed='true'] { background: var(--card); color: var(--ink); box-shadow: var(--shadow-sm); }
+  .onlyev { display: inline-flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 700; cursor: pointer; }
+  .onlyev input { accent-color: var(--ink); width: 16px; height: 16px; }
+  :global(.spark) { color: var(--ink-2); vertical-align: middle; margin-left: 10px; }
   .ldot { width: 8px; height: 8px; border-radius: 50%; background: var(--red); animation: pulse 1.6s infinite; }
   .race-note { margin: -2px 0 12px; font-size: 13px; color: var(--muted); background: var(--card); border: 1px solid var(--line); border-left: 3px solid var(--red); border-radius: 12px; padding: 10px 14px; }
   .race-note .live-dot { margin-right: 6px; }

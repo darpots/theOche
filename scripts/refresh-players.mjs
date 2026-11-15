@@ -47,7 +47,7 @@ for (const [id, sum] of Object.entries(cache)) {
 }
 // This season's main-tour events also need their fixture ids (for averages).
 const isSeasonEvent = a => isSeason(a) && Number(a.seasonID) === season;
-const todo = wanted.filter(a => !cache[a.id] || (isSeasonEvent(a) && !cache[a.id].fx));
+const todo = wanted.filter(a => !cache[a.id] || (isSeasonEvent(a) && !Array.isArray(cache[a.id].fx?.[0])));
 log(`tournaments: ${wanted.length} relevant, ${todo.length} to fetch`);
 
 function summarise(payload, meta) {
@@ -55,13 +55,19 @@ function summarise(payload, meta) {
   const players = {}; // pid -> [bestRound, won, lost, legsFor, legsAgainst]
   const rounds = {};
   const fx = [];
+  const names = {};
   for (const s of a.stages || []) {
     rounds[s.roundNumber] = s.stage?.name || 'Round';
     const legs = !((s.numberOfSets || 0) > 1);
     for (const f of s.fixtures || []) {
       const sides = [[f.participant1, f.participant1Score, f.participant2Score], [f.participant2, f.participant2Score, f.participant1Score]];
       const done = f.winnerParticipantID || (/result/i.test(f.status || '') && f.participant1Score !== f.participant2Score);
-      if (done && !isPlaceholder(f.participant1) && !isPlaceholder(f.participant2)) fx.push(String(f.fixtureID));
+      if (done && !isPlaceholder(f.participant1) && !isPlaceholder(f.participant2)) {
+        // [fixtureId, date, p1, p2, score1, score2, winner, stage]
+        fx.push([String(f.fixtureID), f.startDate, String(f.participant1.participantID), String(f.participant2.participantID), f.participant1Score, f.participant2Score, String(f.winnerParticipantID || ''), s.stage?.name || '']);
+        names[String(f.participant1.participantID)] = playerName(f.participant1);
+        names[String(f.participant2.participantID)] = playerName(f.participant2);
+      }
       for (const [p, mine, theirs] of sides) {
         if (isPlaceholder(p)) continue;
         const id = String(p.participantID);
@@ -77,7 +83,9 @@ function summarise(payload, meta) {
   return {
     n: a.name, s: a.seasonID, d: a.startDate, e: a.endDate, ty: a.tournamentTypeID, c: a.tournamentCategoryID,
     w: a.winnerParticipantID ? String(a.winnerParticipantID) : null,
-    r: rounds, p: players, fx,
+    r: rounds, p: players,
+    // Per-match detail only for this season's events (keeps the cache small).
+    ...(Number(a.seasonID) === season ? { fx, pn: names } : {}),
   };
 }
 
@@ -104,7 +112,7 @@ await writeJsonIfChanged(CACHE, persistable);
 // Per side: [pid, points, darts, first9 points, first9 darts, 180s, checkouts hit, checkout attempts, best checkout]
 const statsCache = (await readJson(STATS)) || {};
 const seasonEvents = Object.entries(cache).filter(([, sum]) => sum.s === season && sum.c !== '17' && ['2', '3', '4'].includes(sum.c) && sum.ty !== '17');
-const wantFx = new Map(seasonEvents.flatMap(([tid, sum]) => (sum.fx || []).map(f => [f, tid])));
+const wantFx = new Map(seasonEvents.flatMap(([tid, sum]) => (sum.fx || []).map(f => [Array.isArray(f) ? f[0] : f, tid])));
 for (const id of Object.keys(statsCache)) if (!wantFx.has(id)) delete statsCache[id]; // last season's matches drop off
 const missing = [...wantFx.keys()].filter(id => !statsCache[id]);
 log(`match stats: ${wantFx.size} matches this season, ${missing.length} to fetch`);
@@ -187,6 +195,13 @@ await pool(top, 4, async row => {
   }
   seasonRec.played = seasonRec.won + seasonRec.lost;
   history.sort((x, y) => y.date.localeCompare(x.date));
+  // Recent matches this season (newest first) for the form guide.
+  const recent = seasonEvents.flatMap(([tid, sum]) => (sum.fx || []).filter(f => Array.isArray(f) && (f[2] === row.id || f[3] === row.id)).map(f => {
+    const me = f[2] === row.id ? 0 : 1, opp = me ? f[2] : f[3];
+    const st = statsCache[f[0]];
+    const mine = st ? (st.a[0] === row.id ? st.a : st.b) : null;
+    return { id: f[0], date: f[1], event: cleanName(sum.n).name, tag: cleanName(sum.n).tag, stage: f[7], tid, opp: sum.pn?.[opp] || '', my: me ? f[5] : f[4], their: me ? f[4] : f[5], won: f[6] === row.id, avg: mine && mine[2] ? Math.round((mine[1] / mine[2]) * 300) / 100 : null };
+  })).sort((x, y) => y.date.localeCompare(x.date) || Number(y.id) - Number(x.id));
   const career = Object.fromEntries((a.statistics?.careerRecord || [])
     .filter(c => ['1000', '2', '3', '4'].includes(c.tournamentCategoryID))
     .map(c => [c.tournamentCategoryName, c.winCount]));
@@ -206,6 +221,7 @@ await pool(top, 4, async row => {
     nineDarters: a.statistics?.nineDartCount ?? null,
     career,
     season: { year: season, ...seasonRec, stats: summaryOf(seasonStats.get(row.id)?.all) },
+    form: recent.slice(0, 10),
     history,
   };
   keep.add(`${row.id}.json`);

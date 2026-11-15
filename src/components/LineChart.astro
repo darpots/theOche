@@ -1,0 +1,47 @@
+---
+// Single-series line chart (SVG) with an optional dashed reference line and
+// hover tooltips. Points: { x: label, y: value, tip: string }.
+interface Point { x: string; y: number; tip: string }
+interface Props { points: Point[]; label: string; refY?: number; refLabel?: string; invert?: boolean; color?: string; height?: number; fmt?: 'avg' | 'rank' }
+const { points, label, refY, refLabel, invert = false, color = '#1d3fd6', height = 220, fmt = 'avg' } = Astro.props;
+const W = 560, H = Math.round(height * 0.8), L = 40, R = 12, T = 14, B = 24;
+const ys = points.map(p => p.y).concat(refY != null ? [refY] : []);
+let lo = Math.min(...ys), hi = Math.max(...ys);
+if (fmt === 'avg') { lo = Math.floor((lo - 2) / 5) * 5; hi = Math.ceil((hi + 2) / 5) * 5; } else { lo = Math.max(1, lo - 2); hi = hi + 2; }
+const x = (i: number) => L + (points.length === 1 ? (W - L - R) / 2 : (i / (points.length - 1)) * (W - L - R));
+const y = (v: number) => { const k = (v - lo) / (hi - lo || 1); return T + (invert ? k : 1 - k) * (H - T - B); };
+const ticks = Array.from({ length: 5 }, (_, i) => lo + ((hi - lo) * i) / 4);
+const step = Math.max(1, Math.ceil(points.length / 10));
+const band = (W - L - R) / Math.max(points.length, 1);
+---
+<div class="lc" data-lc>
+  <svg viewBox={`0 0 ${W} ${H}`} role="img" aria-label={label}>
+    {ticks.map(v => <g><line x1={L} x2={W - R} y1={y(v)} y2={y(v)} class="g" /><text x={L - 8} y={y(v) + 4} class="a" text-anchor="end">{fmt === 'rank' ? `#${Math.round(v)}` : Math.round(v)}</text></g>)}
+    {points.map((p, i) => i % step === 0 && <text x={x(i)} y={H - 6} class="a" text-anchor="middle">{p.x}</text>)}
+    {refY != null && <g><line x1={L} x2={W - R} y1={y(refY)} y2={y(refY)} class="ref" /><text x={W - R} y={y(refY) - 6} class="a rl" text-anchor="end">{refLabel}</text></g>}
+    <polyline points={points.map((p, i) => `${x(i)},${y(p.y)}`).join(' ')} fill="none" stroke={color} stroke-width="2" stroke-linejoin="round" stroke-linecap="round" />
+    {points.map((p, i) => <circle cx={x(i)} cy={y(p.y)} r="4" fill={color} stroke="#fff" stroke-width="2" />)}
+    {points.map((p, i) => <rect x={x(i) - band / 2} y={T} width={band} height={H - T - B} fill="transparent" data-tip={p.tip} data-x={((x(i) / W) * 100).toFixed(2)} />)}
+  </svg>
+  <div class="tip" hidden></div>
+</div>
+<script>
+  function wire() {
+    document.querySelectorAll<HTMLElement>('[data-lc]').forEach(el => {
+      if (el.dataset.wired) return; el.dataset.wired = '1';
+      const tip = el.querySelector<HTMLElement>('.tip')!;
+      el.querySelectorAll<SVGRectElement>('rect[data-tip]').forEach(r => r.addEventListener('pointerenter', () => { tip.textContent = r.dataset.tip!; tip.style.left = `${r.dataset.x}%`; tip.hidden = false; }));
+      el.addEventListener('pointerleave', () => { tip.hidden = true; });
+    });
+  }
+  document.addEventListener('astro:page-load', wire);
+</script>
+<style>
+  .lc { position: relative; background: var(--card); border: 1px solid var(--line); border-radius: 18px; padding: 12px; }
+  svg { width: 100%; height: auto; display: block; }
+  .g { stroke: var(--line); stroke-width: 1; }
+  .a { fill: var(--muted); font-size: 12px; font-family: var(--body); }
+  .rl { font-weight: 700; }
+  .ref { stroke: var(--ink-2); stroke-width: 1; stroke-dasharray: 4 4; }
+  .tip { position: absolute; top: 6px; transform: translateX(-50%); background: var(--ink); color: #fff; font-size: 12px; font-weight: 600; padding: 6px 10px; border-radius: 8px; white-space: nowrap; pointer-events: none; }
+</style>
