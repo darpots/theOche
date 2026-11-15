@@ -171,12 +171,17 @@ const fullTitle = title === 'The Oche' ? title : `${title} · The Oche`;
             const fx = (a.stages || []).flatMap((s: any) => (s.fixtures || []).map((f: any) => ({ ...f, stage: s.stage?.name })))
               .filter((f: any) => f.participant1?.lastName && f.participant2?.lastName && !/to be confirmed/i.test(f.participant1.lastName + f.participant2.lastName));
             const d = today();
-            const live = fx.filter((f: any) => /live|progress/i.test(f.status));
-            const upcoming = fx.filter((f: any) => f.startDate === d && !/result/i.test(f.status) && !/live|progress/i.test(f.status)).sort((x: any, y: any) => (x.startTime || '').localeCompare(y.startTime || ''));
+            // The public feed only updates when a match finishes, so a match counts as
+            // "on now" once its start time has passed and it has no result yet.
+            const nowLdn = new Date().toLocaleTimeString('en-GB', { timeZone: 'Europe/London', hour: '2-digit', minute: '2-digit', hour12: false });
+            const pending = fx.filter((f: any) => f.startDate === d && !/result/i.test(f.status)).sort((x: any, y: any) => (x.startTime || '').localeCompare(y.startTime || ''));
+            const live = fx.filter((f: any) => /live|progress/i.test(f.status)).concat(pending.filter((f: any) => !/live|progress/i.test(f.status) && (f.startTime || '99').slice(0, 5) <= nowLdn).slice(-1));
+            const upcoming = pending.filter((f: any) => !live.includes(f));
             const done = fx.filter((f: any) => /result/i.test(f.status)).sort((x: any, y: any) => `${y.startDate}${y.startTime}`.localeCompare(`${x.startDate}${x.startTime}`));
-            const chip = (f: any, kind: string) => `<a class="lb-m ${kind}" href="/match?id=${f.fixtureID}"><span>${esc(surname(f.participant1))}</span><b>${kind === 'next' ? esc((f.startTime || '').slice(0, 5) || 'vs') : `${f.participant1Score ?? 0}–${f.participant2Score ?? 0}`}</b><span>${esc(surname(f.participant2))}</span></a>`;
+            const chip = (f: any, kind: string) => `<a class="lb-m ${kind}" href="/match?id=${f.fixtureID}"><span>${esc(surname(f.participant1))}</span><b>${kind === 'next' ? esc((f.startTime || '').slice(0, 5) || 'vs') : kind === 'now' && !/live|progress|result/i.test(f.status) ? 'v' : `${f.participant1Score ?? 0}–${f.participant2Score ?? 0}`}</b><span>${esc(surname(f.participant2))}</span></a>`;
             let html = '';
-            if (live.length) html = `<span class="lb-tag live">Live</span>${live.slice(0, 3).map((f: any) => chip(f, 'now')).join('')}`;
+            const follow = (f: any) => `<a class="lb-pdc" href="https://www.pdc.tv/matches/${f.fixtureID}" target="_blank" rel="noopener">Live scoring on pdc.tv ↗</a>`;
+            if (live.length) html = `<span class="lb-tag live">On now</span>${live.slice(0, 3).map((f: any) => chip(f, 'now')).join('')}${follow(live[0])}${upcoming[0] ? `<span class="lb-sep">Next</span>${chip(upcoming[0], 'next')}` : ''}`;
             else if (upcoming.length) html = `<span class="lb-tag">Next</span>${chip(upcoming[0], 'next')}${done[0] ? `<span class="lb-sep">Latest</span>${chip(done[0], 'done')}` : ''}`;
             else if (done[0] && done[0].startDate === d) html = `<span class="lb-tag">Latest</span>${chip(done[0], 'done')}`;
             if (!html) { bar.hidden = true; return; }
@@ -264,6 +269,8 @@ const fullTitle = title === 'The Oche' ? title : `${title} · The Oche`;
   .lb-in :global(.lb-m:hover) { background: rgba(255, 255, 255, .1); color: #fff; }
   .lb-in :global(.lb-m b) { font-family: var(--display); font-variant-numeric: tabular-nums; color: #fff; }
   .lb-in :global(.lb-m.now b) { color: #ff8a98; }
+  .lb-in :global(.lb-pdc) { color: rgba(255, 255, 255, .7); font-size: 12px; font-weight: 600; text-decoration: none; margin-left: 4px; }
+  .lb-in :global(.lb-pdc:hover) { color: #fff; text-decoration: underline; }
 
   .tabbar { display: none; }
 

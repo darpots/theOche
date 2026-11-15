@@ -91,7 +91,7 @@ const portraits = Object.fromEntries(Object.entries(portraitsRaw as Record<strin
         <a class="back" href="/tournament/${tour?.tournamentID}">← ${esc((tour?.name || 'Tournament').replace(/^\d{4}\s+/, ''))}</a>
         <p class="stg">${esc(a.tournamentStage?.stage?.name || '')}${status === 'Live' ? ' · <span class="live-dot">Live</span>' : ` · ${status === 'Result' ? 'Result' : when.toLocaleString('en-GB', { weekday: 'short', day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit', timeZone: 'Europe/London' })}`}</p>
         <div class="duel">${side(0)}
-          <div class="score"><b>${a.participant1Score ?? 0}</b><span>–</span><b>${a.participant2Score ?? 0}</b><small>${(a.tournamentStage?.numberOfSets || 1) > 1 ? 'sets' : 'legs'}</small></div>
+          <div class="score">${status === 'Upcoming' ? '<b class="vs">v</b>' : `<b>${a.participant1Score ?? 0}</b><span>–</span><b>${a.participant2Score ?? 0}</b>`}</div>
           ${side(1)}</div>`;
     }
 
@@ -194,7 +194,10 @@ const portraits = Object.fromEntries(Object.entries(portraitsRaw as Record<strin
         document.title = `${name(a.attributes.participant1)} v ${name(a.attributes.participant2)} · The Oche`;
         mh.innerHTML = header(a, t?.data, data);
         const legs = t?.data ? legData(t.data.attributes) : [];
-        document.getElementById('mb')!.hidden = !t?.data;
+        const started = !/result|live|progress/i.test(a.attributes.status) && new Date(`${a.attributes.startDate}T${(a.attributes.startTime || '23:59').slice(0, 5)}:00`) <= new Date(new Date().toLocaleString('en-US', { timeZone: 'Europe/London' }));
+        const noLegs = !(t?.data?.attributes?.legs?.length);
+        if (started && noLegs) mh.insertAdjacentHTML('beforeend', `<p class="inplay"><span class="live-dot">On now</span> This match should be under way. The PDC's public feed publishes scores when a match finishes, so this page fills in then. <a href="https://www.pdc.tv/matches/${esc(id)}" target="_blank" rel="noopener">Follow it dart by dart on pdc.tv ↗</a></p>`);
+        document.getElementById('mb')!.hidden = !t?.data || noLegs;
         if (t?.data) {
           document.getElementById('cmp')!.innerHTML = compare(a, t.data);
           document.getElementById('lg1')!.innerHTML = document.getElementById('lg2')!.innerHTML = legend(names);
@@ -240,10 +243,14 @@ const portraits = Object.fromEntries(Object.entries(portraitsRaw as Record<strin
   .mh-in :global(.s1 .av) { box-shadow: inset -4px 0 0 #d7263d; }
   .mh-in :global(.score) { display: flex; align-items: baseline; gap: 10px; padding-bottom: 40px; font-family: var(--display); }
   .mh-in :global(.score b) { font-size: clamp(56px, 8vw, 96px); font-weight: 800; line-height: 1; font-variant-numeric: tabular-nums; }
+  .mh-in :global(.score .vs) { font-size: 56px; color: rgba(255, 255, 255, .5); }
   .mh-in :global(.score span) { font-size: 48px; color: rgba(255, 255, 255, .4); }
   .mh-in :global(.score small) { position: absolute; }
   .mh-in :global(.score small) { display: none; }
 
+  .mh-in :global(.inplay) { margin: 0 0 22px; font-size: 14px; color: rgba(255, 255, 255, .85); background: rgba(255, 255, 255, .08); border-radius: 12px; padding: 10px 14px; }
+  .mh-in :global(.inplay a) { color: #fff; font-weight: 700; }
+  .mh-in :global(.inplay .live-dot) { color: #ff8a98; margin-right: 6px; }
   .mbody { margin-top: 28px; }
   .block + .block { margin-top: 36px; }
   h2 { font-size: 24px; margin-bottom: 8px; }
