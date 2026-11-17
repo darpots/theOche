@@ -1,5 +1,5 @@
 {
- "updatedAt": "2026-11-15T11:06:41.320Z",
+ "updatedAt": "2026-11-17T18:30:50.492Z",
  "events": [
   {
    "id": "10717",
@@ -405,6 +405,21 @@
    "winner": null,
    "image": "5d25b3b0-be6d-11f0-bbd2-f5b7cb549a2e.jpg",
    "logo": "ecf0b3b0-9d1f-11f0-a938-5b83f11733db.png"
+  },
+  {
+   "id": "11070",
+   "name": "Bahrain Darts Masters",
+   "tag": null,
+   "start": "2027-01-14",
+   "end": "2027-01-15",
+   "venue": "The Dome, Manama",
+   "city": "Manama",
+   "broadcaster": "itv",
+   "ranked": false,
+   "major": false,
+   "winner": null,
+   "image": null,
+   "logo": null
   },
   {
    "id": "10896",
