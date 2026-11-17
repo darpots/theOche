@@ -1,5 +1,5 @@
 {
- "updatedAt": "2026-11-16T06:14:06.419Z",
+ "updatedAt": "2026-11-17T00:46:22.912Z",
  "tournament": {
   "id": "10871",
   "name": "Grand Slam of Darts",
@@ -949,8 +949,8 @@
      {
       "id": "516989",
       "date": "2026-11-16",
-      "time": "22:45",
-      "status": "upcoming",
+      "time": "22:24",
+      "status": "result",
       "p1": {
        "id": "32956",
        "name": "Wessel Nijman",
@@ -965,9 +965,25 @@
        "country": "DE",
        "ranking": 34
       },
-      "s1": 0,
-      "s2": 0,
-      "winner": null
+      "s1": 3,
+      "s2": 5,
+      "winner": "34874",
+      "stats": [
+       {
+        "avg": 99.89,
+        "f9": 109.79,
+        "t80": 2,
+        "co": 42.86,
+        "hi": 32
+       },
+       {
+        "avg": 105.23,
+        "f9": 109.54,
+        "t80": 3,
+        "co": 62.5,
+        "hi": 78
+       }
+      ]
      }
     ]
    },
@@ -1057,8 +1073,8 @@
      {
       "id": "516987",
       "date": "2026-11-16",
-      "time": "20:15",
-      "status": "upcoming",
+      "time": "20:11",
+      "status": "result",
       "p1": {
        "id": "31041",
        "name": "Rob Cross",
@@ -1073,9 +1089,25 @@
        "country": "SE",
        "ranking": 162
       },
-      "s1": 0,
-      "s2": 0,
-      "winner": null
+      "s1": 5,
+      "s2": 1,
+      "winner": "31041",
+      "stats": [
+       {
+        "avg": 92.81,
+        "f9": 101.5,
+        "t80": 0,
+        "co": 41.67,
+        "hi": 80
+       },
+       {
+        "avg": 87.92,
+        "f9": 87.17,
+        "t80": 1,
+        "co": 11.11,
+        "hi": 28
+       }
+      ]
      }
     ]
    },
@@ -1166,7 +1198,7 @@
       "id": "516983",
       "date": "2026-11-16",
       "time": "19:45",
-      "status": "upcoming",
+      "status": "result",
       "p1": {
        "id": "32037",
        "name": "Ryan Searle",
@@ -1181,9 +1213,25 @@
        "country": "GB-ENG",
        "ranking": 27
       },
-      "s1": 0,
-      "s2": 0,
-      "winner": null
+      "s1": 5,
+      "s2": 1,
+      "winner": "32037",
+      "stats": [
+       {
+        "avg": 91.88,
+        "f9": 93.28,
+        "t80": 2,
+        "co": 62.5,
+        "hi": 110
+       },
+       {
+        "avg": 89.1,
+        "f9": 94.17,
+        "t80": 2,
+        "co": 9.09,
+        "hi": 20
+       }
+      ]
      }
     ]
    },
@@ -1273,8 +1321,8 @@
      {
       "id": "516980",
       "date": "2026-11-16",
-      "time": "21:15",
-      "status": "upcoming",
+      "time": "21:00",
+      "status": "result",
       "p1": {
        "id": "11788",
        "name": "Gerwyn Price",
@@ -1289,9 +1337,25 @@
        "country": "PL",
        "ranking": 51
       },
-      "s1": 0,
-      "s2": 0,
-      "winner": null
+      "s1": 5,
+      "s2": 2,
+      "winner": "11788",
+      "stats": [
+       {
+        "avg": 93.77,
+        "f9": 107.9,
+        "t80": 1,
+        "co": 38.46,
+        "hi": 135
+       },
+       {
+        "avg": 79.86,
+        "f9": 87.67,
+        "t80": 1,
+        "co": 40,
+        "hi": 96
+       }
+      ]
      }
     ]
    },
@@ -1381,8 +1445,8 @@
      {
       "id": "516977",
       "date": "2026-11-16",
-      "time": "22:15",
-      "status": "upcoming",
+      "time": "21:57",
+      "status": "result",
       "p1": {
        "id": "876",
        "name": "Stephen Bunting",
@@ -1397,9 +1461,25 @@
        "country": "GB-SCT",
        "ranking": 26
       },
-      "s1": 0,
-      "s2": 0,
-      "winner": null
+      "s1": 2,
+      "s2": 5,
+      "winner": "2040",
+      "stats": [
+       {
+        "avg": 101.74,
+        "f9": 94.67,
+        "t80": 6,
+        "co": 40,
+        "hi": 60
+       },
+       {
+        "avg": 103.39,
+        "f9": 106.43,
+        "t80": 2,
+        "co": 62.5,
+        "hi": 144
+       }
+      ]
      }
     ]
    },
@@ -1489,8 +1569,8 @@
      {
       "id": "516975",
       "date": "2026-11-16",
-      "time": "20:45",
-      "status": "upcoming",
+      "time": "20:39",
+      "status": "result",
       "p1": {
        "id": "32895",
        "name": "Kevin Doets",
@@ -1505,9 +1585,25 @@
        "country": "GB-ENG",
        "ranking": 82
       },
-      "s1": 0,
-      "s2": 0,
-      "winner": null
+      "s1": 5,
+      "s2": 1,
+      "winner": "32895",
+      "stats": [
+       {
+        "avg": 98.27,
+        "f9": 98.06,
+        "t80": 2,
+        "co": 71.43,
+        "hi": 121
+       },
+       {
+        "avg": 90.83,
+        "f9": 87.78,
+        "t80": 0,
+        "co": 100,
+        "hi": 53
+       }
+      ]
      }
     ]
    },
@@ -1597,8 +1693,8 @@
      {
       "id": "516971",
       "date": "2026-11-16",
-      "time": "19:15",
-      "status": "upcoming",
+      "time": "19:18",
+      "status": "result",
       "p1": {
        "id": "30844",
        "name": "Jermaine Wattimena",
@@ -1613,9 +1709,25 @@
        "country": "GB-SCT",
        "ranking": 61
       },
-      "s1": 0,
-      "s2": 0,
-      "winner": null
+      "s1": 5,
+      "s2": 4,
+      "winner": "30844",
+      "stats": [
+       {
+        "avg": 97.45,
+        "f9": 104,
+        "t80": 3,
+        "co": 35.71,
+        "hi": 96
+       },
+       {
+        "avg": 98.19,
+        "f9": 107.89,
+        "t80": 3,
+        "co": 23.53,
+        "hi": 127
+       }
+      ]
      }
     ]
    },
@@ -1705,8 +1817,8 @@
      {
       "id": "516968",
       "date": "2026-11-16",
-      "time": "21:45",
-      "status": "upcoming",
+      "time": "21:28",
+      "status": "result",
       "p1": {
        "id": "40676",
        "name": "Luke Littler",
@@ -1721,9 +1833,25 @@
        "country": "NL",
        "ranking": 28
       },
-      "s1": 0,
-      "s2": 0,
-      "winner": null
+      "s1": 4,
+      "s2": 5,
+      "winner": "33014",
+      "stats": [
+       {
+        "avg": 104.36,
+        "f9": 119.44,
+        "t80": 5,
+        "co": 30.77,
+        "hi": 150
+       },
+       {
+        "avg": 101.12,
+        "f9": 107.74,
+        "t80": 4,
+        "co": 41.67,
+        "hi": 121
+       }
+      ]
      }
     ]
    },
@@ -1735,10 +1863,22 @@
      {
       "id": "517015",
       "date": "2026-11-18",
-      "time": "19:15",
+      "time": "21:15",
       "status": "upcoming",
-      "p1": null,
-      "p2": null,
+      "p1": {
+       "id": "40676",
+       "name": "Luke Littler",
+       "nick": "The Nuke",
+       "country": "GB-ENG",
+       "ranking": 1
+      },
+      "p2": {
+       "id": "30844",
+       "name": "Jermaine Wattimena",
+       "nick": "The Machine Gun",
+       "country": "NL",
+       "ranking": 18
+      },
       "s1": 0,
       "s2": 0,
       "winner": null
@@ -1746,10 +1886,22 @@
      {
       "id": "517016",
       "date": "2026-11-18",
-      "time": "19:15",
+      "time": "22:15",
       "status": "upcoming",
-      "p1": null,
-      "p2": null,
+      "p1": {
+       "id": "32895",
+       "name": "Kevin Doets",
+       "nick": "Hawk Eye",
+       "country": "NL",
+       "ranking": 23
+      },
+      "p2": {
+       "id": "2040",
+       "name": "Cameron Menzies",
+       "nick": "Cammy",
+       "country": "GB-SCT",
+       "ranking": 26
+      },
       "s1": 0,
       "s2": 0,
       "winner": null
@@ -1757,10 +1909,22 @@
      {
       "id": "517017",
       "date": "2026-11-18",
-      "time": "19:15",
+      "time": "20:15",
       "status": "upcoming",
-      "p1": null,
-      "p2": null,
+      "p1": {
+       "id": "11788",
+       "name": "Gerwyn Price",
+       "nick": "The Iceman",
+       "country": "GB-WLS",
+       "ranking": 4
+      },
+      "p2": {
+       "id": "32037",
+       "name": "Ryan Searle",
+       "nick": "Heavy Metal",
+       "country": "GB-ENG",
+       "ranking": 15
+      },
       "s1": 0,
       "s2": 0,
       "winner": null
@@ -1770,8 +1934,20 @@
       "date": "2026-11-18",
       "time": "19:15",
       "status": "upcoming",
-      "p1": null,
-      "p2": null,
+      "p1": {
+       "id": "31041",
+       "name": "Rob Cross",
+       "nick": "Voltage",
+       "country": "GB-ENG",
+       "ranking": 24
+      },
+      "p2": {
+       "id": "34874",
+       "name": "Niko Springer",
+       "nick": "Meenzer Bub",
+       "country": "DE",
+       "ranking": 34
+      },
       "s1": 0,
       "s2": 0,
       "winner": null
