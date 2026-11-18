@@ -136,8 +136,16 @@ const av = (name: string) => { const [c1, c2] = avatarColours(name); return `--c
             html = `<span class="net ${net > 0 ? 'up' : net < 0 ? 'down' : 'flat'}">${net > 0 ? '▲ ' : net < 0 ? '▼ ' : ''}${net ? k(Math.abs(net)) : 'No change'}</span><span class="br">${parts}</span>`;
           }
           d.hidden = !html; d.innerHTML = html;
-          r.classList.toggle('in-event', !!(live && p.round));
-          r.classList.toggle('knocked', !!(live && p.round && p.alive === false));
+          // Progress chip: volt with the round for players still in, grey "Out" for the knocked out.
+          const name = r.querySelector('.who b')!;
+          r.querySelector('.stage-chip')?.remove();
+          if (live && p.round) {
+            const round = /^(group|league)/i.test(p.round) ? 'Group stage' : p.round;
+            const chip = document.createElement('span');
+            chip.className = `stage-chip ${p.alive === false ? 'out' : 'in'}`;
+            chip.textContent = p.alive === false ? `Out · ${round}` : round;
+            name.parentElement!.appendChild(chip);
+          }
           r.querySelector<HTMLElement>('.bar span')!.style.width = `${(p.money / max) * 100}%`;
           frag.appendChild(r);
         }
@@ -149,7 +157,7 @@ const av = (name: string) => { const [c1, c2] = avatarColours(name); return `--c
         if (live) {
           const drops: string[] = found?.dropNames || [];
           const list = drops.length ? drops.map(d => `<b>${esc(d)}</b>`).join(' and ') : 'events from two years ago';
-          note.innerHTML = `<span class="live-dot">Live</span> Projected standings at the end of the <b>${esc(event.name.replace(/^\d{4}\s+/, ''))}</b>. The PDC drops prize money 104 weeks after it was won, so money from the ${list} is <span class="minus">expiring</span>, and money players have guaranteed in this event so far counts as <span class="plus">won</span>. The chip shows each player's net change; hover “expiring” to see which events. <b>Updated daily</b>${found?.updatedAt ? ` (last at ${new Date(found.updatedAt).toLocaleString('en-GB', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit', timeZone: 'Europe/London' })})` : ''}; positions settle when the PDC publishes the official list after the final.`;
+          note.innerHTML = `<span class="live-dot">Live</span> Projected standings at the end of the <b>${esc(event.name.replace(/^\d{4}\s+/, ''))}</b>. The PDC drops prize money 104 weeks after it was won, so money from the ${list} is <span class="minus">expiring</span>, and money players have guaranteed in this event so far counts as <span class="plus">won</span>. The chip by the money shows each player's net change (hover “expiring” to see which events); the chip by the name shows how far they've got in the ${esc(event.name.replace(/^\d{4}\s+/, ''))}. <b>Updated daily</b>${found?.updatedAt ? ` (last at ${new Date(found.updatedAt).toLocaleString('en-GB', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit', timeZone: 'Europe/London' })})` : ''}; positions settle when the PDC publishes the official list after the final.`;
         }
         asof.textContent = live ? `Movement shown against the official list` : `Top ${official.length} · official PDC list`;
       };
@@ -244,8 +252,9 @@ const av = (name: string) => { const [c1, c2] = avatarColours(name); return `--c
   }
   :global(.delta .tip:hover::after), :global(.tr:focus-visible .delta .tip::after) { opacity: 1; transform: none; }
   :global(.plus) { color: #0a7a3a; } :global(.minus) { color: #c42c23; }
-  .tr.in-event .who b::after { content: ''; display: inline-block; width: 7px; height: 7px; border-radius: 50%; background: var(--green); margin-left: 7px; vertical-align: middle; box-shadow: 0 0 0 3px var(--green-soft); }
-  .tr.knocked .who b::after { background: #b9b2a4; box-shadow: none; }
+  :global(.stage-chip) { display: inline-block; width: fit-content; margin-top: 3px; font-size: 10px; font-weight: 800; letter-spacing: .06em; text-transform: uppercase; padding: 2px 8px; border-radius: 999px; white-space: nowrap; }
+  :global(.stage-chip.in) { background: var(--volt); color: var(--ink); }
+  :global(.stage-chip.out) { background: var(--paper-2); color: var(--muted); }
   .table.shuffle .tr { animation: shuffle .45s var(--ease); }
   @keyframes shuffle { from { opacity: .3; transform: translateY(6px); } }
   :global(.bump) { animation: bump 1s var(--spring); display: inline-block; }

@@ -228,6 +228,10 @@ export function eventPrizes(a) {
       }
     }
   }
+  // Once the knockout draw has players in it, anyone whose best round is a
+  // group or league stage has been knocked out.
+  const koDrawn = stages.some(st => stageOrder(st) < 99 && (st.fixtures || []).some(f => !isPlaceholder(f.participant1) || !isPlaceholder(f.participant2)));
+  if (koDrawn) for (const rec of out.values()) if (rec.order === 99) rec.alive = false;
   return out;
 }
 
