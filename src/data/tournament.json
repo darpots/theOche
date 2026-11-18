@@ -1,5 +1,5 @@
 {
- "updatedAt": "2026-11-17T00:46:22.912Z",
+ "updatedAt": "2026-11-18T01:34:44.219Z",
  "tournament": {
   "id": "10871",
   "name": "Grand Slam of Darts",
@@ -101,8 +101,8 @@
      {
       "id": "517013",
       "date": "2026-11-17",
-      "time": "22:45",
-      "status": "upcoming",
+      "time": "22:28",
+      "status": "result",
       "p1": {
        "id": "11821",
        "name": "Nathan Aspinall",
@@ -117,9 +117,9 @@
        "country": "CZ",
        "ranking": 42
       },
-      "s1": 0,
+      "s1": 5,
       "s2": 0,
-      "winner": null
+      "winner": "11821"
      }
     ]
    },
@@ -209,8 +209,8 @@
      {
       "id": "517011",
       "date": "2026-11-17",
-      "time": "19:45",
-      "status": "upcoming",
+      "time": "19:42",
+      "status": "result",
       "p1": {
        "id": "11156",
        "name": "Gabriel Clemens",
@@ -225,9 +225,25 @@
        "country": "AT",
        "ranking": 141
       },
-      "s1": 0,
-      "s2": 0,
-      "winner": null
+      "s1": 5,
+      "s2": 3,
+      "winner": "11156",
+      "stats": [
+       {
+        "avg": 85.47,
+        "f9": 100.29,
+        "t80": 0,
+        "co": 22.73,
+        "hi": 83
+       },
+       {
+        "avg": 85.93,
+        "f9": 93.29,
+        "t80": 1,
+        "co": 18.75,
+        "hi": 76
+       }
+      ]
      }
     ]
    },
@@ -301,8 +317,8 @@
      {
       "id": "517007",
       "date": "2026-11-17",
-      "time": "20:15",
-      "status": "upcoming",
+      "time": "20:12",
+      "status": "result",
       "p1": {
        "id": "11843",
        "name": "Chris Dobey",
@@ -317,9 +333,25 @@
        "country": "DE",
        "ranking": 20
       },
-      "s1": 0,
-      "s2": 0,
-      "winner": null
+      "s1": 3,
+      "s2": 5,
+      "winner": "11902",
+      "stats": [
+       {
+        "avg": 92.41,
+        "f9": 101.04,
+        "t80": 2,
+        "co": 42.86,
+        "hi": 80
+       },
+       {
+        "avg": 96.38,
+        "f9": 103.83,
+        "t80": 1,
+        "co": 38.46,
+        "hi": 73
+       }
+      ]
      }
     ]
    },
@@ -409,8 +441,8 @@
      {
       "id": "517004",
       "date": "2026-11-17",
-      "time": "21:15",
-      "status": "upcoming",
+      "time": "21:03",
+      "status": "result",
       "p1": {
        "id": "33091",
        "name": "Gian van Veen",
@@ -425,9 +457,25 @@
        "country": "GB-ENG",
        "ranking": 59
       },
-      "s1": 0,
-      "s2": 0,
-      "winner": null
+      "s1": 5,
+      "s2": 2,
+      "winner": "33091",
+      "stats": [
+       {
+        "avg": 99.76,
+        "f9": 112.81,
+        "t80": 3,
+        "co": 38.46,
+        "hi": 40
+       },
+       {
+        "avg": 92.49,
+        "f9": 101.57,
+        "t80": 2,
+        "co": 33.33,
+        "hi": 142
+       }
+      ]
      }
     ]
    },
@@ -517,8 +565,8 @@
      {
       "id": "517001",
       "date": "2026-11-17",
-      "time": "22:15",
-      "status": "upcoming",
+      "time": "21:52",
+      "status": "result",
       "p1": {
        "id": "19",
        "name": "Michael van Gerwen",
@@ -533,9 +581,25 @@
        "country": "SE",
        "ranking": 39
       },
-      "s1": 0,
-      "s2": 0,
-      "winner": null
+      "s1": 5,
+      "s2": 4,
+      "winner": "19",
+      "stats": [
+       {
+        "avg": 90.37,
+        "f9": 106.59,
+        "t80": 2,
+        "co": 23.81,
+        "hi": 87
+       },
+       {
+        "avg": 86.75,
+        "f9": 99.56,
+        "t80": 2,
+        "co": 26.67,
+        "hi": 88
+       }
+      ]
      }
     ]
    },
@@ -625,8 +689,8 @@
      {
       "id": "516998",
       "date": "2026-11-17",
-      "time": "20:45",
-      "status": "upcoming",
+      "time": "20:42",
+      "status": "result",
       "p1": {
        "id": "22",
        "name": "James Wade",
@@ -641,9 +705,9 @@
        "country": "GB-ENG",
        "ranking": 52
       },
-      "s1": 0,
+      "s1": 5,
       "s2": 0,
-      "winner": null
+      "winner": "22"
      }
     ]
    },
@@ -733,8 +797,8 @@
      {
       "id": "516996",
       "date": "2026-11-17",
-      "time": "19:15",
-      "status": "upcoming",
+      "time": "19:19",
+      "status": "result",
       "p1": {
        "id": "224",
        "name": "Krzysztof Ratajski",
@@ -749,9 +813,25 @@
        "country": "GB-ENG",
        "ranking": 81
       },
-      "s1": 0,
-      "s2": 0,
-      "winner": null
+      "s1": 1,
+      "s2": 5,
+      "winner": "32627",
+      "stats": [
+       {
+        "avg": 101.96,
+        "f9": 108,
+        "t80": 2,
+        "co": 25,
+        "hi": 16
+       },
+       {
+        "avg": 104.3,
+        "f9": 108.89,
+        "t80": 0,
+        "co": 71.43,
+        "hi": 130
+       }
+      ]
      }
     ]
    },
@@ -841,8 +921,8 @@
      {
       "id": "516992",
       "date": "2026-11-17",
-      "time": "21:45",
-      "status": "upcoming",
+      "time": "21:30",
+      "status": "result",
       "p1": {
        "id": "32102",
        "name": "Luke Humphries",
@@ -857,9 +937,25 @@
        "country": "GB-ENG",
        "ranking": 32
       },
-      "s1": 0,
-      "s2": 0,
-      "winner": null
+      "s1": 5,
+      "s2": 2,
+      "winner": "32102",
+      "stats": [
+       {
+        "avg": 98.67,
+        "f9": 105.76,
+        "t80": 1,
+        "co": 71.43,
+        "hi": 90
+       },
+       {
+        "avg": 103.22,
+        "f9": 116.43,
+        "t80": 2,
+        "co": 20,
+        "hi": 138
+       }
+      ]
      }
     ]
    },
@@ -1955,10 +2051,22 @@
      {
       "id": "517019",
       "date": "2026-11-19",
-      "time": "19:15",
+      "time": "21:15",
       "status": "upcoming",
-      "p1": null,
-      "p2": null,
+      "p1": {
+       "id": "32102",
+       "name": "Luke Humphries",
+       "nick": "Cool Hand",
+       "country": "GB-ENG",
+       "ranking": 2
+      },
+      "p2": {
+       "id": "32627",
+       "name": "Tom Sykes",
+       "nick": "The Castleford Tiger",
+       "country": "GB-ENG",
+       "ranking": 81
+      },
       "s1": 0,
       "s2": 0,
       "winner": null
@@ -1966,10 +2074,22 @@
      {
       "id": "517020",
       "date": "2026-11-19",
-      "time": "19:15",
+      "time": "22:15",
       "status": "upcoming",
-      "p1": null,
-      "p2": null,
+      "p1": {
+       "id": "22",
+       "name": "James Wade",
+       "nick": "The Machine",
+       "country": "GB-ENG",
+       "ranking": 7
+      },
+      "p2": {
+       "id": "19",
+       "name": "Michael van Gerwen",
+       "nick": "Mighty Mike",
+       "country": "NL",
+       "ranking": 11
+      },
       "s1": 0,
       "s2": 0,
       "winner": null
@@ -1977,10 +2097,22 @@
      {
       "id": "517021",
       "date": "2026-11-19",
-      "time": "19:15",
+      "time": "20:15",
       "status": "upcoming",
-      "p1": null,
-      "p2": null,
+      "p1": {
+       "id": "33091",
+       "name": "Gian van Veen",
+       "nick": "The Giant",
+       "country": "NL",
+       "ranking": 3
+      },
+      "p2": {
+       "id": "11902",
+       "name": "Martin Schindler",
+       "nick": "The Wall",
+       "country": "DE",
+       "ranking": 20
+      },
       "s1": 0,
       "s2": 0,
       "winner": null
@@ -1990,8 +2122,20 @@
       "date": "2026-11-19",
       "time": "19:15",
       "status": "upcoming",
-      "p1": null,
-      "p2": null,
+      "p1": {
+       "id": "11156",
+       "name": "Gabriel Clemens",
+       "nick": "German Giant",
+       "country": "DE",
+       "ranking": 53
+      },
+      "p2": {
+       "id": "11821",
+       "name": "Nathan Aspinall",
+       "nick": "The Asp",
+       "country": "GB-ENG",
+       "ranking": 12
+      },
       "s1": 0,
       "s2": 0,
       "winner": null
