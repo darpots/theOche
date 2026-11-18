@@ -247,9 +247,16 @@ export function previousEdition(event, index) {
  * Re-rank the official list for a ranked event in progress.
  * official: normaliseRankings() output; current/previous: tournament attributes.
  */
-export function liveRace(official, current, previous) {
+export function liveRace(official, current, dropping) {
+  // dropping: tournament attributes (or one) whose money comes off by the end
+  // of the current event. A player's losses are summed across them.
   const gain = eventPrizes(current);
-  const lose = previous ? eventPrizes(previous) : new Map();
+  const lose = new Map();
+  for (const d of [].concat(dropping || [])) for (const [id, r] of eventPrizes(d)) {
+    const l = lose.get(id) || { amount: 0, estimated: false };
+    l.amount += r.amount; l.estimated ||= !!r.estimated;
+    lose.set(id, l);
+  }
   const list = official.map(p => {
     const g = gain.get(p.id), l = lose.get(p.id);
     const plus = g?.amount || 0, minus = l?.amount || 0;
@@ -285,12 +292,19 @@ export async function findLiveRaceEvent(today) {
   const json = u => fetch(u).then(r => (r.ok ? r.json() : null)).catch(() => null);
   const list = async season => ((await json(`${API.tournaments}?seasonID=${season}&page.size=500`))?.data || []).map(d => ({ id: d.id, ...d.attributes }));
   const y = Number(today.slice(0, 4));
-  const idx = (await Promise.all([y, y + 1].map(list))).flat();
-  const live = idx.find(t => RANKED_TYPES.includes(t.tournamentTypeID) && t.fixtureCount > 0 && t.startDate <= today && t.endDate >= today && !/test/i.test(t.name));
+  const idx = (await Promise.all([y - 3, y - 2, y - 1, y, y + 1].map(list))).flat()
+    .filter(t => RANKED_TYPES.includes(t.tournamentTypeID) && t.fixtureCount > 0 && !/test/i.test(t.name));
+  const live = idx.find(t => t.startDate <= today && t.endDate >= today);
   if (!live) return null;
-  const prevMeta = previousEdition(live, await list(Number(live.seasonID) - 2));
-  const prev = prevMeta ? (await json(API.tournaments + prevMeta.id))?.data?.attributes : null;
-  return { meta: live, prev };
+  // The PDC drops an event's money exactly 104 weeks after it was played. The
+  // official list was last updated after the latest ranking event to finish
+  // before this one; anything whose 104 weeks run out between then and the
+  // end of this event comes off in the live race.
+  const plus104 = d => new Date(Date.parse(d + 'T12:00:00Z') + 728 * 864e5).toISOString().slice(0, 10);
+  const lastOfficial = idx.filter(t => t.endDate < live.startDate).map(t => t.endDate).sort().pop() || live.startDate;
+  const dropMeta = idx.filter(t => plus104(t.endDate) > lastOfficial && plus104(t.endDate) <= live.endDate);
+  const prev = (await Promise.all(dropMeta.map(m => json(API.tournaments + m.id)))).map(r => r?.data?.attributes).filter(Boolean);
+  return { meta: live, prev, dropNames: dropMeta.map(m => m.name) };
 }
 
 /** Browser helper: the live race for the event in progress, or null. */

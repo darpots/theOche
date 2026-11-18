@@ -129,7 +129,11 @@ const av = (name: string) => { const [c1, c2] = avatarColours(name); return `--c
         table.appendChild(frag);
         note.hidden = !live;
         document.getElementById('onlyev')!.hidden = !race || mode !== 'live';
-        if (live) note.innerHTML = `<span class="live-dot">Live</span> Projected standings during the <b>${esc(event.name.replace(/^\d{4}\s+/, ''))}</b>: prize money from the ${esc(String(Number(event.seasonID) - 2))} edition comes off (<span class="minus">−</span>) and money players have guaranteed so far is added (<span class="plus">+</span>). Positions settle when the PDC publishes the official list after the final.`;
+        if (live) {
+          const drops: string[] = found?.dropNames || [];
+          const list = drops.length ? drops.map(d => `<b>${esc(d)}</b>`).join(' and ') : 'events from two years ago';
+          note.innerHTML = `<span class="live-dot">Live</span> Projected standings at the end of the <b>${esc(event.name.replace(/^\d{4}\s+/, ''))}</b>. The PDC drops prize money 104 weeks after it was won, so money from the ${list} comes off (<span class="minus">−</span>), and money players have guaranteed so far is added (<span class="plus">+</span>). Positions settle when the PDC publishes the official list after the final.`;
+        }
         asof.textContent = live ? `Movement shown against the official list` : `Top ${official.length} · official PDC list`;
       };
 
