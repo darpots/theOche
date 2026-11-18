@@ -1,6 +1,6 @@
 // Builds src/data/tournament.json: the PDC tournament in progress (or the most
 // recent / next one). The Matches page also refreshes this live in the browser.
-import { API, BROADCASTERS, normaliseTournament, fixtureStatsUrl, slimStats } from '../src/lib/pdc.mjs';
+import { API, BROADCASTERS, normaliseTournament, fixtureStatsUrl, slimStats, liveMatches } from '../src/lib/pdc.mjs';
 import { get, getAll, readJson, writeJsonIfChanged, pool, today, log } from './lib.mjs';
 
 const OUT = new URL('../src/data/tournament.json', import.meta.url).pathname;
@@ -26,13 +26,22 @@ if (!pick) throw new Error('No tournament found');
 const tournament = normaliseTournament(await get(`${API.tournaments}${pick.id}`));
 
 // Averages and 180s for finished matches (kept from the last run once fetched).
-const prevStats = new Map(((await readJson(OUT, null))?.tournament?.stages || []).flatMap(s => s.fixtures).filter(f => f.stats).map(f => [f.id, f.stats]));
+// Official stats are kept once fetched; matches showing live figures keep checking for the official ones.
+const prevStats = new Map(((await readJson(OUT, null))?.tournament?.stages || []).flatMap(s => s.fixtures).filter(f => f.stats && !f.statsLive).map(f => [f.id, f.stats]));
 const need = tournament.stages.flatMap(s => s.fixtures).filter(f => f.status !== 'upcoming');
 await pool(need, 6, async f => {
   if (f.status === 'result' && prevStats.has(f.id)) { f.stats = prevStats.get(f.id); return; }
   try { const s = slimStats(await get(fixtureStatsUrl(f.id))); if (s) f.stats = s; } catch { /* stats are optional */ }
 });
-log(`stats: ${need.filter(f => f.stats).length}/${need.length} matches`);
+// Until the PDC publishes them (often the next day), use the figures from its live scoring.
+const gaps = need.filter(f => !f.stats);
+if (gaps.length) {
+  try {
+    const live = await liveMatches(tournament.id, gaps.map(f => f.id));
+    for (const f of gaps) { const m = live.get(String(f.id)); if (m?.stats) { f.stats = m.stats; f.statsLive = true; } }
+  } catch (e) { log(`live stats unavailable: ${e.message}`); }
+}
+log(`stats: ${need.filter(f => f.stats && !f.statsLive).length} official, ${need.filter(f => f.statsLive).length} live, of ${need.length} matches`);
 
 const next = list.filter(a => inScope(a) && a.startDate > tournament.end)
   .sort((x, y) => x.startDate.localeCompare(y.startDate))[0];

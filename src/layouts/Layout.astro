@@ -91,6 +91,8 @@ const fullTitle = title === 'The Oche' ? title : `${title} · The Oche`;
     </footer>
 
     <script>
+      import { liveScore } from '../lib/pdc.mjs';
+      import { liveFor, LIVE_TICK } from '../lib/live-client.mjs';
       // Scroll-reveal + the sliding nav pill.
       const keyFor = (path: string) => {
         const p = path.replace(/\/$/, '') || '/';
@@ -155,7 +157,8 @@ const fullTitle = title === 'The Oche' ? title : `${title} · The Oche`;
 
       // ---- Live bar ------------------------------------------------------
       // While the current event is on, show live scores (or what's next today)
-      // under the menu on every page, refreshed every 30 seconds.
+      // under the menu on every page. The schedule is re-read every 30 seconds;
+      // live scores come from PDC's live data every few seconds.
       (() => {
         const bar = document.getElementById('livebar');
         if (!bar) return;
@@ -165,13 +168,25 @@ const fullTitle = title === 'The Oche' ? title : `${title} · The Oche`;
         if (!(start <= today() && end >= today())) return;
         const esc = (x: unknown) => String(x ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]!);
         const surname = (p: any) => p?.lastName || '';
+        let feed: any[] | null = null, feedAt = 0;
         async function tick() {
           if (document.hidden) return;
           try {
-            const a = (await (await fetch(`https://tournaments.darts.web.gc.pdcservices.co.uk/v2/${id}`, { cache: 'no-store' })).json()).data.attributes;
-            const fx = (a.stages || []).flatMap((s: any) => (s.fixtures || []).map((f: any) => ({ ...f, stage: s.stage?.name })))
-              .filter((f: any) => f.participant1?.lastName && f.participant2?.lastName && !/to be confirmed/i.test(f.participant1.lastName + f.participant2.lastName));
+            if (!feed || Date.now() - feedAt > 28_000) {
+              const a = (await (await fetch(`https://tournaments.darts.web.gc.pdcservices.co.uk/v2/${id}`, { cache: 'no-store' })).json()).data.attributes;
+              feed = (a.stages || []).flatMap((s: any) => (s.fixtures || []).map((f: any) => ({ ...f, stage: s.stage?.name, sets: (s.numberOfSets || 0) > 1 })))
+                .filter((f: any) => f.participant1?.lastName && f.participant2?.lastName && !/to be confirmed/i.test(f.participant1.lastName + f.participant2.lastName));
+              feedAt = Date.now();
+            }
             const d = today();
+            // Live scores laid over the schedule (the official result wins once it's in).
+            const lv = await liveFor(id!, feed.filter((f: any) => f.startDate === d).map((f: any) => String(f.fixtureID)));
+            const fx = feed.map((f: any) => {
+              const m = lv.get(String(f.fixtureID));
+              if (!m || m.status === 'upcoming' || /result/i.test(f.status)) return f;
+              const [s1, s2] = liveScore(m, f.sets);
+              return { ...f, participant1Score: s1, participant2Score: s2, status: m.status === 'live' ? 'Live' : 'Result' };
+            });
             // The public feed only updates when a match finishes, so a match counts as
             // "on now" once its start time has passed and it has no result yet.
             const nowLdn = new Date().toLocaleTimeString('en-GB', { timeZone: 'Europe/London', hour: '2-digit', minute: '2-digit', hour12: false });
@@ -191,7 +206,7 @@ const fullTitle = title === 'The Oche' ? title : `${title} · The Oche`;
           } catch { /* keep the last state */ }
         }
         tick();
-        setInterval(tick, 30_000);
+        setInterval(tick, LIVE_TICK);
         document.addEventListener('visibilitychange', () => { if (!document.hidden) tick(); });
       })();
 

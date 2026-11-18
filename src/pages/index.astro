@@ -170,7 +170,8 @@ const spot = loadProfile(spotRank.id);
   <script is:inline type="application/json" id="home-data" set:html={JSON.stringify({ cutouts })}></script>
 
   <script>
-    import { normaliseTournament } from '../lib/pdc.mjs';
+    import { normaliseTournament, applyLive, liveCurrentLeg } from '../lib/pdc.mjs';
+    import { liveFor, LIVE_TICK } from '../lib/live-client.mjs';
     import { matchday, featureTile, nextTileInner } from '../lib/feature.mjs';
 
     let timer: number | undefined;
@@ -194,15 +195,26 @@ const spot = loadProfile(spotRank.id);
         tick(); timer = window.setInterval(tick, 30_000);
       }
 
-      // While the event is on: redraw the big tile and results every 30 seconds.
+      // While the event is on: the schedule is re-read every 30 seconds and the
+      // live score and averages every few seconds; tiles redraw only on change.
       if (box.dataset.on) {
+        let base: any = null, baseAt = 0;
+        const draw = (el: HTMLElement, html: string) => { if (el.dataset.html !== html) { el.innerHTML = html; el.dataset.html = html; } };
         const refresh = async () => {
           if (document.hidden) return;
           try {
-            const t = normaliseTournament(await (await fetch(`https://tournaments.darts.web.gc.pdcservices.co.uk/v2/${box.dataset.id}`, { cache: 'no-store' })).json());
+            if (!base || Date.now() - baseAt > 28_000) {
+              base = normaliseTournament(await (await fetch(`https://tournaments.darts.web.gc.pdcservices.co.uk/v2/${box.dataset.id}`, { cache: 'no-store' })).json());
+              baseAt = Date.now();
+            }
+            const ids = base.stages.flatMap((s: any) => s.fixtures).filter((f: any) => f.date === today()).map((f: any) => f.id);
+            const lv = await liveFor(box.dataset.id!, ids);
+            const t = applyLive(structuredClone(base), lv);
             const md = matchday(t, today(), hhmm());
             const pick = md.now ? [md.now, 'now'] : md.next ? [md.next, 'next'] : md.results[0] ? [md.results[0], 'result'] : null;
-            if (pick) box.innerHTML = featureTile(pick[0] as any, pick[1] as string, box.dataset.name!, cutouts);
+            // The leg in play: what each player needs.
+            if (md.now?.status === 'live') (md.now as any).legNow = await liveCurrentLeg(box.dataset.id!, lv.get(String(md.now.id))).catch(() => null);
+            if (pick) draw(box, featureTile(pick[0] as any, pick[1] as string, box.dataset.name!, cutouts));
             const nu = document.getElementById('nextup') as HTMLAnchorElement | null;
             const after = md.todays.find((f: any) => f.status !== 'result' && f !== pick?.[0] && (!md.now || f !== md.now) && f.time >= ((pick?.[0] as any)?.time || ''));
             if (nu) {
@@ -215,12 +227,12 @@ const spot = loadProfile(spotRank.id);
               const list = (todays.length ? todays : md.results).slice(0, 5);
               const last = (n: string) => n.split(' ').slice(-1)[0];
               const e = (x: unknown) => String(x ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]!);
-              ol.innerHTML = list.map((f: any) => `<li><a href="/match?id=${e(f.id)}"><span class="rn${f.winner === f.p1.id ? ' w' : ''}">${e(last(f.p1.name))}</span><span class="poster-num rs">${f.s1}–${f.s2}</span><span class="rn r${f.winner === f.p2.id ? ' w' : ''}">${e(last(f.p2.name))}</span></a></li>`).join('');
+              draw(ol, list.map((f: any) => `<li><a href="/match?id=${e(f.id)}"><span class="rn${f.winner === f.p1.id ? ' w' : ''}">${e(last(f.p1.name))}</span><span class="poster-num rs">${f.s1}–${f.s2}</span><span class="rn r${f.winner === f.p2.id ? ' w' : ''}">${e(last(f.p2.name))}</span></a></li>`).join(''));
             }
           } catch { /* keep what we have */ }
         };
         refresh();
-        timer = window.setInterval(refresh, 30_000);
+        timer = window.setInterval(refresh, LIVE_TICK);
       }
 
     }
@@ -256,6 +268,10 @@ const spot = loadProfile(spotRank.id);
   .feature :global(.ft-score span) { color: #3a3d47; padding: 0 .08em; }
   .feature :global(.ft-vs) { color: #fff; }
   .feature :global(.ft-sub) { color: var(--on-ink-2); margin-top: 14px; }
+  .feature :global(.ft-leg) { display: inline-flex; align-items: center; gap: 10px; margin-top: 10px; padding: 5px 12px; border-radius: 999px; background: rgba(255, 255, 255, .08); font-size: 12px; font-weight: 700; color: var(--on-ink-2); white-space: nowrap; }
+  .feature :global(.ft-leg b) { font-family: var(--poster); font-weight: 400; font-size: 20px; color: #fff; font-variant-numeric: tabular-nums; }
+  .feature :global(.ft-leg b.on) { color: var(--volt); }
+  .feature :global(.ft-pulse) { display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: var(--red); margin-right: 7px; vertical-align: 1px; animation: pulse 1.6s infinite; }
   .feature :global(.ft-bottom) { display: grid; grid-template-columns: 1fr 1fr; border-top: 1px solid var(--ink-2); }
   .feature :global(.ft-who) { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 18px 30px; }
   .feature :global(.ft-who.l) { border-right: 1px solid var(--ink-2); }

@@ -92,7 +92,8 @@ const news = (await getCollection('news')).map(n => n.data)
   <script is:inline type="application/json" id="t-data" set:html={JSON.stringify({ t, portraits })}></script>
 
   <script>
-    import { API, normaliseTournament, fixtureStatsUrl, slimStats } from '../../lib/pdc.mjs';
+    import { API, normaliseTournament, fixtureStatsUrl, slimStats, applyLive } from '../../lib/pdc.mjs';
+    import { liveFor, LIVE_TICK } from '../../lib/live-client.mjs';
     import { matchDays, renderDay, renderTabs, progress, fixtureRow } from '../../lib/render-matches.mjs';
 
     let poll: number | undefined;
@@ -106,12 +107,16 @@ const news = (await getCollection('news')).map(n => n.data)
       const statsCache = new Map<string, any>(initial.stages.flatMap((s: any) => s.fixtures).filter((f: any) => f.stats).map((f: any) => [f.id, f.stats]));
       const merge = () => t.stages.forEach((s: any) => s.fixtures.forEach((f: any) => { if (statsCache.has(f.id)) f.stats = statsCache.get(f.id); }));
       let loading = false;
+      // Official stats are retried at most every two minutes per match until they appear.
+      const triedAt = new Map<string, number>();
       async function loadStats() {
         if (loading) return; loading = true;
         try {
           const shown = new Set([...board!.querySelectorAll<HTMLElement>('.fx')].map(li => li.dataset.id));
           const want = t.stages.flatMap((s: any) => s.fixtures.map((f: any) => ({ f, stage: s.name, sets: s.sets })))
-            .filter(({ f }: any) => shown.has(f.id) && f.status !== 'upcoming' && (f.status === 'live' || !statsCache.has(f.id)));
+            // Official stats are fetched once per finished match; live matches use the live data instead.
+            .filter(({ f }: any) => shown.has(f.id) && f.status !== 'upcoming' && !statsCache.has(f.id) && !(f.status === 'live' && f.statsLive) && Date.now() - (triedAt.get(f.id) || 0) > 120_000);
+          want.forEach(({ f }: any) => triedAt.set(f.id, Date.now()));
           let i = 0;
           await Promise.all(Array.from({ length: 4 }, async () => {
             while (i < want.length) {
@@ -120,12 +125,25 @@ const news = (await getCollection('news')).map(n => n.data)
                 const res = await fetch(fixtureStatsUrl(f.id), { cache: 'no-store' });
                 const st = res.ok ? slimStats(await res.json()) : null;
                 if (!st) continue;
+                f.statsLive = false;
                 statsCache.set(f.id, st); f.stats = st;
                 const li = board!.querySelector<HTMLElement>(`.fx[data-id="${f.id}"]`);
                 if (li) { const tmp = document.createElement('div'); tmp.innerHTML = fixtureRow({ ...f, stage, sets }, portraits).trim(); const n = tmp.firstElementChild as HTMLElement; n.classList.add('stats-in'); li.replaceWith(n); }
               } catch { /* stats are optional */ }
             }
           }));
+          // No official stats yet: use the live figures until they arrive.
+          const gaps = want.filter(({ f }: any) => !f.stats);
+          if (gaps.length) {
+            const lv = await liveFor(t.id, gaps.map(({ f }: any) => f.id));
+            for (const { f, stage, sets } of gaps) {
+              const m = lv.get(String(f.id));
+              if (!m?.stats) continue;
+              f.stats = m.stats; f.statsLive = true;
+              const li = board!.querySelector<HTMLElement>(`.fx[data-id="${f.id}"]`);
+              if (li) { const tmp = document.createElement('div'); tmp.innerHTML = fixtureRow({ ...f, stage, sets }, portraits).trim(); const n = tmp.firstElementChild as HTMLElement; n.classList.add('stats-in'); li.replaceWith(n); }
+            }
+          }
         } finally { loading = false; }
       }
       const today = new Date().toLocaleDateString('en-CA', { timeZone: 'Europe/London' });
@@ -170,11 +188,27 @@ const news = (await getCollection('news')).map(n => n.data)
           if (!res.ok) return;
           t = normaliseTournament(await res.json());
           merge();
+          liveSig = '';
+          await liveTick().catch(() => {});
           ({ days } = matchDays(t, today));
           if (current !== 'all' && !days.includes(current)) current = matchDays(t, today).def;
           paint(true);
           if (live) document.getElementById('updated')!.textContent = `· updated ${new Date().toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' })}`;
         } catch { /* keep showing the last good data */ }
+      };
+      // Live scores and averages from PDC's live data every few seconds; the
+      // board only redraws when something changed.
+      let liveSig = '';
+      const liveTick = async () => {
+        if (document.hidden) return;
+        const ids = t.stages.flatMap((s: any) => s.fixtures).filter((f: any) => f.date === today && f.status !== 'result' || (f.date === today && !f.stats) || f.statsLive).map((f: any) => f.id);
+        if (!ids.length) return;
+        const lv = await liveFor(t.id, ids);
+        const sig = JSON.stringify([...lv.values()].map((m: any) => [m.id, m.status, m.legs, m.sets, m.stats?.map((x: any) => x?.avg)]));
+        if (sig === liveSig) return;
+        liveSig = sig;
+        applyLive(t, lv);
+        paint(true);
       };
       // Schedule / News tabs (#news opens the news tab).
       const tabs = document.querySelectorAll<HTMLButtonElement>('.vt');
@@ -191,7 +225,8 @@ const news = (await getCollection('news')).map(n => n.data)
       if (live) {
         document.getElementById('liveflag')!.hidden = false;
         refresh();
-        poll = window.setInterval(refresh, 30_000);
+        let n = 0;
+        poll = window.setInterval(() => { if (++n % 4 === 0) refresh(); else liveTick().catch(() => {}); }, LIVE_TICK);
       } else if (t.end >= today || !isComplete) refresh();
     }
     document.addEventListener('astro:page-load', init);

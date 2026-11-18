@@ -332,3 +332,148 @@ export async function loadLiveRace(today, found) {
   const full = normaliseRankings(rk);
   return { found, full, event: { ...found.meta, ...cur.data.attributes }, race: liveRace(full, cur.data.attributes, found.prev) };
 }
+
+// ---------------------------------------------------------------------------
+// Live layer: PDC's own Firestore, which pdc.tv reads from every visitor's
+// browser with its public web key. Scores update as each leg is won and the
+// stats (average, 180s, checkout %) as each visit lands, while the official
+// feeds above only fill in after the match (stats often the next day). The
+// official figures always win when both exist. If this ever stops answering,
+// callers fall back to the official feeds alone.
+// ---------------------------------------------------------------------------
+const LIVE_DB = 'projects/professional-darts-corporation/databases/(default)/documents';
+const LIVE_URL = `https://firestore.googleapis.com/v1/${LIVE_DB}`;
+const LIVE_KEY = 'AIzaSyCjME19V2rot9OJqrt96Yigqcx3B0nYMgI';
+const LIVE_FIELDS = ['status', 'legScore', 'setScore', 'stats', 'currentLeg', 'currentSet'];
+
+const fsVal = v => v == null ? null
+  : 'integerValue' in v ? Number(v.integerValue)
+  : 'doubleValue' in v ? Number(v.doubleValue)
+  : 'stringValue' in v ? v.stringValue
+  : 'booleanValue' in v ? v.booleanValue
+  : 'mapValue' in v ? Object.fromEntries(Object.entries(v.mapValue.fields || {}).map(([k, x]) => [k, fsVal(x)]))
+  : null;
+
+const liveSide = s => s && s.average3Darts != null ? {
+  avg: Number(Number(s.average3Darts).toFixed(2)), f9: null,
+  t80: s.scores180s ?? 0, t140: s.scores140sPlus ?? null, t100: s.scores100sPlus ?? null,
+  co: s.checkoutPercentage != null ? Number(s.checkoutPercentage) : null, hi: s.highestCheckout || null,
+} : null;
+
+/** One live match document, slimmed: { id, status: 'live'|'result', legs, sets, stats }. */
+export function slimLive(doc) {
+  if (!doc?.name || !doc.fields) return null;
+  const f = Object.fromEntries(Object.entries(doc.fields).map(([k, v]) => [k, fsVal(v)]));
+  const a = liveSide(f.stats?.home), b = liveSide(f.stats?.away);
+  return {
+    id: doc.name.split('/').pop(),
+    status: f.status === 'O' ? 'live' : f.status === 'C' ? 'result' : 'upcoming',
+    legs: [f.legScore?.home ?? 0, f.legScore?.away ?? 0],
+    sets: [f.setScore?.home ?? 0, f.setScore?.away ?? 0],
+    leg: f.currentLeg ?? null, set: f.currentSet ?? null,
+    stats: a || b ? [a, b] : null,
+  };
+}
+
+/** Matches in play right now in a tournament (one small query). */
+export async function liveNow(tournamentId) {
+  const res = await fetch(`${LIVE_URL}/tournaments/${tournamentId}:runQuery?key=${LIVE_KEY}`, {
+    method: 'POST', cache: 'no-store', headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ structuredQuery: {
+      from: [{ collectionId: 'matches' }],
+      where: { fieldFilter: { field: { fieldPath: 'status' }, op: 'EQUAL', value: { stringValue: 'O' } } },
+    } }),
+  });
+  if (!res.ok) throw new Error(`live ${res.status}`);
+  return (await res.json()).map(r => slimLive(r.document)).filter(Boolean);
+}
+
+/** Live documents for specific matches (one request), as a Map of fixture id to slim match. */
+export async function liveMatches(tournamentId, ids) {
+  const out = new Map();
+  const list = [...new Set(ids.map(String))];
+  for (let i = 0; i < list.length; i += 100) {
+    const res = await fetch(`${LIVE_URL}:batchGet?key=${LIVE_KEY}`, {
+      method: 'POST', cache: 'no-store', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ documents: list.slice(i, i + 100).map(id => `${LIVE_DB}/tournaments/${tournamentId}/matches/${id}`), mask: { fieldPaths: LIVE_FIELDS } }),
+    });
+    if (!res.ok) throw new Error(`live ${res.status}`);
+    for (const r of await res.json()) { const m = slimLive(r.found); if (m) out.set(m.id, m); }
+  }
+  return out;
+}
+
+/** The score to show from a live match: sets in sets matches, legs otherwise. */
+export const liveScore = (m, sets) => (sets ? m.sets : m.legs);
+
+/**
+ * Lay live data over a normalised tournament (mutates it). Live scores and
+ * stats fill gaps only: an official result or official stats are never replaced.
+ * Matches given live stats are flagged statsLive so the page can say so.
+ */
+export function applyLive(t, live) {
+  if (!live?.size) return t;
+  for (const s of t.stages) for (const f of s.fixtures) {
+    const m = live.get(String(f.id));
+    if (!m || m.status === 'upcoming') continue;
+    if (f.status !== 'result') {
+      const [a, b] = liveScore(m, s.sets);
+      f.s1 = a; f.s2 = b; f.status = m.status;
+      if (m.status === 'result') f.winner = a > b ? f.p1?.id ?? null : b > a ? f.p2?.id ?? null : null;
+    }
+    if (m.stats && (!f.stats || f.statsLive)) { f.stats = m.stats; f.statsLive = true; }
+  }
+  return t;
+}
+
+const listDocs = async path => {
+  const res = await fetch(`${LIVE_URL}/${path}?pageSize=300&key=${LIVE_KEY}`, { cache: 'no-store' });
+  if (!res.ok) throw new Error(`live ${res.status}`);
+  return ((await res.json()).documents || []).map(d => ({ id: d.name.split('/').pop(), ...Object.fromEntries(Object.entries(d.fields || {}).map(([k, v]) => [k, fsVal(v)])) }));
+};
+
+/** One leg's visits from the live data, in the official timeline's shape. */
+async function liveLeg(tid, mid, set, leg) {
+  const turns = await listDocs(`tournaments/${tid}/matches/${mid}/sets/${set}/legs/${leg}/turns`);
+  const visits = turns.filter(x => x.isComplete !== false).sort((a, b) => a.globalTurnIndex - b.globalTurnIndex).map(x => ({
+    order: x.globalTurnIndex, visitNumber: x.globalTurnIndex, isParticipant1: x.scoringParticipant === 0,
+    score: x.isBust ? 0 : x.turnScore ?? 0, remaining: x.score, numberOfDartsThrown: x.dartsThrown ?? 3,
+    isBust: !!x.isBust, isCheckout: !!x.isCheckout,
+  }));
+  const next = turns.sort((a, b) => b.globalTurnIndex - a.globalTurnIndex)[0];
+  return { setNumber: set, legNumber: leg, visits, throwing: next ? (next.activeParticipant === 0 ? 0 : 1) : null };
+}
+
+/**
+ * Every leg of a match from the live data, oldest first. Finished legs are kept
+ * in `cache` (a Map) so each poll only re-reads the leg being played.
+ */
+export async function liveLegs(tid, mid, m, cache = new Map()) {
+  if (!m || m.status === 'upcoming' || !m.leg) return [];
+  const sets = Math.max(1, m.set || 1);
+  const want = [];
+  for (let s = 1; s <= sets; s++) {
+    if (s < sets) {
+      const key = `set-${s}`;
+      if (!cache.has(key)) cache.set(key, (await listDocs(`tournaments/${tid}/matches/${mid}/sets/${s}/legs`)).map(d => Number(d.id)).filter(Boolean).sort((a, b) => a - b));
+      for (const l of cache.get(key)) want.push([s, l]);
+    } else for (let l = 1; l <= m.leg; l++) want.push([s, l]);
+  }
+  const current = want[want.length - 1];
+  return Promise.all(want.map(async ([s, l]) => {
+    const key = `${s}-${l}`;
+    const isCurrent = m.status === 'live' && s === current[0] && l === current[1];
+    if (!isCurrent && cache.has(key)) return cache.get(key);
+    const leg = await liveLeg(tid, mid, s, l);
+    if (!isCurrent) cache.set(key, leg);
+    return leg;
+  }));
+}
+
+/** The leg in play: what each player needs and who is throwing. */
+export async function liveCurrentLeg(tid, m) {
+  if (!m || m.status !== 'live' || !m.leg) return null;
+  const leg = await liveLeg(tid, m.id, m.set || 1, m.leg);
+  const left = p1 => { const v = leg.visits.filter(x => x.isParticipant1 === p1); return v.length ? v[v.length - 1].remaining : 501; };
+  return { set: m.set || 1, leg: m.leg, left: [left(true), left(false)], throwing: leg.throwing, visits: leg.visits };
+}

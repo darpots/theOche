@@ -46,7 +46,8 @@ const portraits = Object.fromEntries(Object.entries(portraitsRaw as Record<strin
   <script is:inline type="application/json" id="m-data" set:html={JSON.stringify({ cutouts, portraits })}></script>
 
   <script>
-    import { flag, keyName } from '../lib/pdc.mjs';
+    import { flag, keyName, liveScore, liveLegs } from '../lib/pdc.mjs';
+    import { liveFor, LIVE_TICK } from '../lib/live-client.mjs';
 
     const FX = 'https://fixtures.darts.web.gc.pdcservices.co.uk/v2/';
     const C = ['#2b4bff', '#e8362d']; // player 1 blue, player 2 red (validated pair)
@@ -54,6 +55,26 @@ const portraits = Object.fromEntries(Object.entries(portraitsRaw as Record<strin
     const name = (p: any) => [p?.firstName, p?.lastName].filter(Boolean).join(' ');
     const last = (p: any) => p?.lastName || name(p);
     let timer: number | undefined;
+    // Finished legs from the live data, kept between polls (per match).
+    const legCache = new Map<string, Map<string, any>>();
+
+    /** The leg being played: what each player needs, who's throwing and their last visits. */
+    function currentLeg(leg: any, names: string[]) {
+      const v = (leg.visits || []).slice().sort((a: any, b: any) => a.order - b.order);
+      const mine = (p1: boolean) => v.filter((x: any) => x.isParticipant1 === p1);
+      const left = (p1: boolean) => mine(p1).at(-1)?.remaining ?? 501;
+      const last = v.at(-1);
+      const thrower = leg.throwing ?? (last ? (last.isParticipant1 ? 1 : 0) : null);
+      const darts = (p1: boolean) => mine(p1).reduce((n: number, x: any) => n + (x.numberOfDartsThrown || 0), 0);
+      const chips = (p1: boolean) => mine(p1).slice(-4).reverse().map((x: any, i: number) => `<i class="${x.isBust ? 'bust' : x.score >= 100 ? 'big' : ''}${i === 0 ? ' last' : ''}">${x.isBust ? 'Bust' : x.score}</i>`).join('');
+      const side = (k: number) => `<div class="cl-side c${k}${thrower === k ? ' on' : ''}">
+          <span class="cl-name">${thrower === k ? '<span class="cl-oche" title="Throwing">●</span>' : ''}${esc(names[k])}</span>
+          <b class="poster-num">${left(k === 0)}</b>
+          <span class="cl-v">${chips(k === 0) || '<em>No visits yet</em>'}</span>
+          <small>${darts(k === 0)} darts</small>
+        </div>`;
+      return `<div class="curleg"><span class="lbl cl-h">${leg.setNumber > 1 || (leg.sets ?? 0) > 1 ? `Set ${leg.setNumber} · ` : ''}Leg ${leg.legNumber} · in play</span><div class="cl-row">${side(0)}${side(1)}</div></div>`;
+    }
 
     function legData(t: any) {
       return (t.legs || []).slice().sort((a: any, b: any) => (a.setNumber ?? 1) - (b.setNumber ?? 1) || a.legNumber - b.legNumber).map((leg: any) => {
@@ -114,7 +135,7 @@ const portraits = Object.fromEntries(Object.entries(portraitsRaw as Record<strin
         ['Checkout %', 'checkoutPercentage', a.checkoutPercentage, b.checkoutPercentage, v => `${Number(v).toFixed(1)}%`],
         ['Highest checkout', 'highestCheckout', a.highestCheckout, b.highestCheckout, v => String(v || '–')],
       ];
-      return rows.map(([label, , x, y, fmt]) => {
+      return rows.filter(([, , x, y]) => x != null || y != null).map(([label, , x, y, fmt]) => {
         const X = Number(x) || 0, Y = Number(y) || 0, max = Math.max(X, Y, 1);
         return `<div class="cr"><span class="v l${X > Y ? ' hi' : ''}">${fmt(X)}</span>
           <div class="bars"><i class="b0" style="width:${(X / max) * 100}%"></i></div>
@@ -221,12 +242,45 @@ const portraits = Object.fromEntries(Object.entries(portraitsRaw as Record<strin
       if (!id) { mh.innerHTML = '<div class="loading">No match selected. Open a match from a tournament page.</div>'; return; }
       const data = JSON.parse(document.getElementById('m-data')!.textContent!);
       try {
-        const [f, t] = await Promise.all([fetch(FX + id, { cache: 'no-store' }).then(r => r.json()), fetch(`${FX}${id}/timeline`, { cache: 'no-store' }).then(r => (r.ok ? r.json() : null))]);
+        let [f, t] = await Promise.all([fetch(FX + id, { cache: 'no-store' }).then(r => r.json()), fetch(`${FX}${id}/timeline`, { cache: 'no-store' }).then(r => (r.ok ? r.json() : null))]);
         const a = f.data;
+        // PDC's live data fills the score and stats until the official feed has them.
+        const tid = a.attributes.tournament?.tournamentID;
+        const m: any = tid ? (await liveFor(String(tid), [String(id)])).get(String(id)) : null;
+        let liveStats = false;
+        if (m && m.status !== 'upcoming') {
+          if (!/result/i.test(a.attributes.status)) {
+            const [s1, s2] = liveScore(m, (t?.data?.attributes?.stage?.numberOfSets || 0) > 1);
+            Object.assign(a.attributes, { participant1Score: s1, participant2Score: s2, status: m.status === 'live' ? 'Live' : 'Result' });
+            if (m.status === 'result' && s1 !== s2) a.attributes.winnerParticipantID = (s1 > s2 ? a.attributes.participant1 : a.attributes.participant2)?.participantID;
+          }
+          // Every visit of every leg so far, when the official timeline doesn't have them yet.
+          if (!t?.data?.attributes?.legs?.length) {
+            if (!legCache.has(id)) legCache.set(id, new Map());
+            const lg = await liveLegs(String(tid), String(id), m, legCache.get(id)).catch(() => []);
+            if (lg.length) { t = t?.data ? t : { data: { attributes: { legs: [] } } }; t.data.attributes.legs = lg; }
+          }
+          if (m.stats && !t?.data?.attributes?.fixtureMeta?.participant1Data) {
+            const side = (x: any) => x && { threeDartAverage: x.avg, first9Average: null, score180: x.t80, score140plus: x.t140, score100plus: x.t100, checkoutPercentage: x.co, highestCheckout: x.hi };
+            t = t?.data ? t : { data: { attributes: { legs: [] } } };
+            t.data.attributes.fixtureMeta = { participant1Data: side(m.stats[0]), participant2Data: side(m.stats[1]) };
+            liveStats = true;
+          }
+        }
         const names = [last(a.attributes.participant1), last(a.attributes.participant2)];
         document.title = `${name(a.attributes.participant1)} v ${name(a.attributes.participant2)} · The Oche`;
         mh.innerHTML = header(a, t?.data, data);
         const legs = t?.data ? legData(t.data.attributes) : [];
+        const playing = m?.status === 'live' ? t?.data?.attributes?.legs?.find((l: any) => (l.setNumber ?? 1) === (m.set || 1) && l.legNumber === m.leg) : null;
+        if (playing) {
+          // Nobody has thrown yet: players alternate who starts each leg.
+          if (playing.throwing == null && !playing.visits.length) {
+            const prev = t.data.attributes.legs.find((l: any) => (l.setNumber ?? 1) === (playing.setNumber ?? 1) && l.legNumber === playing.legNumber - 1);
+            const first = prev?.visits?.slice().sort((x: any, y: any) => x.order - y.order)[0];
+            if (first) playing.throwing = first.isParticipant1 ? 1 : 0;
+          }
+          mh.insertAdjacentHTML('beforeend', currentLeg(playing, names));
+        }
         // Key numbers under the score: each player's average, best checkout, shortest leg.
         const meta = t?.data?.attributes?.fixtureMeta;
         if (meta?.participant1Data && legs.length) {
@@ -239,10 +293,15 @@ const portraits = Object.fromEntries(Object.entries(portraitsRaw as Record<strin
         const started = !/result|live|progress/i.test(a.attributes.status) && new Date(`${a.attributes.startDate}T${(a.attributes.startTime || '23:59').slice(0, 5)}:00`) <= new Date(new Date().toLocaleString('en-US', { timeZone: 'Europe/London' }));
         const noLegs = !(t?.data?.attributes?.legs?.length);
         const isResult = /result/i.test(a.attributes.status);
-        if (isResult && noLegs) mh.insertAdjacentHTML('beforeend', `<p class="inplay"><b>Result confirmed.</b> The PDC adds averages and leg-by-leg stats a little later. This page checks again every two minutes and fills in on its own.</p>`);
+        const isLive = /live|progress/i.test(a.attributes.status);
+        if (isLive && liveStats) mh.insertAdjacentHTML('beforeend', `<p class="inplay"><span class="live-dot">Live</span> Score and stats update every few seconds. <a href="https://www.pdc.tv/matches/${esc(id)}" target="_blank" rel="noopener">Follow it dart by dart on pdc.tv ↗</a></p>`);
+        else if (isResult && noLegs) mh.insertAdjacentHTML('beforeend', `<p class="inplay"><b>Result confirmed.</b> ${liveStats ? 'Stats are from PDC live scoring; the' : 'The PDC adds averages and'} leg-by-leg detail follows when the PDC publishes it. This page checks again every two minutes and fills in on its own.</p>`);
         if (!document.getElementById('tp')!.innerHTML) tape([a.attributes.participant1, a.attributes.participant2]);
-        if (started && noLegs) mh.insertAdjacentHTML('beforeend', `<p class="inplay"><span class="live-dot">On now</span> This match should be under way. The PDC's public feed publishes scores when a match finishes, so this page fills in then. <a href="https://www.pdc.tv/matches/${esc(id)}" target="_blank" rel="noopener">Follow it dart by dart on pdc.tv ↗</a></p>`);
-        document.getElementById('mb')!.hidden = !t?.data || noLegs;
+        if (started && noLegs && !m?.stats) mh.insertAdjacentHTML('beforeend', `<p class="inplay"><span class="live-dot">On now</span> This match should be under way. The PDC's public feed publishes scores when a match finishes, so this page fills in then. <a href="https://www.pdc.tv/matches/${esc(id)}" target="_blank" rel="noopener">Follow it dart by dart on pdc.tv ↗</a></p>`);
+        // Stats show as soon as there are any; the leg charts wait for the visit data.
+        const mb = document.getElementById('mb')!;
+        mb.hidden = !t?.data?.attributes?.fixtureMeta?.participant1Data && noLegs;
+        mb.querySelectorAll<HTMLElement>('.block:not(:first-child)').forEach(b => { b.hidden = noLegs; });
         if (t?.data) {
           document.getElementById('cmp')!.innerHTML = compare(a, t.data);
           document.getElementById('lg1')!.innerHTML = document.getElementById('lg2')!.innerHTML = legend(names);
@@ -252,7 +311,8 @@ const portraits = Object.fromEntries(Object.entries(portraitsRaw as Record<strin
           wireTip();
         }
         clearTimeout(timer);
-        if (/live|progress/i.test(a.attributes.status) || (!isResult && a.attributes.startDate <= new Date().toISOString().slice(0, 10))) timer = window.setTimeout(load, 15_000);
+        if (isLive) timer = window.setTimeout(load, LIVE_TICK);
+        else if (!isResult && a.attributes.startDate <= new Date().toISOString().slice(0, 10)) timer = window.setTimeout(load, 15_000);
         else if (isResult && noLegs) timer = window.setTimeout(load, 120_000);
       } catch {
         mh.innerHTML = '<div class="loading">This match could not be loaded. Please try again shortly.</div>';
@@ -296,6 +356,31 @@ const portraits = Object.fromEntries(Object.entries(portraitsRaw as Record<strin
   .mh-in :global(.score small) { position: absolute; }
   .mh-in :global(.score small) { display: none; }
 
+  /* The leg in play */
+  .mh-in :global(.curleg) { margin: 0 0 22px; background: rgba(255, 255, 255, .06); border: 1px solid var(--ink-2); border-radius: 18px; padding: 14px 18px 16px; }
+  .mh-in :global(.cl-h) { color: var(--on-ink-2); display: block; margin-bottom: 10px; }
+  .mh-in :global(.cl-row) { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+  .mh-in :global(.cl-side) { display: grid; grid-template-columns: auto 1fr; grid-template-areas: 'name name' 'left v' 'left n'; column-gap: 16px; align-items: center; }
+  .mh-in :global(.cl-side.c1) { grid-template-columns: 1fr auto; grid-template-areas: 'name name' 'v left' 'n left'; text-align: right; }
+  .mh-in :global(.cl-name) { grid-area: name; font-weight: 800; font-size: 14px; color: rgba(255, 255, 255, .85); margin-bottom: 2px; }
+  .mh-in :global(.cl-oche) { color: var(--volt); margin-right: 6px; font-size: 11px; vertical-align: 2px; }
+  .mh-in :global(.c1 .cl-oche) { margin: 0 0 0 6px; float: right; }
+  .mh-in :global(.cl-side b) { grid-area: left; font-family: var(--poster); font-weight: 400; font-size: clamp(54px, 7vw, 84px); line-height: .95; color: #fff; font-variant-numeric: tabular-nums; }
+  .mh-in :global(.cl-side.on b) { color: var(--volt); }
+  .mh-in :global(.cl-v) { grid-area: v; display: flex; flex-wrap: wrap; gap: 5px; }
+  .mh-in :global(.c1 .cl-v) { justify-content: flex-end; }
+  .mh-in :global(.cl-v i) { font-style: normal; font-weight: 800; font-size: 13px; min-width: 38px; text-align: center; padding: 3px 8px; border-radius: 8px; background: rgba(255, 255, 255, .1); color: rgba(255, 255, 255, .85); font-variant-numeric: tabular-nums; }
+  .mh-in :global(.cl-v i.big) { background: rgba(200, 255, 46, .18); color: var(--volt); }
+  .mh-in :global(.cl-v i.bust) { background: rgba(232, 54, 45, .25); color: #ff8a80; }
+  .mh-in :global(.cl-v i.last) { outline: 1px solid rgba(255, 255, 255, .35); }
+  .mh-in :global(.cl-v em) { font-style: normal; font-size: 13px; color: var(--on-ink-2); }
+  .mh-in :global(.cl-side small) { grid-area: n; font-size: 12px; color: var(--on-ink-2); margin-top: 4px; }
+  @media (max-width: 640px) {
+    .mh-in :global(.cl-row) { gap: 12px; }
+    .mh-in :global(.cl-side), .mh-in :global(.cl-side.c1) { grid-template-columns: 1fr; grid-template-areas: 'name' 'left' 'v' 'n'; }
+    .mh-in :global(.cl-v) { margin-top: 6px; }
+    .mh-in :global(.cl-v i) { min-width: 0; font-size: 12px; padding: 2px 6px; }
+  }
   .mh-in :global(.inplay) { margin: 0 0 22px; font-size: 14px; color: rgba(255, 255, 255, .85); background: rgba(255, 255, 255, .08); border-radius: 12px; padding: 10px 14px; }
   .mh-in :global(.inplay a) { color: #fff; font-weight: 700; }
   .mh-in :global(.inplay .live-dot) { color: #ff8a98; margin-right: 6px; }

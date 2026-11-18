@@ -31,12 +31,13 @@ export function featureTile(f, mode, eventName, cutouts) {
   const tag = mode === 'now' ? `<span class="lbl ft-live">● On now · ${esc(eventName)}</span>`
     : mode === 'next' ? `<span class="lbl ft-next">Next up · ${esc(f.time || 'TBC')} · ${esc(eventName)}</span>`
     : `<span class="lbl ft-res">Result · ${esc(eventName)}</span>`;
-  const centre = done || (f.s1 ?? 0) + (f.s2 ?? 0) > 0
-    ? `<div class="ft-score poster-num">${f.s1 ?? 0}<span>–</span>${f.s2 ?? 0}</div><div class="lbl ft-sub">${mode === 'now' ? 'Latest score' : 'Final score'}</div>`
-    : `<div class="ft-score ft-vs poster-num">V</div><div class="lbl ft-sub">${mode === 'now' ? 'In play · live scoring on pdc.tv' : esc(f.time ? `${f.time} UK time` : 'Time TBC')}</div>`;
+  const inPlay = mode === 'now' && f.status === 'live';
+  const centre = done || inPlay || (f.s1 ?? 0) + (f.s2 ?? 0) > 0
+    ? `<div class="ft-score poster-num">${f.s1 ?? 0}<span>–</span>${f.s2 ?? 0}</div><div class="lbl ft-sub">${inPlay ? '<span class="ft-pulse"></span>Live score' : mode === 'now' ? 'Latest score' : 'Final score'}</div>${inPlay && f.legNow ? `<div class="ft-leg" title="Score left in the leg being played">Leg ${f.legNow.leg}<b class="${f.legNow.throwing === 0 ? 'on' : ''}">${f.legNow.left[0]}</b><b class="${f.legNow.throwing === 1 ? 'on' : ''}">${f.legNow.left[1]}</b></div>` : ''}`
+    : `<div class="ft-score ft-vs poster-num">V</div><div class="lbl ft-sub">${mode === 'now' ? 'Waiting for the first dart' : esc(f.time ? `${f.time} UK time` : 'Time TBC')}</div>`;
   const side = (p, won, s, align) => `<div class="ft-who ${align}${won ? ' won' : ''}">
       <div><b>${esc(p.name)}</b><small>${flag(p.country)} ${p.ranking ? `World #${p.ranking}` : ''}${won ? ' · Winner' : ''}</small></div>
-      ${s?.avg != null ? `<div class="ft-avg"><span class="poster-num">${Number(s.avg).toFixed(2)}</span><small class="lbl">Average</small></div>` : ''}
+      ${s?.avg != null ? `<div class="ft-avg"><span class="poster-num">${Number(s.avg).toFixed(2)}</span><small class="lbl">${inPlay ? 'Live average' : 'Average'}</small></div>` : ''}
     </div>`;
   return `<a class="ft-link" href="/match?id=${esc(f.id)}" aria-label="${esc(`${f.p1.name} v ${f.p2.name}`)}"></a>
     <div class="ft-top">${tag}<span class="lbl ft-stage">${esc(f.stage || '')}</span></div>
