@@ -44,7 +44,7 @@ const av = (name: string) => { const [c1, c2] = avatarColours(name); return `--c
         <button class="seg" data-mode="live" aria-pressed="true"><span class="ldot"></span>Live race</button>
         <button class="seg" data-mode="official" aria-pressed="false">Official</button>
       </div>
-      <label class="onlyev" id="onlyev" hidden><input type="checkbox" id="onlyevcb" /> In this event only</label>
+      <label class="onlyev" id="onlyev" hidden><input type="checkbox" id="onlyevcb" /> <span id="onlyev-label">In this event only</span></label>
       <span class="muted small" id="asof">Top 128 · official PDC list</span>
     </div>
     <p class="race-note" id="raceNote" hidden></p>
@@ -129,23 +129,17 @@ const av = (name: string) => { const [c1, c2] = avatarColours(name); return `--c
           if (live && (p.plus || p.minus)) {
             const net = p.plus - p.minus;
             const ev = (p.expiring || []).map((e: any) => `${k(e.amount)} ${e.name}`).join(', ');
+            // Progress in the event, beside what it has won them (event named on hover).
+            const evName = event.name.replace(/^\d{4}\s+/, '');
+            const round = p.round ? (/^(group|league)/i.test(p.round) ? 'Group stage' : p.round) : '';
+            const chip = round ? `<span class="stage-chip tip ${p.alive === false ? 'out' : 'in'}" data-tip="${esc(`${evName}\n${p.alive === false ? `Knocked out · ${round}` : `Still in · ${round}`}`)}">${esc(p.alive === false ? `Out · ${round}` : round)}</span>` : '';
             const parts = [
-              p.plus ? `<span class="plus">won ${k(p.plus)}</span>` : '',
+              p.plus ? `${chip}<span class="plus">won ${k(p.plus)}</span>` : chip,
               p.minus ? `<span class="minus tip" data-tip="${esc(`Expiring:\n${(p.expiring || []).map((e: any) => `${k(e.amount)} · ${e.name}`).join('\n')}`)}" aria-label="${esc(`Expiring: ${ev}`)}">expiring ${k(p.minus)}${p.estimated ? '*' : ''}</span>` : '',
             ].filter(Boolean).join('<i aria-hidden="true">·</i>');
             html = `<span class="net ${net > 0 ? 'up' : net < 0 ? 'down' : 'flat'}">${net > 0 ? '▲ ' : net < 0 ? '▼ ' : ''}${net ? k(Math.abs(net)) : 'No change'}</span><span class="br">${parts}</span>`;
           }
           d.hidden = !html; d.innerHTML = html;
-          // Progress chip: volt with the round for players still in, grey "Out" for the knocked out.
-          const name = r.querySelector('.who b')!;
-          r.querySelector('.stage-chip')?.remove();
-          if (live && p.round) {
-            const round = /^(group|league)/i.test(p.round) ? 'Group stage' : p.round;
-            const chip = document.createElement('span');
-            chip.className = `stage-chip ${p.alive === false ? 'out' : 'in'}`;
-            chip.textContent = p.alive === false ? `Out · ${round}` : round;
-            name.parentElement!.appendChild(chip);
-          }
           r.querySelector<HTMLElement>('.bar span')!.style.width = `${(p.money / max) * 100}%`;
           frag.appendChild(r);
         }
@@ -157,7 +151,7 @@ const av = (name: string) => { const [c1, c2] = avatarColours(name); return `--c
         if (live) {
           const drops: string[] = found?.dropNames || [];
           const list = drops.length ? drops.map(d => `<b>${esc(d)}</b>`).join(' and ') : 'events from two years ago';
-          note.innerHTML = `<span class="live-dot">Live</span> Projected standings at the end of the <b>${esc(event.name.replace(/^\d{4}\s+/, ''))}</b>. The PDC drops prize money 104 weeks after it was won, so money from the ${list} is <span class="minus">expiring</span>, and money players have guaranteed in this event so far counts as <span class="plus">won</span>. The chip by the money shows each player's net change (hover “expiring” to see which events); the chip by the name shows how far they've got in the ${esc(event.name.replace(/^\d{4}\s+/, ''))}. <b>Updated daily</b>${found?.updatedAt ? ` (last at ${new Date(found.updatedAt).toLocaleString('en-GB', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit', timeZone: 'Europe/London' })})` : ''}; positions settle when the PDC publishes the official list after the final.`;
+          note.innerHTML = `<span class="live-dot">Live</span> Projected standings at the end of the <b>${esc(event.name.replace(/^\d{4}\s+/, ''))}</b>. The PDC drops prize money 104 weeks after it was won, so money from the ${list} is <span class="minus">expiring</span>, and money players have guaranteed in this event so far counts as <span class="plus">won</span>. The red or green chip shows each player's net change (hover “expiring” to see which events); the chip by “won” shows how far they've got in the ${esc(event.name.replace(/^\d{4}\s+/, ''))}. <b>Updated daily</b>${found?.updatedAt ? ` (last at ${new Date(found.updatedAt).toLocaleString('en-GB', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit', timeZone: 'Europe/London' })})` : ''}; positions settle when the PDC publishes the official list after the final.`;
         }
         asof.textContent = live ? `Movement shown against the official list` : `Top ${official.length} · official PDC list`;
       };
@@ -178,6 +172,7 @@ const av = (name: string) => { const [c1, c2] = avatarColours(name); return `--c
       const found: any = cache && cache.event.startDate <= todayLdn && cache.event.endDate >= todayLdn ? cache : null;
       if (found) {
         event = found.event;
+        document.getElementById('onlyev-label')!.textContent = `In the ${found.event.name.replace(/^\d{4}\s+/, '').replace(/ of Darts$/, '')} only`;
         race = found.race.filter((p: any) => p.live <= 128);
       }
       modeBox.hidden = !race;
@@ -240,10 +235,11 @@ const av = (name: string) => { const [c1, c2] = avatarColours(name); return `--c
   :global(.delta .net.up) { background: var(--green-soft); color: #075c3f; }
   :global(.delta .net.down) { background: var(--red-soft); color: #a3221a; }
   :global(.delta .net.flat) { background: var(--paper-2); color: var(--muted); }
-  :global(.delta .br) { display: inline-flex; gap: 5px; white-space: nowrap; }
+  :global(.delta .br) { display: inline-flex; align-items: center; gap: 5px; white-space: nowrap; }
   :global(.delta .br i) { font-style: normal; color: var(--muted); }
   /* Instant tooltip naming the events whose money is expiring */
-  :global(.delta .tip) { position: relative; text-decoration: underline dotted; text-underline-offset: 2px; }
+  :global(.delta .tip) { position: relative; }
+  :global(.delta .minus.tip) { text-decoration: underline dotted; text-underline-offset: 2px; }
   :global(.delta .tip::after) {
     content: attr(data-tip); white-space: pre; position: absolute; z-index: 20; right: 0; bottom: calc(100% + 8px);
     background: var(--ink); color: #fff; font-size: 12px; font-weight: 600; line-height: 1.5; text-align: left;
@@ -252,7 +248,7 @@ const av = (name: string) => { const [c1, c2] = avatarColours(name); return `--c
   }
   :global(.delta .tip:hover::after), :global(.tr:focus-visible .delta .tip::after) { opacity: 1; transform: none; }
   :global(.plus) { color: #0a7a3a; } :global(.minus) { color: #c42c23; }
-  :global(.stage-chip) { display: inline-block; width: fit-content; margin-top: 3px; font-size: 10px; font-weight: 800; letter-spacing: .06em; text-transform: uppercase; padding: 2px 8px; border-radius: 999px; white-space: nowrap; }
+  :global(.stage-chip) { display: inline-block; width: fit-content; margin-right: 2px; font-size: 10px; font-weight: 800; letter-spacing: .06em; text-transform: uppercase; padding: 2px 8px; border-radius: 999px; white-space: nowrap; }
   :global(.stage-chip.in) { background: var(--volt); color: var(--ink); }
   :global(.stage-chip.out) { background: var(--paper-2); color: var(--muted); }
   .table.shuffle .tr { animation: shuffle .45s var(--ease); }
