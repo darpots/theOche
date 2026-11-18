@@ -4,16 +4,18 @@ import '../styles/global.css';
 import Logo from '../components/Logo.astro';
 import current from '../data/tournament.json';
 
-interface Props { title: string; description?: string; active?: 'calendar' | 'matches' | 'news' | 'rankings' }
+interface Props { title: string; description?: string; active?: 'home' | 'calendar' | 'matches' | 'news' | 'rankings' }
 const { title, description = 'PDC darts on TV, live matches, news and world rankings.', active } = Astro.props;
 const nav = [
+  { key: 'home', href: '/', label: 'Home' },
+  { key: 'news', href: '/news', label: 'News' },
   { key: 'calendar', href: '/calendar', label: 'Calendar' },
   { key: 'matches', href: `/tournament/${current.tournament.id}`, label: 'Matches' },
-  { key: 'news', href: '/news', label: 'News' },
   { key: 'rankings', href: '/rankings', label: 'Rankings' },
 ];
 const t = current.tournament;
 const icons: Record<string, string> = {
+  home: '<path d="M4 11l8-7 8 7v8a2 2 0 0 1-2 2h-3v-6H9v6H6a2 2 0 0 1-2-2z"/>',
   calendar: '<rect x="3" y="5" width="18" height="16" rx="3"/><path d="M3 10h18M8 3v4M16 3v4"/>',
   matches: '<circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.5" fill="currentColor"/>',
   news: '<rect x="4" y="4" width="16" height="16" rx="3"/><path d="M8 9h8M8 13h8M8 17h5"/>',
@@ -291,11 +293,14 @@ const fullTitle = title === 'The Oche' ? title : `${title} · The Oche`;
     .bar { height: 58px; }
     .bar nav, .searchbtn { display: none; }
     .tabbar {
-      display: grid; grid-template-columns: repeat(5, 1fr); gap: 2px; position: fixed; z-index: 60; left: 10px; right: 10px; bottom: calc(10px + env(safe-area-inset-bottom));
+      display: grid; grid-template-columns: repeat(6, 1fr); gap: 2px; position: fixed; z-index: 60; left: 10px; right: 10px; bottom: calc(10px + env(safe-area-inset-bottom));
       background: var(--ink); border-radius: 24px; padding: 6px; box-shadow: 0 16px 40px -12px rgba(11, 12, 16, .55);
     }
     .tab { display: flex; flex-direction: column; align-items: center; gap: 2px; padding: 6px 0; border: 0; border-radius: 18px; background: none; color: var(--on-ink); text-decoration: none; font-size: 11px; font-weight: 700; cursor: pointer; }
     .tab.on { color: var(--ink); background: var(--volt); }
+  }
+  @media (max-width: 360px) {
+    .tab { font-size: 10px; }
     :global(body) { padding-bottom: calc(90px + env(safe-area-inset-bottom)); }
     .search { margin-top: 8vh; }
   }
