@@ -64,7 +64,7 @@ const av = (name: string) => { const [c1, c2] = avatarColours(name); return `--c
           <span class="hide-s" role="cell"><Fragment set:html={flag(p.country)} /> {countryName(p.country)}</span>
           <span class="hide-s tabular" role="cell">{age(p.dob) ?? '–'}{trend(p.id) && <Fragment set:html={trend(p.id)} />}</span>
           <span class="r money-cell" role="cell">
-            <span class="tabular" data-money={p.money}>{money(p.money)}</span>
+            <span class="top"><small class="netslot"></small><span class="tabular" data-money={p.money}>{money(p.money)}</span></span>
             <small class="delta" hidden></small>
             <span class="bar"><span style={`width:${(p.money / max) * 100}%`} /></span>
           </span>
@@ -125,7 +125,7 @@ const av = (name: string) => { const [c1, c2] = avatarColours(name); return `--c
           if (Number(m.dataset.money) !== p.money) { m.textContent = money(p.money); m.dataset.money = String(p.money); m.classList.remove('bump'); void m.offsetWidth; m.classList.add('bump'); }
           const d = r.querySelector<HTMLElement>('.delta')!;
           // Net change as a chip, then what was won and what is expiring (named on hover).
-          let html = '';
+          let html = '', netHtml = '';
           if (live && (p.plus || p.minus)) {
             const net = p.plus - p.minus;
             const ev = (p.expiring || []).map((e: any) => `${k(e.amount)} ${e.name}`).join(', ');
@@ -137,9 +137,11 @@ const av = (name: string) => { const [c1, c2] = avatarColours(name); return `--c
               p.plus ? `${chip}<span class="plus">won ${k(p.plus)}</span>` : chip,
               p.minus ? `<span class="minus tip" data-tip="${esc(`Expiring:\n${(p.expiring || []).map((e: any) => `${k(e.amount)} · ${e.name}`).join('\n')}`)}" aria-label="${esc(`Expiring: ${ev}`)}">expiring ${k(p.minus)}${p.estimated ? '*' : ''}</span>` : '',
             ].filter(Boolean).join('<i aria-hidden="true">·</i>');
-            html = `<span class="net ${net > 0 ? 'up' : net < 0 ? 'down' : 'flat'}">${net > 0 ? '▲ ' : net < 0 ? '▼ ' : ''}${net ? k(Math.abs(net)) : 'No change'}</span><span class="br">${parts}</span>`;
+            netHtml = `<span class="net ${net > 0 ? 'up' : net < 0 ? 'down' : 'flat'}">${net > 0 ? '▲ ' : net < 0 ? '▼ ' : ''}${net ? k(Math.abs(net)) : 'No change'}</span>`;
+            html = `<span class="br">${parts}</span>`;
           }
           d.hidden = !html; d.innerHTML = html;
+          r.querySelector<HTMLElement>('.netslot')!.innerHTML = netHtml;
           r.querySelector<HTMLElement>('.bar span')!.style.width = `${(p.money / max) * 100}%`;
           frag.appendChild(r);
         }
@@ -200,7 +202,7 @@ const av = (name: string) => { const [c1, c2] = avatarColours(name); return `--c
   .search input { border: 0; outline: 0; background: none; font: inherit; padding: 12px 0; width: 100%; }
   .small { font-size: 13px; }
   .table { overflow: hidden; }
-  .tr { display: grid; text-decoration: none; grid-template-columns: 76px 1.6fr 1fr 60px 1.1fr; align-items: center; gap: 12px; padding: 10px 18px; width: 100%; border: 0; border-bottom: 1px solid var(--line); background: none; text-align: left; font: inherit; color: inherit; }
+  .tr { display: grid; text-decoration: none; grid-template-columns: 76px minmax(0, 1.6fr) minmax(0, 1fr) 60px 320px; align-items: center; gap: 12px; padding: 10px 18px; width: 100%; border: 0; border-bottom: 1px solid var(--line); background: none; text-align: left; font: inherit; color: inherit; }
   .tr:last-child { border-bottom: 0; }
   .tr.nomatch { display: none; }
   .th { font-size: 12px; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); background: var(--paper-2); }
@@ -209,7 +211,7 @@ const av = (name: string) => { const [c1, c2] = avatarColours(name); return `--c
   .tr.clickable:hover .who b { color: var(--red); }
   .tr:disabled { cursor: default; opacity: .85; }
   .pos { font-family: var(--poster); font-weight: 400; font-size: 26px; display: flex; align-items: center; gap: 6px; }
-  .pos :global(i) { font-style: normal; font-family: var(--body); font-size: 11px; font-weight: 700; }
+  .pos :global(i) { font-style: normal; font-family: var(--body); font-size: 14px; font-weight: 800; }
   :global(.up) { color: var(--green); } :global(.down) { color: var(--red); }
   .who { display: flex; align-items: center; gap: 12px; min-width: 0; }
   .who > span:last-child { display: flex; flex-direction: column; min-width: 0; }
@@ -230,11 +232,14 @@ const av = (name: string) => { const [c1, c2] = avatarColours(name); return `--c
   .ldot { width: 8px; height: 8px; border-radius: 50%; background: var(--red); animation: pulse 1.6s infinite; }
   .race-note { margin: -2px 0 12px; font-size: 13px; color: var(--muted); background: var(--card); border: 1px solid var(--line); border-left: 3px solid var(--red); border-radius: 12px; padding: 10px 14px; }
   .race-note .live-dot { margin-right: 6px; }
-  :global(.delta) { display: flex; flex-direction: column; align-items: flex-end; gap: 3px; font-size: 11px; font-weight: 700; }
-  :global(.delta .net) { font-size: 12px; font-weight: 800; padding: 2px 8px; border-radius: 999px; font-variant-numeric: tabular-nums; }
-  :global(.delta .net.up) { background: var(--green-soft); color: #075c3f; }
-  :global(.delta .net.down) { background: var(--red-soft); color: #a3221a; }
-  :global(.delta .net.flat) { background: var(--paper-2); color: var(--muted); }
+  :global(.delta) { display: flex; flex-direction: column; align-items: flex-end; font-size: 12px; font-weight: 700; }
+  .top { display: flex; align-items: center; gap: 8px; }
+  .netslot:empty { display: none; }
+  /* One pill size for the net change and the progress chip */
+  :global(.money-cell .net), :global(.stage-chip) { display: inline-flex; align-items: center; height: 20px; padding: 0 8px; border-radius: 999px; font-size: 11px; font-weight: 800; line-height: 1; white-space: nowrap; font-variant-numeric: tabular-nums; }
+  :global(.money-cell .net.up) { background: var(--green-soft); color: #075c3f; }
+  :global(.money-cell .net.down) { background: var(--red-soft); color: #a3221a; }
+  :global(.money-cell .net.flat) { background: var(--paper-2); color: var(--muted); }
   :global(.delta .br) { display: inline-flex; align-items: center; gap: 5px; white-space: nowrap; }
   :global(.delta .br i) { font-style: normal; color: var(--muted); }
   /* Instant tooltip naming the events whose money is expiring */
@@ -248,7 +253,7 @@ const av = (name: string) => { const [c1, c2] = avatarColours(name); return `--c
   }
   :global(.delta .tip:hover::after), :global(.tr:focus-visible .delta .tip::after) { opacity: 1; transform: none; }
   :global(.plus) { color: #0a7a3a; } :global(.minus) { color: #c42c23; }
-  :global(.stage-chip) { display: inline-block; width: fit-content; margin-right: 2px; font-size: 10px; font-weight: 800; letter-spacing: .06em; text-transform: uppercase; padding: 2px 8px; border-radius: 999px; white-space: nowrap; }
+  :global(.stage-chip) { margin-right: 2px; letter-spacing: .05em; text-transform: uppercase; }
   :global(.stage-chip.in) { background: var(--volt); color: var(--ink); }
   :global(.stage-chip.out) { background: var(--paper-2); color: var(--muted); }
   .table.shuffle .tr { animation: shuffle .45s var(--ease); }
