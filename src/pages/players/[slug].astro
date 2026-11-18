@@ -38,10 +38,34 @@ const groups = [
   { k: 'et', label: 'European Tour', test: (h: any) => /^European Tour/.test(h.tag || '') },
 ];
 const finishClass = (label: string) => label === 'Winner' ? 'f-win' : label === 'Runner-up' ? 'f-ru' : /semi/i.test(label) ? 'f-sf' : /quarter/i.test(label) ? 'f-qf' : '';
+// This season's titles as table rows: one per event, details grouped
+// (e.g. Premier League nights), linked to the tournament page when we have it.
+const titleRows = (() => {
+  const rows = new Map<string, { name: string; details: string[]; count: number; href: string | null }>();
+  for (const t of s.titles as string[]) {
+    const m = t.match(/^(.*?)\s*\((.*)\)$/);
+    const name = m ? m[1] : t, detail = m ? m[2] : '';
+    const row = rows.get(name) || { name, details: [], count: 0, href: null };
+    row.count++;
+    if (detail) row.details.push(detail.replace(/^Night /, ''));
+    const h = p.history.find((x: any) => x.season === s.year && x.name === name && (!x.tag || x.tag === detail) && x.label === 'Winner');
+    if (h && !row.href) row.href = `/tournament/${h.id}`;
+    rows.set(name, row);
+  }
+  return [...rows.values()].map(r => ({
+    ...r,
+    detail: r.name === 'Premier League'
+      ? [r.details.filter(d => /^\d+$/.test(d)).length ? `Nights ${r.details.filter(d => /^\d+$/.test(d)).join(', ')}` : '', ...r.details.filter(d => !/^\d+$/.test(d))].filter(Boolean).join(' · ')
+      : r.details.join(' · '),
+  }));
+})();
+
+// Recent history: this season and the two before it (the seasons with averages).
+const recent = p.history.filter((h: any) => h.season >= s.year - 2);
 const bySeason = new Map<number, any[]>();
-for (const h of p.history) { if (!bySeason.has(h.season)) bySeason.set(h.season, []); bySeason.get(h.season)!.push(h); }
-const titles = p.history.filter((h: any) => h.label === 'Winner').length;
-const finals = p.history.filter((h: any) => h.label === 'Winner' || h.label === 'Runner-up').length;
+for (const h of recent) { if (!bySeason.has(h.season)) bySeason.set(h.season, []); bySeason.get(h.season)!.push(h); }
+const titles = recent.filter((h: any) => h.label === 'Winner').length;
+const finals = recent.filter((h: any) => h.label === 'Winner' || h.label === 'Runner-up').length;
 
 const facts = [
   ['Age', yrs != null ? `${yrs}` : null],
@@ -123,7 +147,23 @@ const news = (await getCollection('news'))
           <div class="num"><b>{s.won}–{s.lost}</b><span>Win–loss</span></div>
           <div class="num"><b>{s.titles.length}</b><span>Titles</span></div>
         </div>
-        {s.titles.length > 0 && <p class="titles">🏆 {s.titles.join(' · ')}</p>}
+        {titleRows.length > 0 && (
+          <div class="titles">
+            <table>
+              <caption>{s.year} titles · {s.titles.length}</caption>
+              <thead><tr><th scope="col">Event</th><th scope="col">Detail</th><th scope="col" class="n">Wins</th></tr></thead>
+              <tbody>
+                {titleRows.map(r => (
+                  <tr>
+                    <td>{r.href ? <a href={r.href}>{r.name}</a> : r.name}</td>
+                    <td class="muted">{r.detail || '–'}</td>
+                    <td class="n">{r.count}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
         <p class="note">Covers PDC main-tour events: majors, Premier League, World Series, European Tour and Players Championships. Leg counts exclude set-play matches. Updated daily.</p>
       </section>
 
@@ -160,13 +200,13 @@ const news = (await getCollection('news'))
       )}
 
       <section class="block" data-reveal>
-        <div class="hh"><h2>Tournament history</h2><p class="muted">{p.history.length} events · {finals} finals · {titles} titles</p></div>
+        <div class="hh"><h2>Recent tournament history</h2><p class="muted">{s.year - 2}–{s.year} · {recent.length} events · {finals} finals · {titles} titles</p></div>
         <div class="hfilter" role="group" aria-label="Filter history">
           <button class="chip" data-g="all" aria-pressed="true">All</button>
           {groups.map(g => <button class="chip" data-g={g.k} aria-pressed="false">{g.label}</button>)}
         </div>
         <div class="seasons">
-          {p.history.length ? [...bySeason.entries()].map(([yr, list]) => (
+          {recent.length ? [...bySeason.entries()].map(([yr, list]) => (
             <div class="yr">
               <h3>{yr}</h3>
               <ul>
@@ -178,7 +218,7 @@ const news = (await getCollection('news'))
                 ))}
               </ul>
             </div>
-          )) : <p class="muted">No major, World Series or European Tour appearances recorded yet.</p>}
+          )) : <p class="muted">No major, World Series or European Tour appearances since {s.year - 2}.</p>}
         </div>
       </section>
     </main>
@@ -285,7 +325,16 @@ const news = (await getCollection('news'))
   .ring.go .fg { stroke-dashoffset: 0; }
   .ring b { position: absolute; top: 44px; font-family: var(--display); font-size: 18px; }
   .num b { font-family: var(--poster); font-weight: 400; font-size: 40px; }
-  .titles { margin: 12px 0 0; font-weight: 600; font-size: 14px; background: var(--gold-soft); border-radius: 12px; padding: 10px 14px; }
+  .titles { margin: 12px 0 0; background: var(--card); border-radius: 22px; padding: 6px 18px 10px; overflow-x: auto; }
+  .titles table { width: 100%; border-collapse: collapse; font-size: 14px; }
+  .titles caption { text-align: left; padding: 12px 0 6px; font-size: 11px; font-weight: 800; letter-spacing: .14em; text-transform: uppercase; color: var(--gold); }
+  .titles th { text-align: left; font-size: 11px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); padding: 8px 10px 8px 0; border-bottom: 1px solid var(--line); }
+  .titles td { padding: 10px 10px 10px 0; border-top: 1px solid var(--line); vertical-align: top; }
+  .titles tbody tr:first-child td { border-top: 0; }
+  .titles td:first-child { font-weight: 700; white-space: nowrap; }
+  .titles td a { text-decoration: none; }
+  .titles td a:hover { color: var(--red); }
+  .titles .n { text-align: right; font-variant-numeric: tabular-nums; font-weight: 800; width: 56px; }
   .note { font-size: 12px; color: var(--muted); margin: 10px 0 0; }
 
   .hh { display: flex; justify-content: space-between; align-items: baseline; flex-wrap: wrap; gap: 8px; }

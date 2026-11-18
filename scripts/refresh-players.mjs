@@ -47,7 +47,14 @@ for (const [id, sum] of Object.entries(cache)) {
 }
 // This season's main-tour events also need their fixture ids (for averages).
 const isSeasonEvent = a => isSeason(a) && Number(a.seasonID) === season;
-const todo = wanted.filter(a => !cache[a.id] || (isSeasonEvent(a) && !Array.isArray(cache[a.id].fx?.[0])));
+// Match stats are also kept for the two previous seasons' history events
+// (majors, World Series, European Tour), for the averages in each player's
+// tournament history.
+const STATS_FROM = season - 2;
+const isStatsEvent = a => isSeasonEvent(a) || (isHistory(a) && Number(a.seasonID) >= STATS_FROM && Number(a.seasonID) <= season);
+// Summaries made before the round fix have rounds keyed "null": redo them.
+const badRounds = sum => Object.keys(sum.r || {}).some(k => k === 'null' || k === 'undefined');
+const todo = wanted.filter(a => !cache[a.id] || badRounds(cache[a.id]) || (isStatsEvent(a) && !Array.isArray(cache[a.id].fx?.[0])));
 log(`tournaments: ${wanted.length} relevant, ${todo.length} to fetch`);
 
 function summarise(payload, meta) {
@@ -57,7 +64,10 @@ function summarise(payload, meta) {
   const fx = [];
   const names = {};
   for (const s of a.stages || []) {
-    rounds[s.roundNumber] = s.stage?.name || 'Round';
+    // Older events have no roundNumber; cupRound counts back from the final
+    // (1 = final, 2 = semi-final…) and 0 means a group or league stage.
+    const rn = s.roundNumber ?? (Number(s.cupRound) > 0 ? Number(s.cupRound) : 99);
+    rounds[rn] = s.stage?.name || 'Round';
     const legs = !((s.numberOfSets || 0) > 1);
     for (const f of s.fixtures || []) {
       const sides = [[f.participant1, f.participant1Score, f.participant2Score], [f.participant2, f.participant2Score, f.participant1Score]];
@@ -71,8 +81,8 @@ function summarise(payload, meta) {
       for (const [p, mine, theirs] of sides) {
         if (isPlaceholder(p)) continue;
         const id = String(p.participantID);
-        const rec = players[id] ||= [s.roundNumber, 0, 0, 0, 0];
-        rec[0] = Math.min(rec[0], s.roundNumber);
+        const rec = players[id] ||= [rn, 0, 0, 0, 0];
+        rec[0] = Math.min(rec[0], rn);
         if (!done) continue;
         const won = f.winnerParticipantID ? String(f.winnerParticipantID) === id : mine > theirs;
         rec[won ? 1 : 2]++;
@@ -85,7 +95,7 @@ function summarise(payload, meta) {
     w: a.winnerParticipantID ? String(a.winnerParticipantID) : null,
     r: rounds, p: players,
     // Per-match detail only for this season's events (keeps the cache small).
-    ...(Number(a.seasonID) === season ? { fx, pn: names } : {}),
+    ...(isStatsEvent(a) ? { fx, pn: names } : {}),
   };
 }
 
@@ -111,11 +121,13 @@ await writeJsonIfChanged(CACHE, persistable);
 // never change, so each is fetched once and kept in data/stats-cache.json.
 // Per side: [pid, points, darts, first9 points, first9 darts, 180s, checkouts hit, checkout attempts, best checkout]
 const statsCache = (await readJson(STATS)) || {};
-const seasonEvents = Object.entries(cache).filter(([, sum]) => sum.s === season && sum.c !== '17' && ['2', '3', '4'].includes(sum.c) && sum.ty !== '17');
-const wantFx = new Map(seasonEvents.flatMap(([tid, sum]) => (sum.fx || []).map(f => [Array.isArray(f) ? f[0] : f, tid])));
-for (const id of Object.keys(statsCache)) if (!wantFx.has(id)) delete statsCache[id]; // last season's matches drop off
+const sumMeta = sum => ({ tournamentCategoryID: sum.c, tournamentTypeID: sum.ty, seasonID: sum.s });
+const seasonEvents = Object.entries(cache).filter(([, sum]) => isSeasonEvent(sumMeta(sum)));
+const statsEvents = Object.entries(cache).filter(([, sum]) => isStatsEvent(sumMeta(sum)));
+const wantFx = new Map(statsEvents.flatMap(([tid, sum]) => (sum.fx || []).map(f => [Array.isArray(f) ? f[0] : f, tid])));
+for (const id of Object.keys(statsCache)) if (!wantFx.has(id)) delete statsCache[id]; // older seasons drop off
 const missing = [...wantFx.keys()].filter(id => !statsCache[id]);
-log(`match stats: ${wantFx.size} matches this season, ${missing.length} to fetch`);
+log(`match stats: ${wantFx.size} matches (${season} plus ${STATS_FROM}–${season - 1} history events), ${missing.length} to fetch`);
 function sideStats(a, isP1, pid) {
   const r = [pid, 0, 0, 0, 0, 0, 0, 0, 0];
   for (const leg of a.legs || []) {
@@ -149,7 +161,7 @@ const add = (t, r) => { for (let i = 1; i < 9; i++) t[i] = i === 8 ? Math.max(t[
 for (const s of Object.values(statsCache)) for (const r of [s.a, s.b]) {
   if (!r[2]) continue;
   const e = seasonStats.get(r[0]) || { all: [0, 0, 0, 0, 0, 0, 0, 0, 0], byT: new Map() };
-  add(e.all, r);
+  if (cache[s.t]?.s === season) add(e.all, r); // the season summary is this year only
   if (!e.byT.has(s.t)) e.byT.set(s.t, [0, 0, 0, 0, 0, 0, 0, 0, 0]);
   add(e.byT.get(s.t), r);
   seasonStats.set(r[0], e);
@@ -166,7 +178,7 @@ function finishLabel(sum, pid) {
   if (sum.w === pid) return { label: 'Winner', rank: 0 };
   const name = sum.r[best] || 'Round';
   if (best === 1) return { label: 'Runner-up', rank: 1 };
-  if (/^group/i.test(name)) return { label: 'Group stage', rank: 50 };
+  if (/^(group|league)/i.test(name)) return { label: 'Group stage', rank: 50 };
   return { label: name.replace(/^Round of /i, 'Last '), rank: best };
 }
 
