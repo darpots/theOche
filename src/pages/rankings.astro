@@ -128,7 +128,7 @@ const av = (name: string) => { const [c1, c2] = avatarColours(name); return `--c
         rows.forEach(r => { r.hidden = !seen.has(r); if (!seen.has(r)) frag.appendChild(r); });
         table.appendChild(frag);
         note.hidden = !live;
-        document.getElementById('onlyev')!.hidden = !race || mode !== 'live';
+        document.getElementById('onlyev')!.classList.toggle('off', mode !== 'live');
         if (live) {
           const drops: string[] = found?.dropNames || [];
           const list = drops.length ? drops.map(d => `<b>${esc(d)}</b>`).join(' and ') : 'events from two years ago';
@@ -172,8 +172,11 @@ const av = (name: string) => { const [c1, c2] = avatarColours(name); return `--c
 
 <style>
 
-  .tools { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 12px; flex-wrap: wrap; }
-  .search { display: flex; align-items: center; gap: 10px; background: var(--card); border: 1px solid var(--line); border-radius: 999px; padding: 0 16px; flex: 1; max-width: 420px; box-shadow: var(--shadow-sm); transition: box-shadow .2s, border-color .2s; }
+  /* Fixed slots so the Live/Official switch never moves when the view changes */
+  .tools { display: grid; grid-template-columns: minmax(0, 420px) auto auto minmax(0, 1fr); align-items: center; gap: 12px 20px; margin-bottom: 12px; }
+  .tools #asof { grid-column: -2 / -1; justify-self: end; text-align: right; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 100%; }
+  .onlyev.off { visibility: hidden; }
+  .search { display: flex; align-items: center; gap: 10px; background: var(--card); border: 1px solid var(--line); border-radius: 999px; padding: 0 16px; min-width: 0; box-shadow: var(--shadow-sm); transition: box-shadow .2s, border-color .2s; }
   .search:focus-within { border-color: var(--ink); box-shadow: 0 0 0 4px rgba(20, 22, 31, .08); }
   .search input { border: 0; outline: 0; background: none; font: inherit; padding: 12px 0; width: 100%; }
   .small { font-size: 13px; }
@@ -216,6 +219,10 @@ const av = (name: string) => { const [c1, c2] = avatarColours(name); return `--c
   @keyframes bump { 0% { transform: scale(1.25); color: var(--green); } 100% { transform: none; } }
 
 
+  @media (max-width: 900px) {
+    .tools { grid-template-columns: auto auto minmax(0, 1fr); }
+    .tools .search { grid-column: 1 / -1; }
+  }
   @media (max-width: 720px) {
     .tr { grid-template-columns: 58px 1fr auto; padding: 10px 12px; }
     .hide-s { display: none; }
