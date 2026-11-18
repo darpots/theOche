@@ -173,7 +173,7 @@ const news = (await getCollection('news'))
                 {list.map((h: any) => (
                   <li data-g={groups.filter(g => g.test(h)).map(g => g.k).join(' ')}>
                     <a class="ev" href={`/tournament/${h.id}`}>{h.name}{h.tag && <small> {h.tag}</small>}</a>
-                    <span class="hr">{h.avg && <i class="havg" title="Three-dart average">{h.avg.toFixed(2)}</i>}<span class={`fin ${finishClass(h.label)}`}>{h.label}</span></span>
+                    <i class="havg" title={h.avg ? 'Three-dart average' : undefined}>{h.avg ? h.avg.toFixed(2) : ''}</i><span class={`fin ${finishClass(h.label)}`}>{h.label}</span>
                   </li>
                 ))}
               </ul>
@@ -296,14 +296,15 @@ const news = (await getCollection('news'))
   .yr { display: grid; grid-template-columns: 64px 1fr; gap: 12px; padding: 12px 0; border-top: 1px solid var(--line); }
   .yr h3 { font-size: 18px; color: var(--muted); padding-top: 4px; }
   .yr ul { list-style: none; margin: 0; padding: 0; }
-  .yr li { display: flex; justify-content: space-between; align-items: center; gap: 10px; padding: 6px 8px; margin: 0 -8px; border-radius: 10px; font-size: 15px; transition: background .2s; }
+  /* Fixed columns so averages and finishes line up down the list */
+  .yr li { display: grid; grid-template-columns: minmax(0, 1fr) 64px 118px; align-items: center; gap: 14px; padding: 6px 8px; margin: 0 -8px; border-radius: 10px; font-size: 15px; transition: background .2s; }
+  .yr li[hidden] { display: none; }
   .yr li:hover { background: var(--card); }
   .ev { text-decoration: none; font-weight: 600; }
   .ev:hover { color: var(--red); }
   .ev small { color: var(--muted); font-weight: 500; }
-  .hr { display: inline-flex; align-items: center; gap: 10px; flex: none; }
-  .havg { font-style: normal; font-size: 13px; font-weight: 800; font-variant-numeric: tabular-nums; color: var(--ink-2); }
-  .fin { font-size: 12px; font-weight: 700; padding: 2px 10px; border-radius: 99px; background: var(--paper-2); color: var(--ink-2); }
+  .havg { font-style: normal; font-size: 13px; font-weight: 800; font-variant-numeric: tabular-nums; color: var(--ink-2); text-align: right; }
+  .fin { font-size: 12px; font-weight: 700; padding: 3px 10px; border-radius: 99px; background: var(--paper-2); color: var(--ink-2); text-align: center; white-space: nowrap; }
   .f-win { background: linear-gradient(135deg, #e8c766, var(--gold)); color: #3d2e05; }
   .f-ru { background: #e9ecf2; color: #39404f; }
   .f-sf { background: var(--green-soft); color: #075c3f; }
@@ -344,6 +345,7 @@ const news = (await getCollection('news'))
   .pn small { font-size: 11px; color: var(--muted); font-weight: 800; letter-spacing: .08em; }
   .pn .nx { text-align: right; grid-column: 2; }
 
+  @media (max-width: 520px) { .yr li { grid-template-columns: minmax(0, 1fr) 52px 100px; gap: 8px; font-size: 14px; } .fin { font-size: 11px; padding: 3px 6px; } }
   @media (max-width: 900px) {
     .pb-in { grid-template-columns: 1fr; min-height: 0; }
     .pb-pic { order: -1; height: 300px; margin-top: 16px; }
