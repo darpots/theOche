@@ -27,13 +27,6 @@ const published = new Date(story.date).toLocaleDateString('en-GB', { weekday: 'l
     <div class="text">
       {story.body.map((p, i) => <p data-reveal style={`--d:${Math.min(i, 3) * 60}ms`}>{p}</p>)}
     </div>
-    <aside class="sources card">
-      <h2>Sources</h2>
-      <p class="muted">This report was written by our AI-assisted newsdesk from the coverage below. Read the originals for the full story.</p>
-      <ul>
-        {story.sources.map(s => <li><a href={s.url} target="_blank" rel="noopener">{s.title || s.name}</a> <span class="muted">— {s.name}</span></li>)}
-      </ul>
-    </aside>
     {more.length > 0 && (
       <section class="more">
         <h2>More news</h2>
@@ -59,11 +52,6 @@ const published = new Date(story.date).toLocaleDateString('en-GB', { weekday: 'l
   .text { margin-top: 30px; font-size: 18px; line-height: 1.75; }
   .text p { margin: 0 0 1.1em; }
   .text p:first-child::first-letter { font-family: var(--display); font-size: 3.4em; font-weight: 800; float: left; line-height: .9; margin: 6px 10px 0 0; color: var(--red); }
-  .sources { padding: 20px 22px; margin-top: 30px; }
-  .sources h2 { font-size: 18px; }
-  .sources p { font-size: 14px; margin: 6px 0 10px; }
-  .sources ul { margin: 0; padding-left: 18px; font-size: 15px; }
-  .sources li { margin: 4px 0; }
   .more { margin-top: 48px; }
   .more h2 { font-size: 24px; margin-bottom: 14px; }
   .more-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 12px; }
