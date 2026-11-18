@@ -1,5 +1,5 @@
 {
- "updatedAt": "2026-11-17T18:30:50.492Z",
+ "updatedAt": "2026-11-18T10:02:18.246Z",
  "events": [
   {
    "id": "10717",
@@ -854,6 +854,36 @@
    "major": true,
    "winner": null,
    "image": "22268430-c71b-11f1-be0e-c91f42e68604.jpg",
+   "logo": null
+  },
+  {
+   "id": "11071",
+   "name": "US Darts Masters",
+   "tag": null,
+   "start": "2027-06-25",
+   "end": "2027-06-26",
+   "venue": "Madison Square Garden, New York",
+   "city": "New York, New York",
+   "broadcaster": "itv",
+   "ranked": false,
+   "major": false,
+   "winner": null,
+   "image": null,
+   "logo": null
+  },
+  {
+   "id": "11072",
+   "name": "Danish Darts Masters",
+   "tag": null,
+   "start": "2027-07-02",
+   "end": "2027-07-03",
+   "venue": "Forum, Copenhagen",
+   "city": "Copenhagen",
+   "broadcaster": "itv",
+   "ranked": false,
+   "major": false,
+   "winner": null,
+   "image": null,
    "logo": null
   },
   {
