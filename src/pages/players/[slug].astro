@@ -79,6 +79,12 @@ const facts = [
   ['Tour Card', p.tourCard ? 'Yes' : 'No'],
 ].filter(([, v]) => v != null && v !== '');
 
+// Banner backdrop: a dartboard (numbers clockwise from 20 at the top).
+const BOARD = [20, 1, 18, 4, 13, 6, 10, 15, 2, 17, 3, 19, 7, 16, 8, 11, 14, 9, 12, 5];
+const boardNums = BOARD.map((n, i) => {
+  const a = (i * 18 - 90) * Math.PI / 180, r = 610;
+  return { n, x: (r * Math.cos(a)).toFixed(1), y: (r * Math.sin(a)).toFixed(1), rot: i * 18 };
+});
 const shortDate = (d: string) => new Date(d + 'T12:00:00Z').toLocaleDateString('en-GB', { day: 'numeric', month: 'short' });
 // Average at each event this season, oldest first.
 const evAvg = p.history.filter((h: any) => h.season === s.year && h.avg).slice().reverse()
@@ -105,7 +111,17 @@ const news = (await getCollection('news'))
 ---
 <Layout title={p.name} description={`${p.name}: world ranking, ${s.year} season average, darts, titles and full PDC tournament history.`} active="rankings">
   <section class="pbanner">
-    <svg class="prings" viewBox="-100 -100 200 200" aria-hidden="true"><circle r="96" /><circle r="80" /><circle r="58" /><circle r="40" /><circle r="12" /></svg>
+    <svg class="pboard" viewBox="-680 -680 1360 1360" aria-hidden="true">
+      <circle r="560" class="b-base" />
+      <circle r="280" class="b-wedge" stroke-width="560" stroke-dasharray="87.96 87.96" transform="rotate(-99)" />
+      <circle r="540" class="b-green" stroke-width="40" />
+      <circle r="540" class="b-red" stroke-width="40" stroke-dasharray="169.65 169.65" transform="rotate(-99)" />
+      <circle r="342.5" class="b-green" stroke-width="35" />
+      <circle r="342.5" class="b-red" stroke-width="35" stroke-dasharray="107.6 107.6" transform="rotate(-99)" />
+      <circle r="70" class="b-bull-o" />
+      <circle r="30" class="b-bull-i" />
+      <g class="b-nums">{boardNums.map(b => <text x={b.x} y={b.y} transform={`rotate(${b.rot} ${b.x} ${b.y})`}>{b.n}</text>)}</g>
+    </svg>
     <div class="wrap pb-in">
       <div class="pb-copy">
         <a class="back" href="/rankings">← Rankings</a>
@@ -274,10 +290,17 @@ const news = (await getCollection('news'))
 </Layout>
 
 <style>
-  .pbanner { position: relative; overflow: hidden; isolation: isolate; color: #fff; background: var(--ink); border-top: 1px solid var(--ink-2); }
-  .prings { position: absolute; z-index: -1; right: -6%; top: 55%; translate: 0 -50%; width: min(640px, 80vw); fill: none; stroke: rgba(255, 255, 255, .08); stroke-width: 1.2; }
-  .prings circle:nth-child(2) { stroke: rgba(14, 138, 95, .4); stroke-width: 6; stroke-dasharray: 13 13; }
-  .prings circle:nth-child(4) { stroke: rgba(215, 38, 61, .4); stroke-width: 5; stroke-dasharray: 10 10; }
+  .pbanner { position: relative; overflow: hidden; isolation: isolate; color: #fff; background: #15171e; border-top: 1px solid var(--ink-2); }
+  /* Board wall: a dartboard behind the player, a step lighter than the page ink */
+  .pboard { position: absolute; z-index: -1; width: 1360px; height: 1360px; left: calc(50% + 300px); top: 64%; translate: -50% -50%; }
+  .pboard circle { fill: none; }
+  .pboard .b-base { fill: #1c1f28; }
+  .pboard .b-wedge { stroke: #272a35; }
+  .pboard .b-green { stroke: #1f5a40; }
+  .pboard .b-red { stroke: #7a2a2e; }
+  .pboard .b-bull-o { fill: #1f5a40; }
+  .pboard .b-bull-i { fill: #7a2a2e; }
+  .pboard .b-nums { fill: #454a58; font-family: var(--poster); font-size: 56px; text-anchor: middle; dominant-baseline: middle; }
   @keyframes spin { to { rotate: 360deg; } }
   .pb-in { display: grid; grid-template-columns: 1.2fr 1fr; align-items: end; gap: 20px; min-height: 440px; }
   .pb-copy { padding: 28px 0 36px; align-self: center; }
@@ -398,6 +421,7 @@ const news = (await getCollection('news'))
   @media (max-width: 900px) {
     .pb-in { grid-template-columns: 1fr; min-height: 0; }
     .pb-pic { order: -1; height: 300px; margin-top: 16px; }
+    .pboard { width: 900px; height: 900px; left: 50%; top: 210px; }
     .pb-pic .cut { height: 300px; }
     .pb-copy { padding-top: 0; }
     .kpis { grid-template-columns: repeat(2, auto); }
