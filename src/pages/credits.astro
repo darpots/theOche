@@ -8,16 +8,10 @@ const list = Object.values(portraits as Record<string, any>).sort((a, b) => a.na
 <Layout title="Credits" description="Photo credits and data sources for The Oche.">
   <section class="hero wrap">
     <span class="eyebrow">Credits</span>
-    <h1>Photos &amp; data</h1>
+    <h1>Photo credits</h1>
     <p class="lede">Player photographs are reused under Creative Commons licences from Wikimedia Commons and cropped for display. Players without a verified free photo are shown with their initials. The cut-out player images on the homepage are adapted from the same photographs (background removed) and are shared under the same licences.</p>
   </section>
   <section class="wrap">
-    <h2 class="h">Data sources</h2>
-    <ul class="src">
-      <li>Calendar, schedules, results, rankings and player profiles: the PDC's public tournament, rankings and participant feeds.</li>
-      <li>News research: BBC Sport, Dartsnews, Darts World and The Guardian (linked from every story).</li>
-      <li>Flags: <a href="https://github.com/lipis/flag-icons" target="_blank" rel="noopener">flag-icons</a> by Panayiotis Lipiridis (MIT licence).</li>
-    </ul>
     <h2 class="h">Player photographs</h2>
     <ul class="grid">
       {list.map(p => (
