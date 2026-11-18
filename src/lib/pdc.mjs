@@ -253,14 +253,16 @@ export function liveRace(official, current, dropping) {
   const gain = eventPrizes(current);
   const lose = new Map();
   for (const d of [].concat(dropping || [])) for (const [id, r] of eventPrizes(d)) {
-    const l = lose.get(id) || { amount: 0, estimated: false };
+    if (!r.amount) continue;
+    const l = lose.get(id) || { amount: 0, estimated: false, events: [] };
     l.amount += r.amount; l.estimated ||= !!r.estimated;
+    l.events.push({ name: d.name, amount: r.amount, round: r.round });
     lose.set(id, l);
   }
   const list = official.map(p => {
     const g = gain.get(p.id), l = lose.get(p.id);
     const plus = g?.amount || 0, minus = l?.amount || 0;
-    return { ...p, official: p.money, money: p.money - minus + plus, plus, minus, round: g?.round || null, alive: g ? g.alive : null, estimated: !!l?.estimated };
+    return { ...p, official: p.money, money: p.money - minus + plus, plus, minus, expiring: l?.events || [], round: g?.round || null, alive: g ? g.alive : null, estimated: !!l?.estimated };
   });
   // Players who are not on the list yet but have earned money this event.
   for (const [id, g] of gain) if (g.amount && !official.some(p => p.id === id)) list.push({ id, name: g.name, money: g.amount, official: 0, plus: g.amount, minus: 0, round: g.round, alive: g.alive, pos: null });

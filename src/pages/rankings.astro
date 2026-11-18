@@ -117,8 +117,18 @@ const av = (name: string) => { const [c1, c2] = avatarColours(name); return `--c
           const m = r.querySelector<HTMLElement>('[data-money]')!;
           if (Number(m.dataset.money) !== p.money) { m.textContent = money(p.money); m.dataset.money = String(p.money); m.classList.remove('bump'); void m.offsetWidth; m.classList.add('bump'); }
           const d = r.querySelector<HTMLElement>('.delta')!;
-          const bits = live ? [p.plus ? `<span class="plus">+${k(p.plus)}</span>` : '', p.minus ? `<span class="minus">−${k(p.minus)}${p.estimated ? '*' : ''}</span>` : ''].filter(Boolean) : [];
-          d.hidden = !bits.length; d.innerHTML = bits.join(' ');
+          // Net change as a chip, then what was won and what is expiring (named on hover).
+          let html = '';
+          if (live && (p.plus || p.minus)) {
+            const net = p.plus - p.minus;
+            const ev = (p.expiring || []).map((e: any) => `${k(e.amount)} ${e.name}`).join(', ');
+            const parts = [
+              p.plus ? `<span class="plus">won ${k(p.plus)}</span>` : '',
+              p.minus ? `<span class="minus" title="${esc(`Expiring: ${ev}`)}">expiring ${k(p.minus)}${p.estimated ? '*' : ''}</span>` : '',
+            ].filter(Boolean).join('<i aria-hidden="true">·</i>');
+            html = `<span class="net ${net > 0 ? 'up' : net < 0 ? 'down' : 'flat'}">${net > 0 ? '▲ ' : net < 0 ? '▼ ' : ''}${net ? k(Math.abs(net)) : 'No change'}</span><span class="br">${parts}</span>`;
+          }
+          d.hidden = !html; d.innerHTML = html;
           r.classList.toggle('in-event', !!(live && p.round));
           r.classList.toggle('knocked', !!(live && p.round && p.alive === false));
           r.querySelector<HTMLElement>('.bar span')!.style.width = `${(p.money / max) * 100}%`;
@@ -132,7 +142,7 @@ const av = (name: string) => { const [c1, c2] = avatarColours(name); return `--c
         if (live) {
           const drops: string[] = found?.dropNames || [];
           const list = drops.length ? drops.map(d => `<b>${esc(d)}</b>`).join(' and ') : 'events from two years ago';
-          note.innerHTML = `<span class="live-dot">Live</span> Projected standings at the end of the <b>${esc(event.name.replace(/^\d{4}\s+/, ''))}</b>. The PDC drops prize money 104 weeks after it was won, so money from the ${list} comes off (<span class="minus">−</span>), and money players have guaranteed so far is added (<span class="plus">+</span>). Positions settle when the PDC publishes the official list after the final.`;
+          note.innerHTML = `<span class="live-dot">Live</span> Projected standings at the end of the <b>${esc(event.name.replace(/^\d{4}\s+/, ''))}</b>. The PDC drops prize money 104 weeks after it was won, so money from the ${list} is <span class="minus">expiring</span>, and money players have guaranteed in this event so far counts as <span class="plus">won</span>. The chip shows each player's net change; hover “expiring” to see which events. Positions settle when the PDC publishes the official list after the final.`;
         }
         asof.textContent = live ? `Movement shown against the official list` : `Top ${official.length} · official PDC list`;
       };
@@ -197,7 +207,9 @@ const av = (name: string) => { const [c1, c2] = avatarColours(name); return `--c
   .who b { transition: color .2s; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   .who small { color: var(--muted); font-size: 12px; }
   .r { text-align: right; justify-self: end; }
-  .money-cell { display: flex; flex-direction: column; align-items: flex-end; gap: 4px; width: 100%; font-weight: 600; }
+  .money-cell { display: flex; flex-direction: column; align-items: flex-end; gap: 6px; width: 100%; font-weight: 600; }
+  .money-cell :global(.delta) { margin-bottom: 2px; }
+  .money-cell :global(.delta .br) { line-height: 1.3; }
   .bar { width: 100%; max-width: 180px; height: 4px; background: var(--paper-2); border-radius: 9px; overflow: hidden; }
   .bar span { display: block; height: 100%; background: linear-gradient(90deg, var(--red), #f05d23); border-radius: 9px; }
   .mode { display: inline-flex; padding: 4px; gap: 2px; background: var(--paper-2); border: 1px solid var(--line); border-radius: 999px; }
@@ -209,8 +221,15 @@ const av = (name: string) => { const [c1, c2] = avatarColours(name); return `--c
   .ldot { width: 8px; height: 8px; border-radius: 50%; background: var(--red); animation: pulse 1.6s infinite; }
   .race-note { margin: -2px 0 12px; font-size: 13px; color: var(--muted); background: var(--card); border: 1px solid var(--line); border-left: 3px solid var(--red); border-radius: 12px; padding: 10px 14px; }
   .race-note .live-dot { margin-right: 6px; }
-  :global(.delta) { font-size: 11px; font-weight: 700; display: inline-flex; gap: 6px; }
-  :global(.plus) { color: var(--green); } :global(.minus) { color: var(--red); }
+  :global(.delta) { display: flex; flex-direction: column; align-items: flex-end; gap: 3px; font-size: 11px; font-weight: 700; }
+  :global(.delta .net) { font-size: 12px; font-weight: 800; padding: 2px 8px; border-radius: 999px; font-variant-numeric: tabular-nums; }
+  :global(.delta .net.up) { background: var(--green-soft); color: #075c3f; }
+  :global(.delta .net.down) { background: var(--red-soft); color: #a3221a; }
+  :global(.delta .net.flat) { background: var(--paper-2); color: var(--muted); }
+  :global(.delta .br) { display: inline-flex; gap: 5px; white-space: nowrap; }
+  :global(.delta .br i) { font-style: normal; color: var(--muted); }
+  :global(.delta .minus[title]) { text-decoration: underline dotted; text-underline-offset: 2px; cursor: help; }
+  :global(.plus) { color: #0a7a3a; } :global(.minus) { color: #c42c23; }
   .tr.in-event .who b::after { content: ''; display: inline-block; width: 7px; height: 7px; border-radius: 50%; background: var(--green); margin-left: 7px; vertical-align: middle; box-shadow: 0 0 0 3px var(--green-soft); }
   .tr.knocked .who b::after { background: #b9b2a4; box-shadow: none; }
   .table.shuffle .tr { animation: shuffle .45s var(--ease); }
