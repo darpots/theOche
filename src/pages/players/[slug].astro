@@ -63,8 +63,19 @@ const evAvg = p.history.filter((h: any) => h.season === s.year && h.avg).slice()
 const rankHist = ((rankings as any).history || []).map((h: any) => ({ d: h.d, pos: h.pos[p.id] })).filter((h: any) => h.pos)
   .map((h: any) => ({ x: h.d ? shortDate(h.d) : '', y: h.pos, tip: `${h.d ? shortDate(h.d) : ''}: world #${h.pos}` }));
 const form = (p.form || []) as any[];
+// Only stories about this player: their full name in the headline or
+// standfirst, or their surname in the headline when the story lists them as
+// one of its two main players (so a passing mention doesn't count).
+const surname = p.name.split(' ').slice(1).join(' ');
+const mentions = (text: string, n: string) => new RegExp(`\\b${n.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}\\b`, 'i').test(text);
 const news = (await getCollection('news'))
-  .filter(n => n.data.players.some(x => keyName(x) === keyName(p.name)))
+  .filter(n => {
+    const d = n.data;
+    if (!d.players.some(x => keyName(x) === keyName(p.name))) return false;
+    if (mentions(d.headline, p.name) || mentions(d.standfirst, p.name)) return true;
+    const main = d.players.slice(0, 2).some(x => keyName(x) === keyName(p.name));
+    return main && mentions(d.headline, surname);
+  })
   .sort((a, b) => b.data.date.localeCompare(a.data.date))
   .slice(0, 4);
 ---
