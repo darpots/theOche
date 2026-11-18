@@ -1,6 +1,7 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import data from '../data/rankings.json';
+import liveRaceData from '../data/live-race.json';
 import portraitsRaw from '../data/portraits.json';
 import { flag, countryName, age, keyName } from '../lib/pdc.mjs';
 import { money, avatarColours, initials } from '../lib/format.mjs';
@@ -8,6 +9,9 @@ import { money, avatarColours, initials } from '../lib/format.mjs';
 const portraits = Object.fromEntries(Object.entries(portraitsRaw as Record<string, { image: string }>).map(([k, v]) => [k, v.image]));
 const prev = (data.previous || {}) as Record<string, number>;
 // Top 128 shown; a few more are rendered hidden so the live race can promote them.
+// The live race is worked out by the daily data job (scripts/refresh-live-race.mjs).
+const lr = liveRaceData as any;
+const liveCache = lr.event ? { event: lr.event, dropNames: lr.dropNames, updatedAt: lr.updatedAt, race: lr.race } : null;
 const players = data.players.filter(p => p.pos <= 150).map(p => ({ ...p, move: prev[p.id] ? prev[p.id] - p.pos : null }));
 const max = players[0]?.money || 1;
 // Ranking trend from the snapshots kept after each ranking event.
@@ -70,8 +74,11 @@ const av = (name: string) => { const [c1, c2] = avatarColours(name); return `--c
   </section>
 
 
+  <script is:inline type="application/json" id="r-official" set:html={JSON.stringify(data.players.filter(p => p.pos <= 128))}></script>
+  <script is:inline type="application/json" id="lr-data" set:html={JSON.stringify(liveCache)}></script>
+
   <script>
-    import { API, normaliseRankings, liveRace, findLiveRaceEvent } from '../lib/pdc.mjs';
+    import { API, normaliseRankings } from '../lib/pdc.mjs';
     import { money } from '../lib/format.mjs';
 
     const esc = (s: unknown) => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]!);
@@ -92,7 +99,7 @@ const av = (name: string) => { const [c1, c2] = avatarColours(name); return `--c
       const asof = document.getElementById('asof')!;
       const modeBox = document.getElementById('mode')!;
       const note = document.getElementById('raceNote')!;
-      let official: any[] = [];
+      let official: any[] = JSON.parse(document.getElementById('r-official')!.textContent!);
       let full: any[] = [];
       let race: any[] | null = null;
       let event: any = null;
@@ -142,7 +149,7 @@ const av = (name: string) => { const [c1, c2] = avatarColours(name); return `--c
         if (live) {
           const drops: string[] = found?.dropNames || [];
           const list = drops.length ? drops.map(d => `<b>${esc(d)}</b>`).join(' and ') : 'events from two years ago';
-          note.innerHTML = `<span class="live-dot">Live</span> Projected standings at the end of the <b>${esc(event.name.replace(/^\d{4}\s+/, ''))}</b>. The PDC drops prize money 104 weeks after it was won, so money from the ${list} is <span class="minus">expiring</span>, and money players have guaranteed in this event so far counts as <span class="plus">won</span>. The chip shows each player's net change; hover “expiring” to see which events. Positions settle when the PDC publishes the official list after the final.`;
+          note.innerHTML = `<span class="live-dot">Live</span> Projected standings at the end of the <b>${esc(event.name.replace(/^\d{4}\s+/, ''))}</b>. The PDC drops prize money 104 weeks after it was won, so money from the ${list} is <span class="minus">expiring</span>, and money players have guaranteed in this event so far counts as <span class="plus">won</span>. The chip shows each player's net change; hover “expiring” to see which events. <b>Updated daily</b>${found?.updatedAt ? ` (last at ${new Date(found.updatedAt).toLocaleString('en-GB', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit', timeZone: 'Europe/London' })})` : ''}; positions settle when the PDC publishes the official list after the final.`;
         }
         asof.textContent = live ? `Movement shown against the official list` : `Top ${official.length} · official PDC list`;
       };
@@ -158,23 +165,22 @@ const av = (name: string) => { const [c1, c2] = avatarColours(name); return `--c
 
       const json = (u: string) => fetch(u).then(r => (r.ok ? r.json() : null));
       const todayLdn = new Date().toLocaleDateString('en-CA', { timeZone: 'Europe/London' });
-      let found: any = null;
-      async function refresh() {
-        try {
-          const body = await json(`${API.rankings}2YEAR?page.size=500`);
-          if (body) { full = normaliseRankings(body); official = full.filter((p: any) => p.pos <= 128); }
-          if (found === null) found = (await findLiveRaceEvent(todayLdn)) || false;
-          if (found && official.length) {
-            const cur = (await json(API.tournaments + found.meta.id))?.data?.attributes;
-            if (cur) { event = { ...found.meta, ...cur }; race = liveRace(full, cur, found.prev).filter((p: any) => p.live <= 128); }
-          }
-          modeBox.hidden = !race;
-          document.getElementById('onlyev')!.hidden = !race;
-          paint();
-          if (race && document.querySelector('.table')) setTimeout(refresh, 60_000);
-        } catch { /* keep the build-time list */ }
+      // Live race: the daily snapshot saved with the site, shown at once.
+      const cache = JSON.parse(document.getElementById('lr-data')!.textContent || 'null');
+      const found: any = cache && cache.event.startDate <= todayLdn && cache.event.endDate >= todayLdn ? cache : null;
+      if (found) {
+        event = found.event;
+        race = found.race.filter((p: any) => p.live <= 128);
       }
-      refresh();
+      modeBox.hidden = !race;
+      document.getElementById('onlyev')!.hidden = !race;
+      paint();
+      // The official list itself is refreshed quietly in the background.
+      json(`${API.rankings}2YEAR?page.size=500`).then(body => {
+        if (!body || !document.querySelector('.table')) return;
+        full = normaliseRankings(body); official = full.filter((p: any) => p.pos <= 128);
+        if (mode === 'official' || !race) paint();
+      }).catch(() => {});
     }
     document.addEventListener('astro:page-load', init);
   </script>

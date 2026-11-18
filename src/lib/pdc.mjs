@@ -247,10 +247,8 @@ export function previousEdition(event, index) {
  * Re-rank the official list for a ranked event in progress.
  * official: normaliseRankings() output; current/previous: tournament attributes.
  */
-export function liveRace(official, current, dropping) {
-  // dropping: tournament attributes (or one) whose money comes off by the end
-  // of the current event. A player's losses are summed across them.
-  const gain = eventPrizes(current);
+/** Money coming off per player: Map<pid, { amount, estimated, events: [{ name, amount, round }] }>. */
+export function expiringMap(dropping) {
   const lose = new Map();
   for (const d of [].concat(dropping || [])) for (const [id, r] of eventPrizes(d)) {
     if (!r.amount) continue;
@@ -259,13 +257,24 @@ export function liveRace(official, current, dropping) {
     l.events.push({ name: d.name, amount: r.amount, round: r.round });
     lose.set(id, l);
   }
+  return lose;
+}
+
+export function liveRace(official, current, dropping) {
+  return liveRaceWith(official, current, expiringMap(dropping));
+}
+
+/** The live race from a precomputed expiring map (a Map, or a plain object from JSON). */
+export function liveRaceWith(official, current, expiring) {
+  const lose = expiring instanceof Map ? expiring : new Map(Object.entries(expiring || {}));
+  const gain = eventPrizes(current);
   const list = official.map(p => {
     const g = gain.get(p.id), l = lose.get(p.id);
     const plus = g?.amount || 0, minus = l?.amount || 0;
     return { ...p, official: p.money, money: p.money - minus + plus, plus, minus, expiring: l?.events || [], round: g?.round || null, alive: g ? g.alive : null, estimated: !!l?.estimated };
   });
   // Players who are not on the list yet but have earned money this event.
-  for (const [id, g] of gain) if (g.amount && !official.some(p => p.id === id)) list.push({ id, name: g.name, money: g.amount, official: 0, plus: g.amount, minus: 0, round: g.round, alive: g.alive, pos: null });
+  for (const [id, g] of gain) if (g.amount && !official.some(p => p.id === id)) list.push({ id, name: g.name, money: g.amount, official: 0, plus: g.amount, minus: 0, expiring: [], round: g.round, alive: g.alive, pos: null });
   list.sort((x, y) => y.money - x.money || (x.pos ?? 1e9) - (y.pos ?? 1e9));
   let rank = 0, last = null;
   list.forEach((p, i) => { if (p.money !== last) { rank = i + 1; last = p.money; } p.live = rank; p.move = p.pos ? p.pos - rank : null; });

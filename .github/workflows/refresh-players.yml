@@ -26,6 +26,7 @@ jobs:
       - run: npm ci
       - run: npm run data:rankings
       - run: npm run data:players
+      - run: npm run data:live-race
       - uses: ./.github/actions/commit
         with:
           message: 'data: refresh player profiles and tournament history'

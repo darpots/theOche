@@ -6,6 +6,7 @@ import { getCollection } from 'astro:content';
 import calendar from '../data/calendar.json';
 import data from '../data/tournament.json';
 import rankings from '../data/rankings.json';
+import liveRaceData from '../data/live-race.json';
 import cutoutsRaw from '../data/cutouts.json';
 import { tvBadge, keyName, flag } from '../lib/pdc.mjs';
 import { newsDate, dayNum, monthShort, dateRange, money } from '../lib/format.mjs';
@@ -32,6 +33,12 @@ const bigFigure = (h: string) => (h.match(/£[\d,.]+(?:k|m)?|\b\d{1,2}-\d{1,2}\b
 
 const prev = (rankings.previous || {}) as Record<string, number>;
 const top = rankings.players.slice(0, 5).map(p => ({ ...p, move: prev[p.id] ? prev[p.id] - p.pos : 0 }));
+// Live race from the daily snapshot (scripts/refresh-live-race.mjs), shown while its event is on.
+const lrd = liveRaceData as any;
+const liveOn = !!lrd.event && lrd.event.startDate <= today && lrd.event.endDate >= today;
+const raceTop = liveOn ? lrd.race.slice(0, 4) : [];
+const raceMover = liveOn ? lrd.race.slice(4, 32).filter((p: any) => p.move > 0).sort((a: any, b: any) => b.move - a.move)[0] : null;
+const raceUpdated = liveOn ? new Date(lrd.updatedAt).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', timeZone: 'Europe/London' }) : '';
 // Spotlight: the best-ranked player in today's matches, else world number one.
 const todayIds = new Set(md.todays.flatMap(f => [f.p1.id, f.p2.id]));
 const spotRank = rankings.players.find(p => todayIds.has(p.id) && cutouts[keyName(p.name)]) || rankings.players[0];
@@ -118,13 +125,15 @@ const spot = loadProfile(spotRank.id);
       </div>
 
       <section class="tile tile-card race">
-        <div class="th"><h2 id="rk-title">World rankings</h2><a href="/rankings">Top 128 →</a></div>
-        <ol id="rk">
-          {top.map(p => (
+        <div class="th"><h2>{liveOn ? 'Live race' : 'World rankings'}</h2><a href="/rankings">Top 128 →</a></div>
+        <ol>
+          {liveOn ? [...raceTop.map((p: any) => ({ p, hi: false })), ...(raceMover ? [{ p: raceMover, hi: true }] : [])].map(({ p, hi }) => (
+            <li class:list={{ hi }}><a href={`/players/${p.slug}`}><span class="poster-num rp">{p.live}</span><b>{p.name}{p.move ? <i class={p.move > 0 ? 'up' : 'down'}>{p.move > 0 ? '▲' : '▼'} {Math.abs(p.move)}</i> : null}</b><span class="rm">{money(p.money)}</span></a></li>
+          )) : top.map(p => (
             <li><a href={`/players/${p.slug}`}><span class="poster-num rp">{p.pos}</span><b><Fragment set:html={flag(p.country)} /> {p.name}</b><span class="rm">{money(p.money)}</span></a></li>
           ))}
         </ol>
-        <p class="lbl muted" id="rk-note">Official PDC Order of Merit</p>
+        <p class="lbl muted rk-note">{liveOn ? `Projected after the ${lrd.event.name.replace(/^\d{4}\s+/, '')} · updated daily (${raceUpdated})` : 'Official PDC Order of Merit'}</p>
       </section>
 
       {spot && (
@@ -161,9 +170,8 @@ const spot = loadProfile(spotRank.id);
   <script is:inline type="application/json" id="home-data" set:html={JSON.stringify({ cutouts })}></script>
 
   <script>
-    import { normaliseTournament, loadLiveRace } from '../lib/pdc.mjs';
+    import { normaliseTournament } from '../lib/pdc.mjs';
     import { matchday, featureTile, nextTileInner } from '../lib/feature.mjs';
-    import { money } from '../lib/format.mjs';
 
     let timer: number | undefined;
     function init() {
@@ -215,18 +223,6 @@ const spot = loadProfile(spotRank.id);
         timer = window.setInterval(refresh, 30_000);
       }
 
-      // During a ranking event the rankings tile shows the live race.
-      const rk = document.getElementById('rk');
-      if (rk) loadLiveRace(today()).then(res => {
-        if (!res || !document.getElementById('rk')) return;
-        const esc = (x: unknown) => String(x ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]!);
-        const top = res.race.slice(0, 4);
-        const mover = res.race.slice(4, 32).filter((p: any) => p.move > 0).sort((a: any, b: any) => b.move - a.move)[0];
-        const row = (p: any, hi = false) => `<li${hi ? ' class="hi"' : ''}><a href="/players/${esc(p.slug)}"><span class="poster-num rp">${p.live}</span><b>${esc(p.name)}${p.move ? ` <i class="${p.move > 0 ? 'up' : 'down'}">${p.move > 0 ? '▲' : '▼'} ${Math.abs(p.move)}</i>` : ''}</b><span class="rm">${money(p.money)}</span></a></li>`;
-        rk.innerHTML = top.map((p: any) => row(p)).join('') + (mover ? row(mover, true) : '');
-        document.getElementById('rk-title')!.textContent = 'Live race';
-        document.getElementById('rk-note')!.textContent = `Projected after the ${res.event.name.replace(/^\d{4}\s+/, '')}`;
-      });
     }
     document.addEventListener('astro:page-load', init);
   </script>
@@ -322,7 +318,7 @@ const spot = loadProfile(spotRank.id);
   .race :global(.up) { color: #0a7a3a; } .race :global(.down) { color: var(--red); }
   .race :global(.hi .up) { color: var(--ink); }
   .race :global(.rm) { font-weight: 700; font-variant-numeric: tabular-nums; }
-  #rk-note { margin: 12px 0 0; }
+  .rk-note { margin: 12px 0 0; }
 
   .spot { grid-column: span 4; min-height: 420px; display: flex; flex-direction: column; justify-content: space-between; text-decoration: none; }
   .spot-cut { position: absolute; right: -40px; bottom: 0; height: 88%; width: auto; max-width: none; }

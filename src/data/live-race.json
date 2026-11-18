@@ -1,0 +1,3704 @@
+{
+ "updatedAt": "2026-11-18T21:46:58.965Z",
+ "event": {
+  "id": "10871",
+  "name": "2026 Grand Slam of Darts",
+  "seasonID": 2026,
+  "startDate": "2026-11-14",
+  "endDate": "2026-11-22"
+ },
+ "dropNames": [
+  "2024 Grand Slam of Darts",
+  "2024 Players Championship Finals"
+ ],
+ "expiring": {
+  "4": {
+   "amount": 53000,
+   "estimated": false,
+   "events": [
+    {
+     "name": "2024 Grand Slam of Darts",
+     "amount": 50000,
+     "round": "Semi-Final"
+    },
+    {
+     "name": "2024 Players Championship Finals",
+     "amount": 3000,
+     "round": "Last 64"
+    }
+   ]
+  },
+  "19": {
+   "amount": 8000,
+   "estimated": false,
+   "events": [
+    {
+     "name": "2024 Grand Slam of Darts",
+     "amount": 5000,
+     "round": "League"
+    },
+    {
+     "name": "2024 Players Championship Finals",
+     "amount": 3000,
+     "round": "Last 64"
+    }
+   ]
+  },
+  "22": {
+   "amount": 15250,
+   "estimated": false,
+   "events": [
+    {
+     "name": "2024 Grand Slam of Darts",
+     "amount": 12250,
+     "round": "Last 16"
+    },
+    {
+     "name": "2024 Players Championship Finals",
+     "amount": 3000,
+     "round": "Last 64"
+    }
+   ]
+  },
+  "34": {
+   "amount": 3000,
+   "estimated": false,
+   "events": [
+    {
+     "name": "2024 Players Championship Finals",
+     "amount": 3000,
+     "round": "Last 64"
+    }
+   ]
+  },
+  "76": {
+   "amount": 6500,
+   "estimated": false,
+   "events": [
+    {
+     "name": "2024 Players Championship Finals",
+     "amount": 6500,
+     "round": "Last 32"
+    }
+   ]
+  },
+  "81": {
+   "amount": 3000,
+   "estimated": false,
+   "events": [
+    {
+     "name": "2024 Players Championship Finals",
+     "amount": 3000,
+     "round": "Last 64"
+    }
+   ]
+  },
+  "104": {
+   "amount": 11500,
+   "estimated": false,
+   "events": [
+    {
+     "name": "2024 Grand Slam of Darts",
+     "amount": 5000,
+     "round": "League"
+    },
+    {
+     "name": "2024 Players Championship Finals",
+     "amount": 6500,
+     "round": "Last 32"
+    }
+   ]
+  },
+  "136": {
+   "amount": 3000,
+   "estimated": false,
+   "events": [
+    {
+     "name": "2024 Players Championship Finals",
+     "amount": 3000,
+     "round": "Last 64"
+    }
+   ]
+  },
+  "139": {
+   "amount": 8000,
+   "estimated": false,
+   "events": [
+    {
+     "name": "2024 Grand Slam of Darts",
+     "amount": 5000,
+     "round": "League"
+    },
+    {
+     "name": "2024 Players Championship Finals",
+     "amount": 3000,
+     "round": "Last 64"
+    }
+   ]
+  },
+  "142": {
+   "amount": 11500,
+   "estimated": false,
+   "events": [
+    {
+     "name": "2024 Grand Slam of Darts",
+     "amount": 5000,
+     "round": "League"
+    },
+    {
+     "name": "2024 Players Championship Finals",
+     "amount": 6500,
+     "round": "Last 32"
+    }
+   ]
+  },
+  "146": {
+   "amount": 8000,
+   "estimated": false,
+   "events": [
+    {
+     "name": "2024 Grand Slam of Darts",
+     "amount": 5000,
+     "round": "League"
+    },
+    {
+     "name": "2024 Players Championship Finals",
+     "amount": 3000,
+     "round": "Last 64"
+    }
+   ]
+  },
+  "153": {
+   "amount": 3000,
+   "estimated": false,
+   "events": [
+    {
+     "name": "2024 Players Championship Finals",
+     "amount": 3000,
+     "round": "Last 64"
+    }
+   ]
+  },
+  "156": {
+   "amount": 6500,
+   "estimated": false,
+   "events": [
+    {
+     "name": "2024 Players Championship Finals",
+     "amount": 6500,
+     "round": "Last 32"
+    }
+   ]
+  },
+  "162": {
+   "amount": 50000,
+   "estimated": false,
+   "events": [
+    {
+     "name": "2024 Grand Slam of Darts",
+     "amount": 50000,
+     "round": "Semi-Final"
+    }
+   ]
+  },
+  "224": {
+   "amount": 6500,
+   "estimated": false,
+   "events": [
+    {
+     "name": "2024 Players Championship Finals",
+     "amount": 6500,
+     "round": "Last 32"
+    }
+   ]
+  },
+  "231": {
+   "amount": 10000,
+   "estimated": false,
+   "events": [
+    {
+     "name": "2024 Players Championship Finals",
+     "amount": 10000,
+     "round": "Last 16"
+    }
+   ]
+  },
+  "246": {
+   "amount": 30000,
+   "estimated": false,
+   "events": [
+    {
+     "name": "2024 Players Championship Finals",
+     "amount": 30000,
+     "round": "Semi-Final"
+    }
+   ]
+  },
+  "271": {
+   "amount": 3000,
+   "estimated": false,
+   "events": [
+    {
+     "name": "2024 Players Championship Finals",
+     "amount": 3000,
+     "round": "Last 64"
+    }
+   ]
+  },
+  "317": {
+   "amount": 6500,
+   "estimated": false,
+   "events": [
+    {
+     "name": "2024 Players Championship Finals",
+     "amount": 6500,
+     "round": "Last 32"
+    }
+   ]
+  },
+  "570": {
+   "amount": 3000,
+   "estimated": false,
+   "events": [
+    {
+     "name": "2024 Players Championship Finals",
+     "amount": 3000,
+     "round": "Last 64"
+    }
+   ]
+  },
+  "754": {
+   "amount": 42250,
+   "estimated": false,
+   "events": [
+    {
+     "name": "2024 Grand Slam of Darts",
+     "amount": 12250,
+     "round": "Last 16"
+    },
+    {
+     "name": "2024 Players Championship Finals",
+     "amount": 30000,
+     "round": "Semi-Final"
+    }
+   ]
+  },
+  "876": {
+   "amount": 15250,
+   "estimated": false,
+   "events": [
+    {
+     "name": "2024 Grand Slam of Darts",
+     "amount": 12250,
+     "round": "Last 16"
+    },
+    {
+     "name": "2024 Players Championship Finals",
+     "amount": 3000,
+     "round": "Last 64"
+    }
+   ]
+  },
+  "2040": {
+   "amount": 31500,
+   "estimated": false,
+   "events": [
+    {
+     "name": "2024 Grand Slam of Darts",
+     "amount": 25000,
+     "round": "Quarter-Final"
+    },
+    {
+     "name": "2024 Players Championship Finals",
+     "amount": 6500,
+     "round": "Last 32"
+    }
+   ]
+  },
+  "2554": {
+   "amount": 10000,
+   "estimated": false,
+   "events": [
+    {
+     "name": "2024 Players Championship Finals",
+     "amount": 10000,
+     "round": "Last 16"
+    }
+   ]
+  },
+  "2712": {
+   "amount": 3000,
+   "estimated": false,
+   "events": [
+    {
+     "name": "2024 Players Championship Finals",
+     "amount": 3000,
+     "round": "Last 64"
+    }
+   ]
+  },
+  "2771": {
+   "amount": 3000,
+   "estimated": false,
+   "events": [
+    {
+     "name": "2024 Players Championship Finals",
+     "amount": 3000,
+     "round": "Last 64"
+    }
+   ]
+  },
+  "10978": {
+   "amount": 5000,
+   "estimated": false,
+   "events": [
+    {
+     "name": "2024 Grand Slam of Darts",
+     "amount": 5000,
+     "round": "League"
+    }
+   ]
+  },
+  "11102": {
+   "amount": 5000,
+   "estimated": false,
+   "events": [
+    {
+     "name": "2024 Grand Slam of Darts",
+     "amount": 5000,
+     "round": "League"
+    }
+   ]
+  },
+  "11156": {
+   "amount": 3000,
+   "estimated": false,
+   "events": [
+    {
+     "name": "2024 Players Championship Finals",
+     "amount": 3000,
+     "round": "Last 64"
+    }
+   ]
+  },
+  "11788": {
+   "amount": 3000,
+   "estimated": false,
+   "events": [
+    {
+     "name": "2024 Players Championship Finals",
+     "amount": 3000,
+     "round": "Last 64"
+    }
+   ]
+  },
+  "11804": {
+   "amount": 3000,
+   "estimated": false,
+   "events": [
+    {
+     "name": "2024 Players Championship Finals",
+     "amount": 3000,
+     "round": "Last 64"
+    }
+   ]
+  },
+  "11821": {
+   "amount": 6500,
+   "estimated": false,
+   "events": [
+    {
+     "name": "2024 Players Championship Finals",
+     "amount": 6500,
+     "round": "Last 32"
+    }
+   ]
+  },
+  "11843": {
+   "amount": 3000,
+   "estimated": false,
+   "events": [
+    {
+     "name": "2024 Players Championship Finals",
+     "amount": 3000,
+     "round": "Last 64"
+    }
+   ]
+  },
+  "11902": {
+   "amount": 15000,
+   "estimated": false,
+   "events": [
+    {
+     "name": "2024 Grand Slam of Darts",
+     "amount": 5000,
+     "round": "League"
+    },
+    {
+     "name": "2024 Players Championship Finals",
+     "amount": 10000,
+     "round": "Last 16"
+    }
+   ]
+  },
+  "30829": {
+   "amount": 32250,
+   "estimated": false,
+   "events": [
+    {
+     "name": "2024 Grand Slam of Darts",
+     "amount": 12250,
+     "round": "Last 16"
+    },
+    {
+     "name": "2024 Players Championship Finals",
+     "amount": 20000,
+     "round": "Quarter-Final"
+    }
+   ]
+  },
+  "30844": {
+   "amount": 35000,
+   "estimated": false,
+   "events": [
+    {
+     "name": "2024 Grand Slam of Darts",
+     "amount": 25000,
+     "round": "Quarter-Final"
+    },
+    {
+     "name": "2024 Players Championship Finals",
+     "amount": 10000,
+     "round": "Last 16"
+    }
+   ]
+  },
+  "30859": {
+   "amount": 3000,
+   "estimated": false,
+   "events": [
+    {
+     "name": "2024 Players Championship Finals",
+     "amount": 3000,
+     "round": "Last 64"
+    }
+   ]
+  },
+  "31027": {
+   "amount": 3000,
+   "estimated": false,
+   "events": [
+    {
+     "name": "2024 Players Championship Finals",
+     "amount": 3000,
+     "round": "Last 64"
+    }
+   ]
+  },
+  "31028": {
+   "amount": 18750,
+   "estimated": false,
+   "events": [
+    {
+     "name": "2024 Grand Slam of Darts",
+     "amount": 12250,
+     "round": "Last 16"
+    },
+    {
+     "name": "2024 Players Championship Finals",
+     "amount": 6500,
+     "round": "Last 32"
+    }
+   ]
+  },
+  "31031": {
+   "amount": 10000,
+   "estimated": false,
+   "events": [
+    {
+     "name": "2024 Players Championship Finals",
+     "amount": 10000,
+     "round": "Last 16"
+    }
+   ]
+  },
+  "31034": {
+   "amount": 6500,
+   "estimated": false,
+   "events": [
+    {
+     "name": "2024 Players Championship Finals",
+     "amount": 6500,
+     "round": "Last 32"
+    }
+   ]
+  },
+  "31041": {
+   "amount": 28000,
+   "estimated": false,
+   "events": [
+    {
+     "name": "2024 Grand Slam of Darts",
+     "amount": 25000,
+     "round": "Quarter-Final"
+    },
+    {
+     "name": "2024 Players Championship Finals",
+     "amount": 3000,
+     "round": "Last 64"
+    }
+   ]
+  },
+  "31213": {
+   "amount": 6500,
+   "estimated": false,
+   "events": [
+    {
+     "name": "2024 Players Championship Finals",
+     "amount": 6500,
+     "round": "Last 32"
+    }
+   ]
+  },
+  "31356": {
+   "amount": 22250,
+   "estimated": false,
+   "events": [
+    {
+     "name": "2024 Grand Slam of Darts",
+     "amount": 12250,
+     "round": "Last 16"
+    },
+    {
+     "name": "2024 Players Championship Finals",
+     "amount": 10000,
+     "round": "Last 16"
+    }
+   ]
+  },
+  "31501": {
+   "amount": 32250,
+   "estimated": false,
+   "events": [
+    {
+     "name": "2024 Grand Slam of Darts",
+     "amount": 12250,
+     "round": "Last 16"
+    },
+    {
+     "name": "2024 Players Championship Finals",
+     "amount": 20000,
+     "round": "Quarter-Final"
+    }
+   ]
+  },
+  "32037": {
+   "amount": 3000,
+   "estimated": false,
+   "events": [
+    {
+     "name": "2024 Players Championship Finals",
+     "amount": 3000,
+     "round": "Last 64"
+    }
+   ]
+  },
+  "32040": {
+   "amount": 6500,
+   "estimated": false,
+   "events": [
+    {
+     "name": "2024 Players Championship Finals",
+     "amount": 6500,
+     "round": "Last 32"
+    }
+   ]
+  },
+  "32068": {
+   "amount": 73000,
+   "estimated": false,
+   "events": [
+    {
+     "name": "2024 Grand Slam of Darts",
+     "amount": 70000,
+     "round": "Final"
+    },
+    {
+     "name": "2024 Players Championship Finals",
+     "amount": 3000,
+     "round": "Last 64"
+    }
+   ]
+  },
+  "32079": {
+   "amount": 3000,
+   "estimated": false,
+   "events": [
+    {
+     "name": "2024 Players Championship Finals",
+     "amount": 3000,
+     "round": "Last 64"
+    }
+   ]
+  },
+  "32081": {
+   "amount": 25000,
+   "estimated": false,
+   "events": [
+    {
+     "name": "2024 Grand Slam of Darts",
+     "amount": 5000,
+     "round": "League"
+    },
+    {
+     "name": "2024 Players Championship Finals",
+     "amount": 20000,
+     "round": "Quarter-Final"
+    }
+   ]
+  },
+  "32094": {
+   "amount": 3000,
+   "estimated": false,
+   "events": [
+    {
+     "name": "2024 Players Championship Finals",
+     "amount": 3000,
+     "round": "Last 64"
+    }
+   ]
+  },
+  "32102": {
+   "amount": 125000,
+   "estimated": false,
+   "events": [
+    {
+     "name": "2024 Grand Slam of Darts",
+     "amount": 5000,
+     "round": "League"
+    },
+    {
+     "name": "2024 Players Championship Finals",
+     "amount": 120000,
+     "round": "Winner"
+    }
+   ]
+  },
+  "32895": {
+   "amount": 3000,
+   "estimated": false,
+   "events": [
+    {
+     "name": "2024 Players Championship Finals",
+     "amount": 3000,
+     "round": "Last 64"
+    }
+   ]
+  },
+  "32956": {
+   "amount": 8000,
+   "estimated": false,
+   "events": [
+    {
+     "name": "2024 Grand Slam of Darts",
+     "amount": 5000,
+     "round": "League"
+    },
+    {
+     "name": "2024 Players Championship Finals",
+     "amount": 3000,
+     "round": "Last 64"
+    }
+   ]
+  },
+  "33014": {
+   "amount": 10000,
+   "estimated": false,
+   "events": [
+    {
+     "name": "2024 Players Championship Finals",
+     "amount": 10000,
+     "round": "Last 16"
+    }
+   ]
+  },
+  "33091": {
+   "amount": 28000,
+   "estimated": false,
+   "events": [
+    {
+     "name": "2024 Grand Slam of Darts",
+     "amount": 25000,
+     "round": "Quarter-Final"
+    },
+    {
+     "name": "2024 Players Championship Finals",
+     "amount": 3000,
+     "round": "Last 64"
+    }
+   ]
+  },
+  "33144": {
+   "amount": 5000,
+   "estimated": false,
+   "events": [
+    {
+     "name": "2024 Grand Slam of Darts",
+     "amount": 5000,
+     "round": "League"
+    }
+   ]
+  },
+  "33793": {
+   "amount": 6500,
+   "estimated": false,
+   "events": [
+    {
+     "name": "2024 Players Championship Finals",
+     "amount": 6500,
+     "round": "Last 32"
+    }
+   ]
+  },
+  "33876": {
+   "amount": 6500,
+   "estimated": false,
+   "events": [
+    {
+     "name": "2024 Players Championship Finals",
+     "amount": 6500,
+     "round": "Last 32"
+    }
+   ]
+  },
+  "34006": {
+   "amount": 6500,
+   "estimated": false,
+   "events": [
+    {
+     "name": "2024 Players Championship Finals",
+     "amount": 6500,
+     "round": "Last 32"
+    }
+   ]
+  },
+  "34245": {
+   "amount": 15250,
+   "estimated": false,
+   "events": [
+    {
+     "name": "2024 Grand Slam of Darts",
+     "amount": 12250,
+     "round": "Last 16"
+    },
+    {
+     "name": "2024 Players Championship Finals",
+     "amount": 3000,
+     "round": "Last 64"
+    }
+   ]
+  },
+  "34363": {
+   "amount": 5000,
+   "estimated": false,
+   "events": [
+    {
+     "name": "2024 Grand Slam of Darts",
+     "amount": 5000,
+     "round": "League"
+    }
+   ]
+  },
+  "36314": {
+   "amount": 10000,
+   "estimated": false,
+   "events": [
+    {
+     "name": "2024 Players Championship Finals",
+     "amount": 10000,
+     "round": "Last 16"
+    }
+   ]
+  },
+  "36373": {
+   "amount": 3000,
+   "estimated": false,
+   "events": [
+    {
+     "name": "2024 Players Championship Finals",
+     "amount": 3000,
+     "round": "Last 64"
+    }
+   ]
+  },
+  "36408": {
+   "amount": 3000,
+   "estimated": false,
+   "events": [
+    {
+     "name": "2024 Players Championship Finals",
+     "amount": 3000,
+     "round": "Last 64"
+    }
+   ]
+  },
+  "36640": {
+   "amount": 5000,
+   "estimated": false,
+   "events": [
+    {
+     "name": "2024 Grand Slam of Darts",
+     "amount": 5000,
+     "round": "League"
+    }
+   ]
+  },
+  "36712": {
+   "amount": 20000,
+   "estimated": false,
+   "events": [
+    {
+     "name": "2024 Players Championship Finals",
+     "amount": 20000,
+     "round": "Quarter-Final"
+    }
+   ]
+  },
+  "37349": {
+   "amount": 3000,
+   "estimated": false,
+   "events": [
+    {
+     "name": "2024 Players Championship Finals",
+     "amount": 3000,
+     "round": "Last 64"
+    }
+   ]
+  },
+  "38552": {
+   "amount": 11500,
+   "estimated": false,
+   "events": [
+    {
+     "name": "2024 Grand Slam of Darts",
+     "amount": 5000,
+     "round": "League"
+    },
+    {
+     "name": "2024 Players Championship Finals",
+     "amount": 6500,
+     "round": "Last 32"
+    }
+   ]
+  },
+  "39296": {
+   "amount": 5000,
+   "estimated": false,
+   "events": [
+    {
+     "name": "2024 Grand Slam of Darts",
+     "amount": 5000,
+     "round": "League"
+    }
+   ]
+  },
+  "40676": {
+   "amount": 210000,
+   "estimated": false,
+   "events": [
+    {
+     "name": "2024 Grand Slam of Darts",
+     "amount": 150000,
+     "round": "Winner"
+    },
+    {
+     "name": "2024 Players Championship Finals",
+     "amount": 60000,
+     "round": "Final"
+    }
+   ]
+  }
+ },
+ "race": [
+  {
+   "id": "40676",
+   "name": "Luke Littler",
+   "slug": "luke-littler",
+   "pos": 1,
+   "live": 1,
+   "move": 0,
+   "money": 2951000,
+   "plus": 20000,
+   "minus": 210000,
+   "expiring": [
+    {
+     "name": "2024 Grand Slam of Darts",
+     "amount": 150000,
+     "round": "Winner"
+    },
+    {
+     "name": "2024 Players Championship Finals",
+     "amount": 60000,
+     "round": "Final"
+    }
+   ],
+   "round": "Last 16",
+   "alive": true,
+   "estimated": false
+  },
+  {
+   "id": "33091",
+   "name": "Gian van Veen",
+   "slug": "gian-van-veen",
+   "pos": 3,
+   "live": 2,
+   "move": 1,
+   "money": 1050750,
+   "plus": 20000,
+   "minus": 28000,
+   "expiring": [
+    {
+     "name": "2024 Grand Slam of Darts",
+     "amount": 25000,
+     "round": "Quarter-Final"
+    },
+    {
+     "name": "2024 Players Championship Finals",
+     "amount": 3000,
+     "round": "Last 64"
+    }
+   ],
+   "round": "Last 16",
+   "alive": true,
+   "estimated": false
+  },
+  {
+   "id": "32102",
+   "name": "Luke Humphries",
+   "slug": "luke-humphries",
+   "pos": 2,
+   "live": 3,
+   "move": -1,
+   "money": 957500,
+   "plus": 20000,
+   "minus": 125000,
+   "expiring": [
+    {
+     "name": "2024 Grand Slam of Darts",
+     "amount": 5000,
+     "round": "League"
+    },
+    {
+     "name": "2024 Players Championship Finals",
+     "amount": 120000,
+     "round": "Winner"
+    }
+   ],
+   "round": "Last 16",
+   "alive": true,
+   "estimated": false
+  },
+  {
+   "id": "11788",
+   "name": "Gerwyn Price",
+   "slug": "gerwyn-price",
+   "pos": 4,
+   "live": 4,
+   "move": 0,
+   "money": 865500,
+   "plus": 35000,
+   "minus": 3000,
+   "expiring": [
+    {
+     "name": "2024 Players Championship Finals",
+     "amount": 3000,
+     "round": "Last 64"
+    }
+   ],
+   "round": "Quarter-Final",
+   "alive": true,
+   "estimated": false
+  },
+  {
+   "id": "30859",
+   "name": "Jonny Clayton",
+   "slug": "jonny-clayton",
+   "pos": 5,
+   "live": 5,
+   "move": 0,
+   "money": 719250,
+   "plus": 5000,
+   "minus": 3000,
+   "expiring": [
+    {
+     "name": "2024 Players Championship Finals",
+     "amount": 3000,
+     "round": "Last 64"
+    }
+   ],
+   "round": "Group G",
+   "alive": true,
+   "estimated": false
+  },
+  {
+   "id": "754",
+   "name": "Ross Smith",
+   "slug": "ross-smith",
+   "pos": 6,
+   "live": 6,
+   "move": 0,
+   "money": 678000,
+   "plus": 5000,
+   "minus": 42250,
+   "expiring": [
+    {
+     "name": "2024 Grand Slam of Darts",
+     "amount": 12250,
+     "round": "Last 16"
+    },
+    {
+     "name": "2024 Players Championship Finals",
+     "amount": 30000,
+     "round": "Semi-Final"
+    }
+   ],
+   "round": "Group O",
+   "alive": true,
+   "estimated": false
+  },
+  {
+   "id": "22",
+   "name": "James Wade",
+   "slug": "james-wade",
+   "pos": 7,
+   "live": 7,
+   "move": 0,
+   "money": 677500,
+   "plus": 20000,
+   "minus": 15250,
+   "expiring": [
+    {
+     "name": "2024 Grand Slam of Darts",
+     "amount": 12250,
+     "round": "Last 16"
+    },
+    {
+     "name": "2024 Players Championship Finals",
+     "amount": 3000,
+     "round": "Last 64"
+    }
+   ],
+   "round": "Last 16",
+   "alive": true,
+   "estimated": false
+  },
+  {
+   "id": "11821",
+   "name": "Nathan Aspinall",
+   "slug": "nathan-aspinall",
+   "pos": 12,
+   "live": 8,
+   "move": 4,
+   "money": 609000,
+   "plus": 20000,
+   "minus": 6500,
+   "expiring": [
+    {
+     "name": "2024 Players Championship Finals",
+     "amount": 6500,
+     "round": "Last 32"
+    }
+   ],
+   "round": "Last 16",
+   "alive": true,
+   "estimated": false
+  },
+  {
+   "id": "19",
+   "name": "Michael van Gerwen",
+   "slug": "michael-van-gerwen",
+   "pos": 11,
+   "live": 9,
+   "move": 2,
+   "money": 607500,
+   "plus": 20000,
+   "minus": 8000,
+   "expiring": [
+    {
+     "name": "2024 Grand Slam of Darts",
+     "amount": 5000,
+     "round": "League"
+    },
+    {
+     "name": "2024 Players Championship Finals",
+     "amount": 3000,
+     "round": "Last 64"
+    }
+   ],
+   "round": "Last 16",
+   "alive": true,
+   "estimated": false
+  },
+  {
+   "id": "38552",
+   "name": "Josh Rock",
+   "slug": "josh-rock",
+   "pos": 8,
+   "live": 10,
+   "move": -2,
+   "money": 597250,
+   "plus": 5000,
+   "minus": 11500,
+   "expiring": [
+    {
+     "name": "2024 Grand Slam of Darts",
+     "amount": 5000,
+     "round": "League"
+    },
+    {
+     "name": "2024 Players Championship Finals",
+     "amount": 6500,
+     "round": "Last 32"
+    }
+   ],
+   "round": "Group C",
+   "alive": true,
+   "estimated": false
+  },
+  {
+   "id": "876",
+   "name": "Stephen Bunting",
+   "slug": "stephen-bunting",
+   "pos": 9,
+   "live": 11,
+   "move": -2,
+   "money": 587750,
+   "plus": 5000,
+   "minus": 15250,
+   "expiring": [
+    {
+     "name": "2024 Grand Slam of Darts",
+     "amount": 12250,
+     "round": "Last 16"
+    },
+    {
+     "name": "2024 Players Championship Finals",
+     "amount": 3000,
+     "round": "Last 64"
+    }
+   ],
+   "round": "Group D",
+   "alive": true,
+   "estimated": false
+  },
+  {
+   "id": "32956",
+   "name": "Wessel Nijman",
+   "slug": "wessel-nijman",
+   "pos": 13,
+   "live": 11,
+   "move": 2,
+   "money": 587750,
+   "plus": 5000,
+   "minus": 8000,
+   "expiring": [
+    {
+     "name": "2024 Grand Slam of Darts",
+     "amount": 5000,
+     "round": "League"
+    },
+    {
+     "name": "2024 Players Championship Finals",
+     "amount": 3000,
+     "round": "Last 64"
+    }
+   ],
+   "round": "Group H",
+   "alive": true,
+   "estimated": false
+  },
+  {
+   "id": "32037",
+   "name": "Ryan Searle",
+   "slug": "ryan-searle",
+   "pos": 15,
+   "live": 13,
+   "move": 2,
+   "money": 576000,
+   "plus": 20000,
+   "minus": 3000,
+   "expiring": [
+    {
+     "name": "2024 Players Championship Finals",
+     "amount": 3000,
+     "round": "Last 64"
+    }
+   ],
+   "round": "Last 16",
+   "alive": false,
+   "estimated": false
+  },
+  {
+   "id": "31356",
+   "name": "Danny Noppert",
+   "slug": "danny-noppert",
+   "pos": 10,
+   "live": 14,
+   "move": -4,
+   "money": 573500,
+   "plus": 0,
+   "minus": 22250,
+   "expiring": [
+    {
+     "name": "2024 Grand Slam of Darts",
+     "amount": 12250,
+     "round": "Last 16"
+    },
+    {
+     "name": "2024 Players Championship Finals",
+     "amount": 10000,
+     "round": "Last 16"
+    }
+   ],
+   "round": null,
+   "alive": null,
+   "estimated": false
+  },
+  {
+   "id": "11843",
+   "name": "Chris Dobey",
+   "slug": "chris-dobey",
+   "pos": 16,
+   "live": 15,
+   "move": 1,
+   "money": 552500,
+   "plus": 5000,
+   "minus": 3000,
+   "expiring": [
+    {
+     "name": "2024 Players Championship Finals",
+     "amount": 3000,
+     "round": "Last 64"
+    }
+   ],
+   "round": "Group N",
+   "alive": true,
+   "estimated": false
+  },
+  {
+   "id": "4",
+   "name": "Gary Anderson",
+   "slug": "gary-anderson",
+   "pos": 14,
+   "live": 16,
+   "move": -2,
+   "money": 519000,
+   "plus": 0,
+   "minus": 53000,
+   "expiring": [
+    {
+     "name": "2024 Grand Slam of Darts",
+     "amount": 50000,
+     "round": "Semi-Final"
+    },
+    {
+     "name": "2024 Players Championship Finals",
+     "amount": 3000,
+     "round": "Last 64"
+    }
+   ],
+   "round": null,
+   "alive": null,
+   "estimated": false
+  },
+  {
+   "id": "11804",
+   "name": "Luke Woodhouse",
+   "slug": "luke-woodhouse",
+   "pos": 17,
+   "live": 17,
+   "move": 0,
+   "money": 511000,
+   "plus": 5000,
+   "minus": 3000,
+   "expiring": [
+    {
+     "name": "2024 Players Championship Finals",
+     "amount": 3000,
+     "round": "Last 64"
+    }
+   ],
+   "round": "Group J",
+   "alive": true,
+   "estimated": false
+  },
+  {
+   "id": "30844",
+   "name": "Jermaine Wattimena",
+   "slug": "jermaine-wattimena",
+   "pos": 18,
+   "live": 18,
+   "move": 0,
+   "money": 492500,
+   "plus": 20000,
+   "minus": 35000,
+   "expiring": [
+    {
+     "name": "2024 Grand Slam of Darts",
+     "amount": 25000,
+     "round": "Quarter-Final"
+    },
+    {
+     "name": "2024 Players Championship Finals",
+     "amount": 10000,
+     "round": "Last 16"
+    }
+   ],
+   "round": "Last 16",
+   "alive": true,
+   "estimated": false
+  },
+  {
+   "id": "224",
+   "name": "Krzysztof Ratajski",
+   "slug": "krzysztof-ratajski",
+   "pos": 19,
+   "live": 19,
+   "move": 0,
+   "money": 491250,
+   "plus": 5000,
+   "minus": 6500,
+   "expiring": [
+    {
+     "name": "2024 Players Championship Finals",
+     "amount": 6500,
+     "round": "Last 32"
+    }
+   ],
+   "round": "Group J",
+   "alive": true,
+   "estimated": false
+  },
+  {
+   "id": "11902",
+   "name": "Martin Schindler",
+   "slug": "martin-schindler",
+   "pos": 20,
+   "live": 20,
+   "move": 0,
+   "money": 471000,
+   "plus": 20000,
+   "minus": 15000,
+   "expiring": [
+    {
+     "name": "2024 Grand Slam of Darts",
+     "amount": 5000,
+     "round": "League"
+    },
+    {
+     "name": "2024 Players Championship Finals",
+     "amount": 10000,
+     "round": "Last 16"
+    }
+   ],
+   "round": "Last 16",
+   "alive": true,
+   "estimated": false
+  },
+  {
+   "id": "36314",
+   "name": "Damon Heta",
+   "slug": "damon-heta",
+   "pos": 22,
+   "live": 21,
+   "move": 1,
+   "money": 416750,
+   "plus": 0,
+   "minus": 10000,
+   "expiring": [
+    {
+     "name": "2024 Players Championship Finals",
+     "amount": 10000,
+     "round": "Last 16"
+    }
+   ],
+   "round": null,
+   "alive": null,
+   "estimated": false
+  },
+  {
+   "id": "32895",
+   "name": "Kevin Doets",
+   "slug": "kevin-doets",
+   "pos": 23,
+   "live": 21,
+   "move": 2,
+   "money": 416750,
+   "plus": 20000,
+   "minus": 3000,
+   "expiring": [
+    {
+     "name": "2024 Players Championship Finals",
+     "amount": 3000,
+     "round": "Last 64"
+    }
+   ],
+   "round": "Last 16",
+   "alive": true,
+   "estimated": false
+  },
+  {
+   "id": "246",
+   "name": "Dirk van Duijvenbode",
+   "slug": "dirk-van-duijvenbode",
+   "pos": 21,
+   "live": 23,
+   "move": -2,
+   "money": 396750,
+   "plus": 0,
+   "minus": 30000,
+   "expiring": [
+    {
+     "name": "2024 Players Championship Finals",
+     "amount": 30000,
+     "round": "Semi-Final"
+    }
+   ],
+   "round": null,
+   "alive": null,
+   "estimated": false
+  },
+  {
+   "id": "31041",
+   "name": "Rob Cross",
+   "slug": "rob-cross",
+   "pos": 24,
+   "live": 24,
+   "move": 0,
+   "money": 390250,
+   "plus": 20000,
+   "minus": 28000,
+   "expiring": [
+    {
+     "name": "2024 Grand Slam of Darts",
+     "amount": 25000,
+     "round": "Quarter-Final"
+    },
+    {
+     "name": "2024 Players Championship Finals",
+     "amount": 3000,
+     "round": "Last 64"
+    }
+   ],
+   "round": "Last 16",
+   "alive": false,
+   "estimated": false
+  },
+  {
+   "id": "2040",
+   "name": "Cameron Menzies",
+   "slug": "cameron-menzies",
+   "pos": 26,
+   "live": 25,
+   "move": 1,
+   "money": 375500,
+   "plus": 20000,
+   "minus": 31500,
+   "expiring": [
+    {
+     "name": "2024 Grand Slam of Darts",
+     "amount": 25000,
+     "round": "Quarter-Final"
+    },
+    {
+     "name": "2024 Players Championship Finals",
+     "amount": 6500,
+     "round": "Last 32"
+    }
+   ],
+   "round": "Last 16",
+   "alive": true,
+   "estimated": false
+  },
+  {
+   "id": "31501",
+   "name": "Ryan Joyce",
+   "slug": "ryan-joyce",
+   "pos": 25,
+   "live": 26,
+   "move": -1,
+   "money": 365250,
+   "plus": 0,
+   "minus": 32250,
+   "expiring": [
+    {
+     "name": "2024 Grand Slam of Darts",
+     "amount": 12250,
+     "round": "Last 16"
+    },
+    {
+     "name": "2024 Players Championship Finals",
+     "amount": 20000,
+     "round": "Quarter-Final"
+    }
+   ],
+   "round": null,
+   "alive": null,
+   "estimated": false
+  },
+  {
+   "id": "231",
+   "name": "Andrew Gilding",
+   "slug": "andrew-gilding",
+   "pos": 27,
+   "live": 27,
+   "move": 0,
+   "money": 348000,
+   "plus": 5000,
+   "minus": 10000,
+   "expiring": [
+    {
+     "name": "2024 Players Championship Finals",
+     "amount": 10000,
+     "round": "Last 16"
+    }
+   ],
+   "round": "Group F",
+   "alive": true,
+   "estimated": false
+  },
+  {
+   "id": "33014",
+   "name": "Niels Zonneveld",
+   "slug": "niels-zonneveld",
+   "pos": 28,
+   "live": 28,
+   "move": 0,
+   "money": 331250,
+   "plus": 5000,
+   "minus": 10000,
+   "expiring": [
+    {
+     "name": "2024 Players Championship Finals",
+     "amount": 10000,
+     "round": "Last 16"
+    }
+   ],
+   "round": "Group A",
+   "alive": true,
+   "estimated": false
+  },
+  {
+   "id": "153",
+   "name": "William O'Connor",
+   "slug": "william-o-connor",
+   "pos": 29,
+   "live": 29,
+   "move": 0,
+   "money": 287500,
+   "plus": 0,
+   "minus": 3000,
+   "expiring": [
+    {
+     "name": "2024 Players Championship Finals",
+     "amount": 3000,
+     "round": "Last 64"
+    }
+   ],
+   "round": null,
+   "alive": null,
+   "estimated": false
+  },
+  {
+   "id": "34874",
+   "name": "Niko Springer",
+   "slug": "niko-springer",
+   "pos": 34,
+   "live": 30,
+   "move": 4,
+   "money": 286750,
+   "plus": 35000,
+   "minus": 0,
+   "expiring": [],
+   "round": "Quarter-Final",
+   "alive": true,
+   "estimated": false
+  },
+  {
+   "id": "2554",
+   "name": "Daryl Gurney",
+   "slug": "daryl-gurney",
+   "pos": 30,
+   "live": 31,
+   "move": -1,
+   "money": 280500,
+   "plus": 0,
+   "minus": 10000,
+   "expiring": [
+    {
+     "name": "2024 Players Championship Finals",
+     "amount": 10000,
+     "round": "Last 16"
+    }
+   ],
+   "round": null,
+   "alive": null,
+   "estimated": false
+  },
+  {
+   "id": "142",
+   "name": "Dave Chisnall",
+   "slug": "dave-chisnall",
+   "pos": 31,
+   "live": 32,
+   "move": -1,
+   "money": 276250,
+   "plus": 0,
+   "minus": 11500,
+   "expiring": [
+    {
+     "name": "2024 Grand Slam of Darts",
+     "amount": 5000,
+     "round": "League"
+    },
+    {
+     "name": "2024 Players Championship Finals",
+     "amount": 6500,
+     "round": "Last 32"
+    }
+   ],
+   "round": null,
+   "alive": null,
+   "estimated": false
+  },
+  {
+   "id": "81",
+   "name": "Joe Cullen",
+   "slug": "joe-cullen",
+   "pos": 32,
+   "live": 33,
+   "move": -1,
+   "money": 275500,
+   "plus": 5000,
+   "minus": 3000,
+   "expiring": [
+    {
+     "name": "2024 Players Championship Finals",
+     "amount": 3000,
+     "round": "Last 64"
+    }
+   ],
+   "round": "Group I",
+   "alive": true,
+   "estimated": false
+  },
+  {
+   "id": "33672",
+   "name": "Ricardo Pietreczko",
+   "slug": "ricardo-pietreczko",
+   "pos": 36,
+   "live": 34,
+   "move": 2,
+   "money": 227250,
+   "plus": 0,
+   "minus": 0,
+   "expiring": [],
+   "round": null,
+   "alive": null,
+   "estimated": false
+  },
+  {
+   "id": "30829",
+   "name": "Mike De Decker",
+   "slug": "mike-de-decker",
+   "pos": 33,
+   "live": 35,
+   "move": -2,
+   "money": 220250,
+   "plus": 0,
+   "minus": 32250,
+   "expiring": [
+    {
+     "name": "2024 Grand Slam of Darts",
+     "amount": 12250,
+     "round": "Last 16"
+    },
+    {
+     "name": "2024 Players Championship Finals",
+     "amount": 20000,
+     "round": "Quarter-Final"
+    }
+   ],
+   "round": null,
+   "alive": null,
+   "estimated": false
+  },
+  {
+   "id": "139",
+   "name": "Peter Wright",
+   "slug": "peter-wright",
+   "pos": 35,
+   "live": 36,
+   "move": -1,
+   "money": 220000,
+   "plus": 0,
+   "minus": 8000,
+   "expiring": [
+    {
+     "name": "2024 Grand Slam of Darts",
+     "amount": 5000,
+     "round": "League"
+    },
+    {
+     "name": "2024 Players Championship Finals",
+     "amount": 3000,
+     "round": "Last 64"
+    }
+   ],
+   "round": null,
+   "alive": null,
+   "estimated": false
+  },
+  {
+   "id": "104",
+   "name": "Michael Smith",
+   "slug": "michael-smith",
+   "pos": 37,
+   "live": 37,
+   "move": 0,
+   "money": 211250,
+   "plus": 0,
+   "minus": 11500,
+   "expiring": [
+    {
+     "name": "2024 Grand Slam of Darts",
+     "amount": 5000,
+     "round": "League"
+    },
+    {
+     "name": "2024 Players Championship Finals",
+     "amount": 6500,
+     "round": "Last 32"
+    }
+   ],
+   "round": null,
+   "alive": null,
+   "estimated": false
+  },
+  {
+   "id": "36303",
+   "name": "Justin Hood",
+   "slug": "justin-hood",
+   "pos": 38,
+   "live": 38,
+   "move": 0,
+   "money": 198500,
+   "plus": 0,
+   "minus": 0,
+   "expiring": [],
+   "round": null,
+   "alive": null,
+   "estimated": false
+  },
+  {
+   "id": "2771",
+   "name": "Karel Sedlacek",
+   "slug": "karel-sedlacek",
+   "pos": 42,
+   "live": 39,
+   "move": 3,
+   "money": 195500,
+   "plus": 5000,
+   "minus": 3000,
+   "expiring": [
+    {
+     "name": "2024 Players Championship Finals",
+     "amount": 3000,
+     "round": "Last 64"
+    }
+   ],
+   "round": "Group P",
+   "alive": true,
+   "estimated": false
+  },
+  {
+   "id": "32079",
+   "name": "Callan Rydz",
+   "slug": "callan-rydz",
+   "pos": 40,
+   "live": 40,
+   "move": 0,
+   "money": 191250,
+   "plus": 0,
+   "minus": 3000,
+   "expiring": [
+    {
+     "name": "2024 Players Championship Finals",
+     "amount": 3000,
+     "round": "Last 64"
+    }
+   ],
+   "round": null,
+   "alive": null,
+   "estimated": false
+  },
+  {
+   "id": "31031",
+   "name": "Jeffrey De Graaf",
+   "slug": "jeffrey-de-graaf",
+   "pos": 39,
+   "live": 41,
+   "move": -2,
+   "money": 190000,
+   "plus": 5000,
+   "minus": 10000,
+   "expiring": [
+    {
+     "name": "2024 Players Championship Finals",
+     "amount": 10000,
+     "round": "Last 16"
+    }
+   ],
+   "round": "Group L",
+   "alive": true,
+   "estimated": false
+  },
+  {
+   "id": "11156",
+   "name": "Gabriel Clemens",
+   "slug": "gabriel-clemens",
+   "pos": 53,
+   "live": 42,
+   "move": 11,
+   "money": 177000,
+   "plus": 20000,
+   "minus": 3000,
+   "expiring": [
+    {
+     "name": "2024 Players Championship Finals",
+     "amount": 3000,
+     "round": "Last 64"
+    }
+   ],
+   "round": "Last 16",
+   "alive": true,
+   "estimated": false
+  },
+  {
+   "id": "36373",
+   "name": "James Hurrell",
+   "slug": "james-hurrell",
+   "pos": 46,
+   "live": 43,
+   "move": 3,
+   "money": 174500,
+   "plus": 0,
+   "minus": 3000,
+   "expiring": [
+    {
+     "name": "2024 Players Championship Finals",
+     "amount": 3000,
+     "round": "Last 64"
+    }
+   ],
+   "round": null,
+   "alive": null,
+   "estimated": false
+  },
+  {
+   "id": "156",
+   "name": "Kim Huybrechts",
+   "slug": "kim-huybrechts",
+   "pos": 44,
+   "live": 44,
+   "move": 0,
+   "money": 174000,
+   "plus": 0,
+   "minus": 6500,
+   "expiring": [
+    {
+     "name": "2024 Players Championship Finals",
+     "amount": 6500,
+     "round": "Last 32"
+    }
+   ],
+   "round": null,
+   "alive": null,
+   "estimated": false
+  },
+  {
+   "id": "36287",
+   "name": "Sebastian Bialecki",
+   "slug": "sebastian-bialecki",
+   "pos": 51,
+   "live": 45,
+   "move": 6,
+   "money": 173750,
+   "plus": 5000,
+   "minus": 0,
+   "expiring": [],
+   "round": "Group E",
+   "alive": true,
+   "estimated": false
+  },
+  {
+   "id": "271",
+   "name": "Ricky Evans",
+   "slug": "ricky-evans",
+   "pos": 52,
+   "live": 46,
+   "move": 6,
+   "money": 169500,
+   "plus": 5000,
+   "minus": 3000,
+   "expiring": [
+    {
+     "name": "2024 Players Championship Finals",
+     "amount": 3000,
+     "round": "Last 64"
+    }
+   ],
+   "round": "Group K",
+   "alive": true,
+   "estimated": false
+  },
+  {
+   "id": "136",
+   "name": "Brendan Dolan",
+   "slug": "brendan-dolan",
+   "pos": 48,
+   "live": 47,
+   "move": 1,
+   "money": 169250,
+   "plus": 0,
+   "minus": 3000,
+   "expiring": [
+    {
+     "name": "2024 Players Championship Finals",
+     "amount": 3000,
+     "round": "Last 64"
+    }
+   ],
+   "round": null,
+   "alive": null,
+   "estimated": false
+  },
+  {
+   "id": "32094",
+   "name": "Madars Razma",
+   "slug": "madars-razma",
+   "pos": 49,
+   "live": 48,
+   "move": 1,
+   "money": 168750,
+   "plus": 0,
+   "minus": 3000,
+   "expiring": [
+    {
+     "name": "2024 Players Championship Finals",
+     "amount": 3000,
+     "round": "Last 64"
+    }
+   ],
+   "round": null,
+   "alive": null,
+   "estimated": false
+  },
+  {
+   "id": "317",
+   "name": "Raymond van Barneveld",
+   "slug": "raymond-van-barneveld",
+   "pos": 47,
+   "live": 49,
+   "move": -2,
+   "money": 166500,
+   "plus": 0,
+   "minus": 6500,
+   "expiring": [
+    {
+     "name": "2024 Players Championship Finals",
+     "amount": 6500,
+     "round": "Last 32"
+    }
+   ],
+   "round": null,
+   "alive": null,
+   "estimated": false
+  },
+  {
+   "id": "36712",
+   "name": "Scott Williams",
+   "slug": "scott-williams",
+   "pos": 45,
+   "live": 50,
+   "move": -5,
+   "money": 157750,
+   "plus": 0,
+   "minus": 20000,
+   "expiring": [
+    {
+     "name": "2024 Players Championship Finals",
+     "amount": 20000,
+     "round": "Quarter-Final"
+    }
+   ],
+   "round": null,
+   "alive": null,
+   "estimated": false
+  },
+  {
+   "id": "146",
+   "name": "Mensur Suljovic",
+   "slug": "mensur-suljovic",
+   "pos": 55,
+   "live": 51,
+   "move": 4,
+   "money": 147750,
+   "plus": 0,
+   "minus": 8000,
+   "expiring": [
+    {
+     "name": "2024 Grand Slam of Darts",
+     "amount": 5000,
+     "round": "League"
+    },
+    {
+     "name": "2024 Players Championship Finals",
+     "amount": 3000,
+     "round": "Last 64"
+    }
+   ],
+   "round": null,
+   "alive": null,
+   "estimated": false
+  },
+  {
+   "id": "33144",
+   "name": "Keane Barry",
+   "slug": "keane-barry",
+   "pos": 56,
+   "live": 52,
+   "move": 4,
+   "money": 146000,
+   "plus": 0,
+   "minus": 5000,
+   "expiring": [
+    {
+     "name": "2024 Grand Slam of Darts",
+     "amount": 5000,
+     "round": "League"
+    }
+   ],
+   "round": null,
+   "alive": null,
+   "estimated": false
+  },
+  {
+   "id": "32081",
+   "name": "Connor Scutt",
+   "slug": "connor-scutt",
+   "pos": 50,
+   "live": 53,
+   "move": -3,
+   "money": 144750,
+   "plus": 0,
+   "minus": 25000,
+   "expiring": [
+    {
+     "name": "2024 Grand Slam of Darts",
+     "amount": 5000,
+     "round": "League"
+    },
+    {
+     "name": "2024 Players Championship Finals",
+     "amount": 20000,
+     "round": "Quarter-Final"
+    }
+   ],
+   "round": null,
+   "alive": null,
+   "estimated": false
+  },
+  {
+   "id": "162",
+   "name": "Mickey Mansell",
+   "slug": "mickey-mansell",
+   "pos": 41,
+   "live": 54,
+   "move": -13,
+   "money": 143750,
+   "plus": 0,
+   "minus": 50000,
+   "expiring": [
+    {
+     "name": "2024 Grand Slam of Darts",
+     "amount": 50000,
+     "round": "Semi-Final"
+    }
+   ],
+   "round": null,
+   "alive": null,
+   "estimated": false
+  },
+  {
+   "id": "32078",
+   "name": "Bradley Brooks",
+   "slug": "bradley-brooks",
+   "pos": 59,
+   "live": 55,
+   "move": 4,
+   "money": 140750,
+   "plus": 5000,
+   "minus": 0,
+   "expiring": [],
+   "round": "Group M",
+   "alive": true,
+   "estimated": false
+  },
+  {
+   "id": "31028",
+   "name": "Ritchie Edhouse",
+   "slug": "ritchie-edhouse",
+   "pos": 54,
+   "live": 56,
+   "move": -2,
+   "money": 137500,
+   "plus": 0,
+   "minus": 18750,
+   "expiring": [
+    {
+     "name": "2024 Grand Slam of Darts",
+     "amount": 12250,
+     "round": "Last 16"
+    },
+    {
+     "name": "2024 Players Championship Finals",
+     "amount": 6500,
+     "round": "Last 32"
+    }
+   ],
+   "round": null,
+   "alive": null,
+   "estimated": false
+  },
+  {
+   "id": "76",
+   "name": "Ian White",
+   "slug": "ian-white",
+   "pos": 57,
+   "live": 57,
+   "move": 0,
+   "money": 137250,
+   "plus": 0,
+   "minus": 6500,
+   "expiring": [
+    {
+     "name": "2024 Players Championship Finals",
+     "amount": 6500,
+     "round": "Last 32"
+    }
+   ],
+   "round": null,
+   "alive": null,
+   "estimated": false
+  },
+  {
+   "id": "31027",
+   "name": "Richard Veenstra",
+   "slug": "richard-veenstra",
+   "pos": 58,
+   "live": 57,
+   "move": 1,
+   "money": 137250,
+   "plus": 0,
+   "minus": 3000,
+   "expiring": [
+    {
+     "name": "2024 Players Championship Finals",
+     "amount": 3000,
+     "round": "Last 64"
+    }
+   ],
+   "round": null,
+   "alive": null,
+   "estimated": false
+  },
+  {
+   "id": "37349",
+   "name": "Alan Soutar",
+   "slug": "alan-soutar",
+   "pos": 61,
+   "live": 59,
+   "move": 2,
+   "money": 132500,
+   "plus": 5000,
+   "minus": 3000,
+   "expiring": [
+    {
+     "name": "2024 Players Championship Finals",
+     "amount": 3000,
+     "round": "Last 64"
+    }
+   ],
+   "round": "Group B",
+   "alive": true,
+   "estimated": false
+  },
+  {
+   "id": "11795",
+   "name": "Rob Owen",
+   "slug": "rob-owen",
+   "pos": 62,
+   "live": 60,
+   "move": 2,
+   "money": 128250,
+   "plus": 0,
+   "minus": 0,
+   "expiring": [],
+   "round": null,
+   "alive": null,
+   "estimated": false
+  },
+  {
+   "id": "34245",
+   "name": "Dimitri Van den Bergh",
+   "slug": "dimitri-van-den-bergh",
+   "pos": 60,
+   "live": 61,
+   "move": -1,
+   "money": 120250,
+   "plus": 0,
+   "minus": 15250,
+   "expiring": [
+    {
+     "name": "2024 Grand Slam of Darts",
+     "amount": 12250,
+     "round": "Last 16"
+    },
+    {
+     "name": "2024 Players Championship Finals",
+     "amount": 3000,
+     "round": "Last 64"
+    }
+   ],
+   "round": null,
+   "alive": null,
+   "estimated": false
+  },
+  {
+   "id": "33009",
+   "name": "Lukas Wenig",
+   "slug": "lukas-wenig",
+   "pos": 63,
+   "live": 62,
+   "move": 1,
+   "money": 119500,
+   "plus": 0,
+   "minus": 0,
+   "expiring": [],
+   "round": null,
+   "alive": null,
+   "estimated": false
+  },
+  {
+   "id": "30843",
+   "name": "Cristo Reyes",
+   "slug": "cristo-reyes",
+   "pos": 65,
+   "live": 63,
+   "move": 2,
+   "money": 117250,
+   "plus": 0,
+   "minus": 0,
+   "expiring": [],
+   "round": null,
+   "alive": null,
+   "estimated": false
+  },
+  {
+   "id": "585",
+   "name": "Max Hopp",
+   "slug": "max-hopp",
+   "pos": 66,
+   "live": 64,
+   "move": 2,
+   "money": 116250,
+   "plus": 0,
+   "minus": 0,
+   "expiring": [],
+   "round": null,
+   "alive": null,
+   "estimated": false
+  },
+  {
+   "id": "570",
+   "name": "Nick Kenny",
+   "slug": "nick-kenny",
+   "pos": 64,
+   "live": 65,
+   "move": -1,
+   "money": 116000,
+   "plus": 0,
+   "minus": 3000,
+   "expiring": [
+    {
+     "name": "2024 Players Championship Finals",
+     "amount": 3000,
+     "round": "Last 64"
+    }
+   ],
+   "round": null,
+   "alive": null,
+   "estimated": false
+  },
+  {
+   "id": "32068",
+   "name": "Martin Lukeman",
+   "slug": "martin-lukeman",
+   "pos": 43,
+   "live": 66,
+   "move": -23,
+   "money": 113500,
+   "plus": 0,
+   "minus": 73000,
+   "expiring": [
+    {
+     "name": "2024 Grand Slam of Darts",
+     "amount": 70000,
+     "round": "Final"
+    },
+    {
+     "name": "2024 Players Championship Finals",
+     "amount": 3000,
+     "round": "Last 64"
+    }
+   ],
+   "round": null,
+   "alive": null,
+   "estimated": false
+  },
+  {
+   "id": "38159",
+   "name": "Cam Crabtree",
+   "slug": "cam-crabtree",
+   "pos": 69,
+   "live": 67,
+   "move": 2,
+   "money": 112750,
+   "plus": 5000,
+   "minus": 0,
+   "expiring": [],
+   "round": "Group K",
+   "alive": true,
+   "estimated": false
+  },
+  {
+   "id": "31034",
+   "name": "Ryan Meikle",
+   "slug": "ryan-meikle",
+   "pos": 67,
+   "live": 68,
+   "move": -1,
+   "money": 109250,
+   "plus": 0,
+   "minus": 6500,
+   "expiring": [
+    {
+     "name": "2024 Players Championship Finals",
+     "amount": 6500,
+     "round": "Last 32"
+    }
+   ],
+   "round": null,
+   "alive": null,
+   "estimated": false
+  },
+  {
+   "id": "31213",
+   "name": "Mario Vandenbogaerde",
+   "slug": "mario-vandenbogaerde",
+   "pos": 68,
+   "live": 69,
+   "move": -1,
+   "money": 107500,
+   "plus": 0,
+   "minus": 6500,
+   "expiring": [
+    {
+     "name": "2024 Players Championship Finals",
+     "amount": 6500,
+     "round": "Last 32"
+    }
+   ],
+   "round": null,
+   "alive": null,
+   "estimated": false
+  },
+  {
+   "id": "33630",
+   "name": "Maik Kuivenhoven",
+   "slug": "maik-kuivenhoven",
+   "pos": 71,
+   "live": 70,
+   "move": 1,
+   "money": 103750,
+   "plus": 5000,
+   "minus": 0,
+   "expiring": [],
+   "round": "Group P",
+   "alive": true,
+   "estimated": false
+  },
+  {
+   "id": "33876",
+   "name": "Wesley Plaisier",
+   "slug": "wesley-plaisier",
+   "pos": 70,
+   "live": 71,
+   "move": -1,
+   "money": 97000,
+   "plus": 0,
+   "minus": 6500,
+   "expiring": [
+    {
+     "name": "2024 Players Championship Finals",
+     "amount": 6500,
+     "round": "Last 32"
+    }
+   ],
+   "round": null,
+   "alive": null,
+   "estimated": false
+  },
+  {
+   "id": "33793",
+   "name": "Thibault Tricole",
+   "slug": "thibault-tricole",
+   "pos": 72,
+   "live": 72,
+   "move": 0,
+   "money": 92000,
+   "plus": 0,
+   "minus": 6500,
+   "expiring": [
+    {
+     "name": "2024 Players Championship Finals",
+     "amount": 6500,
+     "round": "Last 32"
+    }
+   ],
+   "round": null,
+   "alive": null,
+   "estimated": false
+  },
+  {
+   "id": "43829",
+   "name": "Tom Bissell",
+   "slug": "tom-bissell",
+   "pos": 73,
+   "live": 73,
+   "move": 0,
+   "money": 84250,
+   "plus": 0,
+   "minus": 0,
+   "expiring": [],
+   "round": null,
+   "alive": null,
+   "estimated": false
+  },
+  {
+   "id": "32627",
+   "name": "Tom Sykes",
+   "slug": "tom-sykes-32627",
+   "pos": 81,
+   "live": 74,
+   "move": 7,
+   "money": 82250,
+   "plus": 20000,
+   "minus": 0,
+   "expiring": [],
+   "round": "Last 16",
+   "alive": true,
+   "estimated": false
+  },
+  {
+   "id": "36640",
+   "name": "Beau Greaves",
+   "slug": "beau-greaves-36640",
+   "pos": 74,
+   "live": 75,
+   "move": -1,
+   "money": 81750,
+   "plus": 5000,
+   "minus": 5000,
+   "expiring": [
+    {
+     "name": "2024 Grand Slam of Darts",
+     "amount": 5000,
+     "round": "League"
+    }
+   ],
+   "round": "Group A",
+   "alive": true,
+   "estimated": false
+  },
+  {
+   "id": "32704",
+   "name": "Adam Lipscombe",
+   "slug": "adam-lipscombe",
+   "pos": 75,
+   "live": 76,
+   "move": -1,
+   "money": 81250,
+   "plus": 0,
+   "minus": 0,
+   "expiring": [],
+   "round": null,
+   "alive": null,
+   "estimated": false
+  },
+  {
+   "id": "38279",
+   "name": "Charlie Manby",
+   "slug": "charlie-manby-38279",
+   "pos": 77,
+   "live": 77,
+   "move": 0,
+   "money": 74250,
+   "plus": 5000,
+   "minus": 0,
+   "expiring": [],
+   "round": "Group F",
+   "alive": true,
+   "estimated": false
+  },
+  {
+   "id": "33598",
+   "name": "Darryl Pilgrim",
+   "slug": "darryl-pilgrim",
+   "pos": 76,
+   "live": 78,
+   "move": -2,
+   "money": 72000,
+   "plus": 0,
+   "minus": 0,
+   "expiring": [],
+   "round": null,
+   "alive": null,
+   "estimated": false
+  },
+  {
+   "id": "31054",
+   "name": "Cor Dekker",
+   "slug": "cor-dekker",
+   "pos": 78,
+   "live": 79,
+   "move": -1,
+   "money": 68750,
+   "plus": 0,
+   "minus": 0,
+   "expiring": [],
+   "round": null,
+   "alive": null,
+   "estimated": false
+  },
+  {
+   "id": "33043",
+   "name": "Dominik Gruellich",
+   "slug": "dominik-gruellich",
+   "pos": 79,
+   "live": 80,
+   "move": -1,
+   "money": 65250,
+   "plus": 0,
+   "minus": 0,
+   "expiring": [],
+   "round": null,
+   "alive": null,
+   "estimated": false
+  },
+  {
+   "id": "11109",
+   "name": "Christian Kist",
+   "slug": "christian-kist",
+   "pos": 80,
+   "live": 81,
+   "move": -1,
+   "money": 63000,
+   "plus": 0,
+   "minus": 0,
+   "expiring": [],
+   "round": null,
+   "alive": null,
+   "estimated": false
+  },
+  {
+   "id": "38498",
+   "name": "Tommy Morris",
+   "slug": "tommy-morris",
+   "pos": 82,
+   "live": 82,
+   "move": 0,
+   "money": 62250,
+   "plus": 5000,
+   "minus": 0,
+   "expiring": [],
+   "round": "Group C",
+   "alive": true,
+   "estimated": false
+  },
+  {
+   "id": "199",
+   "name": "Andy Boulton",
+   "slug": "andy-boulton",
+   "pos": 83,
+   "live": 83,
+   "move": 0,
+   "money": 57250,
+   "plus": 0,
+   "minus": 0,
+   "expiring": [],
+   "round": null,
+   "alive": null,
+   "estimated": false
+  },
+  {
+   "id": "358",
+   "name": "Jim Long",
+   "slug": "jim-long",
+   "pos": 84,
+   "live": 84,
+   "move": 0,
+   "money": 56500,
+   "plus": 0,
+   "minus": 0,
+   "expiring": [],
+   "round": null,
+   "alive": null,
+   "estimated": false
+  },
+  {
+   "id": "33558",
+   "name": "Joe Hunt",
+   "slug": "joe-hunt",
+   "pos": 86,
+   "live": 85,
+   "move": 1,
+   "money": 53000,
+   "plus": 5000,
+   "minus": 0,
+   "expiring": [],
+   "round": "Group E",
+   "alive": true,
+   "estimated": false
+  },
+  {
+   "id": "35887",
+   "name": "Oskar Lukasiak",
+   "slug": "oskar-lukasiak",
+   "pos": 85,
+   "live": 86,
+   "move": -1,
+   "money": 49750,
+   "plus": 0,
+   "minus": 0,
+   "expiring": [],
+   "round": null,
+   "alive": null,
+   "estimated": false
+  },
+  {
+   "id": "31502",
+   "name": "Darius Labanauskas",
+   "slug": "darius-labanauskas",
+   "pos": 87,
+   "live": 87,
+   "move": 0,
+   "money": 46250,
+   "plus": 0,
+   "minus": 0,
+   "expiring": [],
+   "round": null,
+   "alive": null,
+   "estimated": false
+  },
+  {
+   "id": "2713",
+   "name": "Jimmy van Schie",
+   "slug": "jimmy-van-schie-2713",
+   "pos": 88,
+   "live": 87,
+   "move": 1,
+   "money": 46250,
+   "plus": 0,
+   "minus": 0,
+   "expiring": [],
+   "round": null,
+   "alive": null,
+   "estimated": false
+  },
+  {
+   "id": "32497",
+   "name": "Thomas Lovely",
+   "slug": "thomas-lovely",
+   "pos": 89,
+   "live": 89,
+   "move": 0,
+   "money": 44250,
+   "plus": 0,
+   "minus": 0,
+   "expiring": [],
+   "round": null,
+   "alive": null,
+   "estimated": false
+  },
+  {
+   "id": "39687",
+   "name": "Henry Coates",
+   "slug": "henry-coates",
+   "pos": 96,
+   "live": 90,
+   "move": 6,
+   "money": 42250,
+   "plus": 5000,
+   "minus": 0,
+   "expiring": [],
+   "round": "Group L",
+   "alive": true,
+   "estimated": false
+  },
+  {
+   "id": "41742",
+   "name": "Leon Weber",
+   "slug": "leon-weber",
+   "pos": 90,
+   "live": 91,
+   "move": -1,
+   "money": 41250,
+   "plus": 0,
+   "minus": 0,
+   "expiring": [],
+   "round": null,
+   "alive": null,
+   "estimated": false
+  },
+  {
+   "id": "34609",
+   "name": "Viktor Tingstrom",
+   "slug": "viktor-tingstrom",
+   "pos": 91,
+   "live": 92,
+   "move": -1,
+   "money": 41000,
+   "plus": 0,
+   "minus": 0,
+   "expiring": [],
+   "round": null,
+   "alive": null,
+   "estimated": false
+  },
+  {
+   "id": "32951",
+   "name": "Shane McGuirk",
+   "slug": "shane-mcguirk-32951",
+   "pos": 92,
+   "live": 93,
+   "move": -1,
+   "money": 39250,
+   "plus": 0,
+   "minus": 0,
+   "expiring": [],
+   "round": null,
+   "alive": null,
+   "estimated": false
+  },
+  {
+   "id": "33070",
+   "name": "Marvin van Velzen",
+   "slug": "marvin-van-velzen",
+   "pos": 93,
+   "live": 94,
+   "move": -1,
+   "money": 39000,
+   "plus": 0,
+   "minus": 0,
+   "expiring": [],
+   "round": null,
+   "alive": null,
+   "estimated": false
+  },
+  {
+   "id": "33768",
+   "name": "Alexander Merkx",
+   "slug": "alexander-merkx-33768",
+   "pos": 94,
+   "live": 95,
+   "move": -1,
+   "money": 38000,
+   "plus": 0,
+   "minus": 0,
+   "expiring": [],
+   "round": null,
+   "alive": null,
+   "estimated": false
+  },
+  {
+   "id": "38149",
+   "name": "Owen Bates",
+   "slug": "owen-bates",
+   "pos": 95,
+   "live": 96,
+   "move": -1,
+   "money": 37500,
+   "plus": 0,
+   "minus": 0,
+   "expiring": [],
+   "round": null,
+   "alive": null,
+   "estimated": false
+  },
+  {
+   "id": "36998",
+   "name": "Tavis Dudeney",
+   "slug": "tavis-dudeney",
+   "pos": 97,
+   "live": 97,
+   "move": 0,
+   "money": 37250,
+   "plus": 0,
+   "minus": 0,
+   "expiring": [],
+   "round": null,
+   "alive": null,
+   "estimated": false
+  },
+  {
+   "id": "35168",
+   "name": "Adam Gawlas",
+   "slug": "adam-gawlas",
+   "pos": 98,
+   "live": 98,
+   "move": 0,
+   "money": 37000,
+   "plus": 0,
+   "minus": 0,
+   "expiring": [],
+   "round": null,
+   "alive": null,
+   "estimated": false
+  },
+  {
+   "id": "34625",
+   "name": "Jurjen van der Velde",
+   "slug": "jurjen-van-der-velde",
+   "pos": 99,
+   "live": 99,
+   "move": 0,
+   "money": 35000,
+   "plus": 0,
+   "minus": 0,
+   "expiring": [],
+   "round": null,
+   "alive": null,
+   "estimated": false
+  },
+  {
+   "id": "32087",
+   "name": "Greg Ritchie",
+   "slug": "greg-ritchie",
+   "pos": 100,
+   "live": 100,
+   "move": 0,
+   "money": 34750,
+   "plus": 0,
+   "minus": 0,
+   "expiring": [],
+   "round": null,
+   "alive": null,
+   "estimated": false
+  },
+  {
+   "id": "668",
+   "name": "Jeffrey De Zwaan",
+   "slug": "jeffrey-de-zwaan",
+   "pos": 101,
+   "live": 101,
+   "move": 0,
+   "money": 34000,
+   "plus": 0,
+   "minus": 0,
+   "expiring": [],
+   "round": null,
+   "alive": null,
+   "estimated": false
+  },
+  {
+   "id": "32602",
+   "name": "Kai Gotthardt",
+   "slug": "kai-gotthardt",
+   "pos": 102,
+   "live": 102,
+   "move": 0,
+   "money": 33000,
+   "plus": 0,
+   "minus": 0,
+   "expiring": [],
+   "round": null,
+   "alive": null,
+   "estimated": false
+  },
+  {
+   "id": "32962",
+   "name": "Adam Paxton",
+   "slug": "adam-paxton",
+   "pos": 103,
+   "live": 103,
+   "move": 0,
+   "money": 32750,
+   "plus": 0,
+   "minus": 0,
+   "expiring": [],
+   "round": null,
+   "alive": null,
+   "estimated": false
+  },
+  {
+   "id": "32846",
+   "name": "David Sharp",
+   "slug": "david-sharp-32846",
+   "pos": 104,
+   "live": 104,
+   "move": 0,
+   "money": 32500,
+   "plus": 0,
+   "minus": 0,
+   "expiring": [],
+   "round": null,
+   "alive": null,
+   "estimated": false
+  },
+  {
+   "id": "35622",
+   "name": "Benjamin Pratnemer",
+   "slug": "benjamin-pratnemer-35622",
+   "pos": 108,
+   "live": 105,
+   "move": 3,
+   "money": 29750,
+   "plus": 0,
+   "minus": 0,
+   "expiring": [],
+   "round": null,
+   "alive": null,
+   "estimated": false
+  },
+  {
+   "id": "35012",
+   "name": "Martijn Dragt",
+   "slug": "martijn-dragt",
+   "pos": 109,
+   "live": 106,
+   "move": 3,
+   "money": 29500,
+   "plus": 0,
+   "minus": 0,
+   "expiring": [],
+   "round": null,
+   "alive": null,
+   "estimated": false
+  },
+  {
+   "id": "36368",
+   "name": "Dennie Olde Kalter",
+   "slug": "dennie-olde-kalter",
+   "pos": 110,
+   "live": 107,
+   "move": 3,
+   "money": 28750,
+   "plus": 0,
+   "minus": 0,
+   "expiring": [],
+   "round": null,
+   "alive": null,
+   "estimated": false
+  },
+  {
+   "id": "39109",
+   "name": "Adam Warner",
+   "slug": "adam-warner",
+   "pos": 111,
+   "live": 107,
+   "move": 4,
+   "money": 28750,
+   "plus": 0,
+   "minus": 0,
+   "expiring": [],
+   "round": null,
+   "alive": null,
+   "estimated": false
+  },
+  {
+   "id": "40691",
+   "name": "Tyler Thorpe",
+   "slug": "tyler-thorpe-40691",
+   "pos": 112,
+   "live": 109,
+   "move": 3,
+   "money": 28250,
+   "plus": 0,
+   "minus": 0,
+   "expiring": [],
+   "round": null,
+   "alive": null,
+   "estimated": false
+  },
+  {
+   "id": "33998",
+   "name": "Jeffrey Sparidaans",
+   "slug": "jeffrey-sparidaans",
+   "pos": 113,
+   "live": 109,
+   "move": 4,
+   "money": 28250,
+   "plus": 0,
+   "minus": 0,
+   "expiring": [],
+   "round": null,
+   "alive": null,
+   "estimated": false
+  },
+  {
+   "id": "36408",
+   "name": "Chris Landman",
+   "slug": "chris-landman",
+   "pos": 106,
+   "live": 111,
+   "move": -5,
+   "money": 27750,
+   "plus": 0,
+   "minus": 3000,
+   "expiring": [
+    {
+     "name": "2024 Players Championship Finals",
+     "amount": 3000,
+     "round": "Last 64"
+    }
+   ],
+   "round": null,
+   "alive": null,
+   "estimated": false
+  },
+  {
+   "id": "34",
+   "name": "Mervyn King",
+   "slug": "mervyn-king",
+   "pos": 107,
+   "live": 112,
+   "move": -5,
+   "money": 27250,
+   "plus": 0,
+   "minus": 3000,
+   "expiring": [
+    {
+     "name": "2024 Players Championship Finals",
+     "amount": 3000,
+     "round": "Last 64"
+    }
+   ],
+   "round": null,
+   "alive": null,
+   "estimated": false
+  },
+  {
+   "id": "32612",
+   "name": "Tommy Lishman",
+   "slug": "tommy-lishman",
+   "pos": 114,
+   "live": 113,
+   "move": 1,
+   "money": 27000,
+   "plus": 0,
+   "minus": 0,
+   "expiring": [],
+   "round": null,
+   "alive": null,
+   "estimated": false
+  },
+  {
+   "id": "32040",
+   "name": "Stephen Burton",
+   "slug": "stephen-burton",
+   "pos": 105,
+   "live": 114,
+   "move": -9,
+   "money": 25750,
+   "plus": 0,
+   "minus": 6500,
+   "expiring": [
+    {
+     "name": "2024 Players Championship Finals",
+     "amount": 6500,
+     "round": "Last 32"
+    }
+   ],
+   "round": null,
+   "alive": null,
+   "estimated": false
+  },
+  {
+   "id": "44506",
+   "name": "Sietse Lap",
+   "slug": "sietse-lap-44506",
+   "pos": 115,
+   "live": 115,
+   "move": 0,
+   "money": 24500,
+   "plus": 0,
+   "minus": 0,
+   "expiring": [],
+   "round": null,
+   "alive": null,
+   "estimated": false
+  },
+  {
+   "id": "33908",
+   "name": "Derek Coulson",
+   "slug": "derek-coulson",
+   "pos": 116,
+   "live": 116,
+   "move": 0,
+   "money": 24000,
+   "plus": 0,
+   "minus": 0,
+   "expiring": [],
+   "round": null,
+   "alive": null,
+   "estimated": false
+  },
+  {
+   "id": "32526",
+   "name": "Niall Culleton",
+   "slug": "niall-culleton-32526",
+   "pos": 117,
+   "live": 116,
+   "move": 1,
+   "money": 24000,
+   "plus": 0,
+   "minus": 0,
+   "expiring": [],
+   "round": null,
+   "alive": null,
+   "estimated": false
+  },
+  {
+   "id": "47162",
+   "name": "Adam Leek",
+   "slug": "adam-leek-47162",
+   "pos": 118,
+   "live": 118,
+   "move": 0,
+   "money": 22500,
+   "plus": 0,
+   "minus": 0,
+   "expiring": [],
+   "round": null,
+   "alive": null,
+   "estimated": false
+  },
+  {
+   "id": "33796",
+   "name": "Stefan Bellmont",
+   "slug": "stefan-bellmont-33796",
+   "pos": 119,
+   "live": 118,
+   "move": 1,
+   "money": 22500,
+   "plus": 0,
+   "minus": 0,
+   "expiring": [],
+   "round": null,
+   "alive": null,
+   "estimated": false
+  },
+  {
+   "id": "135",
+   "name": "Scott Waites",
+   "slug": "scott-waites",
+   "pos": 120,
+   "live": 118,
+   "move": 2,
+   "money": 22500,
+   "plus": 0,
+   "minus": 0,
+   "expiring": [],
+   "round": null,
+   "alive": null,
+   "estimated": false
+  },
+  {
+   "id": "1282",
+   "name": "Steve Lennon",
+   "slug": "steve-lennon",
+   "pos": 121,
+   "live": 121,
+   "move": 0,
+   "money": 22000,
+   "plus": 0,
+   "minus": 0,
+   "expiring": [],
+   "round": null,
+   "alive": null,
+   "estimated": false
+  },
+  {
+   "id": "581",
+   "name": "Jack Tweddell",
+   "slug": "jack-tweddell",
+   "pos": 122,
+   "live": 122,
+   "move": 0,
+   "money": 21750,
+   "plus": 0,
+   "minus": 0,
+   "expiring": [],
+   "round": null,
+   "alive": null,
+   "estimated": false
+  },
+  {
+   "id": "40143",
+   "name": "Carl Sneyd",
+   "slug": "carl-sneyd-40143",
+   "pos": 129,
+   "live": 122,
+   "move": 7,
+   "money": 21750,
+   "plus": 5000,
+   "minus": 0,
+   "expiring": [],
+   "round": "Group M",
+   "alive": true,
+   "estimated": false
+  },
+  {
+   "id": "917",
+   "name": "Arno Merk",
+   "slug": "arno-merk-917",
+   "pos": 123,
+   "live": 124,
+   "move": -1,
+   "money": 21500,
+   "plus": 0,
+   "minus": 0,
+   "expiring": [],
+   "round": null,
+   "alive": null,
+   "estimated": false
+  },
+  {
+   "id": "39541",
+   "name": "Maximilian Czerwinski",
+   "slug": "maximilian-czerwinski",
+   "pos": 124,
+   "live": 125,
+   "move": -1,
+   "money": 20000,
+   "plus": 0,
+   "minus": 0,
+   "expiring": [],
+   "round": null,
+   "alive": null,
+   "estimated": false
+  },
+  {
+   "id": "32976",
+   "name": "Stephen Rosney",
+   "slug": "stephen-rosney-32976",
+   "pos": 125,
+   "live": 126,
+   "move": -1,
+   "money": 19500,
+   "plus": 0,
+   "minus": 0,
+   "expiring": [],
+   "round": null,
+   "alive": null,
+   "estimated": false
+  },
+  {
+   "id": "11829",
+   "name": "Rhys Griffin",
+   "slug": "rhys-griffin",
+   "pos": 126,
+   "live": 127,
+   "move": -1,
+   "money": 19250,
+   "plus": 0,
+   "minus": 0,
+   "expiring": [],
+   "round": null,
+   "alive": null,
+   "estimated": false
+  },
+  {
+   "id": "33950",
+   "name": "Stefaan Henderyck",
+   "slug": "stefaan-henderyck",
+   "pos": 127,
+   "live": 128,
+   "move": -1,
+   "money": 18000,
+   "plus": 0,
+   "minus": 0,
+   "expiring": [],
+   "round": null,
+   "alive": null,
+   "estimated": false
+  },
+  {
+   "id": "37085",
+   "name": "Nathan Potter",
+   "slug": "nathan-potter",
+   "pos": 128,
+   "live": 129,
+   "move": -1,
+   "money": 17000,
+   "plus": 0,
+   "minus": 0,
+   "expiring": [],
+   "round": null,
+   "alive": null,
+   "estimated": false
+  },
+  {
+   "id": "31014",
+   "name": "Harry Ward",
+   "slug": "harry-ward",
+   "pos": 130,
+   "live": 130,
+   "move": 0,
+   "money": 16250,
+   "plus": 0,
+   "minus": 0,
+   "expiring": [],
+   "round": null,
+   "alive": null,
+   "estimated": false
+  },
+  {
+   "id": "30992",
+   "name": "Tytus Kanik",
+   "slug": "tytus-kanik",
+   "pos": 131,
+   "live": 131,
+   "move": 0,
+   "money": 15000,
+   "plus": 0,
+   "minus": 0,
+   "expiring": [],
+   "round": null,
+   "alive": null,
+   "estimated": false
+  },
+  {
+   "id": "32107",
+   "name": "Rusty-Jake Rodriguez",
+   "slug": "rusty-jake-rodriguez",
+   "pos": 141,
+   "live": 131,
+   "move": 10,
+   "money": 15000,
+   "plus": 5000,
+   "minus": 0,
+   "expiring": [],
+   "round": "Group O",
+   "alive": true,
+   "estimated": false
+  },
+  {
+   "id": "44151",
+   "name": "Samuel Price",
+   "slug": "samuel-price-44151",
+   "pos": 132,
+   "live": 133,
+   "move": -1,
+   "money": 14000,
+   "plus": 0,
+   "minus": 0,
+   "expiring": [],
+   "round": null,
+   "alive": null,
+   "estimated": false
+  },
+  {
+   "id": "34958",
+   "name": "Daniel Klose",
+   "slug": "daniel-klose",
+   "pos": 133,
+   "live": 134,
+   "move": -1,
+   "money": 13250,
+   "plus": 0,
+   "minus": 0,
+   "expiring": [],
+   "round": null,
+   "alive": null,
+   "estimated": false
+  },
+  {
+   "id": "47533",
+   "name": "Jack Aldridge",
+   "slug": "jack-aldridge",
+   "pos": 134,
+   "live": 135,
+   "move": -1,
+   "money": 13000,
+   "plus": 0,
+   "minus": 0,
+   "expiring": [],
+   "round": null,
+   "alive": null,
+   "estimated": false
+  },
+  {
+   "id": "32461",
+   "name": "Daniel Ayres",
+   "slug": "daniel-ayres",
+   "pos": 135,
+   "live": 136,
+   "move": -1,
+   "money": 12750,
+   "plus": 0,
+   "minus": 0,
+   "expiring": [],
+   "round": null,
+   "alive": null,
+   "estimated": false
+  },
+  {
+   "id": "42904",
+   "name": "Yorick Hofkens",
+   "slug": "yorick-hofkens-42904",
+   "pos": 136,
+   "live": 137,
+   "move": -1,
+   "money": 12500,
+   "plus": 0,
+   "minus": 0,
+   "expiring": [],
+   "round": null,
+   "alive": null,
+   "estimated": false
+  },
+  {
+   "id": "32508",
+   "name": "Lewis Pride",
+   "slug": "lewis-pride",
+   "pos": 137,
+   "live": 138,
+   "move": -1,
+   "money": 12250,
+   "plus": 0,
+   "minus": 0,
+   "expiring": [],
+   "round": null,
+   "alive": null,
+   "estimated": false
+  },
+  {
+   "id": "39727",
+   "name": "Pascal Rupprecht",
+   "slug": "pascal-rupprecht",
+   "pos": 138,
+   "live": 138,
+   "move": 0,
+   "money": 12250,
+   "plus": 0,
+   "minus": 0,
+   "expiring": [],
+   "round": null,
+   "alive": null,
+   "estimated": false
+  },
+  {
+   "id": "40703",
+   "name": "Jan Schmidt",
+   "slug": "jan-schmidt",
+   "pos": 146,
+   "live": 140,
+   "move": 6,
+   "money": 12000,
+   "plus": 5000,
+   "minus": 0,
+   "expiring": [],
+   "round": "Group N",
+   "alive": true,
+   "estimated": false
+  },
+  {
+   "id": "34743",
+   "name": "Marvin Kraft",
+   "slug": "marvin-kraft-34743",
+   "pos": 139,
+   "live": 141,
+   "move": -2,
+   "money": 11500,
+   "plus": 0,
+   "minus": 0,
+   "expiring": [],
+   "round": null,
+   "alive": null,
+   "estimated": false
+  },
+  {
+   "id": "33694",
+   "name": "Andy Baetens",
+   "slug": "andy-baetens",
+   "pos": 140,
+   "live": 141,
+   "move": -1,
+   "money": 11500,
+   "plus": 0,
+   "minus": 0,
+   "expiring": [],
+   "round": null,
+   "alive": null,
+   "estimated": false
+  },
+  {
+   "id": "41158",
+   "name": "Paul Krohne",
+   "slug": "paul-krohne",
+   "pos": 142,
+   "live": 143,
+   "move": -1,
+   "money": 9500,
+   "plus": 0,
+   "minus": 0,
+   "expiring": [],
+   "round": null,
+   "alive": null,
+   "estimated": false
+  },
+  {
+   "id": "35046",
+   "name": "Anton Ostlund",
+   "slug": "anton-ostlund",
+   "pos": 162,
+   "live": 144,
+   "move": 18,
+   "money": 9000,
+   "plus": 5000,
+   "minus": 0,
+   "expiring": [],
+   "round": "Group G",
+   "alive": true,
+   "estimated": false
+  },
+  {
+   "id": "192",
+   "name": "Boris Krcmar",
+   "slug": "boris-krcmar",
+   "pos": 143,
+   "live": 145,
+   "move": -2,
+   "money": 8500,
+   "plus": 0,
+   "minus": 0,
+   "expiring": [],
+   "round": null,
+   "alive": null,
+   "estimated": false
+  },
+  {
+   "id": "39974",
+   "name": "Jonas Masalin",
+   "slug": "jonas-masalin",
+   "pos": 144,
+   "live": 146,
+   "move": -2,
+   "money": 7500,
+   "plus": 0,
+   "minus": 0,
+   "expiring": [],
+   "round": null,
+   "alive": null,
+   "estimated": false
+  },
+  {
+   "id": "33673",
+   "name": "Michael Unterbuchner",
+   "slug": "michael-unterbuchner",
+   "pos": 145,
+   "live": 146,
+   "move": -1,
+   "money": 7500,
+   "plus": 0,
+   "minus": 0,
+   "expiring": [],
+   "round": null,
+   "alive": null,
+   "estimated": false
+  },
+  {
+   "id": "31100",
+   "name": "Patrik Kovacs",
+   "slug": "patrik-kovacs",
+   "pos": 147,
+   "live": 148,
+   "move": -1,
+   "money": 7000,
+   "plus": 0,
+   "minus": 0,
+   "expiring": [],
+   "round": null,
+   "alive": null,
+   "estimated": false
+  },
+  {
+   "id": "409",
+   "name": "Pero Ljubic",
+   "slug": "pero-ljubic",
+   "pos": 148,
+   "live": 149,
+   "move": -1,
+   "money": 6500,
+   "plus": 0,
+   "minus": 0,
+   "expiring": [],
+   "round": null,
+   "alive": null,
+   "estimated": false
+  },
+  {
+   "id": "47320",
+   "name": "Archie Self",
+   "slug": "archie-self",
+   "pos": 149,
+   "live": 150,
+   "move": -1,
+   "money": 6250,
+   "plus": 0,
+   "minus": 0,
+   "expiring": [],
+   "round": null,
+   "alive": null,
+   "estimated": false
+  },
+  {
+   "id": "11411",
+   "name": "Christopher Wickenden",
+   "slug": "christopher-wickenden",
+   "pos": 150,
+   "live": 150,
+   "move": 0,
+   "money": 6250,
+   "plus": 0,
+   "minus": 0,
+   "expiring": [],
+   "round": null,
+   "alive": null,
+   "estimated": false
+  }
+ ]
+}
