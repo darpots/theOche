@@ -129,11 +129,13 @@ const av = (name: string) => { const [c1, c2] = avatarColours(name); return `--c
             // Progress in the event, beside what it has won them (event named on hover).
             const evName = event.name.replace(/^\d{4}\s+/, '');
             const round = p.round ? (/^(group|league)/i.test(p.round) ? 'Group stage' : p.round) : '';
-            const chip = round ? `<span class="stage-chip tip ${p.alive === false ? 'out' : 'in'}" data-tip="${esc(`${evName}\n${p.alive === false ? `Knocked out · ${round}` : `Still in · ${round}`}`)}">${esc(p.alive === false ? `Out · ${round}` : round)}</span>` : '';
+            const chip = round ? `<span class="stage-chip tip ${p.alive === false ? 'out' : 'in'}" data-tip="${esc(`${evName}\n${p.alive === false ? `Knocked out · ${round}` : `Still in · ${round}`}`)}">${p.alive === false ? `Out<span class="rnd"> · ${esc(round)}</span>` : esc(round)}</span>` : '';
+            // Three fixed slots (chip · won · expiring) so every row lines up.
             const parts = [
-              p.plus ? `${chip}<span class="plus">won ${k(p.plus)}</span>` : chip,
-              p.minus ? `<span class="minus tip" data-tip="${esc(`Expiring:\n${(p.expiring || []).map((e: any) => `${k(e.amount)} · ${e.name}`).join('\n')}`)}" aria-label="${esc(`Expiring: ${ev}`)}">expiring ${k(p.minus)}${p.estimated ? '*' : ''}</span>` : '',
-            ].filter(Boolean).join('<i aria-hidden="true">·</i>');
+              chip || '<span></span>',
+              p.plus ? `<span class="plus">won ${k(p.plus)}</span>` : '<span></span>',
+              p.minus ? `<span class="minus tip" data-tip="${esc(`Expiring:\n${(p.expiring || []).map((e: any) => `${k(e.amount)} · ${e.name}`).join('\n')}`)}" aria-label="${esc(`Expiring: ${ev}`)}">expiring ${k(p.minus)}${p.estimated ? '*' : ''}</span>` : '<span></span>',
+            ].join('');
             netHtml = `<span class="net ${net > 0 ? 'up' : net < 0 ? 'down' : 'flat'}">${net > 0 ? '▲ ' : net < 0 ? '▼ ' : ''}${net ? k(Math.abs(net)) : 'No change'}</span>`;
             html = `<span class="br">${parts}</span>`;
           }
@@ -149,7 +151,7 @@ const av = (name: string) => { const [c1, c2] = avatarColours(name); return `--c
         if (live) {
           const drops: string[] = found?.dropNames || [];
           const list = drops.length ? drops.map(d => `<b>${esc(d)}</b>`).join(' and ') : 'events from two years ago';
-          note.innerHTML = `<span class="live-dot">Live</span> Projected standings at the end of the <b>${esc(event.name.replace(/^\d{4}\s+/, ''))}</b>. The PDC drops prize money 104 weeks after it was won, so money from the ${list} is <span class="minus">expiring</span>, and money players have guaranteed in this event so far counts as <span class="plus">won</span>. The red or green chip shows each player's net change (hover “expiring” to see which events); the chip by “won” shows how far they've got in the ${esc(event.name.replace(/^\d{4}\s+/, ''))}. <b>Updated daily</b>${found?.updatedAt ? ` (last at ${new Date(found.updatedAt).toLocaleString('en-GB', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit', timeZone: 'Europe/London' })})` : ''}; positions settle when the PDC publishes the official list after the final.`;
+          note.innerHTML = `<span class="live-dot">Live</span> Projected standings at the end of the <b>${esc(event.name.replace(/^\d{4}\s+/, ''))}</b>. The PDC drops prize money 104 weeks after it was won, so money from the ${list} is <span class="minus">expiring</span>, and money players have guaranteed in this event so far counts as <span class="plus">won</span>. The red or green chip shows each player's net change (hover “expiring” to see which events); the volt chip shows how far they've got in the ${esc(event.name.replace(/^\d{4}\s+/, ''))}. <b>Updated daily</b>${found?.updatedAt ? ` (last at ${new Date(found.updatedAt).toLocaleString('en-GB', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit', timeZone: 'Europe/London' })})` : ''}; positions settle when the PDC publishes the official list after the final.`;
         }
         asof.textContent = live ? `Movement shown against the official list` : `Top ${official.length} · official PDC list`;
       };
@@ -198,7 +200,7 @@ const av = (name: string) => { const [c1, c2] = avatarColours(name); return `--c
   .search input { border: 0; outline: 0; background: none; font: inherit; padding: 12px 0; width: 100%; }
   .small { font-size: 13px; }
   .table { overflow: hidden; }
-  .tr { display: grid; text-decoration: none; grid-template-columns: 76px minmax(0, 1.6fr) minmax(0, 1fr) 60px 320px; align-items: center; gap: 12px; padding: 10px 18px; width: 100%; border: 0; border-bottom: 1px solid var(--line); background: none; text-align: left; font: inherit; color: inherit; }
+  .tr { display: grid; text-decoration: none; grid-template-columns: 76px minmax(0, 1.6fr) minmax(0, 1fr) 60px 340px; align-items: center; gap: 12px; padding: 10px 18px; width: 100%; border: 0; border-bottom: 1px solid var(--line); background: none; text-align: left; font: inherit; color: inherit; }
   .tr:last-child { border-bottom: 0; }
   .tr.nomatch { display: none; }
   .th { font-size: 12px; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); background: var(--paper-2); }
@@ -227,15 +229,19 @@ const av = (name: string) => { const [c1, c2] = avatarColours(name); return `--c
   .race-note { margin: -2px 0 12px; font-size: 13px; color: var(--muted); background: var(--card); border: 1px solid var(--line); border-left: 3px solid var(--red); border-radius: 12px; padding: 10px 14px; }
   .race-note .live-dot { margin-right: 6px; }
   :global(.delta) { display: flex; flex-direction: column; align-items: flex-end; font-size: 12px; font-weight: 700; }
-  .top { display: flex; align-items: center; gap: 8px; }
+  .top { display: flex; align-items: center; justify-content: flex-end; gap: 10px; }
+  .top [data-money] { min-width: 10ch; text-align: right; font-variant-numeric: tabular-nums; }
   .netslot:empty { display: none; }
   /* One pill size for the net change and the progress chip */
   :global(.money-cell .net), :global(.stage-chip) { display: inline-flex; align-items: center; height: 20px; padding: 0 8px; border-radius: 999px; font-size: 11px; font-weight: 800; line-height: 1; white-space: nowrap; font-variant-numeric: tabular-nums; }
   :global(.money-cell .net.up) { background: var(--green-soft); color: #075c3f; }
   :global(.money-cell .net.down) { background: var(--red-soft); color: #a3221a; }
   :global(.money-cell .net.flat) { background: var(--paper-2); color: var(--muted); }
-  :global(.delta .br) { display: inline-flex; align-items: center; gap: 5px; white-space: nowrap; }
-  :global(.delta .br i) { font-style: normal; color: var(--muted); }
+  /* Fixed tracks: chips line up on the left, won and expiring line up on the right */
+  :global(.delta .br) { display: grid; grid-template-columns: 1fr 76px 118px; align-items: center; column-gap: 12px; white-space: nowrap; width: 100%; }
+  :global(.delta .br > *) { justify-self: end; }
+  :global(.delta .br > .stage-chip) { justify-self: start; }
+  :global(.money-cell .delta) { width: 100%; }
   /* Instant tooltip naming the events whose money is expiring */
   :global(.delta .tip) { position: relative; }
   :global(.delta .minus.tip) { text-decoration: underline dotted; text-underline-offset: 2px; }
@@ -263,5 +269,12 @@ const av = (name: string) => { const [c1, c2] = avatarColours(name); return `--c
   @media (max-width: 720px) {
     .tr { grid-template-columns: 58px 1fr auto; padding: 10px 12px; }
     .hide-s { display: none; }
+    /* Phones: money, net change and progress stacked; won/expiring detail left to the net chip */
+    .top { flex-direction: column-reverse; align-items: flex-end; gap: 4px; }
+    .top [data-money] { min-width: 0; }
+    .money-cell { gap: 4px; }
+    :global(.delta .br) { display: flex; justify-content: flex-end; }
+    :global(.delta .br > :not(.stage-chip)) { display: none; }
+    :global(.stage-chip.out .rnd) { display: none; }
   }
 </style>
