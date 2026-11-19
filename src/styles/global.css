@@ -140,3 +140,10 @@ h1, h2, .poster { font-family: var(--poster); font-weight: 400; letter-spacing: 
   *, *::before, *::after { animation-duration: .001ms !important; animation-iteration-count: 1 !important; transition-duration: .001ms !important; scroll-behavior: auto !important; }
   [data-reveal] { opacity: 1; transform: none; }
 }
+
+/* ---------- long-form pages (about, privacy) ---------- */
+.prose { max-width: 720px; font-size: 17px; line-height: 1.7; }
+.prose h2 { font-size: 30px; margin: 34px 0 10px; }
+.prose p, .prose ul { margin: 0 0 1em; }
+.prose li { margin-bottom: .4em; }
+.prose a { color: var(--red); font-weight: 600; }

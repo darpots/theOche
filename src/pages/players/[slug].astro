@@ -108,7 +108,9 @@ const news = (await getCollection('news'))
   .sort((a, b) => b.data.date.localeCompare(a.data.date))
   .slice(0, 4);
 ---
-<Layout title={p.name} description={`${p.name}: world ranking, ${s.year} season average, darts, titles and full PDC tournament history.`} active="rankings">
+<Layout title={p.name} description={`${p.name}: world ranking, ${s.year} season average, darts, titles and full PDC tournament history.`} active="rankings" type="profile"
+  image={cut ? `/og/players/${p.slug}.jpg` : undefined}
+  jsonld={{ '@context': 'https://schema.org', '@type': 'Person', name: p.name, alternateName: p.nick || undefined, birthDate: p.dob || undefined, nationality: countryName(p.country) || undefined, jobTitle: 'Professional darts player', url: new URL(`/players/${p.slug}`, Astro.site).href }}>
   <section class="pbanner">
     <svg class="pboard" viewBox="-680 -680 1360 1360" aria-hidden="true">
       <circle r="560" class="b-base" />

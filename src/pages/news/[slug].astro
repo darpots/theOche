@@ -2,6 +2,7 @@
 import { getCollection } from 'astro:content';
 import Layout from '../../layouts/Layout.astro';
 import NewsArt from '../../components/NewsArt.astro';
+import { SITE } from '../../lib/site.mjs';
 
 export async function getStaticPaths() {
   const all = (await getCollection('news')).map(s => s.data).sort((a, b) => b.date.localeCompare(a.date));
@@ -13,8 +14,18 @@ export async function getStaticPaths() {
 }
 const { story, more } = Astro.props;
 const published = new Date(story.date).toLocaleDateString('en-GB', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
+const shareImage = `/og/news/${story.slug}.jpg`;
+const jsonld = {
+  '@context': 'https://schema.org', '@type': 'NewsArticle',
+  headline: story.headline, description: story.standfirst, datePublished: story.date, dateModified: story.date,
+  image: [new URL(shareImage, Astro.site).href],
+  author: { '@type': 'Organization', name: SITE.name, url: Astro.site?.href },
+  publisher: { '@type': 'Organization', name: SITE.name, logo: { '@type': 'ImageObject', url: new URL('/icon-512.png', Astro.site).href } },
+  mainEntityOfPage: new URL(`/news/${story.slug}`, Astro.site).href,
+  about: story.players.map(name => ({ '@type': 'Person', name })),
+};
 ---
-<Layout title={story.headline} description={story.standfirst} active="news">
+<Layout title={story.headline} description={story.standfirst} active="news" type="article" image={shareImage} jsonld={jsonld}>
   <article class="wrap article">
     <a href="/news" class="back">← All news</a>
     <header>

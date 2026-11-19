@@ -42,7 +42,8 @@ const todayIds = new Set(md.todays.flatMap(f => [f.p1.id, f.p2.id]));
 const spotRank = rankings.players.find(p => todayIds.has(p.id) && cutout(p.name)) || rankings.players[0];
 const spot = loadProfile(spotRank.id);
 ---
-<Layout title="The Oche" description="PDC darts today: the match on now, results, news, the live rankings race and every event on Sky Sports, ITV and PDCTV." active="home">
+<Layout title="The Oche" description="PDC darts today: the match on now, results, news, the live rankings race and every event on Sky Sports, ITV and PDCTV." active="home"
+  jsonld={{ '@context': 'https://schema.org', '@type': 'WebSite', name: 'The Oche', url: Astro.site?.href }}>
   <div class="wrap bento-wrap">
     <div class="bento">
 

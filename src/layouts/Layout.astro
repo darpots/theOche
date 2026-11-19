@@ -3,9 +3,25 @@ import { ClientRouter } from 'astro:transitions';
 import '../styles/global.css';
 import Logo from '../components/Logo.astro';
 import current from '../data/tournament.json';
+// Preloaded so the big numbers and body text don't flash or shift as fonts arrive.
+import antonFont from '@fontsource/anton/files/anton-latin-400-normal.woff2?url';
+import interFont from '@fontsource-variable/inter/files/inter-latin-wght-normal.woff2?url';
+import { SITE } from '../lib/site.mjs';
 
-interface Props { title: string; description?: string; active?: 'home' | 'calendar' | 'matches' | 'news' | 'rankings' }
-const { title, description = 'PDC darts on TV, live matches, news and world rankings.', active } = Astro.props;
+interface Props {
+  title: string;
+  description?: string;
+  active?: 'home' | 'calendar' | 'matches' | 'news' | 'rankings';
+  /** Share image path (1200×630), defaults to the site card. */
+  image?: string;
+  /** 'article' for news stories. */
+  type?: 'website' | 'article' | 'profile';
+  /** Structured data for search engines (JSON-LD object or list). */
+  jsonld?: object | object[];
+}
+const { title, description = 'PDC darts on TV, live matches, news and world rankings.', active, image = '/og/default.jpg', type = 'website', jsonld } = Astro.props;
+const canonical = new URL(Astro.url.pathname.replace(/\/$/, '') || '/', Astro.site).href;
+const shareImage = new URL(image, Astro.site).href;
 const nav = [
   { key: 'home', href: '/', label: 'Home' },
   { key: 'news', href: '/news', label: 'News' },
@@ -35,9 +51,23 @@ const fullTitle = title === 'The Oche' ? title : `${title} · The Oche`;
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     <link rel="manifest" href="/site.webmanifest" />
+    <link rel="canonical" href={canonical} />
+    <link rel="alternate" type="application/rss+xml" title={`${SITE.name} news`} href="/rss.xml" />
+    <link rel="preload" href={antonFont} as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href={interFont} as="font" type="font/woff2" crossorigin />
+    <meta property="og:site_name" content={SITE.name} />
     <meta property="og:title" content={fullTitle} />
     <meta property="og:description" content={description} />
-    <meta property="og:type" content="website" />
+    <meta property="og:type" content={type} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={shareImage} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={fullTitle} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={shareImage} />
+    {jsonld && <script type="application/ld+json" set:html={JSON.stringify(jsonld)} />}
     <ClientRouter />
   </head>
   <body>
@@ -59,8 +89,17 @@ const fullTitle = title === 'The Oche' ? title : `${title} · The Oche`;
       </div>
       <!-- Live bar: shown site-wide while the current event has matches on today -->
       <div class="livebar" id="livebar" hidden data-id={t.id} data-start={t.start} data-end={t.end} data-name={t.name}>
-        <div class="wrap lb-in" aria-live="polite"></div>
+        <div class="wrap lb-in" aria-live="polite"><a class="lb-ev" href={`/tournament/${t.id}`}>{t.name}</a></div>
       </div>
+      <script is:inline>
+        // Show the bar before the first paint on event days, so the page doesn't jump when scores arrive.
+        (function () {
+          var b = document.getElementById('livebar'); if (!b) return;
+          var p = {}; new Intl.DateTimeFormat('en-GB', { timeZone: 'Europe/London', year: 'numeric', month: '2-digit', day: '2-digit' }).formatToParts(new Date()).forEach(function (x) { p[x.type] = x.value; });
+          var d = p.year + '-' + p.month + '-' + p.day;
+          if (b.dataset.start <= d && b.dataset.end >= d) b.hidden = false;
+        })();
+      </script>
     </header>
 
     <nav class="tabbar" aria-label="Main">
@@ -90,9 +129,18 @@ const fullTitle = title === 'The Oche' ? title : `${title} · The Oche`;
     </main>
 
     <footer class="foot">
-      <div class="wrap">
-        <p><strong>The Oche</strong> is an independent fan site and is not affiliated with the PDC, Sky Sports or ITV. <a href="/credits">Photo credits</a></p>
+      <div class="wrap foot-in">
+        <div class="foot-brand">
+          <Logo size={34} />
+          <p>{SITE.tagline}. An independent fan site, not affiliated with the PDC, Sky Sports or ITV.</p>
+        </div>
+        <nav class="foot-links" aria-label="Site">
+          <div><b>Follow the darts</b><a href="/">Today</a><a href={`/tournament/${t.id}`}>Matches</a><a href="/calendar">Calendar</a><a href="/stats">Stats</a><a href="/rankings">Rankings</a></div>
+          <div><b>News</b><a href="/news">Latest news</a><a href="/rss.xml">RSS feed</a></div>
+          <div><b>About</b><a href="/about">About &amp; contact</a><a href="/privacy">Privacy &amp; cookies</a><a href="/credits">Photo credits &amp; data</a></div>
+        </nav>
       </div>
+      <div class="wrap foot-base"><span>© {new Date().getFullYear()} {SITE.name}</span><span>Scores and data from PDC live scoring · times are UK time</span></div>
     </footer>
 
     <script>
@@ -132,6 +180,7 @@ const fullTitle = title === 'The Oche' ? title : `${title} · The Oche`;
         pill.style.transform = `translateX(${to.x}px)`;
         const appear = pill.style.opacity !== '1';
         pill.style.opacity = '1';
+        pill.parentElement?.classList.add('ready');
         const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
         if (animate && !reduce && last && (last.x !== to.x || last.w !== to.w)) {
           pill.animate([
@@ -279,6 +328,8 @@ const fullTitle = title === 'The Oche' ? title : `${title} · The Oche`;
   .nav { position: relative; z-index: 1; padding: 10px 18px; border-radius: 999px; text-decoration: none; font-weight: 600; font-size: 14px; color: #fff; transition: color .3s; }
   .nav:hover { color: var(--volt); }
   .nav.on { color: var(--ink); font-weight: 800; }
+  /* Until the sliding pill is placed, the active item carries its own highlight (no invisible label on first paint) */
+  nav:not(.ready) .nav.on { background: var(--volt); }
   .pill { position: absolute; z-index: 0; left: 0; top: 4px; bottom: 4px; border-radius: 999px; background: var(--volt); opacity: 0; transition: transform .55s var(--spring), width .55s var(--spring), opacity .2s; }
   .nav { transition: color .3s .1s; }
   .searchbtn { display: inline-flex; align-items: center; gap: 8px; border: 0; background: var(--ink-3); color: var(--on-ink); border-radius: 999px; padding: 11px 12px 11px 16px; font-weight: 600; font-size: 14px; cursor: pointer; transition: color .2s, background .2s; }
@@ -322,8 +373,16 @@ const fullTitle = title === 'The Oche' ? title : `${title} · The Oche`;
   .s-res :global(.s-empty) { padding: 18px; color: var(--muted); font-size: 14px; }
 
   main { min-height: 70vh; }
-  .foot { margin-top: 96px; padding: 36px 0 48px; border-top: 1px solid var(--line); font-size: 14px; }
-  .foot p { margin: 0 0 6px; max-width: 760px; }
+  .foot { margin-top: 96px; padding: 40px 0 32px; border-top: 1px solid var(--line); font-size: 14px; background: var(--paper-2); }
+  .foot-in { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 32px; }
+  .foot-brand p { margin: 12px 0 0; max-width: 380px; color: var(--muted); }
+  .foot-links { display: flex; gap: 48px; flex-wrap: wrap; }
+  .foot-links div { display: flex; flex-direction: column; gap: 8px; }
+  .foot-links b { font-size: 12px; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); }
+  .foot-links a { text-decoration: none; font-weight: 600; }
+  .foot-links a:hover { color: var(--red); }
+  .foot-base { display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; margin-top: 28px; padding-top: 18px; border-top: 1px solid var(--line); color: var(--muted); font-size: 13px; }
+  @media (max-width: 760px) { .foot-in { grid-template-columns: 1fr; } .foot-links { gap: 28px; } }
   @media (max-width: 640px) {
     .bar { height: 58px; }
     .searchbtn, .bar nav .nav, .bar nav .pill { display: none; }

@@ -39,7 +39,9 @@ const news = (await getCollection('news')).map(n => n.data)
   .filter(n => n.tournament ? n.tournament === t.id : n.tags.some(tag => tag.toLowerCase() === String(t.name).toLowerCase()) && n.date.slice(0, 10) >= shift(t.start, -7) && n.date.slice(0, 10) <= shift(t.end, 3))
   .sort((a, b) => (b.kind === 'recap' ? 1 : 0) - (a.kind === 'recap' ? 1 : 0) || b.date.localeCompare(a.date));
 ---
-<Layout title={`${t.fullName || t.name}`} description={`Full schedule, live scores and results from the ${t.fullName || t.name}.`} active={isCurrent ? 'matches' : 'calendar'}>
+<Layout title={`${t.fullName || t.name}`} description={`Full schedule, live scores and results from the ${t.fullName || t.name}.`} active={isCurrent ? 'matches' : 'calendar'}
+  jsonld={{ '@context': 'https://schema.org', '@type': 'SportsEvent', name: t.fullName || t.name, sport: 'Darts', startDate: t.start, endDate: t.end, eventStatus: 'https://schema.org/EventScheduled',
+    location: { '@type': 'Place', name: t.venue || t.city || 'TBC', address: t.city || undefined }, url: new URL(`/tournament/${t.id}`, Astro.site).href }}>
   <section class={`banner b-${t.broadcaster || 'none'}`}>
     <svg class="brings" viewBox="-100 -100 200 200" aria-hidden="true"><circle r="96" /><circle r="80" /><circle r="58" /><circle r="40" /><circle r="12" /></svg>
     <div class="wrap banner-in">

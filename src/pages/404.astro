@@ -1,0 +1,28 @@
+---
+import Layout from '../layouts/Layout.astro';
+import data from '../data/tournament.json';
+const t = data.tournament;
+---
+<Layout title="Page not found" description="That page isn't here.">
+  <section class="wrap nf">
+    <div class="poster-num big" aria-hidden="true">Bust</div>
+    <h1>That page went wide</h1>
+    <p class="lede">The page you were after isn't here. It may have moved, or the link may be out of date.</p>
+    <div class="go">
+      <a class="btn on" href="/">Today's darts</a>
+      <a class="btn" href={`/tournament/${t.id}`}>{t.name} matches</a>
+      <a class="btn" href="/news">Latest news</a>
+      <button class="btn" type="button" data-open-search>Search</button>
+    </div>
+  </section>
+</Layout>
+<style>
+  .nf { padding: 72px 0 24px; text-align: center; display: flex; flex-direction: column; align-items: center; gap: 14px; }
+  .big { font-size: clamp(120px, 22vw, 240px); color: var(--red); }
+  h1 { font-size: clamp(40px, 6vw, 64px); }
+  .lede { color: var(--muted); font-size: 18px; max-width: 520px; margin: 0; }
+  .go { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; margin-top: 10px; }
+  .btn { padding: 12px 20px; border-radius: 999px; border: 1px solid var(--line); background: var(--card); font-weight: 700; text-decoration: none; cursor: pointer; }
+  .btn.on { background: var(--ink); color: var(--volt); border-color: var(--ink); }
+  .btn:hover { transform: translateY(-2px); }
+</style>

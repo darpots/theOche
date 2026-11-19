@@ -1,0 +1,27 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { SITE } from '../lib/site.mjs';
+---
+<Layout title="Privacy and cookies" description={`How ${SITE.name} handles your data: no accounts, no tracking cookies, and what your browser stores.`}>
+  <section class="hero wrap">
+    <span class="eyebrow">Privacy</span>
+    <h1>Privacy &amp; cookies</h1>
+    <p class="lede">Short version: no accounts, no tracking, no advertising cookies.</p>
+  </section>
+  <section class="wrap prose">
+    <h2>What we collect</h2>
+    <p>Nothing about you. There are no accounts, sign-ups or forms, and the site doesn't use analytics or advertising trackers.</p>
+    <h2>What your browser stores</h2>
+    <p>The site keeps a few small settings in your own browser's storage, never sent to us:</p>
+    <ul>
+      <li>players you follow, so their matches can be highlighted for you;</li>
+      <li>your choices on pages such as the calendar filters.</li>
+    </ul>
+    <p>Clearing your browser's site data removes them.</p>
+    <h2>Other services</h2>
+    <p>Live scores and results load straight from the PDC's public data feeds, and our pages are hosted by Vercel. Like any website, those services see your IP address when your browser asks them for data; neither sets cookies on this site.</p>
+    <h2>If this changes</h2>
+    <p>If {SITE.name} ever adds analytics or advertising, this page will be updated first and you'll be asked for consent before any non-essential cookies are set.</p>
+    <p class="muted">Last updated 19 November 2026.</p>
+  </section>
+</Layout>

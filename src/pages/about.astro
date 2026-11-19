@@ -1,0 +1,30 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { SITE } from '../lib/site.mjs';
+---
+<Layout title="About" description={`About ${SITE.name}: who runs it, where the scores and data come from, and how to get in touch.`}>
+  <section class="hero wrap">
+    <span class="eyebrow">About</span>
+    <h1>About {SITE.name}</h1>
+    <p class="lede">{SITE.tagline}, in one place, built by a darts fan.</p>
+  </section>
+  <section class="wrap prose">
+    <h2>What's here</h2>
+    <ul>
+      <li><a href="/">Today</a>: the match on now with the score left in every leg, what's next and the latest results.</li>
+      <li><a href="/calendar">Calendar</a>: every PDC major, Premier League night, World Series and European Tour event, with who's showing it.</li>
+      <li><a href="/stats">Stats</a> and <a href="/rankings">rankings</a>: the season's best averages, 180s and checkouts, and the live race for the Order of Merit.</li>
+      <li><a href="/news">News</a>: short reports on the PDC tour, with links to the original sources.</li>
+    </ul>
+    <h2>Where the data comes from</h2>
+    <p>Scores, fixtures, statistics and rankings come from the PDC's public live-scoring and results feeds. Live scores update every few seconds while a match is on. Everything is shown in UK time.</p>
+    <p>News reports are written by our newsdesk with help from AI, from reporting by the outlets credited at the foot of each story. Match reports and stats are drawn from the PDC's own data.</p>
+    <p>Photo credits and licences are listed on the <a href="/credits">credits page</a>.</p>
+    <h2>Not official</h2>
+    <p>{SITE.name} is an independent fan site. It isn't affiliated with or endorsed by the Professional Darts Corporation, Sky Sports, ITV or any player.</p>
+    <h2>Contact</h2>
+    {SITE.contactEmail
+      ? <p>Corrections, ideas or problems: email <a href={`mailto:${SITE.contactEmail}`}>{SITE.contactEmail}</a>.</p>
+      : <p>A contact address is on its way. Until then, corrections and ideas are welcome via the site's owner.</p>}
+  </section>
+</Layout>
