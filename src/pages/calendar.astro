@@ -196,7 +196,7 @@ const champCut = (e: Ev) => (e.winner ? cutout(e.winner.name, 'pdc') : null);
   /* Event tiles: the site's white cards with the dark date block used on the home page */
   .ev { position: relative; overflow: hidden; display: grid; grid-template-columns: 76px minmax(0, 1fr); gap: 16px; padding: 14px; border-radius: 22px; background: var(--card); box-shadow: var(--shadow-sm); text-decoration: none; color: inherit; transition: transform .3s var(--ease), box-shadow .3s; }
   /* Broadcaster stripe along the top */
-  .ev::before { content: ''; position: absolute; left: 0; right: 0; top: 0; height: 4px; background: var(--bc, var(--line)); }
+  .ev::before { content: ''; position: absolute; z-index: 3; left: 0; right: 0; top: 0; height: 4px; background: var(--bc, var(--line)); }
   .ev-sky { --bc: var(--sky); } .ev-itv { --bc: var(--itv); } .ev-pdctv { --bc: var(--red); }
   /* What the event page has */
   .badges { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 6px; }
@@ -230,7 +230,8 @@ const champCut = (e: Ev) => (e.winner ? cutout(e.winner.name, 'pdc') : null);
   .ev.feat { background: var(--ink); color: #fff; }
 
 
-  .ev .champ { position: absolute; z-index: 1; right: 6%; bottom: 0; height: 115%; width: auto; filter: drop-shadow(0 10px 20px rgba(0, 0, 0, .5)); }
+  /* Champion: anchored from the top so the face is always in the card; the body runs off the bottom */
+  .ev .champ { position: absolute; z-index: 1; right: 6%; top: 10%; bottom: auto; height: 135%; width: auto; filter: drop-shadow(0 10px 20px rgba(0, 0, 0, .5)); }
   .ev.feat .ev-date { background: var(--volt); color: var(--ink); }
   .ev.feat .ev-date .wd, .ev.feat .ev-date .mo { color: var(--ink); }
   .ev.feat h3 { font-size: 24px; }
@@ -274,6 +275,6 @@ const champCut = (e: Ev) => (e.winner ? cutout(e.winner.name, 'pdc') : null);
 
   /* Phones: the filters scroll away instead of covering the list */
   @media (max-width: 640px) { .controls { position: static; background: none; } .chips { flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none; } .chip { white-space: nowrap; } }
-  @media (max-width: 760px) { .ev, .ev.feat { grid-template-columns: 64px minmax(0, 1fr); } .ev .ev-art { inset: 0; width: auto; } .ev .ev-art img:not(.champ) { opacity: .45; } .ev .ev-art::after { background: linear-gradient(100deg, var(--ink) 25%, rgba(11, 12, 16, .55) 75%, rgba(11, 12, 16, .3)); } .ev.feat .ev-date, .ev.feat .ev-main { position: relative; z-index: 1; } .ev .champ { height: 92%; right: 2%; opacity: .55; } }
+  @media (max-width: 760px) { .ev, .ev.feat { grid-template-columns: 64px minmax(0, 1fr); } .ev .ev-art { inset: 0; width: auto; } .ev .ev-art img:not(.champ) { opacity: .45; } .ev .ev-art::after { background: linear-gradient(100deg, var(--ink) 25%, rgba(11, 12, 16, .55) 75%, rgba(11, 12, 16, .3)); } .ev.feat .ev-date, .ev.feat .ev-main { position: relative; z-index: 1; } .ev .champ { top: 12%; height: 130%; right: 2%; opacity: .55; } }
   @media (max-width: 420px) { .grid { grid-template-columns: 1fr; } .ev { grid-template-columns: 64px minmax(0, 1fr); gap: 12px; } .ev-date b { font-size: 34px; } }
 </style>
