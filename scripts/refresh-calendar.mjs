@@ -43,6 +43,8 @@ for (const r of rows) {
     ranked: !!a.isRanked,
     major: a.tournamentCategoryID === '2' && a.tournamentTypeID !== '3',
     winner: a.winner && !isPlaceholder(a.winner) ? { id: String(a.winner.participantID), name: playerName(a.winner) } : null,
+    // Matches published so far: when above zero the draw and schedule are out.
+    fixtures: a.fixtureCount || 0,
     image: a.tournamentListingImage || null,
     logo: a.tournamentLogo || null,
   });

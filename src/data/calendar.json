@@ -1,5 +1,5 @@
 {
- "updatedAt": "2026-11-18T10:02:18.246Z",
+ "updatedAt": "2026-11-19T23:16:12.930Z",
  "events": [
   {
    "id": "10717",
@@ -16,6 +16,7 @@
     "id": "876",
     "name": "Stephen Bunting"
    },
+   "fixtures": 7,
    "image": "1b3f5cb0-be6f-11f0-80b6-e7897a370fda.jpg",
    "logo": "329fa720-6686-11f0-ba36-59f64b9805f6.png"
   },
@@ -34,6 +35,7 @@
     "id": "754",
     "name": "Ross Smith"
    },
+   "fixtures": 47,
    "image": "3c317c20-bc10-11f0-a7ca-afbb18ece5a9.jpg",
    "logo": "7f472080-f326-11f0-8788-e52a4f620615.png"
   },
@@ -52,6 +54,7 @@
     "id": "40676",
     "name": "Luke Littler"
    },
+   "fixtures": 3,
    "image": "1b3f5cb0-be6f-11f0-80b6-e7897a370fda.jpg",
    "logo": "329fa720-6686-11f0-ba36-59f64b9805f6.png"
   },
@@ -70,6 +73,7 @@
     "id": "11804",
     "name": "Luke Woodhouse"
    },
+   "fixtures": 47,
    "image": "3c317c20-bc10-11f0-a7ca-afbb18ece5a9.jpg",
    "logo": "7f4f0fc0-f326-11f0-a926-f19bbcb721b4.png"
   },
@@ -88,6 +92,7 @@
     "id": "19",
     "name": "Michael van Gerwen"
    },
+   "fixtures": 15,
    "image": "226acfb0-efc0-11f0-b0be-df44fa0618a2.jpg",
    "logo": "fe8d6350-998e-11f0-9978-692f640a6a29.png"
   },
@@ -106,6 +111,7 @@
     "id": "40676",
     "name": "Luke Littler"
    },
+   "fixtures": 53,
    "image": "4fb7d9f0-bf3b-11f0-bbdb-5da35870e15f.jpg",
    "logo": "eaf001b0-9d1f-11f0-b750-b39dde66de6a.png"
   },
@@ -124,6 +130,7 @@
     "id": "32956",
     "name": "Wessel Nijman"
    },
+   "fixtures": 47,
    "image": "3c317c20-bc10-11f0-a7ca-afbb18ece5a9.jpg",
    "logo": "7f426590-f326-11f0-9041-c93a9e97621f.png"
   },
@@ -142,6 +149,7 @@
     "id": "32102",
     "name": "Luke Humphries"
    },
+   "fixtures": 15,
    "image": "d5ce6270-efbf-11f0-88b2-b7fc0db4e162.jpg",
    "logo": "fe2e5360-998e-11f0-9acb-876f5a676cc2.png"
   },
@@ -160,6 +168,7 @@
     "id": "224",
     "name": "Krzysztof Ratajski"
    },
+   "fixtures": 47,
    "image": "3c317c20-bc10-11f0-a7ca-afbb18ece5a9.jpg",
    "logo": "7f4cc5d0-f326-11f0-9366-7b9d85b8db6f.png"
   },
@@ -178,6 +187,7 @@
     "id": "40676",
     "name": "Luke Littler"
    },
+   "fixtures": 31,
    "image": "9bea3ef0-bf34-11f0-804c-a1197b305591.jpg",
    "logo": "326d2570-6686-11f0-b17d-3306e3556285.png"
   },
@@ -196,6 +206,7 @@
     "id": "30859",
     "name": "Jonny Clayton"
    },
+   "fixtures": 15,
    "image": "afb322b0-efbf-11f0-88b2-b7fc0db4e162.jpg",
    "logo": "aa27a110-97d8-11f1-8eef-41cefb482a6e.png"
   },
@@ -214,6 +225,7 @@
     "id": "22",
     "name": "James Wade"
    },
+   "fixtures": 15,
    "image": "3e088370-efc0-11f0-88b2-b7fc0db4e162.jpg",
    "logo": "fe29e690-998e-11f0-b090-bd272ce97bd8.png"
   },
@@ -232,6 +244,7 @@
     "id": "754",
     "name": "Ross Smith"
    },
+   "fixtures": 47,
    "image": "3c317c20-bc10-11f0-a7ca-afbb18ece5a9.jpg",
    "logo": "7f4d3b00-f326-11f0-badf-1fc9bd31173b.png"
   },
@@ -250,6 +263,7 @@
     "id": "40676",
     "name": "Luke Littler"
    },
+   "fixtures": 47,
    "image": "3c317c20-bc10-11f0-a7ca-afbb18ece5a9.jpg",
    "logo": "a75f4170-a86f-11f1-82b2-ed84a2c699ab.jpg"
   },
@@ -268,6 +282,7 @@
     "id": "22",
     "name": "James Wade"
    },
+   "fixtures": 47,
    "image": "3c317c20-bc10-11f0-a7ca-afbb18ece5a9.jpg",
    "logo": "7f443a50-f326-11f0-b3da-75bce7c447d0.png"
   },
@@ -286,6 +301,7 @@
     "id": "754",
     "name": "Ross Smith"
    },
+   "fixtures": 31,
    "image": "5f570a50-0e48-11f1-9a05-479114f23571.jpg",
    "logo": null
   },
@@ -304,6 +320,7 @@
     "id": "32102",
     "name": "Luke Humphries"
    },
+   "fixtures": 31,
    "image": "4ef730c0-0120-11f1-bb9e-13988bddd439.jpg",
    "logo": "4026d0d0-bc2a-11f1-be19-098db869e2a8.png"
   },
@@ -322,6 +339,7 @@
     "id": "30859",
     "name": "Jonny Clayton"
    },
+   "fixtures": 79,
    "image": "3c317c20-bc10-11f0-a7ca-afbb18ece5a9.jpg",
    "logo": "7f4795b0-f326-11f0-b605-b32749639581.png"
   },
@@ -340,6 +358,7 @@
     "id": "33014",
     "name": "Niels Zonneveld"
    },
+   "fixtures": 47,
    "image": "3c317c20-bc10-11f0-a7ca-afbb18ece5a9.jpg",
    "logo": "7f4c2990-f326-11f0-998d-5b948e391252.png"
   },
@@ -358,6 +377,7 @@
     "id": "754",
     "name": "Ross Smith"
    },
+   "fixtures": 31,
    "image": "30d9ca50-bbf0-11f0-9bc1-6521c0d7dd40.jpg",
    "logo": "32689190-6686-11f0-ba36-59f64b9805f6.png"
   },
@@ -373,6 +393,7 @@
    "ranked": true,
    "major": true,
    "winner": null,
+   "fixtures": 63,
    "image": "e6c7d150-be88-11f0-b683-1df3aa50a425.jpg",
    "logo": "32ae9b40-6686-11f0-b0e1-2f7ff63d9a66.png"
   },
@@ -388,6 +409,7 @@
    "ranked": true,
    "major": true,
    "winner": null,
+   "fixtures": 0,
    "image": "2800e9a0-be8d-11f0-bbf2-05c127ee4631.jpg",
    "logo": "eaf531d0-9d1f-11f0-bcab-7b767ffe4c98.png"
   },
@@ -403,6 +425,7 @@
    "ranked": true,
    "major": true,
    "winner": null,
+   "fixtures": 0,
    "image": "5d25b3b0-be6d-11f0-bbd2-f5b7cb549a2e.jpg",
    "logo": "ecf0b3b0-9d1f-11f0-a938-5b83f11733db.png"
   },
@@ -418,6 +441,7 @@
    "ranked": false,
    "major": false,
    "winner": null,
+   "fixtures": 0,
    "image": null,
    "logo": null
   },
@@ -433,6 +457,7 @@
    "ranked": true,
    "major": true,
    "winner": null,
+   "fixtures": 0,
    "image": "0e7acf90-c71b-11f1-b527-0f535c3a4676.jpg",
    "logo": null
   },
@@ -448,6 +473,7 @@
    "ranked": false,
    "major": false,
    "winner": null,
+   "fixtures": 0,
    "image": "0e663620-c71b-11f1-be0e-c91f42e68604.jpg",
    "logo": null
   },
@@ -463,6 +489,7 @@
    "ranked": false,
    "major": false,
    "winner": null,
+   "fixtures": 0,
    "image": "0e663620-c71b-11f1-be0e-c91f42e68604.jpg",
    "logo": null
   },
@@ -478,6 +505,7 @@
    "ranked": true,
    "major": false,
    "winner": null,
+   "fixtures": 0,
    "image": "2cdeaf50-c7b7-11f1-9a1d-c18289546f14.jpg",
    "logo": null
   },
@@ -493,6 +521,7 @@
    "ranked": false,
    "major": false,
    "winner": null,
+   "fixtures": 0,
    "image": "0e663620-c71b-11f1-be0e-c91f42e68604.jpg",
    "logo": null
   },
@@ -508,6 +537,7 @@
    "ranked": true,
    "major": false,
    "winner": null,
+   "fixtures": 0,
    "image": "2cdeaf50-c7b7-11f1-9a1d-c18289546f14.jpg",
    "logo": null
   },
@@ -523,6 +553,7 @@
    "ranked": false,
    "major": false,
    "winner": null,
+   "fixtures": 0,
    "image": "0e663620-c71b-11f1-be0e-c91f42e68604.jpg",
    "logo": null
   },
@@ -538,6 +569,7 @@
    "ranked": true,
    "major": false,
    "winner": null,
+   "fixtures": 0,
    "image": "2cdeaf50-c7b7-11f1-9a1d-c18289546f14.jpg",
    "logo": null
   },
@@ -553,6 +585,7 @@
    "ranked": false,
    "major": false,
    "winner": null,
+   "fixtures": 0,
    "image": "0e663620-c71b-11f1-be0e-c91f42e68604.jpg",
    "logo": null
   },
@@ -568,6 +601,7 @@
    "ranked": false,
    "major": true,
    "winner": null,
+   "fixtures": 0,
    "image": "222bdb60-c71b-11f1-8b81-f7644ffb1e05.jpg",
    "logo": null
   },
@@ -583,6 +617,7 @@
    "ranked": false,
    "major": false,
    "winner": null,
+   "fixtures": 0,
    "image": "0e663620-c71b-11f1-be0e-c91f42e68604.jpg",
    "logo": null
   },
@@ -598,6 +633,7 @@
    "ranked": false,
    "major": false,
    "winner": null,
+   "fixtures": 0,
    "image": "0e663620-c71b-11f1-be0e-c91f42e68604.jpg",
    "logo": null
   },
@@ -613,6 +649,7 @@
    "ranked": true,
    "major": false,
    "winner": null,
+   "fixtures": 0,
    "image": "2cdeaf50-c7b7-11f1-9a1d-c18289546f14.jpg",
    "logo": null
   },
@@ -628,6 +665,7 @@
    "ranked": false,
    "major": false,
    "winner": null,
+   "fixtures": 0,
    "image": "0e663620-c71b-11f1-be0e-c91f42e68604.jpg",
    "logo": null
   },
@@ -643,6 +681,7 @@
    "ranked": true,
    "major": false,
    "winner": null,
+   "fixtures": 0,
    "image": "2cdeaf50-c7b7-11f1-9a1d-c18289546f14.jpg",
    "logo": null
   },
@@ -658,6 +697,7 @@
    "ranked": false,
    "major": false,
    "winner": null,
+   "fixtures": 0,
    "image": "0e663620-c71b-11f1-be0e-c91f42e68604.jpg",
    "logo": null
   },
@@ -673,6 +713,7 @@
    "ranked": true,
    "major": false,
    "winner": null,
+   "fixtures": 0,
    "image": "2cdeaf50-c7b7-11f1-9a1d-c18289546f14.jpg",
    "logo": null
   },
@@ -688,6 +729,7 @@
    "ranked": false,
    "major": false,
    "winner": null,
+   "fixtures": 0,
    "image": "0e663620-c71b-11f1-be0e-c91f42e68604.jpg",
    "logo": null
   },
@@ -703,6 +745,7 @@
    "ranked": false,
    "major": false,
    "winner": null,
+   "fixtures": 0,
    "image": "0e663620-c71b-11f1-be0e-c91f42e68604.jpg",
    "logo": null
   },
@@ -718,6 +761,7 @@
    "ranked": true,
    "major": false,
    "winner": null,
+   "fixtures": 0,
    "image": "2cdeaf50-c7b7-11f1-9a1d-c18289546f14.jpg",
    "logo": null
   },
@@ -733,6 +777,7 @@
    "ranked": false,
    "major": false,
    "winner": null,
+   "fixtures": 0,
    "image": "0e663620-c71b-11f1-be0e-c91f42e68604.jpg",
    "logo": null
   },
@@ -748,6 +793,7 @@
    "ranked": false,
    "major": false,
    "winner": null,
+   "fixtures": 0,
    "image": "0e663620-c71b-11f1-be0e-c91f42e68604.jpg",
    "logo": null
   },
@@ -763,6 +809,7 @@
    "ranked": false,
    "major": false,
    "winner": null,
+   "fixtures": 0,
    "image": "0e663620-c71b-11f1-be0e-c91f42e68604.jpg",
    "logo": null
   },
@@ -778,6 +825,7 @@
    "ranked": true,
    "major": false,
    "winner": null,
+   "fixtures": 0,
    "image": "2cdeaf50-c7b7-11f1-9a1d-c18289546f14.jpg",
    "logo": null
   },
@@ -793,6 +841,7 @@
    "ranked": false,
    "major": false,
    "winner": null,
+   "fixtures": 0,
    "image": "0e663620-c71b-11f1-be0e-c91f42e68604.jpg",
    "logo": null
   },
@@ -808,6 +857,7 @@
    "ranked": false,
    "major": false,
    "winner": null,
+   "fixtures": 0,
    "image": "0e663620-c71b-11f1-be0e-c91f42e68604.jpg",
    "logo": null
   },
@@ -823,6 +873,7 @@
    "ranked": true,
    "major": false,
    "winner": null,
+   "fixtures": 0,
    "image": "2cdeaf50-c7b7-11f1-9a1d-c18289546f14.jpg",
    "logo": null
   },
@@ -838,6 +889,7 @@
    "ranked": false,
    "major": true,
    "winner": null,
+   "fixtures": 0,
    "image": "0e663620-c71b-11f1-be0e-c91f42e68604.jpg",
    "logo": null
   },
@@ -853,6 +905,7 @@
    "ranked": false,
    "major": true,
    "winner": null,
+   "fixtures": 0,
    "image": "22268430-c71b-11f1-be0e-c91f42e68604.jpg",
    "logo": null
   },
@@ -868,6 +921,7 @@
    "ranked": false,
    "major": false,
    "winner": null,
+   "fixtures": 0,
    "image": null,
    "logo": null
   },
@@ -883,6 +937,7 @@
    "ranked": false,
    "major": false,
    "winner": null,
+   "fixtures": 0,
    "image": null,
    "logo": null
   },
@@ -898,6 +953,7 @@
    "ranked": true,
    "major": false,
    "winner": null,
+   "fixtures": 0,
    "image": "2cdeaf50-c7b7-11f1-9a1d-c18289546f14.jpg",
    "logo": null
   },
@@ -913,6 +969,7 @@
    "ranked": true,
    "major": true,
    "winner": null,
+   "fixtures": 0,
    "image": "0e641340-c71b-11f1-9598-7f7c38e4ef91.jpg",
    "logo": null
   },
@@ -928,6 +985,7 @@
    "ranked": true,
    "major": false,
    "winner": null,
+   "fixtures": 0,
    "image": "2cdeaf50-c7b7-11f1-9a1d-c18289546f14.jpg",
    "logo": null
   },
@@ -943,6 +1001,7 @@
    "ranked": true,
    "major": false,
    "winner": null,
+   "fixtures": 0,
    "image": "2cdeaf50-c7b7-11f1-9a1d-c18289546f14.jpg",
    "logo": null
   },
@@ -958,6 +1017,7 @@
    "ranked": true,
    "major": false,
    "winner": null,
+   "fixtures": 0,
    "image": "2cdeaf50-c7b7-11f1-9a1d-c18289546f14.jpg",
    "logo": null
   },
@@ -973,6 +1033,7 @@
    "ranked": false,
    "major": true,
    "winner": null,
+   "fixtures": 0,
    "image": "65d5a650-c7b3-11f1-8c05-d15783d86020.jpg",
    "logo": null
   },
@@ -988,6 +1049,7 @@
    "ranked": true,
    "major": true,
    "winner": null,
+   "fixtures": 0,
    "image": "0e6a54d0-c71b-11f1-8938-6bef681e50e5.jpg",
    "logo": null
   },
@@ -1003,6 +1065,7 @@
    "ranked": true,
    "major": false,
    "winner": null,
+   "fixtures": 0,
    "image": "2cdeaf50-c7b7-11f1-9a1d-c18289546f14.jpg",
    "logo": null
   },
@@ -1018,6 +1081,7 @@
    "ranked": true,
    "major": false,
    "winner": null,
+   "fixtures": 0,
    "image": "2cdeaf50-c7b7-11f1-9a1d-c18289546f14.jpg",
    "logo": null
   },
@@ -1033,6 +1097,7 @@
    "ranked": true,
    "major": true,
    "winner": null,
+   "fixtures": 0,
    "image": "221ee310-c71b-11f1-9598-7f7c38e4ef91.jpg",
    "logo": null
   },
@@ -1048,6 +1113,7 @@
    "ranked": true,
    "major": true,
    "winner": null,
+   "fixtures": 0,
    "image": "22332e60-c71b-11f1-8734-7db765d971f4.jpg",
    "logo": null
   },
@@ -1063,6 +1129,7 @@
    "ranked": true,
    "major": true,
    "winner": null,
+   "fixtures": 0,
    "image": "2239e520-c71b-11f1-8938-6bef681e50e5.jpg",
    "logo": null
   },
@@ -1078,6 +1145,7 @@
    "ranked": true,
    "major": true,
    "winner": null,
+   "fixtures": 0,
    "image": "22156d30-c71b-11f1-8938-6bef681e50e5.jpg",
    "logo": null
   }

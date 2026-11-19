@@ -1,7 +1,9 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import calendar from '../data/calendar.json';
-import { avatarSrc } from '../lib/images.mjs';
+import { avatarSrc, cutout } from '../lib/images.mjs';
+import { getCollection } from 'astro:content';
+import current from '../data/tournament.json';
 import { tvBadge, keyName } from '../lib/pdc.mjs';
 import { dayNum, monthShort, monthLong, weekday, dateRange, initials, avatarColours } from '../lib/format.mjs';
 
@@ -23,6 +25,29 @@ const kind = (e: Ev) => e.broadcaster;
 // "Show completed" toggle is right even before the script below runs.
 const builtOn = new Date().toLocaleDateString('en-CA', { timeZone: 'Europe/London' });
 const isPast = (e: Ev) => e.end < builtOn;
+const isLive = (e: Ev) => e.start <= builtOn && e.end >= builtOn;
+
+// What each event's page has, shown as badges so people know it's there.
+const allNews = (await getCollection('news')).map(n => n.data);
+const shift = (d: string, n: number) => new Date(Date.parse(d) + n * 864e5).toISOString().slice(0, 10);
+const newsFor = (e: Ev) => allNews.filter(n => n.tournament ? n.tournament === e.id : n.tags.some(t => t.toLowerCase() === e.name.toLowerCase()) && n.date.slice(0, 10) >= shift(e.start, -7) && n.date.slice(0, 10) <= shift(e.end, 3)).length;
+const KNOCKOUT_FREE = /premier league/i; // league nights have a bracket but no "draw" as such
+const hasDraw = (e: Ev) => ((e as any).fixtures > 0 || e.id === current.tournament.id) && !KNOCKOUT_FREE.test(e.name);
+function badges(e: Ev) {
+  const b: { cls: string; text: string }[] = [];
+  if (isLive(e)) b.push({ cls: 'live', text: 'Live scores' });
+  else if (isPast(e)) b.push({ cls: 'res', text: 'Results' });
+  else if ((e as any).fixtures > 0) b.push({ cls: 'sched', text: 'Schedule out' });
+  if (hasDraw(e)) b.push({ cls: 'draw', text: 'Draw' });
+  const n = newsFor(e);
+  if (n) b.push({ cls: 'news', text: `News ${n}` });
+  return b;
+}
+// Majors get a wide feature card with a licensed photo that fits the event.
+const MAJOR_PHOTO: [RegExp, string][] = [[/world championship/i, 'ally-pally-crowd'], [/matchplay/i, 'winter-gardens'], [/grand slam/i, 'on-stage'], [/grand prix/i, 'board-lights'], [/uk open/i, 'crowd-180s'], [/european championship/i, 'darts-cluster'], [/players championship/i, 'referee'], [/masters/i, 'confetti'], [/world cup/i, 'crowd-signs'], [/world series/i, 'walk-on-crowd']];
+const featured = (e: Ev) => !!e.major;
+const photoFor = (e: Ev) => (MAJOR_PHOTO.find(([re]) => re.test(e.name))?.[1]) || 'arena';
+const champCut = (e: Ev) => (e.winner ? cutout(e.winner.name, 'pdc') : null);
 ---
 <Layout title="Calendar" description="Every PDC darts event on Sky Sports, ITV and PDCTV: dates, venues, broadcasters and winners." active="calendar">
 
@@ -49,11 +74,17 @@ const isPast = (e: Ev) => e.end < builtOn;
   <section class="wrap months" id="months">
     {[...months.entries()].map(([k, list]) => (
       <div class="month" data-month={k} hidden={list.every(isPast)}>
-        <h2 class="month-title"><span>{monthLong(k + '-01')}</span></h2>
+        <h2 class="month-title"><span>{monthLong(k + '-01')}</span><small>{list.length} event{list.length === 1 ? '' : 's'}</small></h2>
         <div class="grid">
           {list.map(e => (
-            <a href={`/tournament/${e.id}`} class={`ev ev-${e.broadcaster}${isPast(e) ? ' past' : ''}`} hidden={isPast(e)}
+            <a href={`/tournament/${e.id}`} class={`ev ev-${e.broadcaster}${isPast(e) ? ' past' : ''}${featured(e) ? ' feat' : ''}`} hidden={isPast(e)}
               data-kind={kind(e)} data-start={e.start} data-end={e.end}>
+              {featured(e) && (
+                <span class="ev-art" aria-hidden="true">
+                  <img src={`/news-img/${photoFor(e)}-600.webp`} alt="" loading="lazy" decoding="async" />
+                  {champCut(e) && <img class="champ" src={champCut(e)!.src} alt="" loading="lazy" decoding="async" />}
+                </span>
+              )}
               <span class="ev-date" aria-hidden="true">
                 <span class="wd">{weekday(e.start)}</span>
                 <b class="poster-num">{dayNum(e.start)}</b>
@@ -63,6 +94,7 @@ const isPast = (e: Ev) => e.end < builtOn;
                 <span class="ev-top"><Fragment set:html={tvBadge(e.broadcaster)} /><span class="len">{days(e) === 1 ? 'One night' : `${days(e)} days`}</span></span>
                 <h3 class="headline">{e.name}{e.tag && <small>{e.tag}</small>}</h3>
                 <span class="where">{place(e) || 'Venue to be announced'}</span>
+                {badges(e).length > 0 && <span class="badges">{badges(e).map(b => <i class={`bd ${b.cls}`}>{b.text}</i>)}</span>}
                 <span class="when sr-only">{dateRange(e.start, e.end)}</span>
                 <span class="ev-foot">
                   {e.winner
@@ -144,11 +176,38 @@ const isPast = (e: Ev) => e.end < builtOn;
 
   .month { margin-top: 32px; }
   .month-title { font-size: 15px; font-family: var(--body); font-weight: 800; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); display: flex; align-items: center; gap: 14px; margin-bottom: 12px; line-height: 1; }
-  .month-title::after { content: ''; flex: 1; height: 1px; background: var(--line); }
+  .month-title::after { content: ''; flex: 1; height: 1px; background: var(--line); order: 1; }
+  .month-title span { font-family: var(--poster); font-weight: 400; font-size: 30px; letter-spacing: .01em; color: var(--ink); }
+  .month-title small { order: 2; font-size: 12px; letter-spacing: .1em; color: var(--muted); }
   .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 14px; }
 
   /* Event tiles: the site's white cards with the dark date block used on the home page */
-  .ev { display: grid; grid-template-columns: 76px minmax(0, 1fr); gap: 16px; padding: 14px; border-radius: 22px; background: var(--card); box-shadow: var(--shadow-sm); text-decoration: none; color: inherit; transition: transform .3s var(--ease), box-shadow .3s; }
+  .ev { position: relative; overflow: hidden; display: grid; grid-template-columns: 76px minmax(0, 1fr); gap: 16px; padding: 14px; border-radius: 22px; background: var(--card); box-shadow: var(--shadow-sm); text-decoration: none; color: inherit; transition: transform .3s var(--ease), box-shadow .3s; }
+  /* Broadcaster stripe along the top */
+  .ev::before { content: ''; position: absolute; left: 0; right: 0; top: 0; height: 4px; background: var(--bc, var(--line)); }
+  .ev-sky { --bc: var(--sky); } .ev-itv { --bc: var(--itv); } .ev-pdctv { --bc: var(--red); }
+  /* What the event page has */
+  .badges { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 6px; }
+  .bd { font-style: normal; font-size: 11px; font-weight: 800; letter-spacing: .04em; padding: 3px 8px; border-radius: 7px; background: var(--paper-2); color: var(--ink-2); }
+  .bd.live { background: var(--red); color: #fff; }
+  .bd.live::before { content: '● '; }
+  .bd.draw::before { content: '⇶ '; }
+  .bd.res { background: var(--green-soft); color: #075c3f; }
+  .bd.sched { background: var(--volt); color: var(--ink); }
+  .bd.news { background: var(--ink); color: #fff; }
+  /* Majors: a wide feature card with a photo and the champion */
+  .ev.feat { grid-column: span 2; background: var(--ink); color: #fff; grid-template-columns: 76px minmax(0, 1fr) minmax(0, 42%); min-height: 170px; }
+  .ev.feat .ev-art { grid-column: 3; grid-row: 1; position: relative; margin: -14px -14px -14px 0; overflow: hidden; }
+  .ev.feat .ev-art img:not(.champ) { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: .55; }
+  .ev.feat .ev-art::after { content: ''; position: absolute; inset: 0; background: linear-gradient(90deg, var(--ink) 0%, rgba(11, 12, 16, .2) 60%); }
+  .ev.feat .champ { position: absolute; z-index: 1; right: 6%; bottom: 0; height: 115%; width: auto; filter: drop-shadow(0 10px 20px rgba(0, 0, 0, .5)); }
+  .ev.feat .ev-date { background: var(--volt); color: var(--ink); }
+  .ev.feat .ev-date .wd, .ev.feat .ev-date .mo { color: var(--ink); }
+  .ev.feat h3 { font-size: 24px; }
+  .ev.feat .where, .ev.feat .len { color: var(--on-ink); }
+  .ev.feat .bd:not(.live):not(.res):not(.sched) { background: rgba(255, 255, 255, .12); color: #fff; }
+  .ev.feat .go { color: var(--volt); }
+  .ev.feat .winner { color: #fff; }
   .ev:hover { transform: translateY(-3px); box-shadow: var(--shadow); }
   .ev-date { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; border-radius: 16px; background: var(--ink); color: #fff; padding: 10px 0; min-height: 96px; }
   .ev-date b { font-size: 40px; line-height: .9; }
@@ -184,5 +243,6 @@ const isPast = (e: Ev) => e.end < builtOn;
 
   /* Phones: the filters scroll away instead of covering the list */
   @media (max-width: 640px) { .controls { position: static; background: none; } .chips { flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none; } .chip { white-space: nowrap; } }
+  @media (max-width: 760px) { .ev.feat { grid-column: auto; grid-template-columns: 64px minmax(0, 1fr); } .ev.feat .ev-art { position: absolute; inset: 0; margin: 0; z-index: 0; opacity: .5; } .ev.feat .ev-date, .ev.feat .ev-main { position: relative; z-index: 1; } .ev.feat .champ { height: 92%; right: 2%; opacity: .55; } }
   @media (max-width: 420px) { .grid { grid-template-columns: 1fr; } .ev { grid-template-columns: 64px minmax(0, 1fr); gap: 12px; } .ev-date b { font-size: 34px; } }
 </style>
