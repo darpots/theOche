@@ -39,7 +39,7 @@ export function fixtureRow(f, portraits) {
   const state = f.status === 'live' ? '<span class="live-dot">Live</span>' : `<span class="ft">${group}${f.status === 'result' ? 'Result' : f.time ? ukZone(f.date) : 'Time TBC'}</span>`;
   const st = f.stats || null;
   const best = st && st[0] && st[1] ? (st[0].avg > st[1].avg ? 1 : st[1].avg > st[0].avg ? 2 : 0) : 0;
-  return `<li class="fx ${f.status}${st ? ' has-stats' : ''}" data-id="${esc(f.id)}" data-sig="${esc(`${f.s1}-${f.s2}-${f.status}-${st ? st[0]?.avg + '/' + st[1]?.avg : ''}`)}">
+  return `<li class="fx ${f.status}${st ? ' has-stats' : ''}" data-players="${esc([f.p1?.id, f.p2?.id].filter(Boolean).join(' '))}" data-id="${esc(f.id)}" data-sig="${esc(`${f.s1}-${f.s2}-${f.status}-${st ? st[0]?.avg + '/' + st[1]?.avg : ''}`)}">
     ${side(f.p1, f.s1, w1, decided, portraits, 'l', st?.[0], best === 1)}
     <div class="mid">${leg}${mid}<div class="st">${state}</div></div>
     ${side(f.p2, f.s2, w2, decided, portraits, 'r', st?.[1], best === 2)}

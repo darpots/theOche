@@ -8,7 +8,9 @@ import rankings from '../../data/rankings.json';
 import { getCollection } from 'astro:content';
 import { cutout, avatarSrc } from '../../lib/images.mjs';
 import { rankedProfiles, playerHref } from '../../lib/players';
-import { flag, countryName, age, keyName } from '../../lib/pdc.mjs';
+import { flag, countryName, age, keyName, cleanName, surnameOf, formatLabel } from '../../lib/pdc.mjs';
+import tournament from '../../data/tournament.json';
+import { ukTime } from '../../lib/format.mjs';
 import { money, avatarColours, initials, newsDate } from '../../lib/format.mjs';
 
 export function getStaticPaths() {
@@ -30,6 +32,19 @@ const legPct = s.legsFor + s.legsAgainst ? Math.round((s.legsFor / (s.legsFor + 
 // Career PDC titles: the official total, else the sum of its parts.
 const careerTotal = p.career?.['Senior PDC Titles'] ?? (Object.values(p.career || {}) as number[]).reduce((a, b) => a + b, 0);
 const yrs = age(p.dob);
+
+// Their next (or current) match in the event on now.
+const tour = tournament.tournament as any;
+const nextMatch = tour.stages.flatMap((st: any) => st.fixtures.map((f: any) => ({ ...f, stage: st.name, fmt: st })))
+  .filter((f: any) => f.status !== 'result' && f.p1 && f.p2 && (f.p1.id === p.id || f.p2.id === p.id))
+  .sort((a: any, b: any) => `${a.date}${a.time}`.localeCompare(`${b.date}${b.time}`))[0] || null;
+const opp = nextMatch ? (nextMatch.p1.id === p.id ? nextMatch.p2 : nextMatch.p1) : null;
+// Televised, major and European Tour titles from their history (sponsor names dropped).
+const SPONSORS = /^(cazoo|bet365|betvictor|unibet|william hill|mr vegas|paddy power|boylesports|ladbrokes|coral|betfred|partypoker|winmau|sky bet|grand slam of darts sponsored by)\s+/i;
+const titleName = (h: any) => { const c = cleanName(h.name); return { name: c.name.replace(SPONSORS, '').replace(/^European Tour \d+ - /, ''), tag: c.tag || h.tag }; };
+const careerTitles = p.history.filter((h: any) => h.label === 'Winner').map((h: any) => ({ ...titleName(h), season: h.season, id: h.id }));
+// Players to pick from in the head-to-head finder.
+const rivals = rankings.players.filter(r => r.pos <= 128 && r.id !== p.id).map(r => ({ id: r.id, name: r.name }));
 
 const groups = [
   { k: 'major', label: 'Majors', test: (h: any) => !h.tag && !/masters$|world series/i.test(h.name) },
@@ -130,6 +145,7 @@ const news = (await getCollection('news'))
         <h1>{p.name}</h1>
         {p.nick && <p class="nick">“{p.nick}”</p>}
         <p class="where"><Fragment set:html={flag(p.country)} /> {countryName(p.country)}{p.hometown && <> · {p.hometown}</>}</p>
+        <button class="follow" type="button" data-follow={p.id} data-name={p.name} aria-pressed="false"><span class="f-off">☆ Follow</span><span class="f-on">★ Following</span></button>
         <dl class="kpis">
           <div><dt>Prize money (2 yrs)</dt><dd>{money(rank.money)}</dd></div>
           <div><dt>{s.year} average</dt><dd>{st ? st.avg.toFixed(2) : '–'}</dd></div>
@@ -145,6 +161,14 @@ const news = (await getCollection('news'))
 
   <div class="wrap page">
     <main class="col-main">
+      {nextMatch && (
+        <a class="nextm" href={`/match?id=${nextMatch.id}`}>
+          <span class="lbl">{nextMatch.status === 'live' ? '● Playing now' : 'Next match'} · {tour.name}</span>
+          <b>v {opp.name}</b>
+          <span>{nextMatch.stage}{formatLabel(nextMatch.fmt) ? ` · ${formatLabel(nextMatch.fmt)}` : ''}{nextMatch.status !== 'live' ? ` · ${new Date(nextMatch.date + 'T12:00:00Z').toLocaleDateString('en-GB', { weekday: 'short', day: 'numeric', month: 'short', timeZone: 'UTC' })}${ukTime(nextMatch.time, nextMatch.date) ? ` · ${ukTime(nextMatch.time, nextMatch.date)}` : ''}` : ''}</span>
+          <span class="go">Match centre →</span>
+        </a>
+      )}
       <section class="block" data-reveal>
         <h2>{s.year} season</h2>
         {st ? (
@@ -238,6 +262,24 @@ const news = (await getCollection('news'))
           )) : <p class="muted">No major, World Series or European Tour appearances since {s.year - 2}.</p>}
         </div>
       </section>
+      {careerTitles.length > 0 && (
+        <section class="block" data-reveal>
+          <div class="hh"><h2>Titles</h2><p class="muted">{careerTotal} PDC titles in all · televised, major and European Tour wins below</p></div>
+          <ul class="ctitles">
+            {careerTitles.map((t: any) => <li><a href={`/tournament/${t.id}`}><b>{t.season}</b> {t.name}{t.tag && <small> {t.tag}</small>}</a></li>)}
+          </ul>
+        </section>
+      )}
+
+      <section class="block h2h" data-reveal id="h2h-finder">
+        <div class="hh"><h2>Head to head</h2><p class="muted" id="hhf-sub">Pick an opponent to see every meeting</p></div>
+        <label class="hhf"><span class="sr-only">Opponent</span>
+          <input list="rivals" id="hhf-q" placeholder={`${surnameOf({ name: p.name })} v …`} autocomplete="off" />
+        </label>
+        <datalist id="rivals">{rivals.map(r => <option value={r.name} />)}</datalist>
+        <div id="hhf-out"></div>
+        <script is:inline type="application/json" id="hhf-data" set:html={JSON.stringify({ me: { id: p.id, name: p.name }, rivals, suggest: opp ? opp.name : null })}></script>
+      </section>
     </main>
 
     <aside class="col-side">
@@ -278,6 +320,30 @@ const news = (await getCollection('news'))
       }));
     }
     document.addEventListener('astro:page-load', init);
+
+    // Head-to-head finder: any top-128 opponent, from the PDC's records.
+    import { fetchH2H, h2hSummary, renderH2H } from '../../lib/h2h.mjs';
+    import { surnameOf } from '../../lib/pdc.mjs';
+    import { initFollow } from '../../lib/follow.mjs';
+    function initFinder() {
+      const el = document.getElementById('hhf-data'); if (!el) return;
+      const { me, rivals, suggest } = JSON.parse(el.textContent!);
+      const q = document.getElementById('hhf-q') as HTMLInputElement, out = document.getElementById('hhf-out')!, sub = document.getElementById('hhf-sub')!;
+      const show = async (name: string) => {
+        const r = rivals.find((x: any) => x.name.toLowerCase() === name.trim().toLowerCase());
+        if (!r) return;
+        out.innerHTML = '<p class="muted">Loading…</p>';
+        try {
+          const games = await fetchH2H(me.id, r.id);
+          sub.textContent = h2hSummary(games, 'meeting') || `${surnameOf({ name: me.name })} v ${surnameOf({ name: r.name })}`;
+          out.innerHTML = renderH2H(games, [surnameOf({ name: me.name }), surnameOf({ name: r.name })]);
+        } catch { out.innerHTML = '<p class="muted">Head to head isn\'t available right now.</p>'; }
+      };
+      q.addEventListener('change', () => show(q.value));
+      q.addEventListener('input', () => { if (rivals.some((x: any) => x.name.toLowerCase() === q.value.trim().toLowerCase())) show(q.value); });
+      if (suggest) { q.value = suggest; show(suggest); }
+    }
+    document.addEventListener('astro:page-load', () => { initFinder(); initFollow(); });
   </script>
 </Layout>
 
@@ -375,6 +441,28 @@ const news = (await getCollection('news'))
   .f-qf { background: var(--sky-soft); color: #1b2f8f; }
 
   .rm-head { margin-bottom: 12px; }
+  /* Next match */
+  .nextm { display: grid; grid-template-columns: 1fr auto; gap: 4px 16px; align-items: center; padding: 16px 20px; margin-bottom: 26px; border-radius: 20px; background: var(--volt); color: var(--ink); text-decoration: none; }
+  .nextm .lbl { grid-column: 1 / -1; }
+  .nextm b { font-family: var(--display); font-size: 24px; font-weight: 800; }
+  .nextm span:not(.lbl):not(.go) { grid-column: 1; font-weight: 600; font-size: 14px; }
+  .nextm .go { grid-column: 2; grid-row: 2 / 4; font-weight: 800; }
+  /* Career titles */
+  .ctitles { list-style: none; padding: 0; margin: 12px 0 0; display: flex; flex-wrap: wrap; gap: 8px; }
+  .ctitles a { display: inline-flex; gap: 8px; align-items: baseline; padding: 8px 14px; border-radius: 999px; background: var(--card); box-shadow: var(--shadow-sm); text-decoration: none; font-weight: 700; font-size: 14px; }
+  .ctitles a:hover { box-shadow: var(--shadow); }
+  .ctitles b { color: var(--gold); font-variant-numeric: tabular-nums; }
+  .ctitles small { color: var(--muted); font-weight: 600; }
+  /* Head-to-head finder */
+  .hhf { display: block; margin: 12px 0; }
+  .hhf input { width: 100%; max-width: 420px; padding: 12px 16px; border-radius: 999px; border: 1px solid var(--line); background: var(--card); font: inherit; box-shadow: var(--shadow-sm); }
+  .hhf input:focus { outline: 2px solid var(--ink); }
+  /* Follow */
+  .follow { margin-top: 14px; padding: 8px 16px; border-radius: 999px; border: 1px solid rgba(255, 255, 255, .35); background: none; color: #fff; font-weight: 800; font-size: 14px; cursor: pointer; }
+  .follow:hover { background: rgba(255, 255, 255, .1); }
+  .follow[aria-pressed='true'] { background: var(--volt); color: var(--ink); border-color: var(--volt); }
+  .follow .f-on, .follow[aria-pressed='true'] .f-off { display: none; }
+  .follow[aria-pressed='true'] .f-on { display: inline; }
   .rm { list-style: none; margin: 0; padding: 0; background: var(--card); border: 1px solid var(--line); border-radius: 16px; overflow: hidden; }
   .rm li + li { border-top: 1px solid var(--line); }
   .rm a { display: grid; grid-template-columns: 56px 1fr auto 56px; align-items: center; gap: 12px; padding: 10px 14px; text-decoration: none; font-variant-numeric: tabular-nums; }

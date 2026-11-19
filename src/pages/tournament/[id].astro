@@ -105,6 +105,7 @@ const news = (await getCollection('news')).map(n => n.data)
     import { API, normaliseTournament, fixtureStatsUrl, slimStats, applyLive, liveCurrentLeg } from '../../lib/pdc.mjs';
     import { liveFor, watchLive, unwatch, isPushing, LIVE_TICK, PUSH_TICK } from '../../lib/live-client.mjs';
     import { matchDays, renderDay, renderTabs, progress, fixtureRow, renderDraw } from '../../lib/render-matches.mjs';
+    import { markFollowed } from '../../lib/follow.mjs';
 
     let poll: number | undefined;
     function init() {
@@ -173,6 +174,7 @@ const news = (await getCollection('news')).map(n => n.data)
           ? days.map(d => `<div class="dayblock"><h2 class="dayhead">${new Date(d + 'T12:00:00Z').toLocaleDateString('en-GB', { weekday: 'long', day: 'numeric', month: 'long' })}</h2>${renderDay(t, d, portraits)}</div>`).join('')
           : renderDay(t, current, portraits);
         board.querySelectorAll<HTMLElement>('.stage').forEach(s => requestAnimationFrame(() => s.classList.add('in')));
+        markFollowed(board);
         if (animate) board.querySelectorAll<HTMLElement>('.fx').forEach(li => { if (before.has(li.dataset.id) && before.get(li.dataset.id) !== li.dataset.sig) li.classList.add('flash'); });
         const draw = renderDraw(t);
         if (draw) { document.getElementById('tdraw')!.innerHTML = draw; (document.querySelector('.vt[data-view="draw"]') as HTMLElement).hidden = false; }
@@ -361,6 +363,9 @@ const news = (await getCollection('news')).map(n => n.data)
   .board :global(.fx-link) { position: absolute; inset: 0; border-radius: inherit; z-index: 1; }
   .board :global(.fx-link:focus-visible) { outline: 3px solid var(--sky); outline-offset: 2px; }
   .board :global(.fx:hover) { transform: translateY(-2px); box-shadow: var(--shadow); }
+  /* Matches with a player you follow */
+  .board :global(.fx.fav) { box-shadow: 0 0 0 2px var(--volt), var(--shadow-sm); }
+  .board :global(.fx.fav)::before { content: '★'; position: absolute; top: -9px; left: 18px; z-index: 2; background: var(--volt); color: var(--ink); font-size: 11px; font-weight: 800; padding: 1px 7px; border-radius: 99px; }
   .board :global(.fx.live) { border-color: var(--red); box-shadow: 0 0 0 3px var(--red-soft); }
   .board :global(.fx.flash) { animation: flash 1.6s var(--ease); }
   @keyframes flash { 0% { background: var(--gold-soft); transform: scale(1.015); } 100% { background: var(--card); transform: none; } }

@@ -147,6 +147,7 @@ const fullTitle = title === 'The Oche' ? title : `${title} · The Oche`;
     <script>
       import { liveScore } from '../lib/pdc.mjs';
     import { ukTime } from '../lib/format.mjs';
+    import { followed, notifyLive } from '../lib/follow.mjs';
       import { liveFor, watchLive, isPushing, LIVE_TICK, PUSH_TICK } from '../lib/live-client.mjs';
       // Scroll-reveal + the sliding nav pill.
       const keyFor = (path: string) => {
@@ -250,13 +251,17 @@ const fullTitle = title === 'The Oche' ? title : `${title} · The Oche`;
             const pending = fx.filter((f: any) => f.startDate === d && !/result/i.test(f.status)).sort((x: any, y: any) => (x.startTime || '').localeCompare(y.startTime || ''));
             const live = fx.filter((f: any) => /live|progress/i.test(f.status)).concat(pending.filter((f: any) => !/live|progress/i.test(f.status) && (f.startTime || '99').slice(0, 5) <= nowLdn).slice(-1));
             const upcoming = pending.filter((f: any) => !live.includes(f));
+            // Followed players: a star in the bar, and a notification when their match starts.
+            const fav = new Set(followed().map((p: any) => p.id));
+            const starred = (f: any) => fav.has(String(f.participant1?.participantID)) || fav.has(String(f.participant2?.participantID));
+            notifyLive(live.filter((f: any) => /live|progress/i.test(f.status)).map((f: any) => ({ id: f.fixtureID, p1: { id: f.participant1?.participantID, name: `${f.participant1?.firstName} ${f.participant1?.lastName}` }, p2: { id: f.participant2?.participantID, name: `${f.participant2?.firstName} ${f.participant2?.lastName}` }, label: `${surname(f.participant1)} v ${surname(f.participant2)} · ${name}` })));
             // Matches under way: have PDC push every change to us (the bar redraws on each).
             if (live.length) watchLive(id!, live.map((f: any) => String(f.fixtureID)), tick);
             const done = fx.filter((f: any) => /result/i.test(f.status)).sort((x: any, y: any) => `${y.startDate}${y.startTime}`.localeCompare(`${x.startDate}${x.startTime}`));
             // Upcoming: "A v B" then the start time in its own pill, so a time never reads as a score.
             const chip = (f: any, kind: string) => kind === 'next'
               ? `<a class="lb-m next" href="/match?id=${f.fixtureID}"><span>${esc(surname(f.participant1))}</span><i class="lb-v">v</i><span>${esc(surname(f.participant2))}</span>${ukTime(f.startTime, f.startDate) ? `<time class="lb-t" aria-label="starts at ${esc(ukTime(f.startTime, f.startDate))}">${esc(ukTime(f.startTime, f.startDate))}</time>` : ''}</a>`
-              : `<a class="lb-m ${kind}" href="/match?id=${f.fixtureID}"><span>${esc(surname(f.participant1))}</span><b>${kind === 'now' && !/live|progress|result/i.test(f.status) ? 'v' : `${f.participant1Score ?? 0}–${f.participant2Score ?? 0}`}</b><span>${esc(surname(f.participant2))}</span></a>`;
+              : `<a class="lb-m ${kind}" href="/match?id=${f.fixtureID}">${starred(f) ? '<i class="lb-fav" aria-label="You follow a player in this match">★</i>' : ''}<span>${esc(surname(f.participant1))}</span><b>${kind === 'now' && !/live|progress|result/i.test(f.status) ? 'v' : `${f.participant1Score ?? 0}–${f.participant2Score ?? 0}`}</b><span>${esc(surname(f.participant2))}</span></a>`;
             let html = '';
             const ln = document.getElementById('livenav') as HTMLAnchorElement | null;
             if (ln) {
@@ -351,6 +356,7 @@ const fullTitle = title === 'The Oche' ? title : `${title} · The Oche`;
   .lb-in :global(.lb-m:hover) { background: rgba(255, 255, 255, .1); color: #fff; }
   .lb-in :global(.lb-m b) { font-family: var(--poster); font-weight: 400; font-size: 17px; font-variant-numeric: tabular-nums; color: #fff; }
   .lb-in :global(.lb-m.now b) { color: var(--volt); }
+  .lb-in :global(.lb-fav) { font-style: normal; color: var(--volt); margin-right: -2px; }
   .lb-in :global(.lb-v) { font-style: normal; color: rgba(255, 255, 255, .5); font-size: 12px; }
   .lb-in :global(.lb-t) { font-size: 11px; font-weight: 800; letter-spacing: .04em; color: rgba(255, 255, 255, .85); border: 1px solid rgba(255, 255, 255, .25); border-radius: 6px; padding: 1px 6px; font-variant-numeric: tabular-nums; }
   /* LIVE in the menu while a match is on */

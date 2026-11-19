@@ -42,6 +42,7 @@ import Layout from '../layouts/Layout.astro';
   <script>
     import { API, flag, keyName, liveScore, liveLegs, cleanName, formatLabel } from '../lib/pdc.mjs';
     import { checkout } from '../lib/checkout.mjs';
+    import { fetchH2H, h2hSummary, renderH2H } from '../lib/h2h.mjs';
     import { liveFor, watchLive, unwatch, isPushing, LIVE_TICK, PUSH_TICK } from '../lib/live-client.mjs';
     import { ukTime } from '../lib/format.mjs';
     import { cutoutImg, avatarSrc } from '../lib/images.mjs';
@@ -196,41 +197,9 @@ import Layout from '../layouts/Layout.astro';
       if (!ids[0] || !ids[1]) return;
       box.dataset.done = f.id;
       try {
-        const res = await fetch(`${API.participants}${ids[0]}/h2h/${ids[1]}`);
-        if (!res.ok) return;
-        const games = ((await res.json()).data || [])
-          .map((x: any) => ({ id: x.id, ...x.attributes }))
-          .filter((x: any) => /result/i.test(x.status) && String(x.id) !== String(f.id))
-          .map((x: any) => {
-            const flip = String(x.participant1ID) === ids[1];
-            const s = flip ? [x.participant2Score, x.participant1Score] : [x.participant1Score, x.participant2Score];
-            const w = x.winnerParticipantID ? ids.indexOf(String(x.winnerParticipantID)) : s[0] > s[1] ? 0 : s[1] > s[0] ? 1 : -1;
-            return { ...x, s, w };
-          })
-          .sort((x: any, y: any) => `${y.startDate}${y.startTime || ''}`.localeCompare(`${x.startDate}${x.startTime || ''}`));
-        const names = [last(a.participant1), last(a.participant2)];
-        if (!games.length) {
-          sub.textContent = '';
-          out.innerHTML = `<p class="muted hh-none">${esc(names[0])} and ${esc(names[1])} haven't met in a PDC event before.</p>`;
-          box.hidden = false;
-          return;
-        }
-        const wins = [0, 1].map(k => games.filter((g: any) => g.w === k).length), draws = games.length - wins[0] - wins[1];
-        const shown = games.slice(0, 6);
-        sub.textContent = `${games.length} previous meeting${games.length === 1 ? '' : 's'} in PDC events${draws ? ` · ${draws} drawn` : ''}${games.length > 6 ? ' · last 6 below' : ''}`;
-        const pct = (n: number) => (n / games.length) * 100;
-        const evName = (n: string) => { const c = cleanName(n || ''); return c.name.replace(/^European Tour \d+ - /, ''); };
-        const day = (d: string) => new Date(d + 'T12:00:00Z').toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
-        out.innerHTML = `<div class="hh-sum">
-            <div class="hh-n"><b class="poster-num${wins[0] > wins[1] ? ' lead' : ''}">${wins[0]}</b><span>${esc(names[0])}</span></div>
-            <div class="hh-bar" role="img" aria-label="${esc(names[0])} ${wins[0]} wins, ${esc(names[1])} ${wins[1]} wins${draws ? `, ${draws} drawn` : ''}"><i style="width:${pct(wins[0])}%;background:${C[0]}"></i><i class="hh-d" style="width:${pct(draws)}%"></i><i style="width:${pct(wins[1])}%;background:${C[1]}"></i></div>
-            <div class="hh-n r"><b class="poster-num${wins[1] > wins[0] ? ' lead' : ''}">${wins[1]}</b><span>${esc(names[1])}</span></div>
-          </div>
-          <ol class="hh-list">${shown.map((g: any) => `<li>
-            <span class="hh-date">${day(g.startDate)}</span>
-            <span class="hh-ev">${esc(evName(g.tournament?.name))}<small>${esc(g.stage?.name || '')}</small></span>
-            <span class="hh-sc"><b class="${g.w === 0 ? 'w' : ''}"${g.w === 0 ? ` style="color:${C[0]}"` : ''}>${g.s[0]}</b><span>–</span><b class="${g.w === 1 ? 'w' : ''}"${g.w === 1 ? ` style="color:${C[1]}"` : ''}>${g.s[1]}</b></span>
-          </li>`).join('')}</ol>`;
+        const games = await fetchH2H(ids[0], ids[1], f.id);
+        sub.textContent = h2hSummary(games);
+        out.innerHTML = renderH2H(games, [last(a.participant1), last(a.participant2)]);
         box.hidden = false;
       } catch { /* head to head is optional */ }
     }
@@ -446,25 +415,6 @@ import Layout from '../layouts/Layout.astro';
   .mh-in :global(.inplay .live-dot) { color: #ff8a98; margin-right: 6px; }
   .tape, .h2h { margin-top: 28px; }
 
-  /* Head to head: wins either side of a split bar, then the latest meetings */
-  .h2h :global(.hh-sum) { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; align-items: center; gap: 18px; background: var(--card); border-radius: var(--tile) var(--tile) 0 0; padding: 18px 22px; }
-  .h2h :global(.hh-n) { display: flex; flex-direction: column; align-items: flex-start; gap: 4px; min-width: 64px; }
-  .h2h :global(.hh-n.r) { align-items: flex-end; text-align: right; }
-  .h2h :global(.hh-n b) { font-size: 52px; line-height: .9; color: var(--muted); }
-  .h2h :global(.hh-n b.lead) { color: var(--ink); }
-  .h2h :global(.hh-n span) { font-size: 13px; font-weight: 700; }
-  .h2h :global(.hh-bar) { display: flex; height: 12px; border-radius: 99px; overflow: hidden; background: var(--paper-2); }
-  .h2h :global(.hh-bar i) { display: block; height: 100%; }
-  .h2h :global(.hh-bar .hh-d) { background: #c9c2b2; }
-  .h2h :global(.hh-list) { list-style: none; margin: 0; padding: 0 22px 8px; background: var(--card); border-radius: 0 0 var(--tile) var(--tile); }
-  .h2h :global(.hh-list li) { display: grid; grid-template-columns: 104px minmax(0, 1fr) auto; align-items: center; gap: 14px; padding: 11px 0; border-top: 1px solid var(--line); font-size: 14px; }
-  .h2h :global(.hh-date) { color: var(--muted); font-weight: 600; font-size: 13px; white-space: nowrap; }
-  .h2h :global(.hh-ev) { display: flex; flex-direction: column; min-width: 0; font-weight: 700; }
-  .h2h :global(.hh-ev small) { color: var(--muted); font-weight: 600; font-size: 12px; }
-  .h2h :global(.hh-sc) { display: inline-flex; align-items: center; gap: 6px; font-family: var(--poster); font-size: 24px; font-variant-numeric: tabular-nums; }
-  .h2h :global(.hh-sc b) { font-weight: 400; color: var(--muted); min-width: 1.2ch; text-align: center; }
-  .h2h :global(.hh-sc span) { color: var(--line); }
-  .h2h :global(.hh-none) { background: var(--card); border-radius: var(--tile); padding: 18px 22px; margin: 0; }
   .mh-in :global(.kpis) { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); border-top: 1px solid var(--ink-2); }
   .mh-in :global(.kpis > div) { padding: 20px 0; display: flex; flex-direction: column; gap: 8px; }
   .mh-in :global(.kpis > div + div) { border-left: 1px solid var(--ink-2); padding-left: 22px; }
@@ -532,11 +482,5 @@ import Layout from '../layouts/Layout.astro';
     .cmp :global(.v.l) { text-align: left; } .cmp :global(.v.r) { grid-column: 2; text-align: right; }
     .lt :global(th), .lt :global(td) { padding-left: 10px; padding-right: 10px; }
     .lt :global(.lg-n) { width: 32px; }
-    .h2h :global(.hh-sum) { padding: 16px; gap: 12px; }
-    .h2h :global(.hh-n) { min-width: 0; }
-    .h2h :global(.hh-n b) { font-size: 40px; }
-    .h2h :global(.hh-list) { padding: 0 16px 6px; }
-    .h2h :global(.hh-list li) { grid-template-columns: minmax(0, 1fr) auto; gap: 2px 12px; }
-    .h2h :global(.hh-date) { grid-column: 1 / -1; font-size: 12px; }
-  }
+              }
 </style>
