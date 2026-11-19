@@ -5,6 +5,7 @@ import liveRaceData from '../data/live-race.json';
 import { avatarSrc } from '../lib/images.mjs';
 import { flag, countryName, age, keyName } from '../lib/pdc.mjs';
 import { money, avatarColours, initials } from '../lib/format.mjs';
+import { loadProfile } from '../lib/players';
 
 const prev = (data.previous || {}) as Record<string, number>;
 // Top 128 shown; a few more are rendered hidden so the live race can promote them.
@@ -22,6 +23,9 @@ const trend = (id: string) => {
   return `<svg class="spark" viewBox="0 0 ${W} ${H}" width="${W}" height="${H}" role="img" aria-label="Ranking trend: ${v.map(r => '#' + r).join(', ')}"><polyline points="${pts}" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg>`;
 };
 const pic = (name: string) => avatarSrc(name);
+// Season average for each ranked player (from their profile), shown instead of age.
+const seasonAvg = (id: string) => { const s = loadProfile(id)?.season; return s?.stats?.avg ? { avg: s.stats.avg, year: s.year } : null; };
+const avgYear = seasonAvg(data.players[0].id)?.year;
 const av = (name: string) => { const [c1, c2] = avatarColours(name); return `--c1:${c1};--c2:${c2}`; };
 ---
 <Layout title="World Rankings" description="The PDC Order of Merit, with full player profiles, darts used and tournament history." active="rankings">
@@ -48,7 +52,7 @@ const av = (name: string) => { const [c1, c2] = avatarColours(name); return `--c
     <p class="race-note" id="raceNote" hidden></p>
     <div class="table card" role="table" aria-label="PDC World Rankings">
       <div class="tr th" role="row">
-        <span role="columnheader">#</span><span role="columnheader">Player</span><span role="columnheader" class="hide-s">Country</span><span role="columnheader" class="hide-s">Age</span><span role="columnheader" class="r">Prize money</span>
+        <span role="columnheader">#</span><span role="columnheader">Player</span><span role="columnheader" class="hide-s">Country</span><span role="columnheader" class="hide-s r" title="Three-dart average this season">{avgYear || 'Season'} avg</span><span role="columnheader" class="r">Prize money</span>
       </div>
       {players.map(p => (
         <a class="tr clickable" role="row" href={p.pos <= 128 ? `/players/${p.slug}` : `https://www.pdc.tv/players/${p.slug}`} data-player={p.id} hidden={p.pos > 128} data-search={`${p.name} ${p.nick || ''} ${countryName(p.country) || ''}`.toLowerCase()}>
@@ -60,7 +64,7 @@ const av = (name: string) => { const [c1, c2] = avatarColours(name); return `--c
             <span><b>{p.name}</b>{p.nick && <small>{p.nick}</small>}</span>
           </span>
           <span class="hide-s" role="cell"><Fragment set:html={flag(p.country)} /> {countryName(p.country)}</span>
-          <span class="hide-s tabular" role="cell">{age(p.dob) ?? '–'}{trend(p.id) && <Fragment set:html={trend(p.id)} />}</span>
+          <span class="hide-s tabular r avgcell" role="cell">{trend(p.id) && <Fragment set:html={trend(p.id)} />}<b>{seasonAvg(p.id)?.avg.toFixed(2) ?? '–'}</b></span>
           <span class="r money-cell" role="cell">
             <span class="top"><small class="netslot"></small><span class="tabular" data-money={p.money}>{money(p.money)}</span></span>
             <small class="delta" hidden></small>
@@ -128,7 +132,9 @@ const av = (name: string) => { const [c1, c2] = avatarColours(name); return `--c
             // Progress in the event, beside what it has won them (event named on hover).
             const evName = event.name.replace(/^\d{4}\s+/, '');
             const round = p.round ? (/^(group|league)/i.test(p.round) ? 'Group stage' : p.round) : '';
-            const chip = round ? `<span class="stage-chip tip ${p.alive === false ? 'out' : 'in'}" data-tip="${esc(`${evName}\n${p.alive === false ? `Knocked out · ${round}` : `Still in · ${round}`}`)}">${p.alive === false ? `Out<span class="rnd"> · ${esc(round)}</span>` : esc(round)}</span>` : '';
+            // Short round names for phones: "Quarter-Final" -> "QF", "Last 16" -> "L16".
+            const abbr = (r: string) => r.replace(/quarter-?final/i, 'QF').replace(/semi-?final/i, 'SF').replace(/^final$/i, 'Final').replace(/^last (\d+)$/i, 'L$1').replace(/^group stage$/i, 'Groups');
+            const chip = round ? `<span class="stage-chip tip ${p.alive === false ? 'out' : 'in'}" data-tip="${esc(`${evName}\n${p.alive === false ? `Knocked out · ${round}` : `Still in · ${round}`}`)}">${p.alive === false ? `Out<span class="rnd"> · ${esc(round)}</span>` : `<span class="full">${esc(round)}</span><span class="abbr">${esc(abbr(round))}</span>`}</span>` : '';
             // Three fixed slots (chip · won · expiring) so every row lines up.
             const parts = [
               chip || '<span></span>',
@@ -199,7 +205,7 @@ const av = (name: string) => { const [c1, c2] = avatarColours(name); return `--c
   .search input { border: 0; outline: 0; background: none; font: inherit; padding: 12px 0; width: 100%; }
   .small { font-size: 13px; }
   .table { overflow: hidden; }
-  .tr { display: grid; text-decoration: none; grid-template-columns: 76px minmax(0, 1.6fr) minmax(0, 1fr) 60px 340px; align-items: center; gap: 12px; padding: 10px 18px; width: 100%; border: 0; border-bottom: 1px solid var(--line); background: none; text-align: left; font: inherit; color: inherit; }
+  .tr { display: grid; text-decoration: none; grid-template-columns: 76px minmax(0, 1.6fr) minmax(0, 1fr) 150px 340px; align-items: center; gap: 12px; padding: 10px 18px; width: 100%; border: 0; border-bottom: 1px solid var(--line); background: none; text-align: left; font: inherit; color: inherit; }
   .tr:last-child { border-bottom: 0; }
   .tr.nomatch { display: none; }
   .th { font-size: 12px; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); background: var(--paper-2); }
@@ -223,7 +229,9 @@ const av = (name: string) => { const [c1, c2] = avatarColours(name); return `--c
   .seg[aria-pressed='true'] { background: var(--card); color: var(--ink); box-shadow: var(--shadow-sm); }
   .onlyev { display: inline-flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 700; cursor: pointer; }
   .onlyev input { accent-color: var(--ink); width: 16px; height: 16px; }
-  :global(.spark) { color: var(--ink-2); vertical-align: middle; margin-left: 10px; }
+  :global(.spark) { color: var(--ink-2); vertical-align: middle; margin-right: 12px; }
+  .avgcell { display: flex; align-items: center; justify-content: flex-end; }
+  .avgcell b { font-variant-numeric: tabular-nums; min-width: 5ch; text-align: right; }
   .ldot { width: 8px; height: 8px; border-radius: 50%; background: var(--red); animation: pulse 1.6s infinite; }
   .race-note { margin: -2px 0 12px; font-size: 13px; color: var(--muted); background: var(--card); border: 1px solid var(--line); border-left: 3px solid var(--red); border-radius: 12px; padding: 10px 14px; }
   .race-note .live-dot { margin-right: 6px; }
@@ -255,6 +263,7 @@ const av = (name: string) => { const [c1, c2] = avatarColours(name); return `--c
   :global(.stage-chip) { margin-right: 2px; letter-spacing: .05em; text-transform: uppercase; }
   :global(.stage-chip.in) { background: var(--volt); color: var(--ink); }
   :global(.stage-chip.out) { background: var(--paper-2); color: var(--muted); }
+  :global(.stage-chip .abbr) { display: none; }
   .table.shuffle .tr { animation: shuffle .45s var(--ease); }
   @keyframes shuffle { from { opacity: .3; transform: translateY(6px); } }
   :global(.bump) { animation: bump 1s var(--spring); display: inline-block; }
@@ -269,14 +278,16 @@ const av = (name: string) => { const [c1, c2] = avatarColours(name); return `--c
     .tr { grid-template-columns: 50px minmax(0, 1fr) auto; gap: 10px; padding: 10px 12px; }
     /* Phones: full names, wrapping onto a second line rather than cut off */
     .who { gap: 10px; }
-    .who b { white-space: normal; overflow: visible; text-overflow: clip; line-height: 1.2; overflow-wrap: anywhere; }
+    .who b { white-space: normal; overflow: visible; text-overflow: clip; line-height: 1.2; overflow-wrap: break-word; }
     .hide-s { display: none; }
-    /* Phones: money, net change and progress stacked; won/expiring detail left to the net chip */
-    .top { flex-direction: column-reverse; align-items: flex-end; gap: 4px; }
-    .top [data-money] { min-width: 0; }
-    .money-cell { gap: 4px; }
-    :global(.delta .br) { display: flex; justify-content: flex-end; }
+    /* Phones: prize money on top, then the net change and the round reached side by side
+       (won/expiring detail is left to the net chip) */
+    .money-cell { display: grid; grid-template-columns: auto auto; justify-content: end; justify-items: end; align-items: center; gap: 5px 6px; width: auto; }
+    .top, .money-cell :global(.delta), .money-cell :global(.delta .br) { display: contents; }
+    .top [data-money] { min-width: 0; grid-column: 1 / -1; order: -1; }
     :global(.delta .br > :not(.stage-chip)) { display: none; }
     :global(.stage-chip.out .rnd) { display: none; }
+    :global(.stage-chip .full) { display: none; }
+    :global(.stage-chip .abbr) { display: inline !important; }
   }
 </style>
