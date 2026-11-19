@@ -1,5 +1,5 @@
 ---
-// Season leaderboards for the top 128, built from their profiles (refreshed daily).
+// Leaderboards over the last 12 months for every ranked player, built from their profiles (refreshed daily).
 import Layout from '../layouts/Layout.astro';
 import { rankedProfiles, playerHref } from '../lib/players';
 import { avatarSrc } from '../lib/images.mjs';
@@ -7,7 +7,7 @@ import { flag } from '../lib/pdc.mjs';
 import { avatarColours, initials } from '../lib/format.mjs';
 
 const all = rankedProfiles().map(({ rank, profile: p }) => ({ rank, p, s: p.season || {}, st: p.season?.stats || {} }));
-const year = all[0]?.s.year;
+const label = all[0]?.s.label || `${all[0]?.s.year} season`;
 const MIN = 20; // matches with stats, for the rate-based boards
 const qual = all.filter(x => (x.st.matches || 0) >= MIN);
 
@@ -20,21 +20,21 @@ const board = (list: typeof all, value: (x: (typeof all)[number]) => number | nu
 const boards = [
   { key: 'avg', title: 'Three-dart average', note: `${MIN}+ matches`, rows: board(qual, x => x.st.avg, v => v.toFixed(2), x => `${x.st.matches} matches`) },
   { key: 'f9', title: 'First-nine average', note: `${MIN}+ matches`, rows: board(qual, x => x.st.f9, v => v.toFixed(2)) },
-  { key: 't80', title: 'Most 180s', note: 'This season', rows: board(all, x => x.st.t80, v => String(v), x => `${x.st.matches || 0} matches`) },
+  { key: 't80', title: 'Most 180s', note: 'Last 12 months', rows: board(all, x => x.st.t80, v => String(v), x => `${x.st.matches || 0} matches`) },
   { key: 't80pm', title: '180s per match', note: `${MIN}+ matches`, rows: board(qual, x => x.st.t80 / x.st.matches, v => v.toFixed(2)) },
   { key: 'co', title: 'Checkout %', note: `${MIN}+ matches`, rows: board(qual, x => x.st.co, v => `${v.toFixed(1)}%`) },
-  { key: 'hi', title: 'Best checkout', note: 'This season', rows: board(all, x => x.st.hi, v => String(v)) },
-  { key: 'titles', title: 'Titles', note: 'This season', rows: board(all, x => x.s.titles?.length, v => String(v), x => x.s.titles.slice(0, 2).join(', ') + (x.s.titles.length > 2 ? '…' : '')) },
+  { key: 'n170', title: '170 checkouts', note: 'Matches with a 170 finish', rows: board(all, x => x.st.n170, v => String(v), x => `${x.st.matches} matches`) },
+  { key: 'titles', title: 'Titles', note: 'Last 12 months', rows: board(all, x => x.s.titles?.length, v => String(v), x => x.s.titles.slice(0, 2).join(', ') + (x.s.titles.length > 2 ? '…' : '')) },
   { key: 'win', title: 'Win rate', note: `${MIN}+ matches`, rows: board(all.filter(x => (x.s.played || 0) >= MIN), x => (x.s.won / x.s.played) * 100, v => `${Math.round(v)}%`, x => `${x.s.won}–${x.s.lost}`) },
   { key: 'nine', title: 'Nine-darters', note: 'Career, televised and floor', rows: board(all, x => x.p.nineDarters, v => String(v)) },
 ];
 const av = (name: string) => { const [c1, c2] = avatarColours(name); return `--c1:${c1};--c2:${c2}`; };
 ---
-<Layout title="Stats" description={`The ${year} PDC season's best: three-dart averages, 180s, checkout percentages, titles and nine-darters for the world's top 128.`} active="stats">
+<Layout title="Stats" description="The PDC tour's best over the last 12 months: three-dart averages, 180s, checkout percentages, 170 finishes, titles and nine-darters for every ranked player." active="stats">
   <section class="hero wrap">
-    <span class="eyebrow">{year} season</span>
+    <span class="eyebrow">{label}</span>
     <h1>Stats <span class="accent">leaders</span></h1>
-    <p class="lede">The best numbers on the PDC tour this season, from every main-tour match with stats, for the world's top 128. Updated daily.</p>
+    <p class="lede">The best numbers on the PDC tour over the last 12 months, from every main-tour match with stats, for every ranked player. A rolling window, updated daily, so it never resets.</p>
   </section>
 
   <nav class="wrap rsw" aria-label="Rankings and stats"><a href="/rankings">Rankings</a><a class="on" aria-current="page" href="/stats">Stats</a></nav>

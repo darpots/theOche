@@ -8,11 +8,11 @@ import { money, avatarColours, initials } from '../lib/format.mjs';
 import { loadProfile } from '../lib/players';
 
 const prev = (data.previous || {}) as Record<string, number>;
-// Top 128 shown; a few more are rendered hidden so the live race can promote them.
+// Every ranked player is listed (the PDC ranks around 230 at a time).
 // The live race is worked out by the daily data job (scripts/refresh-live-race.mjs).
 const lr = liveRaceData as any;
 const liveCache = lr.event ? { event: lr.event, dropNames: lr.dropNames, updatedAt: lr.updatedAt, race: lr.race } : null;
-const players = data.players.filter(p => p.pos <= 150).map(p => ({ ...p, move: prev[p.id] ? prev[p.id] - p.pos : null }));
+const players = data.players.map(p => ({ ...p, move: prev[p.id] ? prev[p.id] - p.pos : null }));
 // Ranking trend from the snapshots kept after each ranking event.
 const hist = ((data as any).history || []) as { d: string; pos: Record<string, number> }[];
 const trend = (id: string) => {
@@ -32,7 +32,7 @@ const av = (name: string) => { const [c1, c2] = avatarColours(name); return `--c
   <section class="hero wrap">
     <span class="eyebrow">PDC Order of Merit</span>
     <h1>World <span class="accent">Rankings</span></h1>
-    <p class="lede">The top 128, ranked on prize money won over two years. Tap any player for their profile, season record and full tournament history.</p>
+    <p class="lede">Every ranked player, on prize money won over two years. Tap any player for their profile, last 12 months and full tournament history.</p>
   </section>
   <nav class="wrap rsw" aria-label="Rankings and stats"><a class="on" aria-current="page" href="/rankings">Rankings</a><a href="/stats">Stats</a></nav>
 
@@ -48,15 +48,15 @@ const av = (name: string) => { const [c1, c2] = avatarColours(name); return `--c
         <button class="seg" data-mode="official" aria-pressed="false">Official</button>
       </div>
       <label class="onlyev" id="onlyev" hidden><input type="checkbox" id="onlyevcb" /> <span id="onlyev-label">In this event only</span></label>
-      <span class="muted small" id="asof">Top 128 · official PDC list</span>
+      <span class="muted small" id="asof">{players.length} ranked players · official PDC list</span>
     </div>
     <p class="race-note" id="raceNote" hidden></p>
     <div class="table card" role="table" aria-label="PDC World Rankings">
       <div class="tr th" role="row">
-        <span role="columnheader">#</span><span role="columnheader">Player</span><span role="columnheader" class="hide-s">Country</span><span role="columnheader" class="hide-s r" title="Three-dart average this season">{avgYear || 'Season'} avg</span><span role="columnheader" class="r">Prize money</span>
+        <span role="columnheader">#</span><span role="columnheader">Player</span><span role="columnheader" class="hide-s">Country</span><span role="columnheader" class="hide-s r" title="Three-dart average over the last 12 months">12-month avg</span><span role="columnheader" class="r">Prize money</span>
       </div>
       {players.map(p => (
-        <a class="tr clickable" role="row" href={p.pos <= 128 ? `/players/${p.slug}` : `https://www.pdc.tv/players/${p.slug}`} data-player={p.id} hidden={p.pos > 128} data-search={`${p.name} ${p.nick || ''} ${countryName(p.country) || ''}`.toLowerCase()}>
+        <a class="tr clickable" role="row" href={loadProfile(p.id) ? `/players/${p.slug}` : `https://www.pdc.tv/players/${p.slug}`} data-player={p.id} data-search={`${p.name} ${p.nick || ''} ${countryName(p.country) || ''}`.toLowerCase()}>
           <span class="pos tabular" role="cell" data-pos={p.pos} data-move={p.move ?? ''}><b>{p.pos}</b>
             {p.move ? <i class={p.move > 0 ? 'up' : 'down'} title={`${p.move > 0 ? 'Up' : 'Down'} ${Math.abs(p.move)}`}>{p.move > 0 ? '▲' : '▼'}{Math.abs(p.move)}</i> : null}
           </span>
@@ -76,7 +76,7 @@ const av = (name: string) => { const [c1, c2] = avatarColours(name); return `--c
   </section>
 
 
-  <script is:inline type="application/json" id="r-official" set:html={JSON.stringify(data.players.filter(p => p.pos <= 128))}></script>
+  <script is:inline type="application/json" id="r-official" set:html={JSON.stringify(data.players)}></script>
   <script is:inline type="application/json" id="lr-data" set:html={JSON.stringify(liveCache)}></script>
 
   <script>
@@ -149,7 +149,7 @@ const av = (name: string) => { const [c1, c2] = avatarColours(name); return `--c
           r.querySelector<HTMLElement>('.netslot')!.innerHTML = netHtml;
           frag.appendChild(r);
         }
-        // Players outside this view's top 128 are hidden.
+        // Anyone not in this view's list is hidden.
         rows.forEach(r => { r.hidden = !seen.has(r); if (!seen.has(r)) frag.appendChild(r); });
         table.appendChild(frag);
         note.hidden = !live;
@@ -159,7 +159,7 @@ const av = (name: string) => { const [c1, c2] = avatarColours(name); return `--c
           const list = drops.length ? drops.map(d => `<b>${esc(d)}</b>`).join(' and ') : 'events from two years ago';
           note.innerHTML = `<span class="live-dot">Live</span> Projected standings at the end of the <b>${esc(event.name.replace(/^\d{4}\s+/, ''))}</b>. The PDC drops prize money 104 weeks after it was won, so money from the ${list} is <span class="minus">expiring</span>, and money players have guaranteed in this event so far counts as <span class="plus">won</span>. The red or green chip shows each player's net change (hover “expiring” to see which events); the volt chip shows how far they've got in the ${esc(event.name.replace(/^\d{4}\s+/, ''))}. <b>Updated daily</b>${found?.updatedAt ? ` (last at ${new Date(found.updatedAt).toLocaleString('en-GB', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit', timeZone: 'Europe/London' })})` : ''}; positions settle when the PDC publishes the official list after the final.`;
         }
-        asof.textContent = live ? `Movement shown against the official list` : `Top ${official.length} · official PDC list`;
+        asof.textContent = live ? `Movement shown against the official list` : `${official.length} ranked players · official PDC list`;
       };
 
       document.getElementById('onlyevcb')!.addEventListener('change', () => { if (mode !== 'live') return; table.classList.add('shuffle'); setTimeout(() => table.classList.remove('shuffle'), 500); paint(); });
@@ -179,7 +179,7 @@ const av = (name: string) => { const [c1, c2] = avatarColours(name); return `--c
       if (found) {
         event = found.event;
         document.getElementById('onlyev-label')!.textContent = `In the ${found.event.name.replace(/^\d{4}\s+/, '').replace(/ of Darts$/, '')} only`;
-        race = found.race.filter((p: any) => p.live <= 128);
+        race = found.race;
       }
       modeBox.hidden = !race;
       document.getElementById('onlyev')!.hidden = !race;
@@ -187,7 +187,7 @@ const av = (name: string) => { const [c1, c2] = avatarColours(name); return `--c
       // The official list itself is refreshed quietly in the background.
       json(`${API.rankings}2YEAR?page.size=500`).then(body => {
         if (!body || !document.querySelector('.table')) return;
-        full = normaliseRankings(body); official = full.filter((p: any) => p.pos <= 128);
+        full = normaliseRankings(body); official = full;
         if (mode === 'official' || !race) paint();
       }).catch(() => {});
     }

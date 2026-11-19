@@ -128,7 +128,7 @@ const spot = loadProfile(spotRank.id);
       </div>
 
       <section class="tile tile-card race">
-        <div class="th"><h2>{liveOn ? 'Live race' : 'World rankings'}</h2><a href="/rankings">Top 128 →</a></div>
+        <div class="th"><h2>{liveOn ? 'Live race' : 'World rankings'}</h2><a href="/rankings">Full rankings →</a></div>
         <ol>
           {liveOn ? [...raceTop.map((p: any) => ({ p, hi: false })), ...(raceMover ? [{ p: raceMover, hi: true }] : [])].map(({ p, hi }) => (
             <li class:list={{ hi }}><a href={`/players/${p.slug}`}><span class="poster-num rp">{p.live}</span><b>{p.name}{p.move ? <i class={p.move > 0 ? 'up' : 'down'}>{p.move > 0 ? '▲' : '▼'} {Math.abs(p.move)}</i> : null}</b><span class="rm">{money(p.money)}</span></a></li>
@@ -146,7 +146,7 @@ const spot = loadProfile(spotRank.id);
           {spot.season?.stats && (
             <div class="spot-bottom">
               <div class="poster-num spot-avg">{spot.season.stats.avg.toFixed(2)}</div>
-              <div class="lbl">{spot.season.year} season average</div>
+              <div class="lbl">Average · last 12 months</div>
             </div>
           )}
         </a>

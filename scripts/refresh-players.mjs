@@ -1,4 +1,4 @@
-// Builds one profile file per top-128 player at public/data/players/<id>.json
+// Builds one profile file per ranked player at public/data/players/<id>.json
 // (loaded by the Rankings pop-up), using only the PDC's public feeds:
 //  - participants feed: age, country, darts used, walk-on, titles, nine-darters
 //  - tournaments feed: tournament-by-tournament finishes and the season record
@@ -13,14 +13,16 @@ const ROOT = new URL('..', import.meta.url).pathname;
 const CACHE = `${ROOT}data/results-cache.json`;
 const STATS = `${ROOT}data/stats-cache.json`;
 const OUTDIR = `${ROOT}public/data/players/`;
-const TOP = 128;
 const FIRST_SEASON = 2005;
 const t = today();
 const season = Number(t.slice(0, 4));
+// "Season" figures cover a rolling 12 months (events that ended in the last
+// 365 days), so they never empty out on 1 January.
+const FROM = new Date(Date.parse(t + 'T12:00:00Z') - 365 * 864e5).toISOString().slice(0, 10);
 
 const rankings = await readJson(`${ROOT}src/data/rankings.json`);
 if (!rankings?.players?.length) throw new Error('Run refresh-rankings first');
-const top = rankings.players.slice(0, TOP);
+const top = rankings.players; // every ranked player
 
 // ---- 1. Tournament index -------------------------------------------------
 const index = (await getAll(API.tournaments, {}, 200)).map(r => ({ id: r.id, ...r.attributes }));
@@ -46,7 +48,7 @@ for (const [id, sum] of Object.entries(cache)) {
   if (a.winnerParticipantID) sum.w = String(a.winnerParticipantID);
 }
 // This season's main-tour events also need their fixture ids (for averages).
-const isSeasonEvent = a => isSeason(a) && Number(a.seasonID) === season;
+const isSeasonEvent = a => isSeason(a) && (a.endDate || '') >= FROM;
 // Match stats are also kept for the two previous seasons' history events
 // (majors, World Series, European Tour), for the averages in each player's
 // tournament history.
@@ -121,7 +123,7 @@ await writeJsonIfChanged(CACHE, persistable);
 // never change, so each is fetched once and kept in data/stats-cache.json.
 // Per side: [pid, points, darts, first9 points, first9 darts, 180s, checkouts hit, checkout attempts, best checkout]
 const statsCache = (await readJson(STATS)) || {};
-const sumMeta = sum => ({ tournamentCategoryID: sum.c, tournamentTypeID: sum.ty, seasonID: sum.s });
+const sumMeta = sum => ({ tournamentCategoryID: sum.c, tournamentTypeID: sum.ty, seasonID: sum.s, endDate: sum.e });
 const seasonEvents = Object.entries(cache).filter(([, sum]) => isSeasonEvent(sumMeta(sum)));
 const statsEvents = Object.entries(cache).filter(([, sum]) => isStatsEvent(sumMeta(sum)));
 const wantFx = new Map(statsEvents.flatMap(([tid, sum]) => (sum.fx || []).map(f => [Array.isArray(f) ? f[0] : f, tid])));
@@ -157,19 +159,20 @@ await writeJsonIfChanged(STATS, statsCache);
 
 // Totals per player, overall and per tournament.
 const seasonStats = new Map(); // pid -> { all: totals, byT: Map<tid, totals> }
-const add = (t, r) => { for (let i = 1; i < 9; i++) t[i] = i === 8 ? Math.max(t[i], r[i]) : t[i] + r[i]; t[0]++; };
+// Totals: [matches, points, darts, f9 points, f9 darts, 180s, checkouts hit, attempts, best checkout, matches with a 170 finish]
+const add = (t, r) => { for (let i = 1; i < 9; i++) t[i] = i === 8 ? Math.max(t[i], r[i]) : t[i] + r[i]; t[0]++; if (r[8] === 170) t[9]++; };
 for (const s of Object.values(statsCache)) for (const r of [s.a, s.b]) {
   if (!r[2]) continue;
-  const e = seasonStats.get(r[0]) || { all: [0, 0, 0, 0, 0, 0, 0, 0, 0], byT: new Map() };
-  if (cache[s.t]?.s === season) add(e.all, r); // the season summary is this year only
-  if (!e.byT.has(s.t)) e.byT.set(s.t, [0, 0, 0, 0, 0, 0, 0, 0, 0]);
+  const e = seasonStats.get(r[0]) || { all: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0], byT: new Map() };
+  if ((cache[s.t]?.e || '') >= FROM) add(e.all, r); // the summary covers the last 12 months
+  if (!e.byT.has(s.t)) e.byT.set(s.t, [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]);
   add(e.byT.get(s.t), r);
   seasonStats.set(r[0], e);
 }
 const avgOf = t => (t[2] ? Math.round((t[1] / t[2]) * 300) / 100 : null);
 function summaryOf(t) {
   if (!t || !t[2]) return null;
-  return { matches: t[0], avg: avgOf(t), f9: t[4] ? Math.round((t[3] / t[4]) * 300) / 100 : null, t80: t[5], co: t[7] ? Math.round((t[6] / t[7]) * 1000) / 10 : null, hi: t[8] || null };
+  return { matches: t[0], avg: avgOf(t), f9: t[4] ? Math.round((t[3] / t[4]) * 300) / 100 : null, t80: t[5], co: t[7] ? Math.round((t[6] / t[7]) * 1000) / 10 : null, hi: t[8] || null, n170: t[9] || 0 };
 }
 
 // ---- 4. Per-player profiles ----------------------------------------------
@@ -199,7 +202,7 @@ await pool(top, 4, async row => {
       const ev = seasonStats.get(row.id)?.byT.get(id);
       history.push({ id, season: sum.s, date: sum.d, name, tag, ...finishLabel(sum, row.id), w: rec[1], l: rec[2], ...(ev ? { avg: avgOf(ev) } : {}) });
     }
-    if (sum.s === season && sum.c !== '17' && ['2', '3', '4'].includes(sum.c)) {
+    if ((sum.e || '') >= FROM && sum.c !== '17' && ['2', '3', '4'].includes(sum.c)) {
       seasonRec.won += rec[1]; seasonRec.lost += rec[2];
       seasonRec.legsFor += rec[3]; seasonRec.legsAgainst += rec[4];
       if (sum.w === row.id && sum.done !== false && sum.e < t) seasonRec.titles.push(cleanName(sum.n).name + (cleanName(sum.n).tag ? ` (${cleanName(sum.n).tag})` : ''));
@@ -207,7 +210,7 @@ await pool(top, 4, async row => {
   }
   seasonRec.played = seasonRec.won + seasonRec.lost;
   history.sort((x, y) => y.date.localeCompare(x.date));
-  // Recent matches this season (newest first) for the form guide.
+  // Recent matches in the last 12 months (newest first) for the form guide.
   const recent = seasonEvents.flatMap(([tid, sum]) => (sum.fx || []).filter(f => Array.isArray(f) && (f[2] === row.id || f[3] === row.id)).map(f => {
     const me = f[2] === row.id ? 0 : 1, opp = me ? f[2] : f[3];
     const st = statsCache[f[0]];
@@ -232,7 +235,7 @@ await pool(top, 4, async row => {
     tourCard: !!a.isCurrentTourCardHolder,
     nineDarters: a.statistics?.nineDartCount ?? null,
     career,
-    season: { year: season, ...seasonRec, stats: summaryOf(seasonStats.get(row.id)?.all) },
+    season: { year: season, label: 'Last 12 months', from: FROM, to: t, ...seasonRec, stats: summaryOf(seasonStats.get(row.id)?.all) },
     form: recent.slice(0, 10),
     history,
   };

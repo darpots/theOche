@@ -1,5 +1,5 @@
 // Player images for every ranked player and everyone in the current event:
-//  - avatars:   public/avatars/<key>.webp, 112px square head-and-shoulders
+//  - avatars:   public/avatars/<key>.webp, 112px square head-and-shoulders (every ranked player)
 //  - cut-outs:  public/cutouts/<key>-400.webp and -800.webp (transparent)
 // Sources, in order of preference:
 //  - cut-outs: our Creative Commons cut-outs (public/cutouts/<key>.webp), else PDC's official headshot
@@ -22,9 +22,9 @@ const faces = await read('src/data/faces.json', {});
 const cache = await read('data/headshot-cache.json', {}); // key -> PDC image file name last processed
 const prev = await read('src/data/player-images.json', {});
 
-// Who needs images: top 160 in the rankings plus everyone in the current event.
+// Who needs images: every ranked player plus everyone in the current event.
 const people = new Map();
-for (const p of rankings.players.filter(p => p.pos <= 160)) people.set(p.id, p.name);
+for (const p of rankings.players) people.set(p.id, p.name);
 for (const s of tournament.stages || []) for (const f of s.fixtures || []) for (const p of [f.p1, f.p2]) if (p) people.set(p.id, p.name);
 
 for (const d of ['public/avatars', 'public/cutouts']) await mkdir(ROOT + d, { recursive: true });

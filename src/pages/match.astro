@@ -24,8 +24,8 @@ import Layout from '../layouts/Layout.astro';
   </section>
 
   <section class="wrap tape" id="tape" hidden>
-    <h2>Season form</h2>
-    <p class="sub">How the two players have gone in PDC main-tour events this year.</p>
+    <h2>Form</h2>
+    <p class="sub">How the two players have gone in PDC main-tour events over the last 12 months.</p>
     <div class="cmp" id="tp"></div>
   </section>
 
@@ -229,7 +229,7 @@ import Layout from '../layouts/Layout.astro';
       svg.addEventListener('pointerleave', () => { tip.hidden = true; xh.setAttribute('hidden', ''); });
     }
 
-    // Season form from the players' profile files (top 128 only).
+    // Form from the players' profile files (every ranked player).
     async function tape(ps: any[]) {
       const box = document.getElementById('tape'), tp = document.getElementById('tp');
       if (!box || !tp) return;
@@ -237,7 +237,7 @@ import Layout from '../layouts/Layout.astro';
       if (!prof.some(Boolean)) { box.hidden = true; return; }
       const st = prof.map(x => x?.season?.stats || null), se = prof.map(x => x?.season || null);
       const rows: [string, number | null, number | null, (v: number) => string, boolean][] = [
-        ['Season average', st[0]?.avg ?? null, st[1]?.avg ?? null, v => v.toFixed(2), true],
+        ['Average', st[0]?.avg ?? null, st[1]?.avg ?? null, v => v.toFixed(2), true],
         ['First 9 average', st[0]?.f9 ?? null, st[1]?.f9 ?? null, v => v.toFixed(2), true],
         ['Checkout %', st[0]?.co ?? null, st[1]?.co ?? null, v => `${v.toFixed(1)}%`, true],
         ['180s per match', st[0] ? st[0].t80 / st[0].matches : null, st[1] ? st[1].t80 / st[1].matches : null, v => v.toFixed(1), true],

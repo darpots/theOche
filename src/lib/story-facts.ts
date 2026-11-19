@@ -12,7 +12,7 @@ type Story = { slug: string; date: string; tournament?: string; players: string[
 export interface KeyNumber { value: string; label: string; hi?: boolean }
 
 const esc = (s: string) => s.replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]!);
-const slugs = new Map(rankings.players.filter(p => p.pos <= 128).map(p => [keyName(p.name), p.slug]));
+const slugs = new Map(rankings.players.map(p => [keyName(p.name), p.slug]));
 
 /** The match a story is about: both lead players met in the story's event, on or before its date. */
 export function storyMatch(story: Story) {

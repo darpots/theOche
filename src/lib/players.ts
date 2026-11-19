@@ -12,9 +12,9 @@ export function loadProfile(id: string): Profile | null {
   return existsSync(f) ? JSON.parse(readFileSync(f, 'utf8')) : null;
 }
 
-/** Top-128 players that have a profile, in ranking order. */
+/** Every ranked player that has a profile, in ranking order. */
 export function rankedProfiles() {
-  return rankings.players.filter(p => p.pos <= 128).map(r => ({ rank: r, profile: loadProfile(r.id) })).filter(x => x.profile);
+  return rankings.players.map(r => ({ rank: r, profile: loadProfile(r.id) })).filter(x => x.profile);
 }
 
 export const playerHref = (slug: string) => `/players/${slug}`;

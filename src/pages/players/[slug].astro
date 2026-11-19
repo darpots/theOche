@@ -1,5 +1,5 @@
 ---
-// A full profile page for each of the top 128: season stats (darts-weighted
+// A full profile page for every ranked player: last-12-months stats (darts-weighted
 // average, first 9, 180s, checkout), record, profile with PDC titles, tournament
 // history and the latest news about the player.
 import Layout from '../../layouts/Layout.astro';
@@ -27,6 +27,8 @@ const portrait = avatarSrc(p.name);
 const [c1, c2] = avatarColours(p.name);
 const s = p.season;
 const st = s.stats;
+// The figures cover a rolling 12 months (s.from to s.to); older profiles used a calendar year.
+const inWindow = (h: any) => (s.from ? (h.date || '') >= s.from : h.season === s.year);
 const winPct = s.played ? Math.round((s.won / s.played) * 100) : 0;
 const legPct = s.legsFor + s.legsAgainst ? Math.round((s.legsFor / (s.legsFor + s.legsAgainst)) * 100) : 0;
 // Career PDC titles: the official total, else the sum of its parts.
@@ -44,7 +46,7 @@ const SPONSORS = /^(cazoo|bet365|betvictor|unibet|william hill|mr vegas|paddy po
 const titleName = (h: any) => { const c = cleanName(h.name); return { name: c.name.replace(SPONSORS, '').replace(/^European Tour \d+ - /, ''), tag: c.tag || h.tag }; };
 const careerTitles = p.history.filter((h: any) => h.label === 'Winner').map((h: any) => ({ ...titleName(h), season: h.season, id: h.id }));
 // Players to pick from in the head-to-head finder.
-const rivals = rankings.players.filter(r => r.pos <= 128 && r.id !== p.id).map(r => ({ id: r.id, name: r.name }));
+const rivals = rankings.players.filter(r => r.id !== p.id).map(r => ({ id: r.id, name: r.name }));
 
 const groups = [
   { k: 'major', label: 'Majors', test: (h: any) => !h.tag && !/masters$|world series/i.test(h.name) },
@@ -62,7 +64,7 @@ const titleRows = (() => {
     const row = rows.get(name) || { name, details: [], count: 0, href: null };
     row.count++;
     if (detail) row.details.push(detail.replace(/^Night /, ''));
-    const h = p.history.find((x: any) => x.season === s.year && x.name === name && (!x.tag || x.tag === detail) && x.label === 'Winner');
+    const h = p.history.find((x: any) => inWindow(x) && x.name === name && (!x.tag || x.tag === detail) && x.label === 'Winner');
     if (h && !row.href) row.href = `/tournament/${h.id}`;
     rows.set(name, row);
   }
@@ -101,7 +103,7 @@ const boardNums = BOARD.map((n, i) => {
 });
 const shortDate = (d: string) => new Date(d + 'T12:00:00Z').toLocaleDateString('en-GB', { day: 'numeric', month: 'short' });
 // Average at each event this season, oldest first.
-const evAvg = p.history.filter((h: any) => h.season === s.year && h.avg).slice().reverse()
+const evAvg = p.history.filter((h: any) => inWindow(h) && h.avg).slice().reverse()
   .map((h: any) => ({ x: shortDate(h.date), y: h.avg, tip: `${h.name}${h.tag ? ` (${h.tag})` : ''}: ${h.avg.toFixed(2)} · ${h.label}` }));
 // World ranking at each update we've recorded.
 const rankHist = ((rankings as any).history || []).map((h: any) => ({ d: h.d, pos: h.pos[p.id] })).filter((h: any) => h.pos)
@@ -123,7 +125,7 @@ const news = (await getCollection('news'))
   .sort((a, b) => b.data.date.localeCompare(a.data.date))
   .slice(0, 4);
 ---
-<Layout title={p.name} description={`${p.name}: world ranking, ${s.year} season average, darts, titles and full PDC tournament history.`} active="rankings" type="profile"
+<Layout title={p.name} description={`${p.name}: world ranking, average over the last 12 months, darts, titles and full PDC tournament history.`} active="rankings" type="profile"
   image={cut ? `/og/players/${p.slug}.jpg` : undefined}
   jsonld={{ '@context': 'https://schema.org', '@type': 'Person', name: p.name, alternateName: p.nick || undefined, birthDate: p.dob || undefined, nationality: countryName(p.country) || undefined, jobTitle: 'Professional darts player', url: new URL(`/players/${p.slug}`, Astro.site).href }}>
   <section class="pbanner">
@@ -148,8 +150,8 @@ const news = (await getCollection('news'))
         <button class="follow" type="button" data-follow={p.id} data-name={p.name} aria-pressed="false"><span class="f-off">☆ Follow</span><span class="f-on">★ Following</span></button>
         <dl class="kpis">
           <div><dt>Prize money (2 yrs)</dt><dd>{money(rank.money)}</dd></div>
-          <div><dt>{s.year} average</dt><dd>{st ? st.avg.toFixed(2) : '–'}</dd></div>
-          <div><dt>{s.year} titles</dt><dd>{s.titles.length}</dd></div>
+          <div><dt>12-month average</dt><dd>{st ? st.avg.toFixed(2) : '–'}</dd></div>
+          <div><dt>Titles · 12 months</dt><dd>{s.titles.length}</dd></div>
           <div><dt>Win rate</dt><dd>{s.played ? `${winPct}%` : '–'}</dd></div>
         </dl>
       </div>
@@ -170,10 +172,10 @@ const news = (await getCollection('news'))
         </a>
       )}
       <section class="block" data-reveal>
-        <h2>{s.year} season</h2>
+        <h2>Last 12 months</h2>
         {st ? (
           <div class="avgcard">
-            <div class="big"><span>Season average</span><b data-count={st.avg}>{st.avg.toFixed(2)}</b><small>across {st.matches} matches, weighted by darts thrown</small></div>
+            <div class="big"><span>Average · 12 months</span><b data-count={st.avg}>{st.avg.toFixed(2)}</b><small>across {st.matches} matches, weighted by darts thrown</small></div>
             <div class="minis">
               <div><b>{st.f9 != null ? st.f9.toFixed(2) : '–'}</b><span>First 9 avg</span></div>
               <div><b>{st.t80}</b><span>180s</span></div>
@@ -191,7 +193,7 @@ const news = (await getCollection('news'))
         {titleRows.length > 0 && (
           <div class="titles">
             <table>
-              <caption>{s.year} titles · {s.titles.length}</caption>
+              <caption>Titles in the last 12 months · {s.titles.length}</caption>
               <thead><tr><th scope="col">Event</th><th scope="col">Detail</th><th scope="col" class="n">Wins</th></tr></thead>
               <tbody>
                 {titleRows.map(r => (
@@ -228,8 +230,8 @@ const news = (await getCollection('news'))
 
       {evAvg.length > 1 && (
         <section class="block" data-reveal>
-          <div class="hh"><h2>Average by event</h2><p class="muted">{s.year} majors, World Series and European Tour</p></div>
-          <LineChart points={evAvg} label={`${p.name}'s three-dart average at each ${s.year} event`} refY={st?.avg} refLabel={st ? `Season ${st.avg.toFixed(2)}` : undefined} />
+          <div class="hh"><h2>Average by event</h2><p class="muted">Last 12 months: majors, World Series and European Tour</p></div>
+          <LineChart points={evAvg} label={`${p.name}'s three-dart average at each event in the last 12 months`} refY={st?.avg} refLabel={st ? `12-month ${st.avg.toFixed(2)}` : undefined} />
         </section>
       )}
 
@@ -321,7 +323,7 @@ const news = (await getCollection('news'))
     }
     document.addEventListener('astro:page-load', init);
 
-    // Head-to-head finder: any top-128 opponent, from the PDC's records.
+    // Head-to-head finder: any ranked opponent, from the PDC's records.
     import { fetchH2H, h2hSummary, renderH2H } from '../../lib/h2h.mjs';
     import { surnameOf } from '../../lib/pdc.mjs';
     import { initFollow } from '../../lib/follow.mjs';
