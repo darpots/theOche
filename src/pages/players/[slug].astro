@@ -156,7 +156,7 @@ const news = (await getCollection('news'))
         </dl>
       </div>
       <div class="pb-pic" aria-hidden="true">
-        {cut ? <img class="cut photo" src={cut.src} srcset={cut.srcset} sizes="(max-width: 900px) 240px, 340px" alt="" fetchpriority="high" /> : <span class="avatar big" style={`--size:220px;--c1:${c1};--c2:${c2}`}>{portrait ? <img src={portrait} alt="" /> : initials(p.name)}</span>}
+        {cut ? <img class="cut photo" src={cut.src} srcset={cut.srcset} sizes="(max-width: 900px) 240px, 340px" alt="" fetchpriority="high" /> : <span class="avatar pb-av" style={`--size:220px;--c1:${c1};--c2:${c2}`}>{portrait ? <img src={portrait} alt="" /> : initials(p.name)}</span>}
       </div>
     </div>
   </section>
