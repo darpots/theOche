@@ -94,7 +94,7 @@ const news = (await getCollection('news')).map(n => n.data)
 
   <script>
     import { API, normaliseTournament, fixtureStatsUrl, slimStats, applyLive, liveCurrentLeg } from '../../lib/pdc.mjs';
-    import { liveFor, LIVE_TICK } from '../../lib/live-client.mjs';
+    import { liveFor, watchLive, unwatch, isPushing, LIVE_TICK, PUSH_TICK } from '../../lib/live-client.mjs';
     import { matchDays, renderDay, renderTabs, progress, fixtureRow } from '../../lib/render-matches.mjs';
 
     let poll: number | undefined;
@@ -199,12 +199,16 @@ const news = (await getCollection('news')).map(n => n.data)
       };
       // Live scores and averages from PDC's live data every few seconds; the
       // board only redraws when something changed.
-      let liveSig = '';
+      let liveSig = '', lastTick = 0;
       const liveTick = async () => {
         if (document.hidden) return;
+        lastTick = Date.now();
         const ids = t.stages.flatMap((s: any) => s.fixtures).filter((f: any) => f.date === today && f.status !== 'result' || (f.date === today && !f.stats) || f.statsLive).map((f: any) => f.id);
         if (!ids.length) return;
         const lv = await liveFor(t.id, ids);
+        // Matches under way: have PDC push every change to us.
+        const inPlay = [...lv.values()].filter((m: any) => m.status === 'live').map((m: any) => String(m.id));
+        if (inPlay.length) watchLive(t.id, inPlay, onPush);
         // The leg in play for each live match: what each player needs.
         const legs = new Map<string, any>();
         await Promise.all([...lv.values()].filter((m: any) => m.status === 'live').map(async (m: any) => {
@@ -217,6 +221,7 @@ const news = (await getCollection('news')).map(n => n.data)
         t.stages.forEach((s: any) => s.fixtures.forEach((f: any) => { f.legNow = f.status === 'live' ? legs.get(String(f.id)) || null : null; }));
         paint(true);
       };
+      const onPush = () => { liveTick().catch(() => {}); };
       // Schedule / News tabs (#news opens the news tab).
       const tabs = document.querySelectorAll<HTMLButtonElement>('.vt');
       const show = (v: string) => {
@@ -233,7 +238,9 @@ const news = (await getCollection('news')).map(n => n.data)
         document.getElementById('liveflag')!.hidden = false;
         refresh();
         let n = 0;
-        poll = window.setInterval(() => { if (++n % 4 === 0) refresh(); else liveTick().catch(() => {}); }, LIVE_TICK);
+        // Polls only when push isn't running; otherwise a slow safety check. The schedule is re-read every ~30s.
+        poll = window.setInterval(() => { if (++n % 4 === 0) refresh(); else if (!isPushing() || Date.now() - lastTick > PUSH_TICK) liveTick().catch(() => {}); }, LIVE_TICK);
+        document.addEventListener('astro:before-swap', () => unwatch(onPush), { once: true });
       } else if (t.end >= today || !isComplete) refresh();
     }
     document.addEventListener('astro:page-load', init);

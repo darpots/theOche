@@ -42,7 +42,7 @@ import Layout from '../layouts/Layout.astro';
   <script>
     import { API, flag, keyName, liveScore, liveLegs, cleanName, formatLabel } from '../lib/pdc.mjs';
     import { checkout } from '../lib/checkout.mjs';
-    import { liveFor, LIVE_TICK } from '../lib/live-client.mjs';
+    import { liveFor, watchLive, unwatch, isPushing, LIVE_TICK, PUSH_TICK } from '../lib/live-client.mjs';
     import { ukTime } from '../lib/format.mjs';
     import { cutoutImg, avatarSrc } from '../lib/images.mjs';
 
@@ -356,13 +356,17 @@ import Layout from '../layouts/Layout.astro';
           wireTip();
         }
         clearTimeout(timer);
-        if (isLive) timer = window.setTimeout(load, LIVE_TICK);
+        // Live: PDC pushes each change (load runs again at once); the timer is only a safety check.
+        if (isLive && tid) watchLive(String(tid), [String(id)], onPush);
+        if (isLive) timer = window.setTimeout(load, isPushing() ? PUSH_TICK : LIVE_TICK);
         else if (!isResult && a.attributes.startDate <= new Date().toISOString().slice(0, 10)) timer = window.setTimeout(load, 15_000);
         else if (isResult && noLegs) timer = window.setTimeout(load, 120_000);
       } catch {
         mh.innerHTML = '<div class="loading">This match could not be loaded. Please try again shortly.</div>';
       }
     }
+    const onPush = () => { if (document.getElementById('mh')) { clearTimeout(timer); load(); } };
+    document.addEventListener('astro:before-swap', () => unwatch(onPush));
     document.addEventListener('astro:page-load', () => { clearTimeout(timer); if (document.getElementById('mh')) load(); });
   </script>
 </Layout>

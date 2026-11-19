@@ -167,7 +167,7 @@ const spot = loadProfile(spotRank.id);
 
   <script>
     import { normaliseTournament, applyLive, liveCurrentLeg, surnameOf } from '../lib/pdc.mjs';
-    import { liveFor, LIVE_TICK } from '../lib/live-client.mjs';
+    import { liveFor, watchLive, unwatch, isPushing, LIVE_TICK, PUSH_TICK } from '../lib/live-client.mjs';
     import { matchday, featureTile, nextTileInner } from '../lib/feature.mjs';
     import { shortDate } from '../lib/format.mjs';
 
@@ -194,10 +194,11 @@ const spot = loadProfile(spotRank.id);
       // While the event is on: the schedule is re-read every 30 seconds and the
       // live score and averages every few seconds; tiles redraw only on change.
       if (box.dataset.on) {
-        let base: any = null, baseAt = 0;
+        let base: any = null, baseAt = 0, lastRun = 0;
         const draw = (el: HTMLElement, html: string) => { if (el.dataset.html !== html) { el.innerHTML = html; el.dataset.html = html; } };
         const refresh = async () => {
           if (document.hidden) return;
+          lastRun = Date.now();
           try {
             if (!base || Date.now() - baseAt > 28_000) {
               base = normaliseTournament(await (await fetch(`https://tournaments.darts.web.gc.pdcservices.co.uk/v2/${box.dataset.id}`, { cache: 'no-store' })).json());
@@ -207,6 +208,9 @@ const spot = loadProfile(spotRank.id);
             const lv = await liveFor(box.dataset.id!, ids);
             const t = applyLive(structuredClone(base), lv);
             const md = matchday(t, today(), hhmm());
+            // Matches under way: have PDC push every change to us.
+            const inPlay = [md.now, ...md.also].filter(Boolean).map((f: any) => f.id);
+            if (inPlay.length) watchLive(box.dataset.id!, inPlay, refresh);
             const pick = md.now ? [md.now, 'now'] : md.next ? [md.next, 'next'] : md.results[0] ? [md.results[0], 'result'] : null;
             // The leg in play: what each player needs.
             if (md.now?.status === 'live') (md.now as any).legNow = await liveCurrentLeg(box.dataset.id!, lv.get(String(md.now.id))).catch(() => null);
@@ -227,7 +231,9 @@ const spot = loadProfile(spotRank.id);
           } catch { /* keep what we have */ }
         };
         refresh();
-        timer = window.setInterval(refresh, LIVE_TICK);
+        // Polls only when push isn't running; otherwise a slow safety check.
+        timer = window.setInterval(() => { if (!isPushing() || Date.now() - lastRun > PUSH_TICK) refresh(); }, LIVE_TICK);
+        document.addEventListener('astro:before-swap', () => unwatch(refresh), { once: true });
       }
 
     }

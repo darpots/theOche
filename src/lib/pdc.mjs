@@ -347,9 +347,10 @@ export async function loadLiveRace(today, found) {
 // official figures always win when both exist. If this ever stops answering,
 // callers fall back to the official feeds alone.
 // ---------------------------------------------------------------------------
-const LIVE_DB = 'projects/professional-darts-corporation/databases/(default)/documents';
+export const LIVE_PROJECT = 'professional-darts-corporation';
+const LIVE_DB = `projects/${LIVE_PROJECT}/databases/(default)/documents`;
 const LIVE_URL = `https://firestore.googleapis.com/v1/${LIVE_DB}`;
-const LIVE_KEY = 'AIzaSyCjME19V2rot9OJqrt96Yigqcx3B0nYMgI';
+export const LIVE_KEY = 'AIzaSyCjME19V2rot9OJqrt96Yigqcx3B0nYMgI';
 const LIVE_FIELDS = ['status', 'legScore', 'setScore', 'stats', 'currentLeg', 'currentSet'];
 
 const fsVal = v => v == null ? null
@@ -369,10 +370,15 @@ const liveSide = s => s && s.average3Darts != null ? {
 /** One live match document, slimmed: { id, status: 'live'|'result', legs, sets, stats }. */
 export function slimLive(doc) {
   if (!doc?.name || !doc.fields) return null;
-  const f = Object.fromEntries(Object.entries(doc.fields).map(([k, v]) => [k, fsVal(v)]));
+  return slimLiveData(doc.name.split('/').pop(), Object.fromEntries(Object.entries(doc.fields).map(([k, v]) => [k, fsVal(v)])));
+}
+
+/** The same, from plain document data (as pushed by the Firestore client). */
+export function slimLiveData(id, f) {
+  if (!f) return null;
   const a = liveSide(f.stats?.home), b = liveSide(f.stats?.away);
   return {
-    id: doc.name.split('/').pop(),
+    id: String(id),
     status: f.status === 'O' ? 'live' : f.status === 'C' ? 'result' : 'upcoming',
     legs: [f.legScore?.home ?? 0, f.legScore?.away ?? 0],
     sets: [f.setScore?.home ?? 0, f.setScore?.away ?? 0],
