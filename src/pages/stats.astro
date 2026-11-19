@@ -1,0 +1,90 @@
+---
+// Season leaderboards for the top 128, built from their profiles (refreshed daily).
+import Layout from '../layouts/Layout.astro';
+import { rankedProfiles, playerHref } from '../lib/players';
+import { avatarSrc } from '../lib/images.mjs';
+import { flag } from '../lib/pdc.mjs';
+import { avatarColours, initials } from '../lib/format.mjs';
+
+const all = rankedProfiles().map(({ rank, profile: p }) => ({ rank, p, s: p.season || {}, st: p.season?.stats || {} }));
+const year = all[0]?.s.year;
+const MIN = 20; // matches with stats, for the rate-based boards
+const qual = all.filter(x => (x.st.matches || 0) >= MIN);
+
+type Row = { p: any; v: number; shown: string; sub?: string };
+const board = (list: typeof all, value: (x: (typeof all)[number]) => number | null | undefined, fmt: (v: number) => string, sub?: (x: (typeof all)[number]) => string, asc = false): Row[] =>
+  list.map(x => ({ x, v: value(x) })).filter((r): r is { x: (typeof all)[number]; v: number } => r.v != null && Number.isFinite(r.v) && r.v > 0)
+    .sort((a, b) => (asc ? a.v - b.v : b.v - a.v)).slice(0, 10)
+    .map(({ x, v }) => ({ p: x.p, v, shown: fmt(v), sub: sub?.(x) }));
+
+const boards = [
+  { key: 'avg', title: 'Three-dart average', note: `${MIN}+ matches`, rows: board(qual, x => x.st.avg, v => v.toFixed(2), x => `${x.st.matches} matches`) },
+  { key: 'f9', title: 'First-nine average', note: `${MIN}+ matches`, rows: board(qual, x => x.st.f9, v => v.toFixed(2)) },
+  { key: 't80', title: 'Most 180s', note: 'This season', rows: board(all, x => x.st.t80, v => String(v), x => `${x.st.matches || 0} matches`) },
+  { key: 't80pm', title: '180s per match', note: `${MIN}+ matches`, rows: board(qual, x => x.st.t80 / x.st.matches, v => v.toFixed(2)) },
+  { key: 'co', title: 'Checkout %', note: `${MIN}+ matches`, rows: board(qual, x => x.st.co, v => `${v.toFixed(1)}%`) },
+  { key: 'hi', title: 'Best checkout', note: 'This season', rows: board(all, x => x.st.hi, v => String(v)) },
+  { key: 'titles', title: 'Titles', note: 'This season', rows: board(all, x => x.s.titles?.length, v => String(v), x => x.s.titles.slice(0, 2).join(', ') + (x.s.titles.length > 2 ? '…' : '')) },
+  { key: 'win', title: 'Win rate', note: `${MIN}+ matches`, rows: board(all.filter(x => (x.s.played || 0) >= MIN), x => (x.s.won / x.s.played) * 100, v => `${Math.round(v)}%`, x => `${x.s.won}–${x.s.lost}`) },
+  { key: 'nine', title: 'Nine-darters', note: 'Career, televised and floor', rows: board(all, x => x.p.nineDarters, v => String(v)) },
+];
+const av = (name: string) => { const [c1, c2] = avatarColours(name); return `--c1:${c1};--c2:${c2}`; };
+---
+<Layout title="Stats" description={`The ${year} PDC season's best: three-dart averages, 180s, checkout percentages, titles and nine-darters for the world's top 128.`} active="stats">
+  <section class="hero wrap">
+    <span class="eyebrow">{year} season</span>
+    <h1>Stats <span class="accent">leaders</span></h1>
+    <p class="lede">The best numbers on the PDC tour this season, from every main-tour match with stats, for the world's top 128. Updated daily.</p>
+  </section>
+
+  <nav class="wrap rsw" aria-label="Rankings and stats"><a href="/rankings">Rankings</a><a class="on" aria-current="page" href="/stats">Stats</a></nav>
+  <nav class="wrap jump" aria-label="Leaderboards">
+    {boards.map(b => <a class="chip" href={`#${b.key}`}>{b.title}</a>)}
+  </nav>
+
+  <section class="wrap boards">
+    {boards.filter(b => b.rows.length).map(b => (
+      <article class="lb card" id={b.key}>
+        <header><h2>{b.title}</h2><span class="lbl muted">{b.note}</span></header>
+        <a class="lb-top" href={playerHref(b.rows[0].p.slug)}>
+          <span class="avatar" style={`--size:64px;${av(b.rows[0].p.name)}`}>{avatarSrc(b.rows[0].p.name) ? <img src={avatarSrc(b.rows[0].p.name)} alt="" width="64" height="64" loading="lazy" /> : initials(b.rows[0].p.name)}</span>
+          <span class="lb-who"><b>{b.rows[0].p.name}</b><small><Fragment set:html={flag(b.rows[0].p.country)} /> {b.rows[0].sub}</small></span>
+          <span class="poster-num lb-v">{b.rows[0].shown}</span>
+        </a>
+        <ol start="2">
+          {b.rows.slice(1).map((r, i) => (
+            <li><a href={playerHref(r.p.slug)}>
+              <span class="lb-n">{i + 2}</span>
+              <span class="avatar" style={`--size:28px;${av(r.p.name)}`}>{avatarSrc(r.p.name) ? <img src={avatarSrc(r.p.name)} alt="" width="28" height="28" loading="lazy" /> : initials(r.p.name)}</span>
+              <span class="lb-name">{r.p.name}</span>
+              <b>{r.shown}</b>
+            </a></li>
+          ))}
+        </ol>
+      </article>
+    ))}
+  </section>
+  <p class="wrap muted foot-note">Averages, 180s and checkout figures cover PDC main-tour events with match statistics (majors, World Series, European Tour and Players Championships). Nine-darters are career totals from the PDC.</p>
+</Layout>
+
+<style>
+  .jump { display: flex; gap: 8px; overflow-x: auto; scrollbar-width: none; padding-bottom: 6px; }
+  .jump .chip { white-space: nowrap; padding: 8px 14px; font-size: 13px; text-decoration: none; }
+  .boards { display: grid; grid-template-columns: repeat(auto-fill, minmax(330px, 1fr)); gap: 16px; margin-top: 18px; }
+  .lb { padding: 18px 20px 12px; scroll-margin-top: 130px; }
+  .lb header { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; margin-bottom: 12px; }
+  .lb h2 { font-size: 28px; }
+  .lb-top { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; align-items: center; gap: 14px; padding: 12px; margin: 0 -8px 6px; background: var(--ink); color: #fff; border-radius: 18px; text-decoration: none; }
+  .lb-who { display: flex; flex-direction: column; min-width: 0; }
+  .lb-who b { font-size: 17px; }
+  .lb-who small { color: var(--on-ink); font-size: 12px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .lb-v { font-size: 44px; color: var(--volt); }
+  .lb ol { list-style: none; margin: 0; padding: 0; }
+  .lb li a { display: grid; grid-template-columns: 22px auto minmax(0, 1fr) auto; align-items: center; gap: 10px; padding: 7px 4px; border-top: 1px solid var(--line); text-decoration: none; font-size: 14px; }
+  .lb li a:hover .lb-name { color: var(--red); }
+  .lb-n { color: var(--muted); font-weight: 700; font-variant-numeric: tabular-nums; }
+  .lb-name { font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .lb li b { font-variant-numeric: tabular-nums; }
+  .foot-note { font-size: 13px; margin-top: 20px; }
+  @media (max-width: 420px) { .boards { grid-template-columns: 1fr; } .lb-v { font-size: 36px; } }
+</style>
