@@ -9,6 +9,14 @@ import Layout from '../layouts/Layout.astro';
     <div class="wrap mh-in" id="mh"><div class="loading"><span class="spinner"></span>Loading match…</div></div>
   </section>
 
+  <!-- Once a match starts: two tabs, Match stats (default) and Head to head & form -->
+  <div id="mtabbed">
+  <div class="wrap mtabs" id="mtabs" role="tablist" aria-label="Match sections" hidden>
+    <button class="mt" role="tab" data-mt="stats" aria-selected="true">Match stats</button>
+    <button class="mt" role="tab" data-mt="h2h" aria-selected="false">Head to head &amp; form</button>
+  </div>
+  <p class="wrap muted mb-wait" id="mb-wait" hidden>Match stats appear here after the first leg.</p>
+
   <section class="wrap h2h" id="h2h" hidden>
     <h2>Head to head</h2>
     <p class="sub" id="hh-sub"></p>
@@ -37,6 +45,7 @@ import Layout from '../layouts/Layout.astro';
       <h2>Leg table</h2>
       <div class="tablewrap"><table class="lt" id="lt"></table></div>
     </section>
+  </div>
   </div>
 
   <script>
@@ -324,11 +333,14 @@ import Layout from '../layouts/Layout.astro';
         if (started && noLegs && !m?.stats) mh.insertAdjacentHTML('beforeend', `<p class="inplay"><span class="live-dot">On now</span> This match should be under way. Scores appear here as soon as the PDC's live scoring has them.</p>`);
         // Stats show as soon as there are any; the leg charts wait for the visit data.
         const mb = document.getElementById('mb')!;
-        // Before a match: head to head and form first. Once it starts: the match itself first.
-        const h2hBox = document.getElementById('h2h')!;
-        if (isLive || isResult) { if (mb.nextElementSibling !== null && h2hBox.previousElementSibling !== mb) h2hBox.before(mb); }
-        else if (mb.previousElementSibling !== document.getElementById('tape')) document.getElementById('tape')!.after(mb);
+        // Before a match: head to head and form only. Once it starts: tabs, with Match stats first.
+        const tabbed = document.getElementById('mtabbed')!, tabsEl = document.getElementById('mtabs')!;
+        if (isLive || isResult) {
+          tabsEl.hidden = false;
+          if (!tabbed.dataset.tab) tabbed.dataset.tab = 'stats';
+        } else { tabsEl.hidden = true; delete tabbed.dataset.tab; }
         mb.hidden = !t?.data?.attributes?.fixtureMeta?.participant1Data && noLegs;
+        document.getElementById('mb-wait')!.hidden = !(mb.hidden && (isLive || isResult));
         mb.querySelectorAll<HTMLElement>('.block:not(:first-child)').forEach(b => { b.hidden = noLegs; });
         if (t?.data) {
           document.getElementById('cmp')!.innerHTML = compare(a, t.data);
@@ -347,6 +359,13 @@ import Layout from '../layouts/Layout.astro';
         mh.innerHTML = '<div class="loading">This match could not be loaded. Please try again shortly.</div>';
       }
     }
+    // Match tabs: remembered while the page is open (each poll keeps the choice).
+    document.addEventListener('click', e => {
+      const b = (e.target as HTMLElement).closest<HTMLButtonElement>('#mtabs [data-mt]');
+      if (!b) return;
+      document.getElementById('mtabbed')!.dataset.tab = b.dataset.mt!;
+      document.querySelectorAll('#mtabs [data-mt]').forEach(x => x.setAttribute('aria-selected', String(x === b)));
+    });
     const onPush = () => { if (document.getElementById('mh')) { clearTimeout(timer); load(); } };
     document.addEventListener('astro:before-swap', () => unwatch(onPush));
     document.addEventListener('astro:page-load', () => { clearTimeout(timer); if (document.getElementById('mh')) load(); });
@@ -427,6 +446,17 @@ import Layout from '../layouts/Layout.astro';
   .mh-in :global(.inplay a) { color: #fff; font-weight: 700; }
   .mh-in :global(.inplay .live-dot) { color: #ff8a98; margin-right: 6px; }
   .tape, .h2h { margin-top: 28px; }
+  /* Match tabs (once a match has started) */
+  .mtabs { display: flex; gap: 6px; margin-top: 22px; border-bottom: 1px solid var(--line); overflow-x: auto; scrollbar-width: none; }
+  .mt { border: 0; background: none; padding: 12px 16px; font-weight: 800; font-size: 15px; color: var(--muted); cursor: pointer; position: relative; white-space: nowrap; }
+  .mt::after { content: ''; position: absolute; left: 10px; right: 10px; bottom: -1px; height: 3px; border-radius: 3px; background: var(--red); transform: scaleX(0); transition: transform .35s var(--spring); }
+  .mt[aria-selected='true'] { color: var(--ink); }
+  .mt[aria-selected='true']::after { transform: scaleX(1); }
+  #mtabbed[data-tab='stats'] .h2h, #mtabbed[data-tab='stats'] .tape { display: none; }
+  #mtabbed[data-tab='h2h'] .mbody, #mtabbed[data-tab='h2h'] .mb-wait { display: none; }
+  #mtabbed[data-tab] .mbody { margin-top: 22px; }
+  #mtabbed[data-tab] .mbody > .block:first-child > h2 { display: none; }
+  .mb-wait { margin-top: 22px; }
 
   .mh-in :global(.kpis) { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); border-top: 1px solid var(--ink-2); }
   .mh-in :global(.kpis > div) { padding: 20px 0; display: flex; flex-direction: column; gap: 8px; }
