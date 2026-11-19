@@ -1,9 +1,9 @@
 // Renders the Matches page body from a normalised tournament. Used at build
 // time (Astro) and again in the browser when live data arrives, so both
 // always produce identical markup.
-import { flag } from './pdc.mjs';
+import { flag, tvBadge, surnameOf, formatLabel } from './pdc.mjs';
 import { avatarSrc } from './images.mjs';
-import { avatarColours, initials, longDate, shortDate, ukClock, ukZone } from './format.mjs';
+import { avatarColours, initials, longDate, shortDate, ukClock, ukZone, money } from './format.mjs';
 
 const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]);
 
@@ -58,23 +58,70 @@ export function matchDays(t, today) {
   return { days, def };
 }
 
+/** Afternoon or evening session, from a UK start time. */
+const sessionOf = time => (time && time < '17:00' ? 'Afternoon session' : 'Evening session');
+
 export function renderDay(t, day, portraits) {
-  // Chronological order of play; consecutive matches from the same round share a heading.
-  const all = t.stages.flatMap(s => s.fixtures.filter(f => f.date === day).map(f => ({ ...f, stage: s.name, sets: s.sets })))
+  // Chronological order of play, in sessions (afternoon / evening, with who's showing it);
+  // consecutive matches from the same round share a heading.
+  const all = t.stages.flatMap(s => s.fixtures.filter(f => f.date === day).map(f => ({ ...f, stage: s.name, sets: s.sets, fmt: s })))
     .sort((a, b) => (a.time || '99').localeCompare(b.time || '99') || a.id.localeCompare(b.id));
   if (!all.length) return `<div class="empty"><h3>No matches on this day</h3><p>Pick another day above.</p></div>`;
   const blocks = [];
   for (const f of all) {
     const last = blocks[blocks.length - 1];
     const label = /^group/i.test(f.stage) ? 'Group stage' : f.stage;
-    if (last && last.label === label) last.fixtures.push(f);
-    else blocks.push({ label, sets: f.sets, fixtures: [f] });
+    const session = f.time ? sessionOf(f.time) : '';
+    if (last && last.label === label && last.session === session) last.fixtures.push(f);
+    else blocks.push({ label, session, fmt: formatLabel(f.fmt), fixtures: [f] });
   }
-  return blocks.map((b, i) => `
+  const tv = t.broadcaster ? tvBadge(t.broadcaster) : '';
+  let shownSession = '';
+  return blocks.map((b, i) => {
+    const head = b.session && b.session !== shownSession
+      ? `<p class="session"><b>${b.session}</b>${b.fixtures[0].time ? `<span>from ${esc(ukClock(b.fixtures[0].time))} ${ukZone(day)}</span>` : ''}${tv ? `<span class="s-tv">${tv}</span>` : ''}</p>`
+      : '';
+    shownSession = b.session || shownSession;
+    return `${head}
     <section class="stage" style="--d:${i * 70}ms">
-      <h3><span>${esc(b.label)}</span><small>${b.fixtures.length} match${b.fixtures.length === 1 ? '' : 'es'}${b.sets ? ' · sets' : ''}</small></h3>
+      <h3><span>${esc(b.label)}</span><small>${b.fixtures.length} match${b.fixtures.length === 1 ? '' : 'es'}${b.fmt ? ` · ${esc(b.fmt)}` : ''}</small></h3>
       <ol class="fixtures">${b.fixtures.map(f => fixtureRow(f, portraits)).join('')}</ol>
-    </section>`).join('');
+    </section>`;
+  }).join('');
+}
+
+/** Knockout draw: one column per round, each round ordered so a match sits beside the two it came from. */
+export function renderDraw(t) {
+  const ko = t.stages.filter(s => !/^group/i.test(s.name) && s.fixtures.length).sort((a, b) => b.fixtures.length - a.fixtures.length || (b.round ?? 0) - (a.round ?? 0));
+  if (ko.length < 2) return '';
+  const cols = [ko[0].fixtures.slice()];
+  for (let i = 1; i < ko.length; i++) {
+    const prev = cols[i - 1];
+    const at = id => prev.findIndex(f => f.p1?.id === id || f.p2?.id === id);
+    const pos = f => Math.min(...[f.p1?.id, f.p2?.id].filter(Boolean).map(at).filter(x => x >= 0), 999);
+    cols.push(ko[i].fixtures.slice().sort((a, b) => pos(a) - pos(b)));
+  }
+  const side = (p, s, won, done) => `<div class="dr-p${won ? ' w' : done ? ' l' : ''}"><span>${p ? `${flag(p.country)} ${esc(surnameOf(p))}` : '<em>TBC</em>'}</span><b>${s ?? ''}</b></div>`;
+  const cell = f => {
+    const done = f.status === 'result';
+    const w = done ? f.winner : null;
+    return `<a class="dr-m ${f.status}" ${f.p1 && f.p2 ? `href="/match?id=${esc(f.id)}"` : ''}>${side(f.p1, f.status === 'upcoming' && !(f.s1 + f.s2) ? '' : f.s1, w && w === f.p1?.id, done)}${side(f.p2, f.status === 'upcoming' && !(f.s1 + f.s2) ? '' : f.s2, w && w === f.p2?.id, done)}</a>`;
+  };
+  return `<div class="draw" style="--cols:${cols.length}">${cols.map((c, i) => `<div class="dr-col"><h3>${esc(ko[i].name)}</h3><div class="dr-list">${c.map(cell).join('')}</div></div>`).join('')}</div>`;
+}
+
+/** Prize money for losing in each round (the PDC feed doesn't give the winner's prize). */
+export function renderPrize(t) {
+  const rows = [];
+  const seen = new Set();
+  for (const s of t.stages.slice().sort((a, b) => (b.prize || 0) - (a.prize || 0))) {
+    const label = /^group/i.test(s.name) ? 'Group stage' : s.name;
+    if (!s.prize || seen.has(label)) continue;
+    seen.add(label);
+    const who = label === 'Final' ? 'Runner-up' : label === 'Group stage' ? 'Out in the group stage' : `Out in the ${label.toLowerCase()}`;
+    rows.push(`<tr><td>${esc(who)}</td><td class="n">${money(s.prize)}</td></tr>`);
+  }
+  return rows.length ? `<table class="prize"><thead><tr><th>Finish</th><th class="n">Prize money</th></tr></thead><tbody>${rows.join('')}</tbody></table><p class="muted prize-note">From the PDC's tournament data. Prize money counts towards the PDC Order of Merit.</p>` : '';
 }
 
 export function renderTabs(days, active) {
