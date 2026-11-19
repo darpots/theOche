@@ -1,7 +1,7 @@
 import { readFile, writeFile, mkdir } from 'node:fs/promises';
 import { dirname } from 'node:path';
 
-export const UA = 'TheOcheBot/1.0 (+https://theoche.vercel.app; fan site data refresh)';
+export const UA = 'TheOcheBot/1.0 (+https://the-oche-mocha.vercel.app; fan site data refresh)';
 export const sleep = ms => new Promise(r => setTimeout(r, ms));
 
 export async function get(url, { tries = 3, as = 'json', headers = {} } = {}) {

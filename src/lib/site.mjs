@@ -2,7 +2,7 @@
 export const SITE = {
   name: 'The Oche',
   tagline: 'PDC darts: live scores, results, news and rankings',
-  url: 'https://theoche.vercel.app',
+  url: 'https://the-oche-mocha.vercel.app',
   // Shown on /about when set. Leave empty until there is a public address for the site.
   contactEmail: '',
 };
