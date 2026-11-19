@@ -26,10 +26,10 @@ const isPast = (e: Ev) => e.end < builtOn;
 ---
 <Layout title="Calendar" description="Every PDC darts event on Sky Sports, ITV and PDCTV: dates, venues, broadcasters and winners." active="calendar">
 
-  <section class="wrap cal-intro">
+  <section class="hero wrap">
     <span class="eyebrow">Sky Sports · ITV · PDCTV</span>
-    <h1>Season calendar</h1>
-    <p class="lede">The PDC majors, Premier League nights and World Series events on Sky Sports and ITV, plus every European Tour event live on PDCTV.</p>
+    <h1>Season <span class="accent">calendar</span></h1>
+    <p class="lede">Every PDC major, Premier League night, World Series and European Tour event, and who's showing it.</p>
   </section>
 
   <section class="wrap controls" data-reveal>
@@ -51,36 +51,26 @@ const isPast = (e: Ev) => e.end < builtOn;
       <div class="month" data-month={k} hidden={list.every(isPast)}>
         <h2 class="month-title"><span>{monthLong(k + '-01')}</span></h2>
         <div class="grid">
-          {list.map((e, i) => (
-            <a
-              href={`/tournament/${e.id}`}
-              class={`ev ev-${e.broadcaster}${isPast(e) ? ' past' : ''}`} hidden={isPast(e)}
-              data-kind={kind(e)} data-start={e.start} data-end={e.end}
-              data-reveal style={`--d:${Math.min(i, 6) * 60}ms`}>
-              <div class="ticket">
-                <svg class="board" viewBox="-50 -50 100 100" aria-hidden="true">
-                  <circle r="48" class="r0" /><circle r="40" class="r1" /><circle r="28" class="r2" /><circle r="20" class="r3" /><circle r="6" class="r4" /><circle r="2.4" class="r5" />
-                </svg>
-                <div class="date">
-                  <span class="wd">{weekday(e.start)}</span>
-                  <span class="dn">{dayNum(e.start)}{e.end !== e.start && <small>–{dayNum(e.end)}</small>}</span>
-                  <span class="mo">{monthShort(e.start)}{e.end.slice(0, 7) !== e.start.slice(0, 7) && `–${monthShort(e.end)}`}</span>
-                </div>
-                <div class="tv-slot"><Fragment set:html={tvBadge(e.broadcaster)} /></div>
-                <span class="len">{days(e) === 1 ? 'One night' : `${days(e)} days`}</span>
-              </div>
-              <div class="body">
-                <h3>{e.name}</h3>
-                {e.tag && <p class="tag">{e.tag}</p>}
-                <p class="where"><svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true"><path d="M12 22s7-6.2 7-12a7 7 0 1 0-14 0c0 5.8 7 12 7 12z" fill="none" stroke="currentColor" stroke-width="2" /><circle cx="12" cy="10" r="2.5" fill="currentColor" /></svg>{place(e) || 'Venue to be announced'}</p>
-                <p class="when sr-only">{dateRange(e.start, e.end)}</p>
-                <div class="foot">
+          {list.map(e => (
+            <a href={`/tournament/${e.id}`} class={`ev ev-${e.broadcaster}${isPast(e) ? ' past' : ''}`} hidden={isPast(e)}
+              data-kind={kind(e)} data-start={e.start} data-end={e.end}>
+              <span class="ev-date" aria-hidden="true">
+                <span class="wd">{weekday(e.start)}</span>
+                <b class="poster-num">{dayNum(e.start)}</b>
+                <span class="mo">{monthShort(e.start)}</span>
+              </span>
+              <span class="ev-main">
+                <span class="ev-top"><Fragment set:html={tvBadge(e.broadcaster)} /><span class="len">{days(e) === 1 ? 'One night' : `${days(e)} days`}</span></span>
+                <h3 class="headline">{e.name}{e.tag && <small>{e.tag}</small>}</h3>
+                <span class="where">{place(e) || 'Venue to be announced'}</span>
+                <span class="when sr-only">{dateRange(e.start, e.end)}</span>
+                <span class="ev-foot">
                   {e.winner
-                    ? <span class="winner"><span class="avatar" style={`--size:30px;${av(e.winner.name)}`}>{pic(e.winner.name) ? <img src={pic(e.winner.name)} alt="" loading="lazy" /> : initials(e.winner.name)}</span><span><small>Winner</small>{e.winner.name}</span></span>
+                    ? <span class="winner"><span class="avatar" style={`--size:26px;${av(e.winner.name)}`}>{pic(e.winner.name) ? <img src={pic(e.winner.name)} alt="" width="26" height="26" loading="lazy" /> : initials(e.winner.name)}</span><span><small>Winner</small>{e.winner.name}</span></span>
                     : <span class="status" data-status></span>}
-                  <span class="go">Schedule <span aria-hidden="true">→</span></span>
-                </div>
-              </div>
+                  <span class="go" aria-hidden="true">→</span>
+                </span>
+              </span>
             </a>
           ))}
         </div>
@@ -138,12 +128,6 @@ const isPast = (e: Ev) => e.end < builtOn;
 </Layout>
 
 <style>
-  .cal-intro { padding: 48px 0 6px; }
-  .cal-intro .eyebrow { display: inline-flex; align-items: center; gap: 8px; font-size: 12px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: var(--red); }
-  .cal-intro .eyebrow::before { content: ''; width: 22px; height: 2px; background: currentColor; border-radius: 2px; }
-  .cal-intro h1 { font-size: clamp(36px, 5vw, 60px); font-weight: 800; margin: 10px 0; }
-  .cal-intro .accent { background: linear-gradient(100deg, var(--red), #f05d23 60%, var(--gold)); -webkit-background-clip: text; background-clip: text; color: transparent; }
-  .cal-intro .lede { color: var(--muted); max-width: 640px; margin: 0; font-size: 17px; }
   .controls { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 14px; padding: 16px 0 8px; position: sticky; top: var(--hdr, 68px); z-index: 20; background: linear-gradient(var(--paper) 75%, transparent); }
   .chips { display: flex; flex-wrap: wrap; gap: 8px; }
   .logo-chip { gap: 8px; }
@@ -158,75 +142,47 @@ const isPast = (e: Ev) => e.end < builtOn;
   .toggle input:checked + .track .thumb { transform: translateX(18px); }
   .toggle input:focus-visible + .track { outline: 3px solid var(--sky); outline-offset: 2px; }
 
-  .month { margin-top: 36px; }
-  .month-title { font-size: 15px; font-family: var(--body); font-weight: 800; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); display: flex; align-items: center; gap: 14px; margin-bottom: 14px; }
+  .month { margin-top: 32px; }
+  .month-title { font-size: 15px; font-family: var(--body); font-weight: 800; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); display: flex; align-items: center; gap: 14px; margin-bottom: 12px; line-height: 1; }
   .month-title::after { content: ''; flex: 1; height: 1px; background: var(--line); }
-  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 18px; perspective: 1200px; }
-  .ev {
-    --accent: var(--ink); --accent-2: var(--ink);
-    position: relative; display: flex; flex-direction: column; text-decoration: none; color: inherit;
-    background: var(--card); border: 1px solid var(--line); border-radius: 22px; overflow: hidden; isolation: isolate;
-    box-shadow: var(--shadow-sm);
-    transition: transform .35s var(--ease), box-shadow .35s var(--ease), border-color .3s, opacity .3s;
-  }
-  .ev:hover { transform: translateY(-3px); box-shadow: var(--shadow); border-color: #d9cfbb; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 14px; }
 
-  .ticket {
-    position: relative; overflow: hidden; display: flex; align-items: flex-end; gap: 14px; padding: 16px 16px 14px; min-height: 112px; color: #fff;
-    background: linear-gradient(135deg, var(--accent), var(--accent-2));
-  }
-  .ticket::after { /* tear-off edge */
-    content: ''; position: absolute; left: 0; right: 0; bottom: -6px; height: 12px;
-    background: radial-gradient(circle at 6px 0, transparent 5px, var(--card) 5.5px) 0 0 / 12px 12px repeat-x;
-  }
-  .board { position: absolute; right: -34px; top: -34px; width: 150px; height: 150px; opacity: .6; fill: none; }
-  .board circle { stroke-width: 6; }
-  .board .r0 { stroke: rgba(255, 255, 255, .08); stroke-width: 1.5; }
-  .board .r1 { stroke: rgba(255, 255, 255, .22); stroke-dasharray: 6.28 6.28; }
-  .board .r2 { stroke: rgba(255, 255, 255, .1); stroke-width: 14; }
-  .board .r3 { stroke: rgba(255, 255, 255, .26); stroke-dasharray: 3.14 3.14; }
-  .board .r4 { fill: rgba(255, 255, 255, .25); stroke: none; }
-  .board .r5 { fill: #fff; stroke: none; }
-  .date { display: flex; flex-direction: column; line-height: 1; }
-  .date .wd, .date .mo { font-size: 11px; font-weight: 800; letter-spacing: .14em; text-transform: uppercase; opacity: .8; }
-  .date .mo small { font-size: 10px; letter-spacing: .06em; opacity: .85; }
-  .date .dn { font-family: var(--poster); font-size: 54px; font-weight: 400; letter-spacing: 0; margin: 6px 0 4px; }
-  .date .dn small { font-size: 24px; opacity: .85; }
-  .tv-slot { position: absolute; top: 14px; right: 14px; z-index: 1; }
-  .tv-slot :global(.tv) { box-shadow: 0 6px 16px -6px rgba(0, 0, 0, .4); border-color: transparent; }
-  .len { margin-left: auto; position: relative; z-index: 1; font-size: 11px; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; background: rgba(255, 255, 255, .16); border: 1px solid rgba(255, 255, 255, .22); padding: 4px 9px; border-radius: 999px; backdrop-filter: blur(6px); }
-
-  .body { display: flex; flex-direction: column; flex: 1; padding: 16px 18px 16px; min-width: 0; }
-  h3 { font-size: 21px; transition: color .25s; }
+  /* Event tiles: the site's white cards with the dark date block used on the home page */
+  .ev { display: grid; grid-template-columns: 76px minmax(0, 1fr); gap: 16px; padding: 14px; border-radius: 22px; background: var(--card); box-shadow: var(--shadow-sm); text-decoration: none; color: inherit; transition: transform .3s var(--ease), box-shadow .3s; }
+  .ev:hover { transform: translateY(-3px); box-shadow: var(--shadow); }
+  .ev-date { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; border-radius: 16px; background: var(--ink); color: #fff; padding: 10px 0; min-height: 96px; }
+  .ev-date b { font-size: 40px; line-height: .9; }
+  .ev-date .wd, .ev-date .mo { font-size: 11px; font-weight: 800; letter-spacing: .14em; text-transform: uppercase; color: var(--on-ink); }
+  .ev-main { display: flex; flex-direction: column; min-width: 0; gap: 4px; }
+  .ev-top { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+  .len { font-size: 11px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+  .ev h3 { font-size: 20px; margin-top: 6px; }
+  .ev h3 small { display: block; font-family: var(--body); font-size: 13px; font-weight: 700; letter-spacing: 0; color: var(--red); margin-top: 2px; }
   .ev:hover h3 { color: var(--red); }
-  .tag { margin: 3px 0 0; font-weight: 700; font-size: 14px; color: var(--red); }
-  .where { margin: 8px 0 0; font-size: 13px; color: var(--muted); display: flex; gap: 6px; align-items: center; }
-  .where svg { flex: none; opacity: .7; }
-  .foot { margin-top: auto; padding-top: 14px; display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+  .where { font-size: 13px; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .ev-foot { margin-top: auto; padding-top: 8px; display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+  .go { font-weight: 800; color: var(--muted); transition: transform .3s var(--spring), color .2s; }
+  .ev:hover .go { transform: translateX(4px); color: var(--ink); }
   .status { font-size: 12px; font-weight: 800; color: var(--muted); letter-spacing: .02em; }
-  .status.soon { color: var(--ink); background: var(--volt); padding: 4px 10px; border-radius: 999px; }
-  .status.done { background: var(--paper-2); padding: 4px 10px; border-radius: 999px; }
-  .winner { display: inline-flex; align-items: center; gap: 9px; font-weight: 700; font-size: 14px; line-height: 1.15; }
+  .status.soon { color: var(--ink); background: var(--volt); padding: 3px 10px; border-radius: 999px; }
+  .status.done { background: var(--paper-2); padding: 3px 10px; border-radius: 999px; }
+  .winner { display: inline-flex; align-items: center; gap: 8px; font-weight: 700; font-size: 14px; line-height: 1.15; min-width: 0; }
   .winner small { display: block; font-size: 10px; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; color: var(--gold); }
-  .winner .avatar { box-shadow: 0 0 0 2px #fff, 0 0 0 4px var(--gold); }
-  .go { font-size: 13px; font-weight: 800; color: var(--ink); display: inline-flex; gap: 6px; opacity: .55; transform: translateX(-6px); transition: opacity .3s, transform .35s var(--spring); }
-  .go span { transition: transform .35s var(--spring); }
-  .ev:hover .go { opacity: 1; transform: none; }
-  .ev:hover .go span { transform: translateX(4px); }
+  .winner .avatar { box-shadow: 0 0 0 2px var(--gold); }
 
-  /* live: glowing animated border */
-  .ev.live { border-color: transparent; }
-  .ev.live .ticket { background: var(--red); }
-  .ev.live::before {
-    content: ''; position: absolute; inset: 0; z-index: 4; pointer-events: none; border-radius: inherit; padding: 2px;
-    background: var(--red);
-    -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); -webkit-mask-composite: xor; mask-composite: exclude;
-  }
-  .ev.live { box-shadow: 0 20px 40px -18px rgba(215, 38, 61, .55); }
-  .ev.past { opacity: .78; filter: saturate(.75); }
-  .ev.past:hover { opacity: 1; filter: none; }
+  /* On now: the dark live tile */
+  .ev.live { background: var(--ink); color: #fff; box-shadow: 0 0 0 2px var(--red), 0 20px 40px -18px rgba(232, 54, 45, .5); }
+  .ev.live .ev-date { background: var(--red); }
+  .ev.live .ev-date .wd, .ev.live .ev-date .mo { color: #fff; }
+  .ev.live .where, .ev.live .len { color: var(--on-ink); }
+  .ev.live h3 small { color: var(--volt); }
+  .ev.live .go { color: var(--volt); }
+  .ev.past { opacity: .8; }
+  .ev.past .ev-date { background: var(--paper-2); color: var(--muted); }
+  .ev.past .ev-date .wd, .ev.past .ev-date .mo { color: var(--muted); }
+  .ev.past:hover { opacity: 1; }
 
-
-  @media (max-width: 400px) { .grid { grid-template-columns: 1fr; } }
-
+  /* Phones: the filters scroll away instead of covering the list */
+  @media (max-width: 640px) { .controls { position: static; background: none; } .chips { flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none; } .chip { white-space: nowrap; } }
+  @media (max-width: 420px) { .grid { grid-template-columns: 1fr; } .ev { grid-template-columns: 64px minmax(0, 1fr); gap: 12px; } .ev-date b { font-size: 34px; } }
 </style>
