@@ -23,7 +23,7 @@ for (const e of events) {
 const place = (e: { venue: string | null; city: string | null }) => (e.venue && e.city && e.venue.includes(e.city) ? e.venue : [e.venue, e.city].filter(Boolean).join(' · '));
 const kind = (e: Ev) => e.broadcaster;
 // Completed events start hidden in the HTML too (the site rebuilds daily), so the
-// "Show completed" toggle is right even before the script below runs.
+// "Include past 2 years" toggle is right even before the script below runs.
 const builtOn = new Date().toLocaleDateString('en-CA', { timeZone: 'Europe/London' });
 const isPast = (e: Ev) => e.end < builtOn;
 const isLive = (e: Ev) => e.start <= builtOn && e.end >= builtOn;
@@ -78,7 +78,7 @@ const champCut = (e: Ev) => (e.winner ? cutout(e.winner.name, 'pdc') : null);
     <label class="toggle">
       <input type="checkbox" id="showPast" />
       <span class="track"><span class="thumb"></span></span>
-      Show completed
+      Include past 2 years
     </label>
   </section>
 
