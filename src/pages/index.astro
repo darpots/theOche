@@ -114,7 +114,12 @@ const spot = loadProfile(spotRank.id);
         {news[2] && (
           <a class="tile nred" href={`/news/${news[2].slug}`}>
             <span class="lbl">{newsDate(news[2].date)} · {news[2].tags[0]}</span>
-            <div>{bigFigure(news[2].headline) && <div class="poster-num big">{bigFigure(news[2].headline)}</div>}<h3>{news[2].headline}</h3></div>
+            {/* A big figure from the headline when there is one, otherwise the story's summary */}
+            {bigFigure(news[2].headline) ? (
+              <div><div class="poster-num big">{bigFigure(news[2].headline)}</div><h3>{news[2].headline}</h3></div>
+            ) : (
+              <div><h3>{news[2].headline}</h3><p class="nred-sf">{news[2].standfirst}</p></div>
+            )}
           </a>
         )}
         {news[3] && (
@@ -324,6 +329,7 @@ const spot = loadProfile(spotRank.id);
   .nc h3, .nred h3, .nwide h3 { font-size: 19px; line-height: 1.2; margin-top: 8px; }
   .nc:hover h3, .nwide:hover h3 { color: var(--red); }
   .nred { background: var(--red); color: #fff; padding: 22px; display: flex; flex-direction: column; justify-content: space-between; text-decoration: none; }
+  .nred-sf { margin: 10px 0 0; font-size: 15px; line-height: 1.45; color: rgba(255, 255, 255, .88); }
   .big { font-size: 96px; }
   .nwide { grid-column: span 2; display: flex; align-items: center; gap: 22px; padding: 20px 24px; text-decoration: none; }
   .nwide .big { font-size: 64px; flex: none; }
