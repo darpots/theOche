@@ -27,13 +27,17 @@ export const isPushing = () => pushOk && watching.size > 0;
 /** Live documents for these fixtures; served from push data when every one is watched, else one shared request per tick. */
 export function liveFor(tournamentId, ids) {
   const list = [...new Set(ids.map(String))];
-  if (isPushing() && list.length && list.every(id => watching.has(`${tournamentId}:${id}`) && pushed.has(id))) {
-    return Promise.resolve(new Map(list.map(id => [id, pushed.get(id)])));
+  const isWatched = id => watching.has(`${tournamentId}:${id}`) && pushed.has(id);
+  // While push is running, watched matches come from it; the rest (finished or not
+  // started) change rarely, so they're fetched at most every PUSH_TICK.
+  const rest = isPushing() ? list.filter(id => !isWatched(id)) : list;
+  const key = `${tournamentId}:${rest.slice().sort().join(',')}`;
+  const fresh = isPushing() ? PUSH_TICK : LIVE_TICK - 1_000;
+  if (!(memo.p && memo.key === key && Date.now() - memo.at < fresh)) {
+    memo = { key, at: Date.now(), p: rest.length ? liveMatches(tournamentId, rest).catch(() => new Map()) : Promise.resolve(new Map()) };
   }
-  const key = `${tournamentId}:${list.sort().join(',')}`;
-  if (memo.p && memo.key === key && Date.now() - memo.at < LIVE_TICK - 1_000) return memo.p;
-  memo = { key, at: Date.now(), p: list.length ? liveMatches(tournamentId, list).catch(() => new Map()) : Promise.resolve(new Map()) };
-  return memo.p;
+  if (rest.length === list.length) return memo.p;
+  return memo.p.then(m => { const out = new Map(m); for (const id of list) if (isWatched(id)) out.set(id, pushed.get(id)); return out; });
 }
 
 function db() {
