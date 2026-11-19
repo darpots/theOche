@@ -3,6 +3,7 @@
 // always produce identical markup.
 import { flag, tvBadge, surnameOf, formatLabel } from './pdc.mjs';
 import { avatarSrc } from './images.mjs';
+import { checkout } from './checkout.mjs';
 import { avatarColours, initials, longDate, shortDate, ukClock, ukZone, money } from './format.mjs';
 
 const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]);
@@ -35,14 +36,31 @@ export function fixtureRow(f, portraits) {
     ? `<span class="sc${w1 ? ' w' : ''}">${f.s1}</span><span class="dash">–</span><span class="sc${w2 ? ' w' : ''}">${f.s2}</span>`
     : `<span class="vs">${f.time ? esc(ukClock(f.time)) : 'vs'}</span>`;
   const group = /^group/i.test(f.stage || '') ? `${esc(f.stage)} · ` : '';
-  const leg = f.status === 'live' && f.legNow ? `<span class="lg" title="Score left in the leg being played; the dot marks who is throwing"><b class="${f.legNow.throwing === 0 ? 'on' : ''}">${f.legNow.left[0]}</b><i>Leg ${f.legNow.leg}</i><b class="${f.legNow.throwing === 1 ? 'on' : ''}">${f.legNow.left[1]}</b></span>` : '';
+  // A live match gets a taller card: under the score, a strip for the leg in play with each
+  // player's score left on their own side, who's throwing, their last visit and the finish.
+  const legStrip = (() => {
+    const l = f.status === 'live' && f.legNow;
+    if (!l) return '';
+    const v = (l.visits || []).slice().sort((a, b) => a.order - b.order);
+    const side = k => {
+      const mine = v.filter(x => x.isParticipant1 === (k === 0));
+      const last = mine[mine.length - 1];
+      const route = checkout(l.left[k]);
+      return `<div class="ls ${k ? 'r' : 'l'}${l.throwing === k ? ' on' : ''}">
+        <b class="ls-n">${l.throwing === k ? '<i class="ls-dot" aria-label="throwing"></i>' : ''}${l.left[k]}</b>
+        <span class="ls-meta">${last ? `<i class="ls-last${last.isBust ? ' bust' : last.score >= 140 ? ' big' : ''}">${last.isBust ? 'Bust' : last.score}</i>` : ''}${route ? `<i class="ls-co">${route.join(' ')}</i>` : ''}</span>
+      </div>`;
+    };
+    return `<div class="legstrip" title="Score left in the leg being played; the dot marks who is throwing">${side(0)}<span class="ls-mid">${f.fmt?.sets || f.sets ? `Set ${l.set} · ` : ''}Leg ${l.leg}</span>${side(1)}</div>`;
+  })();
   const state = f.status === 'live' ? '<span class="live-dot">Live</span>' : `<span class="ft">${group}${f.status === 'result' ? 'Result' : f.time ? ukZone(f.date) : 'Time TBC'}</span>`;
   const st = f.stats || null;
   const best = st && st[0] && st[1] ? (st[0].avg > st[1].avg ? 1 : st[1].avg > st[0].avg ? 2 : 0) : 0;
-  return `<li class="fx ${f.status}${st ? ' has-stats' : ''}" data-players="${esc([f.p1?.id, f.p2?.id].filter(Boolean).join(' '))}" data-id="${esc(f.id)}" data-sig="${esc(`${f.s1}-${f.s2}-${f.status}-${st ? st[0]?.avg + '/' + st[1]?.avg : ''}`)}">
+  return `<li class="fx ${f.status}${legStrip ? ' big' : ''}${st ? ' has-stats' : ''}" data-players="${esc([f.p1?.id, f.p2?.id].filter(Boolean).join(' '))}" data-id="${esc(f.id)}" data-sig="${esc(`${f.s1}-${f.s2}-${f.status}-${st ? st[0]?.avg + '/' + st[1]?.avg : ''}`)}">
     ${side(f.p1, f.s1, w1, decided, portraits, 'l', st?.[0], best === 1)}
-    <div class="mid">${leg}${mid}<div class="st">${state}</div></div>
+    <div class="mid">${mid}<div class="st">${state}</div></div>
     ${side(f.p2, f.s2, w2, decided, portraits, 'r', st?.[1], best === 2)}
+    ${legStrip}
     ${f.p1 && f.p2 ? `<a class="fx-link" href="/match?id=${esc(f.id)}" aria-label="${esc(`${f.p1.name} v ${f.p2.name}: match centre`)}"></a>` : ''}
   </li>`;
 }

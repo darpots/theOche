@@ -528,3 +528,17 @@ export function formatLabel(st) {
 
 /** Short surname for tight spaces: the feed's last name ("van Gerwen"), else the name after the first word. */
 export const surnameOf = p => p?.last || (p?.name || '').split(' ').slice(1).join(' ') || p?.name || '';
+
+/** Short event names for the menu: "Grand Slam of Darts" -> "Grand Slam"; phone = the shortest form. */
+const SHORT = [
+  [/^grand slam/i, 'Grand Slam', 'Grand Slam'], [/^players championship finals/i, 'PC Finals', 'PC Finals'],
+  [/^world championship/i, 'Worlds', 'Worlds'], [/matchplay/i, 'Matchplay', 'Matchplay'], [/grand prix/i, 'Grand Prix', 'Grand Prix'],
+  [/^european championship/i, 'Euro Champs', 'Euro Champs'], [/^premier league/i, 'Premier League', 'Prem League'],
+  [/^uk open/i, 'UK Open', 'UK Open'], [/^world cup/i, 'World Cup', 'World Cup'], [/world series of darts finals/i, 'WS Finals', 'WS Finals'],
+  [/world masters$/i, 'World Masters', 'Masters'], [/masters$/i, null, 'Masters'],
+];
+export function shortEvent(name = '') {
+  for (const [re, desk, phone] of SHORT) if (re.test(name)) return { desk: desk || name.replace(/ Darts Masters$/i, ' Masters'), phone };
+  const desk = name.replace(/ (Darts|of Darts)\b/gi, '').trim();
+  return { desk, phone: desk.length > 11 ? desk.split(' ')[0] : desk };
+}

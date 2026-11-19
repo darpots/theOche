@@ -7,6 +7,7 @@ import current from '../data/tournament.json';
 import antonFont from '@fontsource/anton/files/anton-latin-400-normal.woff2?url';
 import interFont from '@fontsource-variable/inter/files/inter-latin-wght-normal.woff2?url';
 import { SITE } from '../lib/site.mjs';
+import { shortEvent } from '../lib/pdc.mjs';
 
 interface Props {
   title: string;
@@ -26,7 +27,8 @@ const nav = [
   { key: 'home', href: '/', label: 'Home' },
   { key: 'news', href: '/news', label: 'News' },
   { key: 'calendar', href: '/calendar', label: 'Calendar' },
-  { key: 'matches', href: `/tournament/${current.tournament.id}`, label: 'Matches' },
+  // The current or next event, by name: "Grand Slam", "Worlds"…
+  { key: 'matches', href: `/tournament/${current.tournament.id}`, label: shortEvent(current.tournament.name).desk, phone: shortEvent(current.tournament.name).phone, title: `${current.tournament.name}: schedule, live scores, draw and results` },
   { key: 'rankings', href: '/rankings', label: 'Rankings' },
   { key: 'stats', href: '/stats', label: 'Stats', desktopOnly: true },
 ];
@@ -77,7 +79,7 @@ const fullTitle = title === 'The Oche' ? title : `${title} · The Oche`;
         <a href="/" class="brand" aria-label="The Oche home"><Logo size={40} tone="light" /></a>
         <nav aria-label="Main" data-current={current.tournament.id}>
           {nav.map(n => (
-            <a href={n.href} class:list={['nav', { on: active === n.key }]} aria-current={active === n.key ? 'page' : undefined} data-nav={n.key}>{n.label}</a>
+            <a href={n.href} class:list={['nav', { on: active === n.key }]} aria-current={active === n.key ? 'page' : undefined} data-nav={n.key} title={n.title}>{n.label}</a>
           ))}
           <span class="pill" aria-hidden="true"></span>
           <!-- Shown by the live bar script while a match is in play; goes to that match -->
@@ -107,7 +109,7 @@ const fullTitle = title === 'The Oche' ? title : `${title} · The Oche`;
       {nav.filter(n => !n.desktopOnly).map(n => (
         <a href={n.href} class:list={['tab', { on: active === n.key || (n.key === 'rankings' && active === 'stats') }]} data-tab={n.key}>
           <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" set:html={icons[n.key]} />
-          <span>{n.label}</span>
+          <span>{n.phone || n.label}</span>
         </a>
       ))}
       <button class="tab" type="button" data-open-search>
@@ -136,7 +138,7 @@ const fullTitle = title === 'The Oche' ? title : `${title} · The Oche`;
           <p>{SITE.tagline}. An independent fan site, not affiliated with the PDC, Sky Sports or ITV.</p>
         </div>
         <nav class="foot-links" aria-label="Site">
-          <div><b>Follow the darts</b><a href="/">Today</a><a href={`/tournament/${t.id}`}>Matches</a><a href="/calendar">Calendar</a><a href="/stats">Stats</a><a href="/rankings">Rankings</a></div>
+          <div><b>Follow the darts</b><a href="/">Today</a><a href={`/tournament/${t.id}`}>{shortEvent(t.name).desk}</a><a href="/calendar">Calendar</a><a href="/stats">Stats</a><a href="/rankings">Rankings</a></div>
           <div><b>News</b><a href="/news">Latest news</a><a href="/rss.xml">RSS feed</a></div>
           <div><b>About</b><a href="/about">About &amp; contact</a><a href="/privacy">Privacy &amp; cookies</a><a href="/credits">Photo credits &amp; data</a></div>
         </nav>

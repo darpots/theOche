@@ -363,6 +363,27 @@ const news = (await getCollection('news')).map(n => n.data)
   .board :global(.fx-link) { position: absolute; inset: 0; border-radius: inherit; z-index: 1; }
   .board :global(.fx-link:focus-visible) { outline: 3px solid var(--sky); outline-offset: 2px; }
   .board :global(.fx:hover) { transform: translateY(-2px); box-shadow: var(--shadow); }
+  /* The match being played: a taller card, like the match centre header */
+  .board :global(.fx.big) { grid-template-columns: 1fr auto 1fr; grid-template-rows: auto auto; padding: 18px 20px 14px; row-gap: 12px; }
+  .board :global(.fx.big .avatar) { --size: 72px !important; width: 72px; height: 72px; }
+  .board :global(.fx.big .pl b) { font-size: 20px; }
+  .board :global(.fx.big .sc) { font-size: 72px; line-height: .9; color: var(--ink); }
+  .board :global(.fx.big .mid) { min-width: 180px; }
+  .board :global(.legstrip) { grid-column: 1 / -1; display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 12px; padding: 12px 16px; border-radius: 16px; background: var(--ink); color: #fff; position: relative; z-index: 2; pointer-events: none; }
+  .board :global(.ls) { display: flex; align-items: center; gap: 14px; }
+  .board :global(.ls.r) { flex-direction: row-reverse; }
+  .board :global(.ls-n) { display: inline-flex; align-items: center; gap: 8px; font-family: var(--poster); font-weight: 400; font-size: 48px; line-height: .9; color: var(--on-ink); font-variant-numeric: tabular-nums; min-width: 3.4ch; }
+  .board :global(.ls.r .ls-n) { flex-direction: row-reverse; justify-content: flex-start; }
+  .board :global(.ls.on .ls-n) { color: var(--volt); }
+  .board :global(.ls-dot) { width: 10px; height: 10px; border-radius: 50%; background: var(--volt); box-shadow: 0 0 0 4px rgba(200, 255, 46, .2); }
+  .board :global(.ls-meta) { display: flex; flex-direction: column; gap: 5px; align-items: flex-start; min-height: 50px; justify-content: center; }
+  .board :global(.ls.r .ls-meta) { align-items: flex-end; }
+  .board :global(.ls-last), .board :global(.ls-co) { font-style: normal; font-size: 12px; font-weight: 800; padding: 2px 8px; border-radius: 7px; white-space: nowrap; }
+  .board :global(.ls-last) { background: rgba(255, 255, 255, .1); }
+  .board :global(.ls-last.big) { background: var(--volt); color: var(--ink); }
+  .board :global(.ls-last.bust) { background: var(--red); }
+  .board :global(.ls-co) { border: 1px dashed rgba(255, 255, 255, .3); }
+  .board :global(.ls-mid) { font-size: 11px; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; color: var(--on-ink-2); }
   /* Matches with a player you follow */
   .board :global(.fx.fav) { box-shadow: 0 0 0 2px var(--volt), var(--shadow-sm); }
   .board :global(.fx.fav)::before { content: '★'; position: absolute; top: -9px; left: 18px; z-index: 2; background: var(--volt); color: var(--ink); font-size: 11px; font-weight: 800; padding: 1px 7px; border-radius: 99px; }
@@ -391,16 +412,6 @@ const news = (await getCollection('news')).map(n => n.data)
   .board :global(.sc.w) { color: var(--ink); }
   .board :global(.dash) { margin: 0 6px; color: var(--line); font-size: 24px; }
   .board :global(.vs) { font-family: var(--display); font-size: 20px; font-weight: 700; color: var(--ink-2); }
-  .board :global(.lg) { display: flex; width: max-content; align-items: center; gap: 8px; margin: 0 auto 6px; padding: 4px 16px; border-radius: 999px; background: var(--paper-2); white-space: nowrap; }
-  .board :global(.lg i) { font-style: normal; font-size: 10px; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); }
-  .board :global(.lg b) { font-family: var(--poster); font-weight: 400; font-size: 18px; line-height: 1; color: var(--muted); font-variant-numeric: tabular-nums; min-width: 3ch; }
-  .board :global(.lg b:first-child) { text-align: right; }
-  .board :global(.lg b) { position: relative; }
-  .board :global(.lg b.on) { color: var(--ink); }
-  /* Who's throwing: a red dot on the outside of their score */
-  .board :global(.lg b.on::after) { content: ''; position: absolute; top: 50%; width: 6px; height: 6px; margin-top: -3px; border-radius: 50%; background: var(--red); }
-  .board :global(.lg b.on:first-child::after) { left: -10px; }
-  .board :global(.lg b.on:last-child::after) { right: -10px; }
   .board :global(.st) { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .08em; color: var(--muted); }
   .board :global(.dayhead) { font-size: 15px; font-family: var(--body); font-weight: 800; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); display: flex; align-items: center; gap: 14px; margin-top: 34px; }
   .board :global(.dayhead::after) { content: ''; flex: 1; height: 1px; background: var(--line); }
@@ -426,7 +437,14 @@ const news = (await getCollection('news')).map(n => n.data)
     .board :global(.pl.r) { flex-direction: row; text-align: left; }
     .board :global(.mid) { text-align: left; display: flex; align-items: center; gap: 10px; padding-left: 10px; }
     .board :global(.sc) { font-size: 22px; }
-    .board :global(.lg) { margin: 0 0 0 auto; order: 3; }
+    .board :global(.fx.big) { grid-template-columns: 1fr; }
+    .board :global(.fx.big .sc) { font-size: 40px; }
+    .board :global(.fx.big .avatar) { --size: 52px !important; width: 52px; height: 52px; }
+    .board :global(.legstrip) { grid-template-columns: 1fr auto 1fr; padding: 10px 12px; gap: 8px; }
+    .board :global(.ls-n) { font-size: 34px; }
+    .board :global(.ls) { flex-direction: column; align-items: flex-start; gap: 6px; }
+    .board :global(.ls.r) { flex-direction: column; align-items: flex-end; }
+    .board :global(.ls-meta) { min-height: 0; flex-direction: row; flex-wrap: wrap; }
     .board :global(.pl.r .avg) { margin-left: auto; margin-right: 0; }
     }
 </style>
