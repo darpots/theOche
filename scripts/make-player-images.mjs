@@ -7,7 +7,7 @@
 // PDC headshots are not licensed to us: fine for a personal site, to be replaced
 // with licensed images before the site goes commercial (see /credits).
 // Writes src/data/player-images.json: { key: flags } where a = avatar, c = CC cut-out,
-// p = PDC cut-out, h = has a PDC headshot. Re-runs only fetch headshots that changed.
+// p = PDC cut-out (made for everyone with a headshot), h = has a PDC headshot. Re-runs only fetch headshots that changed.
 import { readFile, writeFile, mkdir } from 'node:fs/promises';
 import { existsSync } from 'node:fs';
 import sharp from 'sharp';
@@ -65,16 +65,14 @@ for (let i = 0; i < ids.length; i += 6) {
     // PDC headshot (only re-processed when its file name changes).
     const pa = await json(`${API.participants}${id}`);
     const file = pa?.data?.attributes?.media?.find(m => m.type === 'profile')?.image || null;
-    if (file && (cache[key] !== file || !existsSync(`${ROOT}public/avatars/${key}.webp`))) {
+    if (file && (cache[key] !== file || !existsSync(`${ROOT}public/avatars/${key}.webp`) || !existsSync(`${ROOT}public/cutouts/${key}-pdc-400.webp`))) {
       const res = await fetch(`${API.images}fit-in/900x900/${file}`).catch(() => null);
       if (res?.ok) {
         const buf = Buffer.from(await res.arrayBuffer());
         const trimmed = await sharp(buf).trim({ threshold: 1 }).png().toBuffer();
         await sharp(await headSquare(trimmed, 112)).toFile(`${ROOT}public/avatars/${key}.webp`);
-        // PDC cut-outs only where we have no Creative Commons one.
-        if (!existsSync(`${ROOT}public/cutouts/${key}.webp`)) {
-          for (const w of [400, 800]) await sharp(trimmed).resize({ width: w, withoutEnlargement: true }).webp({ quality: 76 }).toFile(`${ROOT}public/cutouts/${key}-pdc-${w}.webp`);
-        }
+        // PDC cut-outs for everyone with a headshot: news panels use them (sharp, consistent studio shots).
+        for (const w of [400, 800]) await sharp(trimmed).resize({ width: w, withoutEnlargement: true }).webp({ quality: 76 }).toFile(`${ROOT}public/cutouts/${key}-pdc-${w}.webp`);
         cache[key] = file; fetched++;
       }
     }
@@ -98,10 +96,9 @@ for (let i = 0; i < ids.length; i += 6) {
         const o = `${ROOT}public/cutouts/${key}-${w}.webp`;
         if (!existsSync(o)) { await sharp(`${ROOT}public/cutouts/${key}.webp`).resize({ width: w, withoutEnlargement: true }).webp({ quality: 76 }).toFile(o); made++; }
       }
-      flags.add('c'); flags.delete('p');
-    } else if (existsSync(`${ROOT}public/cutouts/${key}-pdc-400.webp`)) {
-      flags.add('p');
+      flags.add('c');
     }
+    if (existsSync(`${ROOT}public/cutouts/${key}-pdc-400.webp`)) flags.add('p'); else flags.delete('p');
     if (flags.has('a') || flags.has('c') || flags.has('p')) out[key] = [...flags].sort().join('');
   }));
 }

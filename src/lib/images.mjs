@@ -11,10 +11,11 @@ export function avatarSrc(name) {
   return flags(name).includes('a') ? `/avatars/${keyName(name)}.webp` : null;
 }
 
-/** Transparent cut-out at 400px wide (800px for retina), or null. */
-export function cutout(name) {
+/** Transparent cut-out at 400px wide (800px for retina), or null. prefer: 'cc' (default) or 'pdc' (studio shot, used by news panels). */
+export function cutout(name, prefer = 'cc') {
   const f = flags(name), k = keyName(name || '');
-  const base = f.includes('c') ? `/cutouts/${k}` : f.includes('p') ? `/cutouts/${k}-pdc` : null;
+  const cc = f.includes('c') ? `/cutouts/${k}` : null, pdc = f.includes('p') ? `/cutouts/${k}-pdc` : null;
+  const base = prefer === 'pdc' ? pdc || cc : cc || pdc;
   if (!base) return null;
   return { src: `${base}-400.webp`, srcset: `${base}-400.webp 400w, ${base}-800.webp 800w`, licensed: f.includes('c') };
 }

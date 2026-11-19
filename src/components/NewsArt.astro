@@ -19,11 +19,17 @@ const panel = shots[0]?.cut;
 const photoSizes = sizes || (shots.length > 1 ? '(max-width: 760px) 50vw, 400px' : '(max-width: 760px) 100vw, 700px');
 ---
 <div class:list={['art', cls, { split: shots.length > 1, panel }, panel && `t-${shots[0].tone}`]}>
-  {panel && <svg class="rings" viewBox="-50 -50 100 100" aria-hidden="true"><circle r="46" /><circle r="34" /><circle r="22" /><circle r="8" /></svg>}
-  {shots.map(s => s.cut ? (
-    <img class="cut" src={s.src} srcset={s.srcset} sizes={shots.length > 1 ? '(max-width: 760px) 40vw, 260px' : '(max-width: 760px) 60vw, 360px'}
-      alt={s.alt} loading={eager ? 'eager' : 'lazy'} decoding="async" fetchpriority={eager ? 'high' : 'auto'} />
-  ) : (
+  {panel ? (
+    <>
+      {shots.map((s, i) => (
+        <span class="half">
+          <img class="cut" src={s.src} srcset={s.srcset} sizes={shots.length > 1 ? '(max-width: 760px) 50vw, 340px' : '(max-width: 760px) 80vw, 520px'}
+            alt={s.alt} loading={eager ? 'eager' : 'lazy'} decoding="async" fetchpriority={eager ? 'high' : 'auto'} />
+        </span>
+      ))}
+      {shots.length > 1 && <span class="vs" aria-hidden="true">V</span>}
+    </>
+  ) : shots.map(s => (
     <img class="photo" src={s.src.replace('.jpg', '-1200.webp')} srcset={`${s.src.replace('.jpg', '-600.webp')} 600w, ${s.src.replace('.jpg', '-1200.webp')} 1200w`}
       sizes={photoSizes} alt={s.alt} style={`object-position:${s.focus}`} loading={eager ? 'eager' : 'lazy'} decoding="async" fetchpriority={eager ? 'high' : 'auto'} />
   ))}
@@ -35,16 +41,19 @@ const photoSizes = sizes || (shots.length > 1 ? '(max-width: 760px) 50vw, 400px'
   .art img.photo { flex: 1; min-width: 0; width: 100%; height: 100%; object-fit: cover; transition: transform 1s var(--ease); }
   :global(a:hover) .art img.photo { transform: scale(1.04); }
   .lbl { position: absolute; z-index: 2; left: 14px; top: 12px; background: var(--ink); color: #fff; font-size: 11px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; padding: 5px 10px; border-radius: 999px; }
-  /* Colour panels with cut-outs */
-  .panel { gap: 0; align-items: flex-end; justify-content: center; }
-  .panel .cut { position: relative; z-index: 1; height: 92%; width: auto; max-width: 70%; object-fit: contain; object-position: center bottom; filter: drop-shadow(0 14px 22px rgba(0, 0, 0, .35)); transition: transform .8s var(--ease); }
-  .panel.split .cut { max-width: 50%; margin: 0 -4%; }
-  :global(a:hover) .panel .cut { transform: translateY(-4px); }
-  .rings { position: absolute; z-index: 0; width: 130%; left: 50%; top: 50%; translate: -50% -50%; fill: none; stroke-width: 1.2; }
-  .t-ink { background: radial-gradient(circle at 50% 110%, #2a2d38, var(--ink) 70%); } .t-ink .rings { stroke: rgba(255, 255, 255, .08); }
-  .t-red { background: radial-gradient(circle at 50% 110%, #ff5a4f, var(--red) 70%); } .t-red .rings { stroke: rgba(255, 255, 255, .18); }
-  .t-volt { background: radial-gradient(circle at 50% 110%, #e6ff99, var(--volt) 70%); } .t-volt .rings { stroke: rgba(11, 12, 16, .12); }
-  .t-green { background: radial-gradient(circle at 50% 110%, #1fb37e, var(--green) 70%); } .t-green .rings { stroke: rgba(255, 255, 255, .16); }
-  .t-sky { background: radial-gradient(circle at 50% 110%, #4a6bff, var(--sky) 70%); } .t-sky .rings { stroke: rgba(255, 255, 255, .16); }
+  /* Player panels: a dark backdrop tinted by the tone, each player cropped to
+     head and shoulders (so mismatched poses never show), a V between two */
+  .panel { gap: 0; background: var(--ink); isolation: isolate; }
+  .panel::before { content: ''; position: absolute; inset: 0; z-index: -1; background: radial-gradient(120% 90% at 50% 120%, var(--tone) 0%, transparent 60%), linear-gradient(160deg, var(--tone-deep), var(--ink) 70%); }
+  .panel .half { position: relative; flex: 1; min-width: 0; height: 100%; overflow: hidden; }
+  .panel .cut { position: absolute; left: 50%; top: 9%; height: 185%; width: auto; max-width: none; translate: -50% 0; filter: drop-shadow(0 12px 24px rgba(0, 0, 0, .45)); transition: transform .8s var(--ease); }
+  .panel.split .half + .half { border-left: 1px solid rgba(255, 255, 255, .12); }
+  .panel.split .cut { top: 11%; height: 190%; }
+  :global(a:hover) .panel .cut { transform: scale(1.03); }
+  .vs { position: absolute; left: 50%; top: 50%; translate: -50% -50%; z-index: 2; width: 44px; height: 44px; border-radius: 50%; display: grid; place-items: center; background: var(--ink); color: var(--volt); font-family: var(--poster); font-size: 22px; box-shadow: 0 0 0 3px rgba(255, 255, 255, .15); }
+  .t-ink { --tone: #3b3f4d; --tone-deep: #1a1c24; }
+  .t-red { --tone: rgba(232, 54, 45, .75); --tone-deep: #3a0f0d; }
+  .t-green { --tone: rgba(14, 138, 95, .8); --tone-deep: #0a2a20; }
+  .t-sky { --tone: rgba(43, 75, 255, .75); --tone-deep: #111a4a; }
   @media (prefers-reduced-motion: reduce) { .art img { transition: none; } }
 </style>

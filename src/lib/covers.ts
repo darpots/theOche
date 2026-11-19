@@ -9,6 +9,7 @@ import library from '../data/news-library.json';
 import portraits from '../data/portraits.json';
 import faces from '../data/photo-faces.json';
 import extraPhotos from '../data/extra-photos.json';
+import photoSizes from '../data/photo-sizes.json';
 import { keyName } from './pdc.mjs';
 import { cutout } from './images.mjs';
 
@@ -19,11 +20,16 @@ const PORTRAITS = portraits as Record<string, { name: string }>;
 
 export interface CoverImage { src: string; alt: string; focus: string; cut?: boolean; srcset?: string; tone?: string }
 
-const TONES = ['ink', 'red', 'volt', 'green', 'sky'];
+// Dark, rich panel tones (bright lime washed out the players).
+const TONES = ['ink', 'red', 'green', 'sky'];
+// Photos narrower than this blur when a card blows them up, so they aren't used as covers.
+const MIN_PHOTO_WIDTH = 640;
+const SIZES = photoSizes as Record<string, number>;
+const sharpEnough = (src: string) => (SIZES[src.replace(/^\/photos\//, '').replace(/\.jpg$/, '')] || 0) >= MIN_PHOTO_WIDTH;
 const hash = (s: string) => { let h = 0; for (const c of s) h = (h * 31 + c.charCodeAt(0)) >>> 0; return h; };
 const cutFor = (name: string, tone: string): CoverImage | null => {
-  const c = cutout(name);
-  return c ? { src: c.src, srcset: c.srcset, alt: name, focus: 'center bottom', cut: true, tone } : null;
+  const c = cutout(name, 'pdc');
+  return c ? { src: c.src, srcset: c.srcset, alt: name, focus: 'center top', cut: true, tone } : null;
 };
 
 const EXTRA = extraPhotos as Record<string, { file: string; face: { x: number; y: number; h: number } }[]>;
@@ -35,6 +41,8 @@ const photoFor = (name: string, seed = ''): CoverImage | null => {
   // object-position at the face centre keeps the face in frame at any crop.
   if (PORTRAITS[k] && FACES[k]) set.push({ src: `/photos/${k}.jpg`, alt: name, focus: focusOf(FACES[k]) });
   for (const x of EXTRA[k] || []) set.push({ src: x.file, alt: name, focus: focusOf(x.face) });
+  // Only photos big enough to look sharp on a card.
+  for (let i = set.length - 1; i >= 0; i--) if (!sharpEnough(set[i].src)) set.splice(i, 1);
   return set.length ? set[hash(`${seed}:${k}`) % set.length] : null;
 };
 const libImage = (key: string): CoverImage => ({ src: `/news-img/${key}.jpg`, alt: LIB[key].alt, focus: LIB[key].focus });

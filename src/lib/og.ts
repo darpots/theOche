@@ -7,13 +7,13 @@ import { join } from 'node:path';
 const PUB = join(process.cwd(), 'public');
 const W = 1200, H = 630;
 const TONES: Record<string, [string, string]> = {
-  ink: ['#2a2d38', '#0b0c10'], red: ['#ff5a4f', '#e8362d'], volt: ['#e6ff99', '#c8ff2e'], green: ['#1fb37e', '#0e8a5f'], sky: ['#4a6bff', '#1d3fd6'],
+  ink: ['#3b3f4d', '#0b0c10'], red: ['#b8261f', '#2a0b0a'], green: ['#0e8a5f', '#08221a'], sky: ['#2b4bff', '#0f1640'],
 };
 const mark = readFileSync(join(PUB, 'favicon.svg'));
 
 function panel(tone: string) {
   const [hi, lo] = TONES[tone] || TONES.ink;
-  const ring = tone === 'volt' ? 'rgba(11,12,16,.12)' : 'rgba(255,255,255,.12)';
+  const ring = 'rgba(255,255,255,.08)';
   return Buffer.from(`<svg xmlns="http://www.w3.org/2000/svg" width="${W}" height="${H}">
     <defs><radialGradient id="g" cx="50%" cy="110%" r="90%"><stop offset="0" stop-color="${hi}"/><stop offset=".75" stop-color="${lo}"/></radialGradient></defs>
     <rect width="${W}" height="${H}" fill="url(#g)"/>
@@ -39,11 +39,16 @@ export async function ogPhoto(file: string, focus = '50% 30%') {
   return withMark(sharp(await img.resize(w, h).extract({ left, top, width: W, height: H }).toBuffer()));
 }
 
-/** One or two player cut-outs standing on a brand-colour panel. */
+/** One or more players, head and shoulders, on a dark panel tinted by the tone. */
 export async function ogCutouts(files: string[], tone = 'ink') {
-  // Each cut-out gets an equal share of the width (slight overlap), standing on the bottom edge.
+  // Crop each cut-out to its top (head and shoulders), then share the width out.
   const maxW = Math.floor((W - 80) / files.length) + (files.length > 1 ? 60 : 0);
-  const layers = await Promise.all(files.map(f => sharp(join(PUB, f)).resize({ height: files.length > 2 ? 560 : 600, width: Math.min(maxW, 760), fit: 'inside' }).png().toBuffer({ resolveWithObject: true })));
+  const layers = await Promise.all(files.map(async f => {
+    const img = sharp(join(PUB, f));
+    const m = await img.metadata();
+    const top = await img.extract({ left: 0, top: 0, width: m.width!, height: Math.min(m.height!, Math.round(m.width! * 1.05)) }).png().toBuffer();
+    return sharp(top).resize({ height: files.length > 2 ? 560 : 600, width: Math.min(maxW, 760), fit: 'inside' }).png().toBuffer({ resolveWithObject: true });
+  }));
   const total = layers.reduce((s, l) => s + l.info.width, 0);
   const overlap = files.length > 1 ? Math.max(0, Math.ceil((total - (W - 40)) / (files.length - 1))) : 0;
   let x = Math.max(0, Math.round((W - (total - overlap * (files.length - 1))) / 2));

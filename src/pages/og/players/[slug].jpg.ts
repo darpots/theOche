@@ -8,4 +8,4 @@ export function getStaticPaths() {
   return rankedProfiles().filter(({ profile }) => cutout(profile.name)).map(({ profile }) => ({ params: { slug: profile.slug }, props: { name: profile.name } }));
 }
 
-export const GET: APIRoute = async ({ props }) => jpeg(await ogCutouts([cutout(props.name)!.src.replace('-400.', '-800.').slice(1)], 'ink'));
+export const GET: APIRoute = async ({ props }) => jpeg(await ogCutouts([cutout(props.name, 'pdc')!.src.replace('-400.', '-800.').slice(1)], 'ink'));
