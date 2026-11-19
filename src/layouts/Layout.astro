@@ -406,6 +406,7 @@ const fullTitle = title === 'The Oche' ? title : `${title} · The Oche`;
     }
     .tab { display: flex; flex-direction: column; align-items: center; gap: 2px; padding: 6px 0; border: 0; border-radius: 18px; background: none; color: var(--on-ink); text-decoration: none; font-size: 11px; font-weight: 700; cursor: pointer; }
     .tab.on { color: var(--ink); background: var(--volt); }
+    .tab span { max-width: 100%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; letter-spacing: -.01em; }
   }
   @media (max-width: 360px) {
     .tab { font-size: 10px; }

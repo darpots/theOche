@@ -4,6 +4,7 @@ import calendar from '../data/calendar.json';
 import { avatarSrc, cutout } from '../lib/images.mjs';
 import { getCollection } from 'astro:content';
 import current from '../data/tournament.json';
+import venuePhotos from '../data/venue-photos.json';
 import { tvBadge, keyName } from '../lib/pdc.mjs';
 import { dayNum, monthShort, monthLong, weekday, dateRange, initials, avatarColours } from '../lib/format.mjs';
 
@@ -47,6 +48,16 @@ function badges(e: Ev) {
 const MAJOR_PHOTO: [RegExp, string][] = [[/world championship/i, 'ally-pally-crowd'], [/matchplay/i, 'winter-gardens'], [/grand slam/i, 'on-stage'], [/grand prix/i, 'board-lights'], [/uk open/i, 'crowd-180s'], [/european championship/i, 'darts-cluster'], [/players championship/i, 'referee'], [/masters/i, 'confetti'], [/world cup/i, 'crowd-signs'], [/world series/i, 'walk-on-crowd']];
 const featured = (e: Ev) => !!e.major;
 const photoFor = (e: Ev) => (MAJOR_PHOTO.find(([re]) => re.test(e.name))?.[1]) || 'arena';
+// Every card has a background: the venue's photo, else (for majors) a fitting
+// library photo, else one of eight generated backgrounds picked by the event id.
+const venueKey = (v: string | null) => String(v || '').toLowerCase().normalize('NFKD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+const VENUES = venuePhotos as Record<string, unknown>;
+const bgFor = (e: Ev) => {
+  const k = venueKey(e.venue);
+  if (VENUES[k]) return `/venues/${k}-600.webp`;
+  if (featured(e)) return `/news-img/${photoFor(e)}-600.webp`;
+  return `/venues/bg-${(Number(e.id) % 8) + 1}-600.webp`;
+};
 const champCut = (e: Ev) => (e.winner ? cutout(e.winner.name, 'pdc') : null);
 ---
 <Layout title="Calendar" description="Every PDC darts event on Sky Sports, ITV and PDCTV: dates, venues, broadcasters and winners." active="calendar">
@@ -79,10 +90,10 @@ const champCut = (e: Ev) => (e.winner ? cutout(e.winner.name, 'pdc') : null);
           {list.map(e => (
             <a href={`/tournament/${e.id}`} class={`ev ev-${e.broadcaster}${isPast(e) ? ' past' : ''}${featured(e) ? ' feat' : ''}`} hidden={isPast(e)}
               data-kind={kind(e)} data-start={e.start} data-end={e.end}>
-              {featured(e) && (
+              {(
                 <span class="ev-art" aria-hidden="true">
-                  <img src={`/news-img/${photoFor(e)}-600.webp`} alt="" loading="lazy" decoding="async" />
-                  {champCut(e) && <img class="champ" src={champCut(e)!.src} alt="" loading="lazy" decoding="async" />}
+                  <img src={bgFor(e)} alt="" loading="lazy" decoding="async" />
+                  {featured(e) && champCut(e) && <img class="champ" src={champCut(e)!.src} alt="" loading="lazy" decoding="async" />}
                 </span>
               )}
               <span class="ev-date" aria-hidden="true">
@@ -195,9 +206,27 @@ const champCut = (e: Ev) => (e.winner ? cutout(e.winner.name, 'pdc') : null);
   .bd.res { background: var(--green-soft); color: #075c3f; }
   .bd.sched { background: var(--volt); color: var(--ink); }
   .bd.news { background: var(--ink); color: #fff; }
+  /* Every card: dark, with its background faded in behind the text */
+  .ev { background: var(--ink); color: #fff; isolation: isolate; }
+  .ev .ev-art { position: absolute; inset: 0; z-index: -1; overflow: hidden; }
+  .ev .ev-art img:not(.champ) { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: .5; transition: transform .8s var(--ease), opacity .4s; }
+  .ev .ev-art::after { content: ''; position: absolute; inset: 0; background: linear-gradient(100deg, var(--ink) 25%, rgba(11, 12, 16, .55) 70%, rgba(11, 12, 16, .25)); }
+  .ev:hover .ev-art img:not(.champ) { transform: scale(1.04); opacity: .6; }
+  .ev .ev-date { background: rgba(255, 255, 255, .1); color: #fff; backdrop-filter: blur(4px); }
+  .ev .ev-date .wd, .ev .ev-date .mo { color: var(--on-ink); }
+  .ev .where, .ev .len { color: var(--on-ink); }
+  .ev h3 small { color: #ff7a72; }
+  .ev .go { color: var(--volt); }
+  .ev .winner { color: #fff; }
+  .ev .bd:not(.live):not(.res):not(.sched) { background: rgba(255, 255, 255, .12); color: #fff; }
+  .ev .status.done { background: rgba(255, 255, 255, .12); color: var(--on-ink); }
+  .ev .status { color: var(--on-ink); }
+  .ev .status.soon { color: var(--ink); }
+  .ev:hover h3 { color: var(--volt); }
   /* Majors: a wide feature card with a photo and the champion */
   .ev.feat { grid-column: span 2; background: var(--ink); color: #fff; grid-template-columns: 76px minmax(0, 1fr) minmax(0, 42%); min-height: 170px; }
-  .ev.feat .ev-art { grid-column: 3; grid-row: 1; position: relative; margin: -14px -14px -14px 0; overflow: hidden; }
+  .ev.feat .ev-art { inset: 0 0 0 auto; width: 48%; z-index: 0; }
+  .ev.feat .ev-date, .ev.feat .ev-main { position: relative; z-index: 1; }
   .ev.feat .ev-art img:not(.champ) { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: .55; }
   .ev.feat .ev-art::after { content: ''; position: absolute; inset: 0; background: linear-gradient(90deg, var(--ink) 0%, rgba(11, 12, 16, .2) 60%); }
   .ev.feat .champ { position: absolute; z-index: 1; right: 6%; bottom: 0; height: 115%; width: auto; filter: drop-shadow(0 10px 20px rgba(0, 0, 0, .5)); }
@@ -237,12 +266,13 @@ const champCut = (e: Ev) => (e.winner ? cutout(e.winner.name, 'pdc') : null);
   .ev.live h3 small { color: var(--volt); }
   .ev.live .go { color: var(--volt); }
   .ev.past { opacity: .8; }
-  .ev.past .ev-date { background: var(--paper-2); color: var(--muted); }
-  .ev.past .ev-date .wd, .ev.past .ev-date .mo { color: var(--muted); }
+  .ev.past .ev-date { background: rgba(255, 255, 255, .06); color: var(--on-ink-2); }
+  .ev.past .ev-date .wd, .ev.past .ev-date .mo { color: var(--on-ink-2); }
+  .ev.past .ev-art img:not(.champ) { filter: grayscale(.6); }
   .ev.past:hover { opacity: 1; }
 
   /* Phones: the filters scroll away instead of covering the list */
   @media (max-width: 640px) { .controls { position: static; background: none; } .chips { flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none; } .chip { white-space: nowrap; } }
-  @media (max-width: 760px) { .ev.feat { grid-column: auto; grid-template-columns: 64px minmax(0, 1fr); } .ev.feat .ev-art { position: absolute; inset: 0; margin: 0; z-index: 0; opacity: .5; } .ev.feat .ev-date, .ev.feat .ev-main { position: relative; z-index: 1; } .ev.feat .champ { height: 92%; right: 2%; opacity: .55; } }
+  @media (max-width: 760px) { .ev.feat { grid-column: auto; grid-template-columns: 64px minmax(0, 1fr); } .ev.feat .ev-art { position: absolute; inset: 0; width: auto; margin: 0; z-index: 0; } .ev.feat .ev-date, .ev.feat .ev-main { position: relative; z-index: 1; } .ev.feat .champ { height: 92%; right: 2%; opacity: .55; } }
   @media (max-width: 420px) { .grid { grid-template-columns: 1fr; } .ev { grid-template-columns: 64px minmax(0, 1fr); gap: 12px; } .ev-date b { font-size: 34px; } }
 </style>

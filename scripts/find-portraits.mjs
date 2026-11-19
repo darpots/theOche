@@ -15,7 +15,7 @@ const rankings = JSON.parse(await readFile(`${ROOT}src/data/rankings.json`, 'utf
 const tour = JSON.parse(await readFile(`${ROOT}src/data/tournament.json`, 'utf8'));
 
 const names = new Map();
-for (const p of rankings.players.filter(p => p.pos <= 128)) names.set(keyName(p.name), p.name);
+for (const p of rankings.players) names.set(keyName(p.name), p.name); // every ranked player
 for (const s of tour.tournament.stages) for (const f of s.fixtures) for (const p of [f.p1, f.p2]) if (p) names.set(keyName(p.name), p.name);
 const missing = [...names].filter(([k]) => !portraits[k]);
 console.log(`${missing.length} players without a photo`);

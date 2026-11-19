@@ -3,6 +3,8 @@ import Layout from '../layouts/Layout.astro';
 import portraits from '../data/portraits.json';
 import library from '../data/news-library.json';
 import extraPhotos from '../data/extra-photos.json';
+import venuePhotos from '../data/venue-photos.json';
+const venues = Object.entries(venuePhotos as Record<string, any>).sort((a, b) => a[1].venue.localeCompare(b[1].venue));
 import rankings from '../data/rankings.json';
 import { pdcImageKeys } from '../lib/images.mjs';
 import { keyName } from '../lib/pdc.mjs';
@@ -34,6 +36,13 @@ const extras = Object.entries(extraPhotos as Record<string, any[]>).flatMap(([k,
         <li class="card"><img src={p.file.replace('.jpg', '-600.webp')} alt={p.name} loading="lazy" style={`object-position:${(p.face.x * 100).toFixed(0)}% ${(p.face.y * 100).toFixed(0)}%`} /><div><strong>{p.name}</strong><span>{p.credit}</span><a href={p.licenseUrl} target="_blank" rel="noopener">{p.license}</a> · <a href={p.source} target="_blank" rel="noopener">Source</a></div></li>
       ))}
     </ul>
+    <h2 class="h">Venue photographs (calendar)</h2>
+    <ul class="grid">
+      {venues.map(([k, v]) => (
+        <li class="card"><img class="sq" src={`/venues/${k}-600.webp`} alt={v.venue} loading="lazy" /><div><strong>{v.venue}</strong><span>{v.credit}</span><a href={v.licenseUrl} target="_blank" rel="noopener">{v.license}</a> · <a href={v.source} target="_blank" rel="noopener">Source</a></div></li>
+      ))}
+    </ul>
+    <p class="src">Events at venues without a free photo use backgrounds made for this site.</p>
     <h2 class="h">PDC headshots</h2>
     <p class="src">{pdc.length} players: {pdc.join(', ')}.</p>
     <h2 class="h">News photographs</h2>

@@ -831,5 +831,45 @@
   "license": "CC BY-SA 4.0",
   "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
   "source": "https://commons.wikimedia.org/wiki/File:Michael_Smith_6-3_Steve_Lennon_-_Steve_Lennon_-_2019249215215_2019-09-06_PDC_European_Darts_Matchplay_-_0982_-_AK8I7880_(cropped).jpg"
+ },
+ "davidrosi": {
+  "name": "David Rosi",
+  "image": "/portraits/player-davidrosi.jpg",
+  "credit": "DarthBob, Wikimedia Commons",
+  "license": "CC BY-SA 4.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+  "source": "https://commons.wikimedia.org/wiki/File:David_Ros%C3%AD.jpg"
+ },
+ "davidpisek": {
+  "name": "David Pisek",
+  "image": "/portraits/player-davidpisek.jpg",
+  "credit": "DarthBob, Wikimedia Commons",
+  "license": "CC BY-SA 4.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+  "source": "https://commons.wikimedia.org/wiki/File:David_P%C3%ADsek.jpg"
+ },
+ "michalsmejda": {
+  "name": "Michal Smejda",
+  "image": "/portraits/player-michalsmejda.jpg",
+  "credit": "DarthBob, Wikimedia Commons",
+  "license": "CC BY-SA 4.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+  "source": "https://commons.wikimedia.org/wiki/File:Michal_%C5%A0mejda.jpg"
+ },
+ "florianhempel": {
+  "name": "Florian Hempel",
+  "image": "/portraits/player-florianhempel.jpg",
+  "credit": "Sven Mandel, Wikimedia Commons",
+  "license": "CC BY-SA 4.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+  "source": "https://commons.wikimedia.org/wiki/File:Florian_Hempel_2019_(cropped).jpg"
+ },
+ "ronmeulenkamp": {
+  "name": "Ron Meulenkamp",
+  "image": "/portraits/player-ronmeulenkamp.jpg",
+  "credit": "Darts Actueel, Wikimedia Commons",
+  "license": "CC BY 4.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by/4.0",
+  "source": "https://commons.wikimedia.org/wiki/File:Ron_Meulenkamp.png"
  }
 }
