@@ -1,5 +1,5 @@
 {
- "updatedAt": "2026-11-18T21:55:58.743Z",
+ "updatedAt": "2026-11-19T13:39:42.236Z",
  "event": {
   "id": "10871",
   "name": "2026 Grand Slam of Darts",
@@ -943,7 +943,7 @@
     }
    ],
    "round": "Last 16",
-   "alive": true,
+   "alive": false,
    "estimated": false
   },
   {
@@ -1339,8 +1339,8 @@
    "pos": 18,
    "live": 18,
    "move": 0,
-   "money": 492500,
-   "plus": 20000,
+   "money": 507500,
+   "plus": 35000,
    "minus": 35000,
    "expiring": [
     {
@@ -1354,7 +1354,7 @@
      "round": "Last 16"
     }
    ],
-   "round": "Last 16",
+   "round": "Quarter-Final",
    "alive": true,
    "estimated": false
   },
@@ -1406,12 +1406,33 @@
    "estimated": false
   },
   {
+   "id": "32895",
+   "name": "Kevin Doets",
+   "slug": "kevin-doets",
+   "pos": 23,
+   "live": 21,
+   "move": 2,
+   "money": 431750,
+   "plus": 35000,
+   "minus": 3000,
+   "expiring": [
+    {
+     "name": "2024 Players Championship Finals",
+     "amount": 3000,
+     "round": "Last 64"
+    }
+   ],
+   "round": "Quarter-Final",
+   "alive": true,
+   "estimated": false
+  },
+  {
    "id": "36314",
    "name": "Damon Heta",
    "slug": "damon-heta",
    "pos": 22,
-   "live": 21,
-   "move": 1,
+   "live": 22,
+   "move": 0,
    "money": 416750,
    "plus": 0,
    "minus": 10000,
@@ -1424,27 +1445,6 @@
    ],
    "round": null,
    "alive": null,
-   "estimated": false
-  },
-  {
-   "id": "32895",
-   "name": "Kevin Doets",
-   "slug": "kevin-doets",
-   "pos": 23,
-   "live": 21,
-   "move": 2,
-   "money": 416750,
-   "plus": 20000,
-   "minus": 3000,
-   "expiring": [
-    {
-     "name": "2024 Players Championship Finals",
-     "amount": 3000,
-     "round": "Last 64"
-    }
-   ],
-   "round": "Last 16",
-   "alive": true,
    "estimated": false
   },
   {
@@ -1517,7 +1517,7 @@
     }
    ],
    "round": "Last 16",
-   "alive": true,
+   "alive": false,
    "estimated": false
   },
   {
