@@ -1,5 +1,5 @@
 {
- "updatedAt": "2026-11-19T01:06:02.588Z",
+ "updatedAt": "2026-11-19T21:49:43.688Z",
  "tournament": {
   "id": "10871",
   "name": "Grand Slam of Darts",
@@ -19,6 +19,10 @@
     "name": "Group P",
     "round": 20,
     "sets": false,
+    "bestOf": 9,
+    "legsPerSet": 9,
+    "twoClear": false,
+    "prize": 5000,
     "fixtures": [
      {
       "id": "517012",
@@ -28,6 +32,7 @@
       "p1": {
        "id": "11821",
        "name": "Nathan Aspinall",
+       "last": "Aspinall",
        "nick": "The Asp",
        "country": "GB-ENG",
        "ranking": 12
@@ -35,6 +40,7 @@
       "p2": {
        "id": "33630",
        "name": "Maik Kuivenhoven",
+       "last": "Kuivenhoven",
        "nick": null,
        "country": "NL",
        "ranking": 71
@@ -67,6 +73,7 @@
       "p1": {
        "id": "2771",
        "name": "Karel Sedlacek",
+       "last": "Sedlacek",
        "nick": "Evil Charlie",
        "country": "CZ",
        "ranking": 42
@@ -74,6 +81,7 @@
       "p2": {
        "id": "33630",
        "name": "Maik Kuivenhoven",
+       "last": "Kuivenhoven",
        "nick": null,
        "country": "NL",
        "ranking": 71
@@ -106,6 +114,7 @@
       "p1": {
        "id": "11821",
        "name": "Nathan Aspinall",
+       "last": "Aspinall",
        "nick": "The Asp",
        "country": "GB-ENG",
        "ranking": 12
@@ -113,6 +122,7 @@
       "p2": {
        "id": "2771",
        "name": "Karel Sedlacek",
+       "last": "Sedlacek",
        "nick": "Evil Charlie",
        "country": "CZ",
        "ranking": 42
@@ -148,6 +158,10 @@
     "name": "Group O",
     "round": 19,
     "sets": false,
+    "bestOf": 9,
+    "legsPerSet": 9,
+    "twoClear": false,
+    "prize": 5000,
     "fixtures": [
      {
       "id": "517009",
@@ -157,6 +171,7 @@
       "p1": {
        "id": "754",
        "name": "Ross Smith",
+       "last": "Smith",
        "nick": "Smudger",
        "country": "GB-ENG",
        "ranking": 6
@@ -164,6 +179,7 @@
       "p2": {
        "id": "32107",
        "name": "Rusty-Jake Rodriguez",
+       "last": "Rodriguez",
        "nick": "RJR #3",
        "country": "AT",
        "ranking": 141
@@ -196,6 +212,7 @@
       "p1": {
        "id": "754",
        "name": "Ross Smith",
+       "last": "Smith",
        "nick": "Smudger",
        "country": "GB-ENG",
        "ranking": 6
@@ -203,6 +220,7 @@
       "p2": {
        "id": "11156",
        "name": "Gabriel Clemens",
+       "last": "Clemens",
        "nick": "German Giant",
        "country": "DE",
        "ranking": 53
@@ -235,6 +253,7 @@
       "p1": {
        "id": "11156",
        "name": "Gabriel Clemens",
+       "last": "Clemens",
        "nick": "German Giant",
        "country": "DE",
        "ranking": 53
@@ -242,6 +261,7 @@
       "p2": {
        "id": "32107",
        "name": "Rusty-Jake Rodriguez",
+       "last": "Rodriguez",
        "nick": "RJR #3",
        "country": "AT",
        "ranking": 141
@@ -272,6 +292,10 @@
     "name": "Group N",
     "round": 18,
     "sets": false,
+    "bestOf": 9,
+    "legsPerSet": 9,
+    "twoClear": false,
+    "prize": 5000,
     "fixtures": [
      {
       "id": "517006",
@@ -281,6 +305,7 @@
       "p1": {
        "id": "11843",
        "name": "Chris Dobey",
+       "last": "Dobey",
        "nick": "Hollywood",
        "country": "GB-ENG",
        "ranking": 16
@@ -288,6 +313,7 @@
       "p2": {
        "id": "40703",
        "name": "Jan Schmidt",
+       "last": "Schmidt",
        "nick": "Lightning",
        "country": "DE",
        "ranking": 146
@@ -320,6 +346,7 @@
       "p1": {
        "id": "11902",
        "name": "Martin Schindler",
+       "last": "Schindler",
        "nick": "The Wall",
        "country": "DE",
        "ranking": 20
@@ -327,6 +354,7 @@
       "p2": {
        "id": "40703",
        "name": "Jan Schmidt",
+       "last": "Schmidt",
        "nick": "Lightning",
        "country": "DE",
        "ranking": 146
@@ -364,6 +392,7 @@
       "p1": {
        "id": "11843",
        "name": "Chris Dobey",
+       "last": "Dobey",
        "nick": "Hollywood",
        "country": "GB-ENG",
        "ranking": 16
@@ -371,6 +400,7 @@
       "p2": {
        "id": "11902",
        "name": "Martin Schindler",
+       "last": "Schindler",
        "nick": "The Wall",
        "country": "DE",
        "ranking": 20
@@ -401,6 +431,10 @@
     "name": "Group M",
     "round": 17,
     "sets": false,
+    "bestOf": 9,
+    "legsPerSet": 9,
+    "twoClear": false,
+    "prize": 5000,
     "fixtures": [
      {
       "id": "517003",
@@ -410,6 +444,7 @@
       "p1": {
        "id": "33091",
        "name": "Gian van Veen",
+       "last": "van Veen",
        "nick": "The Giant",
        "country": "NL",
        "ranking": 3
@@ -417,6 +452,7 @@
       "p2": {
        "id": "40143",
        "name": "Carl Sneyd",
+       "last": "Sneyd",
        "nick": "Bomber",
        "country": "GB-ENG",
        "ranking": 129
@@ -449,6 +485,7 @@
       "p1": {
        "id": "32078",
        "name": "Bradley Brooks",
+       "last": "Brooks",
        "nick": "Bam Bam",
        "country": "GB-ENG",
        "ranking": 59
@@ -456,6 +493,7 @@
       "p2": {
        "id": "40143",
        "name": "Carl Sneyd",
+       "last": "Sneyd",
        "nick": "Bomber",
        "country": "GB-ENG",
        "ranking": 129
@@ -488,6 +526,7 @@
       "p1": {
        "id": "33091",
        "name": "Gian van Veen",
+       "last": "van Veen",
        "nick": "The Giant",
        "country": "NL",
        "ranking": 3
@@ -495,6 +534,7 @@
       "p2": {
        "id": "32078",
        "name": "Bradley Brooks",
+       "last": "Brooks",
        "nick": "Bam Bam",
        "country": "GB-ENG",
        "ranking": 59
@@ -525,6 +565,10 @@
     "name": "Group L",
     "round": 16,
     "sets": false,
+    "bestOf": 9,
+    "legsPerSet": 9,
+    "twoClear": false,
+    "prize": 5000,
     "fixtures": [
      {
       "id": "517000",
@@ -534,6 +578,7 @@
       "p1": {
        "id": "19",
        "name": "Michael van Gerwen",
+       "last": "van Gerwen",
        "nick": "Mighty Mike",
        "country": "NL",
        "ranking": 11
@@ -541,6 +586,7 @@
       "p2": {
        "id": "39687",
        "name": "Henry Coates",
+       "last": "Coates",
        "nick": null,
        "country": "GB-ENG",
        "ranking": 96
@@ -573,6 +619,7 @@
       "p1": {
        "id": "31031",
        "name": "Jeffrey De Graaf",
+       "last": "De Graaf",
        "nick": null,
        "country": "SE",
        "ranking": 39
@@ -580,6 +627,7 @@
       "p2": {
        "id": "39687",
        "name": "Henry Coates",
+       "last": "Coates",
        "nick": null,
        "country": "GB-ENG",
        "ranking": 96
@@ -612,6 +660,7 @@
       "p1": {
        "id": "19",
        "name": "Michael van Gerwen",
+       "last": "van Gerwen",
        "nick": "Mighty Mike",
        "country": "NL",
        "ranking": 11
@@ -619,6 +668,7 @@
       "p2": {
        "id": "31031",
        "name": "Jeffrey De Graaf",
+       "last": "De Graaf",
        "nick": null,
        "country": "SE",
        "ranking": 39
@@ -649,6 +699,10 @@
     "name": "Group K",
     "round": 15,
     "sets": false,
+    "bestOf": 9,
+    "legsPerSet": 9,
+    "twoClear": false,
+    "prize": 5000,
     "fixtures": [
      {
       "id": "516997",
@@ -658,6 +712,7 @@
       "p1": {
        "id": "22",
        "name": "James Wade",
+       "last": "Wade",
        "nick": "The Machine",
        "country": "GB-ENG",
        "ranking": 7
@@ -665,6 +720,7 @@
       "p2": {
        "id": "38159",
        "name": "Cam Crabtree",
+       "last": "Crabtree",
        "nick": "Shazam",
        "country": "GB-ENG",
        "ranking": 69
@@ -697,6 +753,7 @@
       "p1": {
        "id": "271",
        "name": "Ricky Evans",
+       "last": "Evans",
        "nick": "Rapid",
        "country": "GB-ENG",
        "ranking": 52
@@ -704,6 +761,7 @@
       "p2": {
        "id": "38159",
        "name": "Cam Crabtree",
+       "last": "Crabtree",
        "nick": "Shazam",
        "country": "GB-ENG",
        "ranking": 69
@@ -736,6 +794,7 @@
       "p1": {
        "id": "22",
        "name": "James Wade",
+       "last": "Wade",
        "nick": "The Machine",
        "country": "GB-ENG",
        "ranking": 7
@@ -743,6 +802,7 @@
       "p2": {
        "id": "271",
        "name": "Ricky Evans",
+       "last": "Evans",
        "nick": "Rapid",
        "country": "GB-ENG",
        "ranking": 52
@@ -778,6 +838,10 @@
     "name": "Group J",
     "round": 14,
     "sets": false,
+    "bestOf": 9,
+    "legsPerSet": 9,
+    "twoClear": false,
+    "prize": 5000,
     "fixtures": [
      {
       "id": "516994",
@@ -787,6 +851,7 @@
       "p1": {
        "id": "11804",
        "name": "Luke Woodhouse",
+       "last": "Woodhouse",
        "nick": "Woody",
        "country": "GB-ENG",
        "ranking": 17
@@ -794,6 +859,7 @@
       "p2": {
        "id": "32627",
        "name": "Tom Sykes",
+       "last": "Sykes",
        "nick": "The Castleford Tiger",
        "country": "GB-ENG",
        "ranking": 81
@@ -826,6 +892,7 @@
       "p1": {
        "id": "11804",
        "name": "Luke Woodhouse",
+       "last": "Woodhouse",
        "nick": "Woody",
        "country": "GB-ENG",
        "ranking": 17
@@ -833,6 +900,7 @@
       "p2": {
        "id": "224",
        "name": "Krzysztof Ratajski",
+       "last": "Ratajski",
        "nick": "The Polish Eagle",
        "country": "PL",
        "ranking": 19
@@ -865,6 +933,7 @@
       "p1": {
        "id": "224",
        "name": "Krzysztof Ratajski",
+       "last": "Ratajski",
        "nick": "The Polish Eagle",
        "country": "PL",
        "ranking": 19
@@ -872,6 +941,7 @@
       "p2": {
        "id": "32627",
        "name": "Tom Sykes",
+       "last": "Sykes",
        "nick": "The Castleford Tiger",
        "country": "GB-ENG",
        "ranking": 81
@@ -902,6 +972,10 @@
     "name": "Group I",
     "round": 13,
     "sets": false,
+    "bestOf": 9,
+    "legsPerSet": 9,
+    "twoClear": false,
+    "prize": 5000,
     "fixtures": [
      {
       "id": "516991",
@@ -911,6 +985,7 @@
       "p1": {
        "id": "32102",
        "name": "Luke Humphries",
+       "last": "Humphries",
        "nick": "Cool Hand",
        "country": "GB-ENG",
        "ranking": 2
@@ -918,6 +993,7 @@
       "p2": {
        "id": "32736",
        "name": "Paolo Nebrida",
+       "last": "Nebrida",
        "nick": "Pow",
        "country": "PH",
        "ranking": null
@@ -950,6 +1026,7 @@
       "p1": {
        "id": "81",
        "name": "Joe Cullen",
+       "last": "Cullen",
        "nick": "The Rockstar",
        "country": "GB-ENG",
        "ranking": 32
@@ -957,6 +1034,7 @@
       "p2": {
        "id": "32736",
        "name": "Paolo Nebrida",
+       "last": "Nebrida",
        "nick": "Pow",
        "country": "PH",
        "ranking": null
@@ -989,6 +1067,7 @@
       "p1": {
        "id": "32102",
        "name": "Luke Humphries",
+       "last": "Humphries",
        "nick": "Cool Hand",
        "country": "GB-ENG",
        "ranking": 2
@@ -996,6 +1075,7 @@
       "p2": {
        "id": "81",
        "name": "Joe Cullen",
+       "last": "Cullen",
        "nick": "The Rockstar",
        "country": "GB-ENG",
        "ranking": 32
@@ -1026,6 +1106,10 @@
     "name": "Group H",
     "round": 12,
     "sets": false,
+    "bestOf": 9,
+    "legsPerSet": 9,
+    "twoClear": false,
+    "prize": 5000,
     "fixtures": [
      {
       "id": "516988",
@@ -1035,6 +1119,7 @@
       "p1": {
        "id": "32956",
        "name": "Wessel Nijman",
+       "last": "Nijman",
        "nick": null,
        "country": "NL",
        "ranking": 13
@@ -1042,6 +1127,7 @@
       "p2": {
        "id": "43097",
        "name": "Adam Sevada",
+       "last": "Sevada",
        "nick": "The Reaper",
        "country": "US",
        "ranking": null
@@ -1074,6 +1160,7 @@
       "p1": {
        "id": "34874",
        "name": "Niko Springer",
+       "last": "Springer",
        "nick": "Meenzer Bub",
        "country": "DE",
        "ranking": 34
@@ -1081,6 +1168,7 @@
       "p2": {
        "id": "43097",
        "name": "Adam Sevada",
+       "last": "Sevada",
        "nick": "The Reaper",
        "country": "US",
        "ranking": null
@@ -1113,6 +1201,7 @@
       "p1": {
        "id": "32956",
        "name": "Wessel Nijman",
+       "last": "Nijman",
        "nick": null,
        "country": "NL",
        "ranking": 13
@@ -1120,6 +1209,7 @@
       "p2": {
        "id": "34874",
        "name": "Niko Springer",
+       "last": "Springer",
        "nick": "Meenzer Bub",
        "country": "DE",
        "ranking": 34
@@ -1150,6 +1240,10 @@
     "name": "Group G",
     "round": 11,
     "sets": false,
+    "bestOf": 9,
+    "legsPerSet": 9,
+    "twoClear": false,
+    "prize": 5000,
     "fixtures": [
      {
       "id": "516985",
@@ -1159,6 +1253,7 @@
       "p1": {
        "id": "30859",
        "name": "Jonny Clayton",
+       "last": "Clayton",
        "nick": "The Ferret",
        "country": "GB-WLS",
        "ranking": 5
@@ -1166,6 +1261,7 @@
       "p2": {
        "id": "35046",
        "name": "Anton Ostlund",
+       "last": "Ostlund",
        "nick": "One-Ton",
        "country": "SE",
        "ranking": 162
@@ -1198,6 +1294,7 @@
       "p1": {
        "id": "30859",
        "name": "Jonny Clayton",
+       "last": "Clayton",
        "nick": "The Ferret",
        "country": "GB-WLS",
        "ranking": 5
@@ -1205,6 +1302,7 @@
       "p2": {
        "id": "31041",
        "name": "Rob Cross",
+       "last": "Cross",
        "nick": "Voltage",
        "country": "GB-ENG",
        "ranking": 24
@@ -1237,6 +1335,7 @@
       "p1": {
        "id": "31041",
        "name": "Rob Cross",
+       "last": "Cross",
        "nick": "Voltage",
        "country": "GB-ENG",
        "ranking": 24
@@ -1244,6 +1343,7 @@
       "p2": {
        "id": "35046",
        "name": "Anton Ostlund",
+       "last": "Ostlund",
        "nick": "One-Ton",
        "country": "SE",
        "ranking": 162
@@ -1274,6 +1374,10 @@
     "name": "Group F",
     "round": 10,
     "sets": false,
+    "bestOf": 9,
+    "legsPerSet": 9,
+    "twoClear": false,
+    "prize": 5000,
     "fixtures": [
      {
       "id": "516982",
@@ -1283,6 +1387,7 @@
       "p1": {
        "id": "32037",
        "name": "Ryan Searle",
+       "last": "Searle",
        "nick": "Heavy Metal",
        "country": "GB-ENG",
        "ranking": 15
@@ -1290,6 +1395,7 @@
       "p2": {
        "id": "38279",
        "name": "Charlie Manby",
+       "last": "Manby",
        "nick": "Champagne",
        "country": "GB-ENG",
        "ranking": 77
@@ -1322,6 +1428,7 @@
       "p1": {
        "id": "231",
        "name": "Andrew Gilding",
+       "last": "Gilding",
        "nick": "Goldfinger",
        "country": "GB-ENG",
        "ranking": 27
@@ -1329,6 +1436,7 @@
       "p2": {
        "id": "38279",
        "name": "Charlie Manby",
+       "last": "Manby",
        "nick": "Champagne",
        "country": "GB-ENG",
        "ranking": 77
@@ -1361,6 +1469,7 @@
       "p1": {
        "id": "32037",
        "name": "Ryan Searle",
+       "last": "Searle",
        "nick": "Heavy Metal",
        "country": "GB-ENG",
        "ranking": 15
@@ -1368,6 +1477,7 @@
       "p2": {
        "id": "231",
        "name": "Andrew Gilding",
+       "last": "Gilding",
        "nick": "Goldfinger",
        "country": "GB-ENG",
        "ranking": 27
@@ -1398,6 +1508,10 @@
     "name": "Group E",
     "round": 9,
     "sets": false,
+    "bestOf": 9,
+    "legsPerSet": 9,
+    "twoClear": false,
+    "prize": 5000,
     "fixtures": [
      {
       "id": "516979",
@@ -1407,6 +1521,7 @@
       "p1": {
        "id": "11788",
        "name": "Gerwyn Price",
+       "last": "Price",
        "nick": "The Iceman",
        "country": "GB-WLS",
        "ranking": 4
@@ -1414,6 +1529,7 @@
       "p2": {
        "id": "33558",
        "name": "Joe Hunt",
+       "last": "Hunt",
        "nick": "Joe Boy",
        "country": "GB-ENG",
        "ranking": 86
@@ -1446,6 +1562,7 @@
       "p1": {
        "id": "36287",
        "name": "Sebastian Bialecki",
+       "last": "Bialecki",
        "nick": "The Bolt",
        "country": "PL",
        "ranking": 51
@@ -1453,6 +1570,7 @@
       "p2": {
        "id": "33558",
        "name": "Joe Hunt",
+       "last": "Hunt",
        "nick": "Joe Boy",
        "country": "GB-ENG",
        "ranking": 86
@@ -1485,6 +1603,7 @@
       "p1": {
        "id": "11788",
        "name": "Gerwyn Price",
+       "last": "Price",
        "nick": "The Iceman",
        "country": "GB-WLS",
        "ranking": 4
@@ -1492,6 +1611,7 @@
       "p2": {
        "id": "36287",
        "name": "Sebastian Bialecki",
+       "last": "Bialecki",
        "nick": "The Bolt",
        "country": "PL",
        "ranking": 51
@@ -1522,6 +1642,10 @@
     "name": "Group D",
     "round": 8,
     "sets": false,
+    "bestOf": 9,
+    "legsPerSet": 9,
+    "twoClear": false,
+    "prize": 5000,
     "fixtures": [
      {
       "id": "516976",
@@ -1531,6 +1655,7 @@
       "p1": {
        "id": "876",
        "name": "Stephen Bunting",
+       "last": "Bunting",
        "nick": "The Bullet",
        "country": "GB-ENG",
        "ranking": 9
@@ -1538,6 +1663,7 @@
       "p2": {
        "id": "31498",
        "name": "Raymond Smith",
+       "last": "Smith",
        "nick": "Guru",
        "country": "AU",
        "ranking": null
@@ -1570,6 +1696,7 @@
       "p1": {
        "id": "2040",
        "name": "Cameron Menzies",
+       "last": "Menzies",
        "nick": "Cammy",
        "country": "GB-SCT",
        "ranking": 26
@@ -1577,6 +1704,7 @@
       "p2": {
        "id": "31498",
        "name": "Raymond Smith",
+       "last": "Smith",
        "nick": "Guru",
        "country": "AU",
        "ranking": null
@@ -1609,6 +1737,7 @@
       "p1": {
        "id": "876",
        "name": "Stephen Bunting",
+       "last": "Bunting",
        "nick": "The Bullet",
        "country": "GB-ENG",
        "ranking": 9
@@ -1616,6 +1745,7 @@
       "p2": {
        "id": "2040",
        "name": "Cameron Menzies",
+       "last": "Menzies",
        "nick": "Cammy",
        "country": "GB-SCT",
        "ranking": 26
@@ -1646,6 +1776,10 @@
     "name": "Group C",
     "round": 7,
     "sets": false,
+    "bestOf": 9,
+    "legsPerSet": 9,
+    "twoClear": false,
+    "prize": 5000,
     "fixtures": [
      {
       "id": "516973",
@@ -1655,6 +1789,7 @@
       "p1": {
        "id": "38552",
        "name": "Josh Rock",
+       "last": "Rock",
        "nick": null,
        "country": "GB-NIR",
        "ranking": 8
@@ -1662,6 +1797,7 @@
       "p2": {
        "id": "38498",
        "name": "Tommy Morris",
+       "last": "Morris",
        "nick": "The Gun",
        "country": "GB-ENG",
        "ranking": 82
@@ -1694,6 +1830,7 @@
       "p1": {
        "id": "38552",
        "name": "Josh Rock",
+       "last": "Rock",
        "nick": null,
        "country": "GB-NIR",
        "ranking": 8
@@ -1701,6 +1838,7 @@
       "p2": {
        "id": "32895",
        "name": "Kevin Doets",
+       "last": "Doets",
        "nick": "Hawk Eye",
        "country": "NL",
        "ranking": 23
@@ -1733,6 +1871,7 @@
       "p1": {
        "id": "32895",
        "name": "Kevin Doets",
+       "last": "Doets",
        "nick": "Hawk Eye",
        "country": "NL",
        "ranking": 23
@@ -1740,6 +1879,7 @@
       "p2": {
        "id": "38498",
        "name": "Tommy Morris",
+       "last": "Morris",
        "nick": "The Gun",
        "country": "GB-ENG",
        "ranking": 82
@@ -1770,6 +1910,10 @@
     "name": "Group B",
     "round": 6,
     "sets": false,
+    "bestOf": 9,
+    "legsPerSet": 9,
+    "twoClear": false,
+    "prize": 5000,
     "fixtures": [
      {
       "id": "516970",
@@ -1779,6 +1923,7 @@
       "p1": {
        "id": "30844",
        "name": "Jermaine Wattimena",
+       "last": "Wattimena",
        "nick": "The Machine Gun",
        "country": "NL",
        "ranking": 18
@@ -1786,6 +1931,7 @@
       "p2": {
        "id": "31491",
        "name": "Lisa Ashton",
+       "last": "Ashton",
        "nick": "The Lancashire Rose",
        "country": "GB-ENG",
        "ranking": null
@@ -1818,6 +1964,7 @@
       "p1": {
        "id": "37349",
        "name": "Alan Soutar",
+       "last": "Soutar",
        "nick": "Soots",
        "country": "GB-SCT",
        "ranking": 61
@@ -1825,6 +1972,7 @@
       "p2": {
        "id": "31491",
        "name": "Lisa Ashton",
+       "last": "Ashton",
        "nick": "The Lancashire Rose",
        "country": "GB-ENG",
        "ranking": null
@@ -1857,6 +2005,7 @@
       "p1": {
        "id": "30844",
        "name": "Jermaine Wattimena",
+       "last": "Wattimena",
        "nick": "The Machine Gun",
        "country": "NL",
        "ranking": 18
@@ -1864,6 +2013,7 @@
       "p2": {
        "id": "37349",
        "name": "Alan Soutar",
+       "last": "Soutar",
        "nick": "Soots",
        "country": "GB-SCT",
        "ranking": 61
@@ -1894,6 +2044,10 @@
     "name": "Group A",
     "round": 5,
     "sets": false,
+    "bestOf": 9,
+    "legsPerSet": 9,
+    "twoClear": false,
+    "prize": 5000,
     "fixtures": [
      {
       "id": "516967",
@@ -1903,6 +2057,7 @@
       "p1": {
        "id": "40676",
        "name": "Luke Littler",
+       "last": "Littler",
        "nick": "The Nuke",
        "country": "GB-ENG",
        "ranking": 1
@@ -1910,6 +2065,7 @@
       "p2": {
        "id": "36640",
        "name": "Beau Greaves",
+       "last": "Greaves",
        "nick": "Beau & Arrow",
        "country": "GB-ENG",
        "ranking": 74
@@ -1942,6 +2098,7 @@
       "p1": {
        "id": "33014",
        "name": "Niels Zonneveld",
+       "last": "Zonneveld",
        "nick": "Triple Z",
        "country": "NL",
        "ranking": 28
@@ -1949,6 +2106,7 @@
       "p2": {
        "id": "36640",
        "name": "Beau Greaves",
+       "last": "Greaves",
        "nick": "Beau & Arrow",
        "country": "GB-ENG",
        "ranking": 74
@@ -1981,6 +2139,7 @@
       "p1": {
        "id": "40676",
        "name": "Luke Littler",
+       "last": "Littler",
        "nick": "The Nuke",
        "country": "GB-ENG",
        "ranking": 1
@@ -1988,6 +2147,7 @@
       "p2": {
        "id": "33014",
        "name": "Niels Zonneveld",
+       "last": "Zonneveld",
        "nick": "Triple Z",
        "country": "NL",
        "ranking": 28
@@ -2018,6 +2178,10 @@
     "name": "Last 16",
     "round": 4,
     "sets": false,
+    "bestOf": 19,
+    "legsPerSet": 19,
+    "twoClear": false,
+    "prize": 20000,
     "fixtures": [
      {
       "id": "517015",
@@ -2027,6 +2191,7 @@
       "p1": {
        "id": "40676",
        "name": "Luke Littler",
+       "last": "Littler",
        "nick": "The Nuke",
        "country": "GB-ENG",
        "ranking": 1
@@ -2034,6 +2199,7 @@
       "p2": {
        "id": "30844",
        "name": "Jermaine Wattimena",
+       "last": "Wattimena",
        "nick": "The Machine Gun",
        "country": "NL",
        "ranking": 18
@@ -2066,6 +2232,7 @@
       "p1": {
        "id": "32895",
        "name": "Kevin Doets",
+       "last": "Doets",
        "nick": "Hawk Eye",
        "country": "NL",
        "ranking": 23
@@ -2073,6 +2240,7 @@
       "p2": {
        "id": "2040",
        "name": "Cameron Menzies",
+       "last": "Menzies",
        "nick": "Cammy",
        "country": "GB-SCT",
        "ranking": 26
@@ -2105,6 +2273,7 @@
       "p1": {
        "id": "11788",
        "name": "Gerwyn Price",
+       "last": "Price",
        "nick": "The Iceman",
        "country": "GB-WLS",
        "ranking": 4
@@ -2112,6 +2281,7 @@
       "p2": {
        "id": "32037",
        "name": "Ryan Searle",
+       "last": "Searle",
        "nick": "Heavy Metal",
        "country": "GB-ENG",
        "ranking": 15
@@ -2144,6 +2314,7 @@
       "p1": {
        "id": "31041",
        "name": "Rob Cross",
+       "last": "Cross",
        "nick": "Voltage",
        "country": "GB-ENG",
        "ranking": 24
@@ -2151,6 +2322,7 @@
       "p2": {
        "id": "34874",
        "name": "Niko Springer",
+       "last": "Springer",
        "nick": "Meenzer Bub",
        "country": "DE",
        "ranking": 34
@@ -2183,6 +2355,7 @@
       "p1": {
        "id": "32102",
        "name": "Luke Humphries",
+       "last": "Humphries",
        "nick": "Cool Hand",
        "country": "GB-ENG",
        "ranking": 2
@@ -2190,6 +2363,7 @@
       "p2": {
        "id": "32627",
        "name": "Tom Sykes",
+       "last": "Sykes",
        "nick": "The Castleford Tiger",
        "country": "GB-ENG",
        "ranking": 81
@@ -2206,6 +2380,7 @@
       "p1": {
        "id": "22",
        "name": "James Wade",
+       "last": "Wade",
        "nick": "The Machine",
        "country": "GB-ENG",
        "ranking": 7
@@ -2213,6 +2388,7 @@
       "p2": {
        "id": "19",
        "name": "Michael van Gerwen",
+       "last": "van Gerwen",
        "nick": "Mighty Mike",
        "country": "NL",
        "ranking": 11
@@ -2225,10 +2401,11 @@
       "id": "517021",
       "date": "2026-11-19",
       "time": "20:15",
-      "status": "upcoming",
+      "status": "result",
       "p1": {
        "id": "33091",
        "name": "Gian van Veen",
+       "last": "van Veen",
        "nick": "The Giant",
        "country": "NL",
        "ranking": 3
@@ -2236,22 +2413,45 @@
       "p2": {
        "id": "11902",
        "name": "Martin Schindler",
+       "last": "Schindler",
        "nick": "The Wall",
        "country": "DE",
        "ranking": 20
       },
-      "s1": 0,
-      "s2": 0,
-      "winner": null
+      "s1": 10,
+      "s2": 7,
+      "winner": "33091",
+      "stats": [
+       {
+        "avg": 101.69,
+        "f9": null,
+        "t80": 4,
+        "t140": 19,
+        "t100": 17,
+        "co": 37.04,
+        "hi": 93
+       },
+       {
+        "avg": 99.51,
+        "f9": null,
+        "t80": 6,
+        "t140": 14,
+        "t100": 16,
+        "co": 28,
+        "hi": 94
+       }
+      ],
+      "statsLive": true
      },
      {
       "id": "517022",
       "date": "2026-11-19",
-      "time": "19:15",
-      "status": "upcoming",
+      "time": "19:19",
+      "status": "result",
       "p1": {
        "id": "11156",
        "name": "Gabriel Clemens",
+       "last": "Clemens",
        "nick": "German Giant",
        "country": "DE",
        "ranking": 53
@@ -2259,13 +2459,35 @@
       "p2": {
        "id": "11821",
        "name": "Nathan Aspinall",
+       "last": "Aspinall",
        "nick": "The Asp",
        "country": "GB-ENG",
        "ranking": 12
       },
-      "s1": 0,
-      "s2": 0,
-      "winner": null
+      "s1": 7,
+      "s2": 10,
+      "winner": "11821",
+      "stats": [
+       {
+        "avg": 96.55,
+        "f9": null,
+        "t80": 10,
+        "t140": 9,
+        "t100": 15,
+        "co": 31.82,
+        "hi": 86
+       },
+       {
+        "avg": 100.72,
+        "f9": null,
+        "t80": 7,
+        "t140": 10,
+        "t100": 18,
+        "co": 52.63,
+        "hi": 170
+       }
+      ],
+      "statsLive": true
      }
     ]
    },
@@ -2273,6 +2495,10 @@
     "name": "Quarter-Final",
     "round": 3,
     "sets": false,
+    "bestOf": 31,
+    "legsPerSet": 31,
+    "twoClear": false,
+    "prize": 35000,
     "fixtures": [
      {
       "id": "517023",
@@ -2282,6 +2508,7 @@
       "p1": {
        "id": "30844",
        "name": "Jermaine Wattimena",
+       "last": "Wattimena",
        "nick": "The Machine Gun",
        "country": "NL",
        "ranking": 18
@@ -2289,6 +2516,7 @@
       "p2": {
        "id": "32895",
        "name": "Kevin Doets",
+       "last": "Doets",
        "nick": "Hawk Eye",
        "country": "NL",
        "ranking": 23
@@ -2305,6 +2533,7 @@
       "p1": {
        "id": "11788",
        "name": "Gerwyn Price",
+       "last": "Price",
        "nick": "The Iceman",
        "country": "GB-WLS",
        "ranking": 4
@@ -2312,6 +2541,7 @@
       "p2": {
        "id": "34874",
        "name": "Niko Springer",
+       "last": "Springer",
        "nick": "Meenzer Bub",
        "country": "DE",
        "ranking": 34
@@ -2336,8 +2566,22 @@
       "date": "2026-11-21",
       "time": "19:15",
       "status": "upcoming",
-      "p1": null,
-      "p2": null,
+      "p1": {
+       "id": "33091",
+       "name": "Gian van Veen",
+       "last": "van Veen",
+       "nick": "The Giant",
+       "country": "NL",
+       "ranking": 3
+      },
+      "p2": {
+       "id": "11821",
+       "name": "Nathan Aspinall",
+       "last": "Aspinall",
+       "nick": "The Asp",
+       "country": "GB-ENG",
+       "ranking": 12
+      },
       "s1": 0,
       "s2": 0,
       "winner": null
@@ -2348,6 +2592,10 @@
     "name": "Semi-Final",
     "round": 2,
     "sets": false,
+    "bestOf": 31,
+    "legsPerSet": 31,
+    "twoClear": false,
+    "prize": 60000,
     "fixtures": [
      {
       "id": "517027",
@@ -2377,6 +2625,10 @@
     "name": "Final",
     "round": 1,
     "sets": false,
+    "bestOf": 31,
+    "legsPerSet": 31,
+    "twoClear": false,
+    "prize": 100000,
     "fixtures": [
      {
       "id": "517029",

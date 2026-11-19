@@ -68,6 +68,7 @@ function slimPlayer(p) {
   return {
     id: String(p.participantID),
     name: playerName(p),
+    last: p.lastName || null,
     nick: p.nickname || null,
     country: p.countryCode || null,
     ranking: p.ranking ?? null,
@@ -85,6 +86,11 @@ export function normaliseTournament(payload) {
       name: s.stage?.name || 'Round',
       round: s.roundNumber,
       sets: (s.numberOfSets || 0) > 1,
+      // Match length: best of N sets (legs per set) or best of N legs.
+      bestOf: (s.numberOfSets || 0) > 1 ? s.numberOfSets : s.numberOfLegsPerSet || null,
+      legsPerSet: s.numberOfLegsPerSet || null,
+      twoClear: !!s.twoClearLegsToWin,
+      prize: s.compensationValue != null ? Number(s.compensationValue) : null,
       fixtures: (s.fixtures || []).map(f => {
         const p1 = slimPlayer(f.participant1);
         const p2 = slimPlayer(f.participant2);
@@ -416,6 +422,8 @@ export function applyLive(t, live) {
   for (const s of t.stages) for (const f of s.fixtures) {
     const m = live.get(String(f.id));
     if (!m || m.status === 'upcoming') continue;
+    // Both tallies: legs in the current set and sets (set play shows both).
+    f.liveLegs = m.legs; f.liveSets = m.sets; f.liveSet = m.set; f.liveLeg = m.leg;
     if (f.status !== 'result') {
       const [a, b] = liveScore(m, s.sets);
       f.s1 = a; f.s2 = b; f.status = m.status;
@@ -484,3 +492,13 @@ export async function liveCurrentLeg(tid, m) {
   }
   return { set: m.set || 1, leg: m.leg, left: [left(true), left(false)], throwing, visits: leg.visits };
 }
+
+/** "First to 10 legs" / "First to 4 sets" for a stage ({ sets, bestOf, twoClear }). */
+export function formatLabel(st) {
+  if (!st?.bestOf) return '';
+  const n = Math.floor(st.bestOf / 2) + 1;
+  return `First to ${n} ${st.sets ? 'sets' : 'legs'}${st.twoClear ? ' (two clear)' : ''}`;
+}
+
+/** Short surname for tight spaces: the feed's last name ("van Gerwen"), else the name after the first word. */
+export const surnameOf = p => p?.last || (p?.name || '').split(' ').slice(1).join(' ') || p?.name || '';

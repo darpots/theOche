@@ -1,15 +1,16 @@
 // Renders the Matches page body from a normalised tournament. Used at build
 // time (Astro) and again in the browser when live data arrives, so both
 // always produce identical markup.
-import { flag, keyName } from './pdc.mjs';
+import { flag } from './pdc.mjs';
+import { avatarSrc } from './images.mjs';
 import { avatarColours, initials, longDate, shortDate, ukClock, ukZone } from './format.mjs';
 
 const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]);
 
-export function avatar(p, portraits, size = 44) {
-  const pic = p && portraits[keyName(p.name)];
+export function avatar(p, _unused, size = 44) {
+  const pic = p && avatarSrc(p.name);
   const [c1, c2] = avatarColours(p?.name || '?');
-  return `<span class="avatar" style="--size:${size}px;--c1:${c1};--c2:${c2}">${pic ? `<img src="${pic}" alt="" loading="lazy" decoding="async">` : esc(initials(p?.name || '?'))}</span>`;
+  return `<span class="avatar" style="--size:${size}px;--c1:${c1};--c2:${c2}">${pic ? `<img src="${pic}" alt="" width="${size}" height="${size}" loading="lazy" decoding="async">` : esc(initials(p?.name || '?'))}</span>`;
 }
 
 const fmt = (n, d = 2) => (n == null || Number.isNaN(n) ? '–' : Number(n).toFixed(d));

@@ -7,14 +7,13 @@ import calendar from '../data/calendar.json';
 import data from '../data/tournament.json';
 import rankings from '../data/rankings.json';
 import liveRaceData from '../data/live-race.json';
-import cutoutsRaw from '../data/cutouts.json';
-import { tvBadge, keyName, flag } from '../lib/pdc.mjs';
+import { tvBadge, flag, surnameOf } from '../lib/pdc.mjs';
+import { cutout } from '../lib/images.mjs';
 import { newsDate, dayNum, monthShort, dateRange, money, shortDate } from '../lib/format.mjs';
 import { matchday, featureTile, nextTileInner } from '../lib/feature.mjs';
 import { chooseCover } from '../lib/covers';
 import { loadProfile } from '../lib/players';
 
-const cutouts = cutoutsRaw as Record<string, string>;
 const t = data.tournament as any;
 const today = new Date().toLocaleDateString('en-CA', { timeZone: 'Europe/London' });
 const nowHHMM = new Date().toLocaleTimeString('en-GB', { timeZone: 'Europe/London', hour: '2-digit', minute: '2-digit', hour12: false });
@@ -26,7 +25,6 @@ const resultsList = (md.results.filter(f => f.date === today).length ? md.result
 
 const upcoming = calendar.events.filter(e => e.start > today && e.id !== t.id);
 const nextEvent = upcoming[0];
-const short = (n: string) => n.split(' ').slice(-1)[0];
 
 const news = (await getCollection('news')).map(n => n.data).sort((a, b) => b.date.localeCompare(a.date)).slice(0, 4);
 const bigFigure = (h: string) => (h.match(/£[\d,.]+(?:k|m)?|\b\d{1,2}-\d{1,2}\b|\b1\d\d\.\d\d\b/i) || [null])[0]?.replace(/,000$/, 'K').replace(/^(£\d+),(\d{3})$/, '$1K');
@@ -41,7 +39,7 @@ const raceMover = liveOn ? lrd.race.slice(4, 32).filter((p: any) => p.move > 0).
 const raceUpdated = liveOn ? new Date(lrd.updatedAt).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', timeZone: 'Europe/London' }) : '';
 // Spotlight: the best-ranked player in today's matches, else world number one.
 const todayIds = new Set(md.todays.flatMap(f => [f.p1.id, f.p2.id]));
-const spotRank = rankings.players.find(p => todayIds.has(p.id) && cutouts[keyName(p.name)]) || rankings.players[0];
+const spotRank = rankings.players.find(p => todayIds.has(p.id) && cutout(p.name)) || rankings.players[0];
 const spot = loadProfile(spotRank.id);
 ---
 <Layout title="The Oche" description="PDC darts today: the match on now, results, news, the live rankings race and every event on Sky Sports, ITV and PDCTV." active="home">
@@ -50,7 +48,7 @@ const spot = loadProfile(spotRank.id);
 
       <section class="tile tile-ink feature" id="feature" data-id={t.id} data-name={t.name} data-on={isOn ? '1' : ''} aria-live="polite">
         {feature ? (
-          <Fragment set:html={featureTile(feature.f, feature.mode, t.name, cutouts)} />
+          <Fragment set:html={featureTile(feature.f, feature.mode, t.name, feature.mode === 'now' ? md.also : [])} />
         ) : nextEvent ? (
           <a class="ne" href={`/tournament/${nextEvent.id}`}>
             <span class="lbl ft-next">Next on the oche</span>
@@ -78,9 +76,9 @@ const spot = loadProfile(spotRank.id);
             {resultsList.map(f => (
               <li><a href={`/match?id=${f.id}`}>
                 <span class="rd">{shortDate(f.date)}</span>
-                <span class:list={['rn', { w: f.winner === f.p1.id }]}>{short(f.p1.name)}</span>
+                <span class:list={['rn', { w: f.winner === f.p1.id }]}>{surnameOf(f.p1)}</span>
                 <span class="poster-num rs">{f.s1}–{f.s2}</span>
-                <span class:list={['rn', 'r', { w: f.winner === f.p2.id }]}>{short(f.p2.name)}</span>
+                <span class:list={['rn', 'r', { w: f.winner === f.p2.id }]}>{surnameOf(f.p2)}</span>
               </a></li>
             ))}
           </ol>
@@ -144,7 +142,7 @@ const spot = loadProfile(spotRank.id);
 
       {spot && (
         <a class="tile tile-ink spot" href={`/players/${spot.slug}`}>
-          {cutouts[keyName(spot.name)] && <img class="spot-cut photo" src={cutouts[keyName(spot.name)]} alt="" loading="lazy" />}
+          {cutout(spot.name) && <img class="spot-cut photo" src={cutout(spot.name)!.src} srcset={cutout(spot.name)!.srcset} sizes="(max-width: 640px) 45vw, 220px" alt="" loading="lazy" />}
           <div class="spot-top"><span class="lbl volt">Player spotlight · World #{spotRank.pos}</span><h2>{spot.name.split(' ')[0]}<br />{spot.name.split(' ').slice(1).join(' ')}</h2></div>
           {spot.season?.stats && (
             <div class="spot-bottom">
@@ -168,10 +166,8 @@ const spot = loadProfile(spotRank.id);
     </div>
   </div>
 
-  <script is:inline type="application/json" id="home-data" set:html={JSON.stringify({ cutouts })}></script>
-
   <script>
-    import { normaliseTournament, applyLive, liveCurrentLeg } from '../lib/pdc.mjs';
+    import { normaliseTournament, applyLive, liveCurrentLeg, surnameOf } from '../lib/pdc.mjs';
     import { liveFor, LIVE_TICK } from '../lib/live-client.mjs';
     import { matchday, featureTile, nextTileInner } from '../lib/feature.mjs';
     import { shortDate } from '../lib/format.mjs';
@@ -181,7 +177,6 @@ const spot = loadProfile(spotRank.id);
       clearInterval(timer);
       const box = document.getElementById('feature');
       if (!box) return;
-      const { cutouts } = JSON.parse(document.getElementById('home-data')!.textContent!);
       const today = () => new Date().toLocaleDateString('en-CA', { timeZone: 'Europe/London' });
       const hhmm = () => new Date().toLocaleTimeString('en-GB', { timeZone: 'Europe/London', hour: '2-digit', minute: '2-digit', hour12: false });
 
@@ -216,9 +211,9 @@ const spot = loadProfile(spotRank.id);
             const pick = md.now ? [md.now, 'now'] : md.next ? [md.next, 'next'] : md.results[0] ? [md.results[0], 'result'] : null;
             // The leg in play: what each player needs.
             if (md.now?.status === 'live') (md.now as any).legNow = await liveCurrentLeg(box.dataset.id!, lv.get(String(md.now.id))).catch(() => null);
-            if (pick) draw(box, featureTile(pick[0] as any, pick[1] as string, box.dataset.name!, cutouts));
+            if (pick) draw(box, featureTile(pick[0] as any, pick[1] as string, box.dataset.name!, pick[1] === 'now' ? md.also : []));
             const nu = document.getElementById('nextup') as HTMLAnchorElement | null;
-            const after = md.todays.find((f: any) => f.status !== 'result' && f !== pick?.[0] && (!md.now || f !== md.now) && f.time >= ((pick?.[0] as any)?.time || ''));
+            const after = md.todays.find((f: any) => f.status !== 'result' && f !== pick?.[0] && (!md.now || f !== md.now) && !md.also.includes(f) && f.time >= ((pick?.[0] as any)?.time || ''));
             if (nu) {
               if (after) { nu.innerHTML = nextTileInner(after, box.dataset.name!); nu.href = `/match?id=${after.id}`; nu.hidden = false; }
               else nu.hidden = true;
@@ -227,9 +222,8 @@ const spot = loadProfile(spotRank.id);
             if (ol) {
               const todays = md.results.filter((f: any) => f.date === today());
               const list = (todays.length ? todays : md.results).slice(0, 5);
-              const last = (n: string) => n.split(' ').slice(-1)[0];
               const e = (x: unknown) => String(x ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]!);
-              draw(ol, list.map((f: any) => `<li><a href="/match?id=${e(f.id)}"><span class="rd">${e(shortDate(f.date))}</span><span class="rn${f.winner === f.p1.id ? ' w' : ''}">${e(last(f.p1.name))}</span><span class="poster-num rs">${f.s1}–${f.s2}</span><span class="rn r${f.winner === f.p2.id ? ' w' : ''}">${e(last(f.p2.name))}</span></a></li>`).join(''));
+              draw(ol, list.map((f: any) => `<li><a href="/match?id=${e(f.id)}"><span class="rd">${e(shortDate(f.date))}</span><span class="rn${f.winner === f.p1.id ? ' w' : ''}">${e(surnameOf(f.p1))}</span><span class="poster-num rs">${f.s1}–${f.s2}</span><span class="rn r${f.winner === f.p2.id ? ' w' : ''}">${e(surnameOf(f.p2))}</span></a></li>`).join(''));
             }
           } catch { /* keep what we have */ }
         };
@@ -270,24 +264,47 @@ const spot = loadProfile(spotRank.id);
   .feature :global(.ft-score span) { color: #3a3d47; padding: 0 .08em; }
   .feature :global(.ft-vs) { color: #fff; }
   .feature :global(.ft-sub) { color: var(--on-ink-2); margin-top: 14px; }
-  .feature :global(.ft-leg) { display: inline-flex; align-items: center; gap: 10px; margin-bottom: 10px; padding: 6px 20px; border-radius: 999px; background: rgba(255, 255, 255, .07); white-space: nowrap; }
-  .feature :global(.ft-leg-n) { font-size: 10px; font-weight: 800; letter-spacing: .14em; text-transform: uppercase; color: var(--on-ink-2); }
-  .feature :global(.ft-leg b) { font-family: var(--poster); font-weight: 400; font-size: 22px; line-height: 1; color: var(--on-ink-2); font-variant-numeric: tabular-nums; min-width: 3ch; }
-  .feature :global(.ft-leg b:first-child) { text-align: right; }
-  .feature :global(.ft-leg b) { position: relative; }
-  .feature :global(.ft-leg b.on) { color: var(--volt); }
-  /* Who's throwing: a volt dot on the outside of their score */
-  .feature :global(.ft-leg b.on::after) { content: ''; position: absolute; top: 50%; width: 7px; height: 7px; margin-top: -3.5px; border-radius: 50%; background: var(--volt); box-shadow: 0 0 0 3px rgba(200, 255, 46, .22); }
-  .feature :global(.ft-leg b.on:first-child::after) { left: -12px; }
-  .feature :global(.ft-leg b.on:last-child::after) { right: -12px; }
   .feature :global(.ft-pulse) { display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: var(--red); margin-right: 7px; vertical-align: 1px; animation: pulse 1.6s infinite; }
   .feature :global(.ft-bottom) { display: grid; grid-template-columns: 1fr 1fr; border-top: 1px solid var(--ink-2); }
   .feature :global(.ft-who) { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 18px 30px; }
   .feature :global(.ft-who.l) { border-right: 1px solid var(--ink-2); }
   .feature :global(.ft-who.r) { flex-direction: row-reverse; text-align: right; }
-  .feature :global(.ft-who b) { display: block; font-size: 19px; }
+  .feature :global(.ft-id) { min-width: 0; display: flex; flex-direction: column; gap: 2px; }
+  .feature :global(.ft-id b) { display: block; font-size: 19px; }
   .feature :global(.ft-who small) { color: var(--on-ink-2); font-size: 13px; }
-  .feature :global(.ft-who.won b) { color: var(--volt); }
+  .feature :global(.ft-who.won .ft-id b) { color: var(--volt); }
+  .feature :global(.ft-av) { font-size: 13px; font-weight: 700; color: #fff; font-variant-numeric: tabular-nums; margin-top: 4px; }
+  .feature :global(.ft-av i), .feature :global(.ft-avg small) { font-style: normal; font-size: 11px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--on-ink-2); }
+  /* Set play: legs in the current set under the sets score */
+  .feature :global(.ft-set) { margin-top: 6px; font-size: 14px; font-weight: 700; color: var(--on-ink); }
+  .feature :global(.ft-set b) { font-family: var(--poster); font-weight: 400; font-size: 26px; color: #fff; margin-left: 4px; }
+  /* Score left in the leg: the second-biggest number on the tile */
+  .feature :global(.ft-now) { position: relative; display: flex; flex-direction: column; align-items: flex-end; gap: 6px; }
+  .feature :global(.ft-who.r .ft-now) { align-items: flex-start; }
+  .feature :global(.ft-rem) { position: relative; display: inline-flex; align-items: center; gap: 10px; font-size: 72px; line-height: .9; color: var(--on-ink); font-weight: 400; }
+  .feature :global(.ft-now.on .ft-rem) { color: var(--volt); }
+  .feature :global(.ft-dot) { width: 10px; height: 10px; border-radius: 50%; background: var(--volt); box-shadow: 0 0 0 4px rgba(200, 255, 46, .2); }
+  .feature :global(.ft-who.r .ft-rem) { flex-direction: row-reverse; }
+  .feature :global(.ft-meta) { display: flex; gap: 6px; align-items: center; flex-wrap: wrap; justify-content: flex-end; }
+  .feature :global(.ft-who.r .ft-meta) { justify-content: flex-start; }
+  .feature :global(.ft-last), .feature :global(.ft-co) { font-style: normal; font-size: 12px; font-weight: 800; padding: 3px 8px; border-radius: 8px; white-space: nowrap; font-variant-numeric: tabular-nums; }
+  .feature :global(.ft-last) { background: rgba(255, 255, 255, .08); color: var(--on-ink); }
+  .feature :global(.ft-last.big) { background: var(--volt); color: var(--ink); }
+  .feature :global(.ft-last.bust) { background: var(--red); color: #fff; }
+  .feature :global(.ft-co) { border: 1px dashed rgba(255, 255, 255, .28); color: #fff; letter-spacing: .02em; }
+  /* A 180 gets shouted about until the next visit */
+  .feature :global(.ft-180) { position: absolute; top: -34px; right: 0; font-family: var(--poster); font-size: 34px; color: var(--ink); background: var(--volt); padding: 0 10px; border-radius: 10px; transform: rotate(-6deg); animation: pop .6s var(--spring) both; }
+  .feature :global(.ft-who.r .ft-180) { right: auto; left: 0; transform: rotate(6deg); }
+  @keyframes pop { from { transform: scale(.3) rotate(-20deg); opacity: 0; } }
+  /* Players with no cut-out: their round headshot */
+  .feature :global(.ft-round) { width: 190px; height: 190px; border-radius: 50%; overflow: hidden; background: var(--ink-3); margin-bottom: 40px; box-shadow: 0 0 0 6px var(--ink-2); }
+  .feature :global(.ft-round img) { width: 100%; height: 100%; object-fit: cover; }
+  /* Other boards live at the same time */
+  .feature :global(.ft-also) { position: relative; z-index: 4; display: flex; align-items: center; gap: 8px 14px; flex-wrap: wrap; padding: 12px 30px 16px; border-top: 1px solid var(--ink-2); font-size: 14px; }
+  .feature :global(.ft-also .lbl) { color: var(--on-ink-2); }
+  .feature :global(.ft-also a) { color: #fff; text-decoration: none; }
+  .feature :global(.ft-also a:hover) { color: var(--volt); }
+  .feature :global(.ft-also b) { font-family: var(--poster); font-weight: 400; font-size: 18px; color: var(--volt); margin: 0 4px; }
   .feature :global(.ft-avg) { display: flex; flex-direction: column; align-items: inherit; }
   .feature :global(.ft-avg .poster-num) { font-size: 34px; }
     .ne { display: flex; flex-direction: column; gap: 14px; padding: 30px; height: 100%; text-decoration: none; color: #fff; }
@@ -380,11 +397,17 @@ const spot = loadProfile(spotRank.id);
     .feature :global(.ft-mid) { padding-bottom: 24px; max-width: 136px; }
     .feature :global(.ft-sub) { font-size: 10px; letter-spacing: .08em; }
     .feature :global(.ft-score) { font-size: 76px; white-space: nowrap; }
-    .feature :global(.ft-leg) { padding: 5px 10px; gap: 7px; }
-    .feature :global(.ft-leg b) { font-size: 19px; }
-    .feature :global(.ft-who) { padding: 12px 16px; flex-direction: column; align-items: flex-start; }
+        .feature :global(.ft-who) { padding: 12px 16px; flex-direction: column; align-items: flex-start; }
     .feature :global(.ft-who.r) { flex-direction: column; align-items: flex-end; }
-    .feature :global(.ft-who b) { font-size: 15px; }
+    .feature :global(.ft-id b) { font-size: 15px; }
+    .feature :global(.ft-rem) { font-size: 46px; gap: 7px; }
+    .feature :global(.ft-now), .feature :global(.ft-who.r .ft-now) { align-items: inherit; margin-top: 8px; }
+    .feature :global(.ft-who.l .ft-rem) { flex-direction: row-reverse; }
+    .feature :global(.ft-who.l .ft-meta) { justify-content: flex-start; }
+    .feature :global(.ft-who.r .ft-meta) { justify-content: flex-end; }
+    .feature :global(.ft-180) { top: -26px; font-size: 26px; }
+    .feature :global(.ft-round) { width: 96px; height: 96px; margin-bottom: 30px; box-shadow: 0 0 0 4px var(--ink-2); }
+    .feature :global(.ft-also) { padding: 10px 16px 14px; }
     .feature :global(.ft-avg .poster-num) { font-size: 26px; }
     .feature :global(.ft-top) { padding: 18px 18px 0; }
     .nu :global(.nu-names) { font-size: 44px; }
