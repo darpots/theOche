@@ -92,7 +92,7 @@ const news = (await getCollection('news')).map(n => n.data)
   <script is:inline type="application/json" id="t-data" set:html={JSON.stringify({ t, portraits })}></script>
 
   <script>
-    import { API, normaliseTournament, fixtureStatsUrl, slimStats, applyLive } from '../../lib/pdc.mjs';
+    import { API, normaliseTournament, fixtureStatsUrl, slimStats, applyLive, liveCurrentLeg } from '../../lib/pdc.mjs';
     import { liveFor, LIVE_TICK } from '../../lib/live-client.mjs';
     import { matchDays, renderDay, renderTabs, progress, fixtureRow } from '../../lib/render-matches.mjs';
 
@@ -204,10 +204,16 @@ const news = (await getCollection('news')).map(n => n.data)
         const ids = t.stages.flatMap((s: any) => s.fixtures).filter((f: any) => f.date === today && f.status !== 'result' || (f.date === today && !f.stats) || f.statsLive).map((f: any) => f.id);
         if (!ids.length) return;
         const lv = await liveFor(t.id, ids);
-        const sig = JSON.stringify([...lv.values()].map((m: any) => [m.id, m.status, m.legs, m.sets, m.stats?.map((x: any) => x?.avg)]));
+        // The leg in play for each live match: what each player needs.
+        const legs = new Map<string, any>();
+        await Promise.all([...lv.values()].filter((m: any) => m.status === 'live').map(async (m: any) => {
+          legs.set(String(m.id), await liveCurrentLeg(t.id, m).catch(() => null));
+        }));
+        const sig = JSON.stringify([...lv.values()].map((m: any) => [m.id, m.status, m.legs, m.sets, m.stats?.map((x: any) => x?.avg), legs.get(String(m.id))?.left, legs.get(String(m.id))?.throwing]));
         if (sig === liveSig) return;
         liveSig = sig;
         applyLive(t, lv);
+        t.stages.forEach((s: any) => s.fixtures.forEach((f: any) => { f.legNow = f.status === 'live' ? legs.get(String(f.id)) || null : null; }));
         paint(true);
       };
       // Schedule / News tabs (#news opens the news tab).
@@ -333,6 +339,16 @@ const news = (await getCollection('news')).map(n => n.data)
   .board :global(.sc.w) { color: var(--ink); }
   .board :global(.dash) { margin: 0 6px; color: var(--line); font-size: 24px; }
   .board :global(.vs) { font-family: var(--display); font-size: 20px; font-weight: 700; color: var(--ink-2); }
+  .board :global(.lg) { display: flex; width: max-content; align-items: center; gap: 8px; margin: 0 auto 6px; padding: 4px 16px; border-radius: 999px; background: var(--paper-2); white-space: nowrap; }
+  .board :global(.lg i) { font-style: normal; font-size: 10px; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); }
+  .board :global(.lg b) { font-family: var(--poster); font-weight: 400; font-size: 18px; line-height: 1; color: var(--muted); font-variant-numeric: tabular-nums; min-width: 3ch; }
+  .board :global(.lg b:first-child) { text-align: right; }
+  .board :global(.lg b) { position: relative; }
+  .board :global(.lg b.on) { color: var(--ink); }
+  /* Who's throwing: a red dot on the outside of their score */
+  .board :global(.lg b.on::after) { content: ''; position: absolute; top: 50%; width: 6px; height: 6px; margin-top: -3px; border-radius: 50%; background: var(--red); }
+  .board :global(.lg b.on:first-child::after) { left: -10px; }
+  .board :global(.lg b.on:last-child::after) { right: -10px; }
   .board :global(.st) { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .08em; color: var(--muted); }
   .board :global(.dayhead) { font-size: 15px; font-family: var(--body); font-weight: 800; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); display: flex; align-items: center; gap: 14px; margin-top: 34px; }
   .board :global(.dayhead::after) { content: ''; flex: 1; height: 1px; background: var(--line); }
@@ -344,6 +360,7 @@ const news = (await getCollection('news')).map(n => n.data)
     .board :global(.pl.r) { flex-direction: row; text-align: left; }
     .board :global(.mid) { text-align: left; display: flex; align-items: center; gap: 10px; padding-left: 10px; }
     .board :global(.sc) { font-size: 22px; }
+    .board :global(.lg) { margin: 0 0 0 auto; order: 3; }
     .board :global(.pl.r .avg) { margin-left: auto; margin-right: 0; }
     }
 </style>

@@ -9,7 +9,7 @@ import rankings from '../data/rankings.json';
 import liveRaceData from '../data/live-race.json';
 import cutoutsRaw from '../data/cutouts.json';
 import { tvBadge, keyName, flag } from '../lib/pdc.mjs';
-import { newsDate, dayNum, monthShort, dateRange, money } from '../lib/format.mjs';
+import { newsDate, dayNum, monthShort, dateRange, money, shortDate } from '../lib/format.mjs';
 import { matchday, featureTile, nextTileInner } from '../lib/feature.mjs';
 import { chooseCover } from '../lib/covers';
 import { loadProfile } from '../lib/players';
@@ -77,6 +77,7 @@ const spot = loadProfile(spotRank.id);
           <ol id="results">
             {resultsList.map(f => (
               <li><a href={`/match?id=${f.id}`}>
+                <span class="rd">{shortDate(f.date)}</span>
                 <span class:list={['rn', { w: f.winner === f.p1.id }]}>{short(f.p1.name)}</span>
                 <span class="poster-num rs">{f.s1}–{f.s2}</span>
                 <span class:list={['rn', 'r', { w: f.winner === f.p2.id }]}>{short(f.p2.name)}</span>
@@ -144,11 +145,6 @@ const spot = loadProfile(spotRank.id);
             <div class="spot-bottom">
               <div class="poster-num spot-avg">{spot.season.stats.avg.toFixed(2)}</div>
               <div class="lbl">{spot.season.year} season average</div>
-              {spot.form?.length > 0 && (
-                <div class="fm" aria-label={`Last five: ${spot.form.slice(0, 5).map((m: any) => (m.won ? 'won' : 'lost')).join(', ')}`}>
-                  {spot.form.slice(0, 5).map((m: any) => <i class={m.won ? 'w' : 'l'} title={`${m.won ? 'Won' : 'Lost'} ${m.my}-${m.their} v ${m.opp}`}>{m.won ? 'W' : 'L'}</i>)}
-                </div>
-              )}
             </div>
           )}
         </a>
@@ -173,6 +169,7 @@ const spot = loadProfile(spotRank.id);
     import { normaliseTournament, applyLive, liveCurrentLeg } from '../lib/pdc.mjs';
     import { liveFor, LIVE_TICK } from '../lib/live-client.mjs';
     import { matchday, featureTile, nextTileInner } from '../lib/feature.mjs';
+    import { shortDate } from '../lib/format.mjs';
 
     let timer: number | undefined;
     function init() {
@@ -227,7 +224,7 @@ const spot = loadProfile(spotRank.id);
               const list = (todays.length ? todays : md.results).slice(0, 5);
               const last = (n: string) => n.split(' ').slice(-1)[0];
               const e = (x: unknown) => String(x ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]!);
-              draw(ol, list.map((f: any) => `<li><a href="/match?id=${e(f.id)}"><span class="rn${f.winner === f.p1.id ? ' w' : ''}">${e(last(f.p1.name))}</span><span class="poster-num rs">${f.s1}–${f.s2}</span><span class="rn r${f.winner === f.p2.id ? ' w' : ''}">${e(last(f.p2.name))}</span></a></li>`).join(''));
+              draw(ol, list.map((f: any) => `<li><a href="/match?id=${e(f.id)}"><span class="rd">${e(shortDate(f.date))}</span><span class="rn${f.winner === f.p1.id ? ' w' : ''}">${e(last(f.p1.name))}</span><span class="poster-num rs">${f.s1}–${f.s2}</span><span class="rn r${f.winner === f.p2.id ? ' w' : ''}">${e(last(f.p2.name))}</span></a></li>`).join(''));
             }
           } catch { /* keep what we have */ }
         };
@@ -268,9 +265,16 @@ const spot = loadProfile(spotRank.id);
   .feature :global(.ft-score span) { color: #3a3d47; padding: 0 .08em; }
   .feature :global(.ft-vs) { color: #fff; }
   .feature :global(.ft-sub) { color: var(--on-ink-2); margin-top: 14px; }
-  .feature :global(.ft-leg) { display: inline-flex; align-items: center; gap: 10px; margin-top: 10px; padding: 5px 12px; border-radius: 999px; background: rgba(255, 255, 255, .08); font-size: 12px; font-weight: 700; color: var(--on-ink-2); white-space: nowrap; }
-  .feature :global(.ft-leg b) { font-family: var(--poster); font-weight: 400; font-size: 20px; color: #fff; font-variant-numeric: tabular-nums; }
+  .feature :global(.ft-leg) { display: inline-flex; align-items: center; gap: 10px; margin-bottom: 10px; padding: 6px 20px; border-radius: 999px; background: rgba(255, 255, 255, .07); white-space: nowrap; }
+  .feature :global(.ft-leg-n) { font-size: 10px; font-weight: 800; letter-spacing: .14em; text-transform: uppercase; color: var(--on-ink-2); }
+  .feature :global(.ft-leg b) { font-family: var(--poster); font-weight: 400; font-size: 22px; line-height: 1; color: var(--on-ink-2); font-variant-numeric: tabular-nums; min-width: 3ch; }
+  .feature :global(.ft-leg b:first-child) { text-align: right; }
+  .feature :global(.ft-leg b) { position: relative; }
   .feature :global(.ft-leg b.on) { color: var(--volt); }
+  /* Who's throwing: a volt dot on the outside of their score */
+  .feature :global(.ft-leg b.on::after) { content: ''; position: absolute; top: 50%; width: 7px; height: 7px; margin-top: -3.5px; border-radius: 50%; background: var(--volt); box-shadow: 0 0 0 3px rgba(200, 255, 46, .22); }
+  .feature :global(.ft-leg b.on:first-child::after) { left: -12px; }
+  .feature :global(.ft-leg b.on:last-child::after) { right: -12px; }
   .feature :global(.ft-pulse) { display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: var(--red); margin-right: 7px; vertical-align: 1px; animation: pulse 1.6s infinite; }
   .feature :global(.ft-bottom) { display: grid; grid-template-columns: 1fr 1fr; border-top: 1px solid var(--ink-2); }
   .feature :global(.ft-who) { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 18px 30px; }
@@ -281,8 +285,7 @@ const spot = loadProfile(spotRank.id);
   .feature :global(.ft-who.won b) { color: var(--volt); }
   .feature :global(.ft-avg) { display: flex; flex-direction: column; align-items: inherit; }
   .feature :global(.ft-avg .poster-num) { font-size: 34px; }
-  .feature :global(.ft-avg small) { color: var(--on-ink-2); margin-top: 6px; }
-  .ne { display: flex; flex-direction: column; gap: 14px; padding: 30px; height: 100%; text-decoration: none; color: #fff; }
+    .ne { display: flex; flex-direction: column; gap: 14px; padding: 30px; height: 100%; text-decoration: none; color: #fff; }
   .ne-name { font-size: clamp(64px, 8vw, 120px); margin-top: auto; }
   .ne-name small { display: block; font-size: .35em; color: var(--on-ink); margin-top: 8px; }
   .ne-meta { margin: 0; color: var(--on-ink); font-weight: 600; }
@@ -300,8 +303,9 @@ const spot = loadProfile(spotRank.id);
   .nu-sub { font-weight: 600; font-size: 14px; }
   .res { padding: 20px 22px; flex: 1; }
   .res ol, .race ol { list-style: none; margin: 0; padding: 0; }
-  .res :global(li a) { display: grid; grid-template-columns: 1fr auto 1fr; gap: 10px; align-items: center; padding: 10px 0; border-top: 1px solid var(--line); text-decoration: none; }
-  .res :global(.rn) { color: var(--muted); }
+  .res :global(li a) { display: grid; grid-template-columns: 48px minmax(0, 1fr) auto minmax(0, 1fr); gap: 10px; align-items: center; padding: 10px 0; border-top: 1px solid var(--line); text-decoration: none; }
+  .res :global(.rn) { color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .res :global(.rd) { font-size: 12px; font-weight: 700; color: var(--muted); white-space: nowrap; }
   .res :global(.rn.w) { color: var(--ink); font-weight: 700; }
   .res :global(.rn.r) { text-align: right; }
   .res :global(.rs) { font-size: 22px; }
@@ -342,10 +346,6 @@ const spot = loadProfile(spotRank.id);
   .spot-top h2 { font-size: 44px; margin-top: 10px; }
   .spot-avg { font-size: 96px; color: var(--volt); }
   .spot-bottom .lbl { color: var(--on-ink); margin-top: 8px; }
-  .fm { display: flex; gap: 6px; margin-top: 16px; }
-  .fm i { font-style: normal; width: 30px; height: 30px; border-radius: 9px; display: grid; place-items: center; font-weight: 800; font-size: 13px; }
-  .fm .w { background: var(--volt); color: var(--ink); }
-  .fm .l { background: var(--red); color: #fff; }
 
   .cu { grid-column: span 3; padding: 20px 20px; display: flex; flex-direction: column; gap: 10px; }
   .cu-row { display: flex; gap: 14px; align-items: center; padding: 10px; border-radius: 18px; background: var(--paper); text-decoration: none; }
@@ -366,9 +366,12 @@ const spot = loadProfile(spotRank.id);
     .feature :global(.ft-p) { height: 170px; }
     .feature :global(.ft-ini) { width: 96px; height: 130px; }
     .feature :global(.ft-ini span) { font-size: 40px; }
-    .feature :global(.ft-mid) { padding-bottom: 30px; max-width: 120px; }
+    .feature :global(.ft-stage-row) { padding: 0 8px; }
+    .feature :global(.ft-mid) { padding-bottom: 24px; max-width: 136px; }
     .feature :global(.ft-sub) { font-size: 10px; letter-spacing: .08em; }
-    .feature :global(.ft-score) { font-size: 96px; }
+    .feature :global(.ft-score) { font-size: 76px; white-space: nowrap; }
+    .feature :global(.ft-leg) { padding: 5px 10px; gap: 7px; }
+    .feature :global(.ft-leg b) { font-size: 19px; }
     .feature :global(.ft-who) { padding: 12px 16px; flex-direction: column; align-items: flex-start; }
     .feature :global(.ft-who.r) { flex-direction: column; align-items: flex-end; }
     .feature :global(.ft-who b) { font-size: 15px; }

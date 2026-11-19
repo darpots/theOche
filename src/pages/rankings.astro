@@ -267,7 +267,10 @@ const av = (name: string) => { const [c1, c2] = avatarColours(name); return `--c
     .tools .search { grid-column: 1 / -1; }
   }
   @media (max-width: 720px) {
-    .tr { grid-template-columns: 58px 1fr auto; padding: 10px 12px; }
+    .tr { grid-template-columns: 50px minmax(0, 1fr) auto; gap: 10px; padding: 10px 12px; }
+    /* Phones: full names, wrapping onto a second line rather than cut off */
+    .who { gap: 10px; }
+    .who b { white-space: normal; overflow: visible; text-overflow: clip; line-height: 1.2; overflow-wrap: anywhere; }
     .hide-s { display: none; }
     /* Phones: money, net change and progress stacked; won/expiring detail left to the net chip */
     .top { flex-direction: column-reverse; align-items: flex-end; gap: 4px; }

@@ -365,8 +365,8 @@ const news = (await getCollection('news'))
   .hh p { margin: 0; font-size: 13px; }
   .hfilter { display: flex; gap: 6px; flex-wrap: wrap; margin: 12px 0 8px; }
   .hfilter .chip { padding: 6px 12px; font-size: 13px; }
-  .yr { display: grid; grid-template-columns: 64px 1fr; gap: 12px; padding: 12px 0; border-top: 1px solid var(--line); }
-  .yr h3 { font-size: 18px; color: var(--muted); padding-top: 4px; }
+  .yr { padding: 14px 0 8px; border-top: 1px solid var(--line); }
+  .yr h3 { font-size: 18px; color: var(--muted); margin-bottom: 6px; }
   .yr ul { list-style: none; margin: 0; padding: 0; }
   /* Fixed columns so averages and finishes line up down the list */
   .yr li { display: grid; grid-template-columns: minmax(0, 1fr) 64px 118px; align-items: center; gap: 14px; padding: 6px 8px; margin: 0 -8px; border-radius: 10px; font-size: 15px; transition: background .2s; }
@@ -374,7 +374,7 @@ const news = (await getCollection('news'))
   .yr li:hover { background: var(--card); }
   .ev { text-decoration: none; font-weight: 600; }
   .ev:hover { color: var(--red); }
-  .ev small { color: var(--muted); font-weight: 500; }
+  .ev small { display: block; color: var(--muted); font-weight: 500; font-size: 13px; }
   .havg { font-style: normal; font-size: 13px; font-weight: 800; font-variant-numeric: tabular-nums; color: var(--ink-2); text-align: right; }
   .fin { font-size: 12px; font-weight: 700; padding: 3px 10px; border-radius: 99px; background: var(--paper-2); color: var(--ink-2); text-align: center; white-space: nowrap; }
   .f-win { background: linear-gradient(135deg, #e8c766, var(--gold)); color: #3d2e05; }
@@ -389,7 +389,7 @@ const news = (await getCollection('news'))
   .rm a:hover { background: var(--paper); }
   .rm-d { font-size: 12px; font-weight: 700; color: var(--muted); }
   .rm-e { display: flex; flex-direction: column; min-width: 0; }
-  .rm-e b { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .rm-e b { line-height: 1.25; }
   .rm-e small { color: var(--muted); font-size: 12px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   .rm-s { font-weight: 800; font-size: 14px; }
   .rm-s.w { color: var(--green); } .rm-s.l { color: var(--red); }
@@ -417,7 +417,11 @@ const news = (await getCollection('news'))
   .pn small { font-size: 11px; color: var(--muted); font-weight: 800; letter-spacing: .08em; }
   .pn .nx { text-align: right; grid-column: 2; }
 
-  @media (max-width: 520px) { .yr li { grid-template-columns: minmax(0, 1fr) 52px 100px; gap: 8px; font-size: 14px; } .fin { font-size: 11px; padding: 3px 6px; } }
+  @media (max-width: 520px) {
+    .yr li { grid-template-columns: minmax(0, 1fr) 52px 100px; gap: 8px; font-size: 14px; } .fin { font-size: 11px; padding: 3px 6px; }
+    .rm a { grid-template-columns: 44px minmax(0, 1fr) auto 50px; gap: 8px; padding: 10px 12px; }
+    .rm-s { font-size: 13px; white-space: nowrap; }
+  }
   @media (max-width: 900px) {
     .pb-in { grid-template-columns: 1fr; min-height: 0; }
     .pb-pic { order: -1; height: 300px; margin-top: 16px; }

@@ -20,6 +20,10 @@ for (const e of events) {
 }
 const place = (e: { venue: string | null; city: string | null }) => (e.venue && e.city && e.venue.includes(e.city) ? e.venue : [e.venue, e.city].filter(Boolean).join(' · '));
 const kind = (e: Ev) => e.broadcaster;
+// Completed events start hidden in the HTML too (the site rebuilds daily), so the
+// "Show completed" toggle is right even before the script below runs.
+const builtOn = new Date().toLocaleDateString('en-CA', { timeZone: 'Europe/London' });
+const isPast = (e: Ev) => e.end < builtOn;
 ---
 <Layout title="Calendar" description="Every PDC darts event on Sky Sports, ITV and PDCTV: dates, venues, broadcasters and winners." active="calendar">
 
@@ -45,13 +49,13 @@ const kind = (e: Ev) => e.broadcaster;
 
   <section class="wrap months" id="months">
     {[...months.entries()].map(([k, list]) => (
-      <div class="month" data-month={k}>
+      <div class="month" data-month={k} hidden={list.every(isPast)}>
         <h2 class="month-title"><span>{monthLong(k + '-01')}</span></h2>
         <div class="grid">
           {list.map((e, i) => (
             <a
               href={`/tournament/${e.id}`}
-              class={`ev ev-${e.broadcaster}`}
+              class={`ev ev-${e.broadcaster}${isPast(e) ? ' past' : ''}`} hidden={isPast(e)}
               data-kind={kind(e)} data-start={e.start} data-end={e.end}
               data-reveal style={`--d:${Math.min(i, 6) * 60}ms`}>
               <div class="ticket">
@@ -92,12 +96,14 @@ const kind = (e: Ev) => e.broadcaster;
     function init() {
       const root = document.getElementById('months');
       if (!root) return;
-      const today = new Date().toLocaleDateString('en-CA', { timeZone: 'Europe/London' });
+      const p = Object.fromEntries(new Intl.DateTimeFormat('en-GB', { timeZone: 'Europe/London', year: 'numeric', month: '2-digit', day: '2-digit' }).formatToParts(new Date()).map(x => [x.type, x.value]));
+      const today = `${p.year}-${p.month}-${p.day}`;
       const cards = [...root.querySelectorAll<HTMLElement>('.ev')];
       for (const c of cards) {
         const { start = '', end = '' } = c.dataset;
         const s = c.querySelector<HTMLElement>('[data-status]');
         const set = (cls: string, txt: string) => { if (s) { s.className = cls; s.textContent = txt; } };
+        c.classList.remove('live', 'past');
         if (start <= today && end >= today) { c.classList.add('live'); set('status live-dot', 'On now'); }
         else if (end < today) { c.classList.add('past'); set('status done', 'Completed'); }
         else {

@@ -23,6 +23,11 @@ function pic(p, cutouts, side) {
   return `<span class="ft-ini ${side}" role="img" aria-label="${esc(p?.name || 'To be decided')}"><span>${esc(initials(p?.name || '?'))}</span></span>`;
 }
 
+/** The leg in play: what each player needs either side of the leg number; a dot marks who's throwing. */
+export function legChip(l) {
+  return `<div class="ft-leg" title="Score left in the leg being played; the dot marks who is throwing"><b class="${l.throwing === 0 ? 'on' : ''}">${l.left[0]}</b><span class="ft-leg-n">Leg ${l.leg}</span><b class="${l.throwing === 1 ? 'on' : ''}">${l.left[1]}</b></div>`;
+}
+
 /** HTML for the feature tile. mode: 'now' | 'next' | 'result'. */
 export function featureTile(f, mode, eventName, cutouts) {
   const done = f.status === 'result';
@@ -33,11 +38,11 @@ export function featureTile(f, mode, eventName, cutouts) {
     : `<span class="lbl ft-res">Result · ${esc(eventName)}</span>`;
   const inPlay = mode === 'now' && f.status === 'live';
   const centre = done || inPlay || (f.s1 ?? 0) + (f.s2 ?? 0) > 0
-    ? `<div class="ft-score poster-num">${f.s1 ?? 0}<span>–</span>${f.s2 ?? 0}</div><div class="lbl ft-sub">${inPlay ? '<span class="ft-pulse"></span>Live score' : mode === 'now' ? 'Latest score' : 'Final score'}</div>${inPlay && f.legNow ? `<div class="ft-leg" title="Score left in the leg being played">Leg ${f.legNow.leg}<b class="${f.legNow.throwing === 0 ? 'on' : ''}">${f.legNow.left[0]}</b><b class="${f.legNow.throwing === 1 ? 'on' : ''}">${f.legNow.left[1]}</b></div>` : ''}`
+    ? `${inPlay && f.legNow ? legChip(f.legNow) : ''}<div class="ft-score poster-num">${f.s1 ?? 0}<span>–</span>${f.s2 ?? 0}</div><div class="lbl ft-sub">${inPlay ? '<span class="ft-pulse"></span>Live score' : mode === 'now' ? 'Latest score' : 'Final score'}</div>`
     : `<div class="ft-score ft-vs poster-num">V</div><div class="lbl ft-sub">${mode === 'now' ? 'Waiting for the first dart' : esc(f.time ? `${f.time} UK time` : 'Time TBC')}</div>`;
   const side = (p, won, s, align) => `<div class="ft-who ${align}${won ? ' won' : ''}">
       <div><b>${esc(p.name)}</b><small>${flag(p.country)} ${p.ranking ? `World #${p.ranking}` : ''}${won ? ' · Winner' : ''}</small></div>
-      ${s?.avg != null ? `<div class="ft-avg"><span class="poster-num">${Number(s.avg).toFixed(2)}</span><small class="lbl">${inPlay ? 'Live average' : 'Average'}</small></div>` : ''}
+      ${s?.avg != null ? `<div class="ft-avg" title="Three-dart average"><span class="poster-num">${Number(s.avg).toFixed(2)}</span></div>` : ''}
     </div>`;
   return `<a class="ft-link" href="/match?id=${esc(f.id)}" aria-label="${esc(`${f.p1.name} v ${f.p2.name}`)}"></a>
     <div class="ft-top">${tag}<span class="lbl ft-stage">${esc(f.stage || '')}</span></div>

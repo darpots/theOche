@@ -475,5 +475,12 @@ export async function liveCurrentLeg(tid, m) {
   if (!m || m.status !== 'live' || !m.leg) return null;
   const leg = await liveLeg(tid, m.id, m.set || 1, m.leg);
   const left = p1 => { const v = leg.visits.filter(x => x.isParticipant1 === p1); return v.length ? v[v.length - 1].remaining : 501; };
-  return { set: m.set || 1, leg: m.leg, left: [left(true), left(false)], throwing: leg.throwing, visits: leg.visits };
+  // No darts in this leg yet: the throw alternates, so whoever didn't start the last leg starts this one.
+  let throwing = leg.throwing;
+  if (throwing == null && m.leg > 1) {
+    const prev = await liveLeg(tid, m.id, m.set || 1, m.leg - 1).catch(() => null);
+    const first = prev?.visits[0];
+    if (first) throwing = first.isParticipant1 ? 1 : 0;
+  }
+  return { set: m.set || 1, leg: m.leg, left: [left(true), left(false)], throwing, visits: leg.visits };
 }
