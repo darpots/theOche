@@ -1,6 +1,6 @@
 ---
 // A full profile page for each of the top 128: season stats (darts-weighted
-// average, first 9, 180s, checkout), record, career titles, tournament
+// average, first 9, 180s, checkout), record, profile with PDC titles, tournament
 // history and the latest news about the player.
 import Layout from '../../layouts/Layout.astro';
 import LineChart from '../../components/LineChart.astro';
@@ -28,8 +28,8 @@ const s = p.season;
 const st = s.stats;
 const winPct = s.played ? Math.round((s.won / s.played) * 100) : 0;
 const legPct = s.legsFor + s.legsAgainst ? Math.round((s.legsFor / (s.legsFor + s.legsAgainst)) * 100) : 0;
-const career = Object.entries(p.career || {}) as [string, number][];
-const careerMax = Math.max(1, ...career.map(c => c[1]));
+// Career PDC titles: the official total, else the sum of its parts.
+const careerTotal = p.career?.['Senior PDC Titles'] ?? (Object.values(p.career || {}) as number[]).reduce((a, b) => a + b, 0);
 const yrs = age(p.dob);
 
 const groups = [
@@ -75,8 +75,8 @@ const facts = [
   ['Walk-on', p.walkOn],
   ['Throws', p.leftHanded ? 'Left-handed' : 'Right-handed'],
   ['Started playing', p.started],
+  ['PDC titles', careerTotal || null],
   ['Nine-darters', p.nineDarters],
-  ['Tour Card', p.tourCard ? 'Yes' : 'No'],
 ].filter(([, v]) => v != null && v !== '');
 
 // Banner backdrop: a dartboard (numbers clockwise from 20 at the top).
@@ -246,14 +246,6 @@ const news = (await getCollection('news'))
         <a class="ext" href={`https://www.pdc.tv/players/${p.slug}`} target="_blank" rel="noopener">Official PDC profile ↗</a>
       </section>
 
-      {career.length > 0 && (
-        <section class="block card" data-reveal>
-          <h2>Career titles</h2>
-          <div class="bars">
-            {career.map(([k, v]) => <div><span>{k.replace('Senior PDC Titles', 'All PDC titles')}</span><i style={`--w:${(v / careerMax) * 100}%`}></i><b>{v}</b></div>)}
-          </div>
-        </section>
-      )}
 
       {news.length > 0 && (
         <section class="block card" data-reveal>
@@ -276,7 +268,6 @@ const news = (await getCollection('news'))
       const root = document.querySelector('.page');
       if (!root) return;
       root.querySelectorAll<HTMLElement>('.ring').forEach(el => requestAnimationFrame(() => el.classList.add('go')));
-      root.querySelectorAll<HTMLElement>('.bars i').forEach((el, i) => setTimeout(() => el.classList.add('go'), 200 + i * 80));
       const chips = root.querySelectorAll<HTMLButtonElement>('.hfilter .chip');
       chips.forEach(b => b.addEventListener('click', () => {
         chips.forEach(c => c.setAttribute('aria-pressed', String(c === b)));
@@ -400,11 +391,6 @@ const news = (await getCollection('news'))
   .facts dt { color: var(--muted); font-weight: 600; }
   .facts dd { margin: 0; font-weight: 700; text-align: right; }
   .ext { display: inline-block; margin-top: 12px; font-size: 13px; font-weight: 700; color: var(--red); text-decoration: none; }
-  .bars > div { display: grid; grid-template-columns: 110px 1fr 32px; align-items: center; gap: 10px; margin: 8px 0; font-size: 13px; font-weight: 600; }
-  .bars i { height: 10px; border-radius: 9px; background: var(--paper-2); position: relative; overflow: hidden; }
-  .bars i::after { content: ''; position: absolute; inset: 0; width: 0; background: linear-gradient(90deg, var(--gold), #e8c766); border-radius: 9px; transition: width 1s var(--ease); }
-  .bars i.go::after { width: var(--w); }
-  .bars b { text-align: right; font-family: var(--display); }
   .pnews { list-style: none; margin: 0; padding: 0; }
   .pnews li + li { border-top: 1px solid var(--line); }
   .pnews a { display: flex; flex-direction: column; gap: 2px; padding: 10px 0; text-decoration: none; }
@@ -430,6 +416,10 @@ const news = (await getCollection('news'))
     .pb-copy { padding-top: 0; }
     .kpis { grid-template-columns: repeat(2, auto); }
     .page { grid-template-columns: 1fr; }
+    /* Phones: the Profile card comes straight after the header, the rest of the sidebar after the stats */
+    .col-side { display: contents; }
+    .facts { order: -1; }
+    .col-side .block + .block { margin-top: 0; }
     .avgcard { grid-template-columns: 1fr; }
     .stats { grid-template-columns: repeat(2, 1fr); }
   }
