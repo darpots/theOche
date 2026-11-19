@@ -48,13 +48,11 @@ function legSide(l, k) {
   const justThrew = latest && latest === lastMine;
   const big = lastMine && !lastMine.isBust && lastMine.score >= 140;
   const last = lastMine ? `<i class="ft-last${big ? ' big' : ''}${lastMine.isBust ? ' bust' : ''}">${lastMine.isBust ? 'Bust' : lastMine.score}</i>` : '';
-  // Darts thrown so far in the visit, filling in as each one lands.
-  const pips = throwing && l.dartsIn ? `<span class="ft-pips" aria-label="${l.dartsIn} of 3 darts thrown">${[1, 2, 3].map(n => `<i class="${n <= l.dartsIn ? 'on' : ''}"></i>`).join('')}</span>` : '';
   // Fixed layout: the number keeps its width and both chip rows are always there
   // (empty when there's nothing to show), so the tile never changes size mid-match.
   return `<div class="ft-now${throwing ? ' on' : ''}">
       ${justThrew && lastMine.score === 180 && !lastMine.isBust ? '<span class="ft-180" aria-label="One hundred and eighty">180!</span>' : ''}
-      <b class="ft-rem poster-num" title="Score left in this leg${throwing ? ' (throwing)' : ''}"><span class="ft-mark">${throwing ? '<span class="ft-dot" aria-label="throwing"></span>' : ''}${pips}</span><span class="ft-num">${left}</span></b>
+      <b class="ft-rem poster-num" title="Score left in this leg${throwing ? ' (throwing)' : ''}"><span class="ft-mark">${throwing ? '<span class="ft-dot" aria-label="throwing"></span>' : ''}</span><span class="ft-num">${left}</span></b>
       <span class="ft-meta"><span class="ft-row">${last}</span><span class="ft-row">${route && left <= 170 ? `<i class="ft-co" title="Checkout">${route.join(' ')}</i>` : ''}</span></span>
     </div>`;
 }

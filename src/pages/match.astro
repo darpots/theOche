@@ -71,7 +71,7 @@ import Layout from '../layouts/Layout.astro';
       const route = (k: number) => { const r = checkout(left(k === 0)); return r ? `<span class="cl-co" title="Checkout">${r.join(' ')}</span>` : ''; };
       const side = (k: number) => `<div class="cl-side c${k}${thrower === k ? ' on' : ''}">
           ${shout(k)}
-          <span class="cl-name">${thrower === k ? `<span class="cl-oche" title="Throwing">●</span>${leg.dartsIn ? `<span class="pips" aria-label="${leg.dartsIn} of 3 darts thrown">${[1, 2, 3].map(n => `<i class="${n <= leg.dartsIn ? 'on' : ''}"></i>`).join('')}</span>` : ''}` : ''}${esc(names[k])}</span>
+          <span class="cl-name">${thrower === k ? `<span class="cl-oche" title="Throwing">●</span>` : ''}${esc(names[k])}</span>
           <b class="poster-num">${left(k === 0)}</b>${route(k)}
           <span class="cl-v">${chips(k === 0) || '<em>No visits yet</em>'}</span>
           <small>${darts(k === 0)} darts</small>
@@ -404,9 +404,6 @@ import Layout from '../layouts/Layout.astro';
   .mh-in :global(.c1 .cl-180) { right: auto; left: 0; transform: rotate(6deg); }
   @keyframes pop { from { transform: scale(.3) rotate(-20deg); opacity: 0; } }
   .mh-in :global(.cl-name) { grid-area: name; font-weight: 800; font-size: 14px; color: rgba(255, 255, 255, .85); margin-bottom: 2px; }
-  .mh-in :global(.pips) { display: inline-flex; gap: 3px; margin-right: 8px; vertical-align: 1px; }
-  .mh-in :global(.pips i) { width: 7px; height: 7px; border-radius: 50%; border: 1.5px solid var(--volt); }
-  .mh-in :global(.pips i.on) { background: var(--volt); }
   .mh-in :global(.cl-oche) { color: var(--volt); margin-right: 6px; font-size: 11px; vertical-align: 2px; }
   .mh-in :global(.c1 .cl-oche) { margin: 0 0 0 6px; float: right; }
   .mh-in :global(.cl-side b) { grid-area: left; font-family: var(--poster); font-weight: 400; font-size: clamp(54px, 7vw, 84px); line-height: .95; color: #fff; font-variant-numeric: tabular-nums; }
