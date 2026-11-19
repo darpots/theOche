@@ -2,6 +2,7 @@
 import Layout from '../layouts/Layout.astro';
 import portraits from '../data/portraits.json';
 import library from '../data/news-library.json';
+import extraPhotos from '../data/extra-photos.json';
 import rankings from '../data/rankings.json';
 import { pdcImageKeys } from '../lib/images.mjs';
 import { keyName } from '../lib/pdc.mjs';
@@ -9,6 +10,8 @@ const nameOf = Object.fromEntries(rankings.players.map(p => [keyName(p.name), p.
 const pdc = pdcImageKeys().map(k => nameOf[k] || k).sort();
 const lib = Object.entries(library as Record<string, any>);
 const list = Object.values(portraits as Record<string, any>).sort((a, b) => a.name.localeCompare(b.name));
+const nameFor = (k: string) => (portraits as any)[k]?.name || k;
+const extras = Object.entries(extraPhotos as Record<string, any[]>).flatMap(([k, xs]) => xs.map(x => ({ ...x, name: nameFor(k) }))).sort((a, b) => a.name.localeCompare(b.name));
 ---
 <Layout title="Credits" description="Photo credits and data sources for The Oche.">
   <section class="hero wrap">
@@ -25,6 +28,12 @@ const list = Object.values(portraits as Record<string, any>).sort((a, b) => a.na
       ))}
     </ul>
     <p class="src">News covers and player pages use these photos and larger versions of them, cropped to fit.</p>
+    <h2 class="h">More player photographs</h2>
+    <ul class="grid">
+      {extras.map(p => (
+        <li class="card"><img src={p.file.replace('.jpg', '-600.webp')} alt={p.name} loading="lazy" style={`object-position:${(p.face.x * 100).toFixed(0)}% ${(p.face.y * 100).toFixed(0)}%`} /><div><strong>{p.name}</strong><span>{p.credit}</span><a href={p.licenseUrl} target="_blank" rel="noopener">{p.license}</a> · <a href={p.source} target="_blank" rel="noopener">Source</a></div></li>
+      ))}
+    </ul>
     <h2 class="h">PDC headshots</h2>
     <p class="src">{pdc.length} players: {pdc.join(', ')}.</p>
     <h2 class="h">News photographs</h2>

@@ -1,11 +1,194 @@
 {
- "darts-in-board": { "file": "File:2025-04-03 Premier League Darts Berlin 2025 by Sandro Halank–108.jpg", "alt": "Three darts in a dartboard on stage", "focus": "50% 50%", "credit": "Sandro Halank, Wikimedia Commons", "license": "CC BY-SA 4.0", "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0" },
- "treble-twenty": { "file": "File:2025-04-03 Premier League Darts Berlin 2025 by Sandro Halank–109.jpg", "alt": "Darts landing in the board", "focus": "40% 50%", "credit": "Sandro Halank, Wikimedia Commons", "license": "CC BY-SA 4.0", "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0" },
- "board-close": { "file": "File:2025-04-03 Premier League Darts Berlin 2025 by Sandro Halank–170.jpg", "alt": "Darts in the board under the stage lights", "focus": "50% 50%", "credit": "Sandro Halank, Wikimedia Commons", "license": "CC BY-SA 4.0", "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0" },
- "premier-league-trophy": { "file": "File:2025-04-03 Premier League Darts Berlin 2025 by Sandro Halank–201.jpg", "alt": "The Premier League Darts nightly winner's trophy", "focus": "50% 45%", "credit": "Sandro Halank, Wikimedia Commons", "license": "CC BY-SA 4.0", "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0" },
- "walk-on": { "file": "File:2025-04-03 Premier League Darts Berlin 2025 by Sandro Halank–067.jpg", "alt": "A player's walk-on through the crowd", "focus": "50% 40%", "credit": "Sandro Halank, Wikimedia Commons", "license": "CC BY-SA 4.0", "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0" },
- "crowd-signs": { "file": "File:2025-04-03 Premier League Darts Berlin 2025 by Sandro Halank–153.jpg", "alt": "Fans holding signs in the darts crowd", "focus": "50% 45%", "credit": "Sandro Halank, Wikimedia Commons", "license": "CC BY-SA 4.0", "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0" },
- "ally-pally-crowd": { "file": "File:Crowd in Alexandra Palace (4236250773).jpg", "alt": "The crowd at Alexandra Palace during the World Championship", "focus": "50% 50%", "credit": "sachab, Wikimedia Commons", "license": "CC BY 2.0", "licenseUrl": "https://creativecommons.org/licenses/by/2.0" },
- "winter-gardens": { "file": "File:The Winter Gardens Empress Ballroom (49059924802).jpg", "alt": "The Empress Ballroom at the Winter Gardens, Blackpool", "focus": "50% 50%", "credit": "Michael D Beckwith, Wikimedia Commons", "license": "CC0", "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/" },
- "dartboard": { "file": "File:Dart Board (14493127251).jpg", "alt": "A dartboard", "focus": "50% 50%", "credit": "Stuart Kerr, Wikimedia Commons", "license": "CC BY 2.0", "licenseUrl": "https://creativecommons.org/licenses/by/2.0" }
+ "darts-in-board": {
+  "file": "File:2025-04-03 Premier League Darts Berlin 2025 by Sandro Halank–108.jpg",
+  "alt": "Three darts in a dartboard on stage",
+  "focus": "50% 50%",
+  "credit": "Sandro Halank, Wikimedia Commons",
+  "license": "CC BY-SA 4.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0"
+ },
+ "treble-twenty": {
+  "file": "File:2025-04-03 Premier League Darts Berlin 2025 by Sandro Halank–109.jpg",
+  "alt": "Darts landing in the board",
+  "focus": "40% 50%",
+  "credit": "Sandro Halank, Wikimedia Commons",
+  "license": "CC BY-SA 4.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0"
+ },
+ "board-close": {
+  "file": "File:2025-04-03 Premier League Darts Berlin 2025 by Sandro Halank–170.jpg",
+  "alt": "Darts in the board under the stage lights",
+  "focus": "50% 50%",
+  "credit": "Sandro Halank, Wikimedia Commons",
+  "license": "CC BY-SA 4.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0"
+ },
+ "premier-league-trophy": {
+  "file": "File:2025-04-03 Premier League Darts Berlin 2025 by Sandro Halank–201.jpg",
+  "alt": "The Premier League Darts nightly winner's trophy",
+  "focus": "50% 45%",
+  "credit": "Sandro Halank, Wikimedia Commons",
+  "license": "CC BY-SA 4.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0"
+ },
+ "walk-on": {
+  "file": "File:2025-04-03 Premier League Darts Berlin 2025 by Sandro Halank–067.jpg",
+  "alt": "A player's walk-on through the crowd",
+  "focus": "50% 40%",
+  "credit": "Sandro Halank, Wikimedia Commons",
+  "license": "CC BY-SA 4.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0"
+ },
+ "crowd-signs": {
+  "file": "File:2025-04-03 Premier League Darts Berlin 2025 by Sandro Halank–153.jpg",
+  "alt": "Fans holding signs in the darts crowd",
+  "focus": "50% 45%",
+  "credit": "Sandro Halank, Wikimedia Commons",
+  "license": "CC BY-SA 4.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0"
+ },
+ "ally-pally-crowd": {
+  "file": "File:Crowd in Alexandra Palace (4236250773).jpg",
+  "alt": "The crowd at Alexandra Palace during the World Championship",
+  "focus": "50% 50%",
+  "credit": "sachab, Wikimedia Commons",
+  "license": "CC BY 2.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by/2.0"
+ },
+ "winter-gardens": {
+  "file": "File:The Winter Gardens Empress Ballroom (49059924802).jpg",
+  "alt": "The Empress Ballroom at the Winter Gardens, Blackpool",
+  "focus": "50% 50%",
+  "credit": "Michael D Beckwith, Wikimedia Commons",
+  "license": "CC0",
+  "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/"
+ },
+ "dartboard": {
+  "file": "File:Dart Board (14493127251).jpg",
+  "alt": "A dartboard",
+  "focus": "50% 50%",
+  "credit": "Stuart Kerr, Wikimedia Commons",
+  "license": "CC BY 2.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by/2.0"
+ },
+ "crowd-180s": {
+  "file": "File:2022-06-13 Play-offs (2022 Premier League Darts) by Sandro Halank–035.jpg",
+  "alt": "Fans holding up 180 cards in the crowd",
+  "focus": "50% 45%",
+  "credit": "Sandro Halank, Wikimedia Commons",
+  "license": "CC BY-SA 4.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0"
+ },
+ "fan-sign": {
+  "file": "File:2022-06-13 Play-offs (2022 Premier League Darts) by Sandro Halank–061.jpg",
+  "alt": "A fan's handwritten sign held up in the crowd",
+  "focus": "50% 40%",
+  "credit": "Sandro Halank, Wikimedia Commons",
+  "license": "CC BY-SA 4.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0"
+ },
+ "arena": {
+  "file": "File:2022-06-13 Play-offs (2022 Premier League Darts) by Sandro Halank–131.jpg",
+  "alt": "A packed arena under the lights on a darts night",
+  "focus": "50% 50%",
+  "credit": "Sandro Halank, Wikimedia Commons",
+  "license": "CC BY-SA 4.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0"
+ },
+ "on-stage": {
+  "file": "File:2022-06-13 Play-offs (2022 Premier League Darts) by Sandro Halank–132.jpg",
+  "alt": "Players and the referee on stage at the oche",
+  "focus": "50% 40%",
+  "credit": "Sandro Halank, Wikimedia Commons",
+  "license": "CC BY-SA 4.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0"
+ },
+ "darts-cluster": {
+  "file": "File:2025-04-03 Premier League Darts Berlin 2025 by Sandro Halank–106.jpg",
+  "alt": "Three darts grouped in the board",
+  "focus": "60% 45%",
+  "credit": "Sandro Halank, Wikimedia Commons",
+  "license": "CC BY-SA 4.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0"
+ },
+ "fan-sign-2": {
+  "file": "File:2025-04-03 Premier League Darts Berlin 2025 by Sandro Halank–154.jpg",
+  "alt": "A fan holding a sign at a Premier League night",
+  "focus": "45% 40%",
+  "credit": "Sandro Halank, Wikimedia Commons",
+  "license": "CC BY-SA 4.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0"
+ },
+ "board-lights": {
+  "file": "File:2025-04-03 Premier League Darts Berlin 2025 by Sandro Halank–169.jpg",
+  "alt": "Darts in the board under the stage lights",
+  "focus": "55% 45%",
+  "credit": "Sandro Halank, Wikimedia Commons",
+  "license": "CC BY-SA 4.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0"
+ },
+ "confetti": {
+  "file": "File:2026-03-26 Premier League Darts – Night 8 – Berlin 2026 by Sandro Halank–069.jpg",
+  "alt": "Gold confetti falling at the end of a final",
+  "focus": "50% 50%",
+  "credit": "Sandro Halank, Wikimedia Commons",
+  "license": "CC BY-SA 4.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0"
+ },
+ "referee": {
+  "file": "File:2026-03-26 Premier League Darts – Night 8 – Berlin 2026 by Sandro Halank–109.jpg",
+  "alt": "The referee calling at the board",
+  "focus": "60% 45%",
+  "credit": "Sandro Halank, Wikimedia Commons",
+  "license": "CC BY-SA 4.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0"
+ },
+ "walk-on-crowd": {
+  "file": "File:2026-03-26 Premier League Darts – Night 8 – Berlin 2026 by Sandro Halank–148.jpg",
+  "alt": "A walk-on through a crowd of fans",
+  "focus": "50% 35%",
+  "credit": "Sandro Halank, Wikimedia Commons",
+  "license": "CC BY-SA 4.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0"
+ },
+ "pub-board": {
+  "file": "File:Dartboard, public bar, Railway Inn, Spofforth, North Yorkshire (24th February 2018).jpg",
+  "alt": "A dartboard in a pub, the game at grassroots level",
+  "focus": "45% 50%",
+  "credit": "Mtaylor848, Wikimedia Commons",
+  "license": "CC BY-SA 4.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0"
+ },
+ "board-darts": {
+  "file": "File:Dart board (17555603273).jpg",
+  "alt": "Darts in a Winmau board",
+  "focus": "50% 50%",
+  "credit": "oatsy40, Wikimedia Commons",
+  "license": "CC BY 2.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by/2.0"
+ },
+ "ally-pally-building": {
+  "file": "File:Alex palace1.jpg",
+  "alt": "Alexandra Palace, home of the World Championship",
+  "focus": "50% 55%",
+  "credit": "Oliver Spalt, Wikimedia Commons",
+  "license": "CC BY-SA 3.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0"
+ },
+ "ally-pally-spring": {
+  "file": "File:Alexandra Palace - geograph.org.uk - 2863885.jpg",
+  "alt": "Alexandra Palace across the park",
+  "focus": "50% 55%",
+  "credit": "Peter Trimming, Wikimedia Commons",
+  "license": "CC BY-SA 2.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by-sa/2.0"
+ },
+ "ally-pally-letters": {
+  "file": "File:Alexandra Palace - geograph.org.uk - 7999808.jpg",
+  "alt": "The ALLY PALLY sign outside Alexandra Palace",
+  "focus": "50% 60%",
+  "credit": "Peter Trimming, Wikimedia Commons",
+  "license": "CC BY-SA 2.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by-sa/2.0"
+ }
 }
