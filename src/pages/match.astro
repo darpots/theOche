@@ -43,7 +43,7 @@ import Layout from '../layouts/Layout.astro';
     import { API, flag, keyName, liveScore, liveLegs, cleanName, formatLabel } from '../lib/pdc.mjs';
     import { checkout } from '../lib/checkout.mjs';
     import { fetchH2H, h2hSummary, renderH2H } from '../lib/h2h.mjs';
-    import { liveFor, watchLive, unwatch, isPushing, LIVE_TICK, PUSH_TICK } from '../lib/live-client.mjs';
+    import { liveFor, watchLive, unwatch, isPushing, pushedLegFor, LIVE_TICK, PUSH_TICK } from '../lib/live-client.mjs';
     import { ukTime } from '../lib/format.mjs';
     import { cutoutImg, avatarSrc } from '../lib/images.mjs';
 
@@ -55,6 +55,7 @@ import Layout from '../layouts/Layout.astro';
     let timer: number | undefined;
     // Finished legs from the live data, kept between polls (per match).
     const legCache = new Map<string, Map<string, any>>();
+    let ftCache: { id: string | null; at: number; f: any; t: any } = { id: null, at: 0, f: null, t: null };
 
     /** The leg being played: what each player needs, who's throwing and their last visits. */
     function currentLeg(leg: any, names: string[]) {
@@ -70,7 +71,7 @@ import Layout from '../layouts/Layout.astro';
       const route = (k: number) => { const r = checkout(left(k === 0)); return r ? `<span class="cl-co" title="Checkout">${r.join(' ')}</span>` : ''; };
       const side = (k: number) => `<div class="cl-side c${k}${thrower === k ? ' on' : ''}">
           ${shout(k)}
-          <span class="cl-name">${thrower === k ? '<span class="cl-oche" title="Throwing">●</span>' : ''}${esc(names[k])}</span>
+          <span class="cl-name">${thrower === k ? `<span class="cl-oche" title="Throwing">●</span>${leg.dartsIn ? `<span class="pips" aria-label="${leg.dartsIn} of 3 darts thrown">${[1, 2, 3].map(n => `<i class="${n <= leg.dartsIn ? 'on' : ''}"></i>`).join('')}</span>` : ''}` : ''}${esc(names[k])}</span>
           <b class="poster-num">${left(k === 0)}</b>${route(k)}
           <span class="cl-v">${chips(k === 0) || '<em>No visits yet</em>'}</span>
           <small>${darts(k === 0)} darts</small>
@@ -250,7 +251,10 @@ import Layout from '../layouts/Layout.astro';
       if (!id) { mh.innerHTML = '<div class="loading">No match selected. Open a match from a tournament page.</div>'; return; }
       const data = {};
       try {
-        let [f, t] = await Promise.all([fetch(FX + id, { cache: 'no-store' }).then(r => r.json()), fetch(`${FX}${id}/timeline`, { cache: 'no-store' }).then(r => (r.ok ? r.json() : null))]);
+        // While PDC is pushing this match, the fixture and timeline barely change: reuse them for 30s.
+        const reuse = isPushing() && ftCache.id === id && Date.now() - ftCache.at < PUSH_TICK;
+        let [f, t] = reuse ? [structuredClone(ftCache.f), structuredClone(ftCache.t)] : await Promise.all([fetch(FX + id, { cache: 'no-store' }).then(r => r.json()), fetch(`${FX}${id}/timeline`, { cache: 'no-store' }).then(r => (r.ok ? r.json() : null))]);
+        if (!reuse) ftCache = { id, at: Date.now(), f: structuredClone(f), t: structuredClone(t) };
         const a = f.data;
         // PDC's live data fills the score and stats until the official feed has them.
         const tid = a.attributes.tournament?.tournamentID;
@@ -265,7 +269,8 @@ import Layout from '../layouts/Layout.astro';
           // Every visit of every leg so far, when the official timeline doesn't have them yet.
           if (!t?.data?.attributes?.legs?.length) {
             if (!legCache.has(id)) legCache.set(id, new Map());
-            const lg = await liveLegs(String(tid), String(id), m, legCache.get(id)).catch(() => []);
+            // With push running, only finished legs are fetched (once); the leg in play comes from push below.
+            const lg = await liveLegs(String(tid), String(id), pushedLegFor(id, m.set || 1, m.leg) ? { ...m, status: 'result' } : m, legCache.get(id)).catch(() => []);
             if (lg.length) { t = t?.data ? t : { data: { attributes: { legs: [] } } }; t.data.attributes.legs = lg; }
           }
           if (m.stats && !t?.data?.attributes?.fixtureMeta?.participant1Data) {
@@ -274,6 +279,14 @@ import Layout from '../layouts/Layout.astro';
             t.data.attributes.fixtureMeta = { participant1Data: side(m.stats[0]), participant2Data: side(m.stats[1]) };
             liveStats = true;
           }
+        }
+        // The leg in play straight from pushed data when it's flowing (every dart, no extra fetch).
+        const pl = m?.status === 'live' ? pushedLegFor(id, m.set || 1, m.leg) : null;
+        if (pl) {
+          t = t?.data ? t : { data: { attributes: { legs: [] } } };
+          const L = t.data.attributes.legs || (t.data.attributes.legs = []);
+          const i = L.findIndex((l: any) => (l.setNumber ?? 1) === pl.setNumber && l.legNumber === pl.legNumber);
+          if (i >= 0) L[i] = pl; else L.push(pl);
         }
         const names = [last(a.attributes.participant1), last(a.attributes.participant2)];
         document.title = `${name(a.attributes.participant1)} v ${name(a.attributes.participant2)} · The Oche`;
@@ -391,6 +404,9 @@ import Layout from '../layouts/Layout.astro';
   .mh-in :global(.c1 .cl-180) { right: auto; left: 0; transform: rotate(6deg); }
   @keyframes pop { from { transform: scale(.3) rotate(-20deg); opacity: 0; } }
   .mh-in :global(.cl-name) { grid-area: name; font-weight: 800; font-size: 14px; color: rgba(255, 255, 255, .85); margin-bottom: 2px; }
+  .mh-in :global(.pips) { display: inline-flex; gap: 3px; margin-right: 8px; vertical-align: 1px; }
+  .mh-in :global(.pips i) { width: 7px; height: 7px; border-radius: 50%; border: 1.5px solid var(--volt); }
+  .mh-in :global(.pips i.on) { background: var(--volt); }
   .mh-in :global(.cl-oche) { color: var(--volt); margin-right: 6px; font-size: 11px; vertical-align: 2px; }
   .mh-in :global(.c1 .cl-oche) { margin: 0 0 0 6px; float: right; }
   .mh-in :global(.cl-side b) { grid-area: left; font-family: var(--poster); font-weight: 400; font-size: clamp(54px, 7vw, 84px); line-height: .95; color: #fff; font-variant-numeric: tabular-nums; }

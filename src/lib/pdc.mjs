@@ -447,15 +447,38 @@ const listDocs = async path => {
 };
 
 /** One leg's visits from the live data, in the official timeline's shape. */
-async function liveLeg(tid, mid, set, leg) {
-  const turns = await listDocs(`tournaments/${tid}/matches/${mid}/sets/${set}/legs/${leg}/turns`);
-  const visits = turns.filter(x => x.isComplete !== false).sort((a, b) => a.globalTurnIndex - b.globalTurnIndex).map(x => ({
+/**
+ * A leg from its live turn documents. How PDC's scorer writes them: when a
+ * player steps up, a turn is added straight away (isComplete false,
+ * scoringParticipant = the player throwing, dartsThrown counting up after each
+ * dart); it gets its score and isComplete true after the visit. activeParticipant
+ * is the *other* player (who throws next). So the thrower is the scorer of an
+ * unfinished turn, or the next player after a finished one.
+ */
+export function legFromTurns(turns, set, leg) {
+  const sorted = turns.slice().sort((a, b) => a.globalTurnIndex - b.globalTurnIndex);
+  const visits = sorted.filter(x => x.isComplete !== false).map(x => ({
     order: x.globalTurnIndex, visitNumber: x.globalTurnIndex, isParticipant1: x.scoringParticipant === 0,
     score: x.isBust ? 0 : x.turnScore ?? 0, remaining: x.score, numberOfDartsThrown: x.dartsThrown ?? 3,
     isBust: !!x.isBust, isCheckout: !!x.isCheckout,
   }));
-  const next = turns.sort((a, b) => b.globalTurnIndex - a.globalTurnIndex)[0];
-  return { setNumber: set, legNumber: leg, visits, throwing: next ? (next.activeParticipant === 0 ? 0 : 1) : null };
+  const last = sorted[sorted.length - 1];
+  const inVisit = last && last.isComplete === false;
+  const throwing = !last ? null : inVisit ? (last.scoringParticipant === 0 ? 0 : 1) : (last.activeParticipant === 0 ? 0 : 1);
+  return { setNumber: set, legNumber: leg, visits, throwing, dartsIn: inVisit ? Math.min(3, last.dartsThrown || 0) : 0 };
+}
+
+async function liveLeg(tid, mid, set, leg) {
+  return legFromTurns(await listDocs(`tournaments/${tid}/matches/${mid}/sets/${set}/legs/${leg}/turns`), set, leg);
+}
+
+/** What the tiles need from a leg: score left each side, who's throwing and how many darts are in. `prevFirst` = 0/1 who threw first last leg. */
+export function legSummary(leg, m, prevFirst = null) {
+  const left = p1 => { const v = leg.visits.filter(x => x.isParticipant1 === p1); return v.length ? v[v.length - 1].remaining : 501; };
+  // No darts in this leg yet: the throw alternates, so whoever didn't start the last leg starts this one.
+  let throwing = leg.throwing;
+  if (throwing == null && prevFirst != null) throwing = prevFirst ? 0 : 1;
+  return { set: m.set || 1, leg: m.leg, left: [left(true), left(false)], throwing, dartsIn: leg.dartsIn || 0, visits: leg.visits };
 }
 
 /**
@@ -488,15 +511,12 @@ export async function liveLegs(tid, mid, m, cache = new Map()) {
 export async function liveCurrentLeg(tid, m) {
   if (!m || m.status !== 'live' || !m.leg) return null;
   const leg = await liveLeg(tid, m.id, m.set || 1, m.leg);
-  const left = p1 => { const v = leg.visits.filter(x => x.isParticipant1 === p1); return v.length ? v[v.length - 1].remaining : 501; };
-  // No darts in this leg yet: the throw alternates, so whoever didn't start the last leg starts this one.
-  let throwing = leg.throwing;
-  if (throwing == null && m.leg > 1) {
+  let prevFirst = null;
+  if (leg.throwing == null && m.leg > 1) {
     const prev = await liveLeg(tid, m.id, m.set || 1, m.leg - 1).catch(() => null);
-    const first = prev?.visits[0];
-    if (first) throwing = first.isParticipant1 ? 1 : 0;
+    if (prev?.visits[0]) prevFirst = prev.visits[0].isParticipant1 ? 0 : 1;
   }
-  return { set: m.set || 1, leg: m.leg, left: [left(true), left(false)], throwing, visits: leg.visits };
+  return legSummary(leg, m, prevFirst);
 }
 
 /** "First to 10 legs" / "First to 4 sets" for a stage ({ sets, bestOf, twoClear }). */

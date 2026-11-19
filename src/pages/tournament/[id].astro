@@ -102,8 +102,8 @@ const news = (await getCollection('news')).map(n => n.data)
   <script is:inline type="application/json" id="t-data" set:html={JSON.stringify({ t, portraits })}></script>
 
   <script>
-    import { API, normaliseTournament, fixtureStatsUrl, slimStats, applyLive, liveCurrentLeg } from '../../lib/pdc.mjs';
-    import { liveFor, watchLive, unwatch, isPushing, LIVE_TICK, PUSH_TICK } from '../../lib/live-client.mjs';
+    import { API, normaliseTournament, fixtureStatsUrl, slimStats, applyLive } from '../../lib/pdc.mjs';
+    import { liveFor, watchLive, unwatch, isPushing, currentLeg, LIVE_TICK, PUSH_TICK } from '../../lib/live-client.mjs';
     import { matchDays, renderDay, renderTabs, progress, fixtureRow, renderDraw } from '../../lib/render-matches.mjs';
     import { markFollowed } from '../../lib/follow.mjs';
 
@@ -225,9 +225,9 @@ const news = (await getCollection('news')).map(n => n.data)
         // The leg in play for each live match: what each player needs.
         const legs = new Map<string, any>();
         await Promise.all([...lv.values()].filter((m: any) => m.status === 'live').map(async (m: any) => {
-          legs.set(String(m.id), await liveCurrentLeg(t.id, m).catch(() => null));
+          legs.set(String(m.id), await currentLeg(t.id, m).catch(() => null));
         }));
-        const sig = JSON.stringify([...lv.values()].map((m: any) => [m.id, m.status, m.legs, m.sets, m.stats?.map((x: any) => x?.avg), legs.get(String(m.id))?.left, legs.get(String(m.id))?.throwing]));
+        const sig = JSON.stringify([...lv.values()].map((m: any) => [m.id, m.status, m.legs, m.sets, m.stats?.map((x: any) => x?.avg), legs.get(String(m.id))?.left, legs.get(String(m.id))?.throwing, legs.get(String(m.id))?.dartsIn]));
         if (sig === liveSig) return;
         liveSig = sig;
         applyLive(t, lv);

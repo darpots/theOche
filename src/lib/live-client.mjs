@@ -8,7 +8,7 @@
 //    fallback if it ever drops (blocked network, old browser).
 // Pages keep their own timers; while push is running they only need a slow
 // safety check, and watchLive() calls them back the moment a score changes.
-import { liveMatches, slimLiveData, LIVE_KEY, LIVE_PROJECT } from './pdc.mjs';
+import { liveMatches, slimLiveData, legFromTurns, legSummary, liveCurrentLeg, LIVE_KEY, LIVE_PROJECT } from './pdc.mjs';
 
 /** How often the live score is polled when push isn't running (ms). */
 export const LIVE_TICK = 8_000;
@@ -17,6 +17,7 @@ export const PUSH_TICK = 30_000;
 
 let memo = { key: '', at: 0, p: null };
 const pushed = new Map(); // fixture id -> slim live match, kept current by the listeners
+const pushedLeg = new Map(); // fixture id -> { set, leg, data: legFromTurns(...), prevFirst }
 const watching = new Map(); // `${tid}:${id}` -> unsubscribe
 const callbacks = new Set();
 let dbPromise = null, pushOk = false, notifyTimer = 0;
@@ -77,7 +78,18 @@ export async function watchLive(tournamentId, ids, onChange) {
         const lk = m && m.status === 'live' && m.leg ? `${m.set || 1}/${m.leg}` : '';
         if (lk !== legKey) {
           legOff?.(); legOff = null; legKey = lk;
-          if (lk) legOff = fs.onSnapshot(fs.collection(store, `tournaments/${tournamentId}/matches/${id}/sets/${m.set || 1}/legs/${m.leg}/turns`), () => notify(), () => {});
+          // Who threw first in the leg just finished: they don't throw first in the next one.
+          const before = pushedLeg.get(id);
+          const prevFirst = before?.data.visits[0] ? (before.data.visits[0].isParticipant1 ? 0 : 1) : before?.prevFirst ?? null;
+          if (lk) {
+            const set = m.set || 1, leg = m.leg;
+            pushedLeg.set(id, { set, leg, data: legFromTurns([], set, leg), prevFirst: before && before.leg === leg - 1 ? prevFirst : null, ready: false });
+            legOff = fs.onSnapshot(fs.collection(store, `tournaments/${tournamentId}/matches/${id}/sets/${set}/legs/${leg}/turns`), q => {
+              const cur = pushedLeg.get(id);
+              pushedLeg.set(id, { ...cur, data: legFromTurns(q.docs.map(d => d.data()), set, leg), ready: true });
+              notify();
+            }, () => {});
+          }
         }
         notify();
       }, () => { pushOk = false; watching.delete(key); });
@@ -85,6 +97,27 @@ export async function watchLive(tournamentId, ids, onChange) {
     }
   } catch { pushOk = false; }
   return isPushing();
+}
+
+/**
+ * The leg in play for a live match: from pushed data when it's flowing (no
+ * extra request, and every dart shows), else one fetch.
+ */
+export async function currentLeg(tournamentId, m) {
+  if (!m || m.status !== 'live' || !m.leg) return null;
+  const p = pushedLeg.get(String(m.id));
+  if (isPushing() && p?.ready && p.leg === m.leg && p.set === (m.set || 1)) {
+    // A new leg with no darts yet and no memory of the last one: ask once.
+    if (p.data.throwing == null && p.prevFirst == null && m.leg > 1) return liveCurrentLeg(tournamentId, m);
+    return legSummary(p.data, m, p.prevFirst);
+  }
+  return liveCurrentLeg(tournamentId, m);
+}
+
+/** The pushed leg in play (as legFromTurns returns it), if push has it for this set and leg. */
+export function pushedLegFor(id, set, leg) {
+  const p = pushedLeg.get(String(id));
+  return isPushing() && p?.ready && p.set === set && p.leg === leg ? p.data : null;
 }
 
 /** Remove a page's callback (on navigation). */

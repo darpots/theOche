@@ -166,8 +166,8 @@ const spot = loadProfile(spotRank.id);
   </div>
 
   <script>
-    import { normaliseTournament, applyLive, liveCurrentLeg, surnameOf } from '../lib/pdc.mjs';
-    import { liveFor, watchLive, unwatch, isPushing, LIVE_TICK, PUSH_TICK } from '../lib/live-client.mjs';
+    import { normaliseTournament, applyLive, surnameOf } from '../lib/pdc.mjs';
+    import { liveFor, watchLive, unwatch, isPushing, currentLeg, LIVE_TICK, PUSH_TICK } from '../lib/live-client.mjs';
     import { matchday, featureTile, nextTileInner } from '../lib/feature.mjs';
     import { shortDate } from '../lib/format.mjs';
 
@@ -213,7 +213,7 @@ const spot = loadProfile(spotRank.id);
             if (inPlay.length) watchLive(box.dataset.id!, inPlay, refresh);
             const pick = md.now ? [md.now, 'now'] : md.next ? [md.next, 'next'] : md.results[0] ? [md.results[0], 'result'] : null;
             // The leg in play: what each player needs.
-            if (md.now?.status === 'live') (md.now as any).legNow = await liveCurrentLeg(box.dataset.id!, lv.get(String(md.now.id))).catch(() => null);
+            if (md.now?.status === 'live') (md.now as any).legNow = await currentLeg(box.dataset.id!, lv.get(String(md.now.id))).catch(() => null);
             if (pick) draw(box, featureTile(pick[0] as any, pick[1] as string, box.dataset.name!, pick[1] === 'now' ? md.also : []));
             const nu = document.getElementById('nextup') as HTMLAnchorElement | null;
             const after = md.todays.find((f: any) => f.status !== 'result' && f !== pick?.[0] && (!md.now || f !== md.now) && !md.also.includes(f) && f.time >= ((pick?.[0] as any)?.time || ''));
@@ -287,11 +287,21 @@ const spot = loadProfile(spotRank.id);
   .feature :global(.ft-now) { position: relative; display: flex; flex-direction: column; align-items: flex-end; gap: 6px; }
   .feature :global(.ft-who.r .ft-now) { align-items: flex-start; }
   .feature :global(.ft-rem) { position: relative; display: inline-flex; align-items: center; gap: 10px; font-size: 72px; line-height: .9; color: var(--on-ink); font-weight: 400; }
+  /* Fixed widths and rows so nothing shifts as scores and chips change */
+  .feature :global(.ft-num) { display: inline-block; min-width: 3ch; text-align: right; font-variant-numeric: tabular-nums; }
+  .feature :global(.ft-who.r .ft-num) { text-align: left; }
+  .feature :global(.ft-mark) { display: inline-flex; flex-direction: column; align-items: center; justify-content: center; gap: 5px; width: 14px; height: .9em; overflow: visible; }
+  .feature :global(.ft-pips) { display: flex; flex-direction: column; gap: 3px; }
+  .feature :global(.ft-pips i) { width: 7px; height: 7px; border-radius: 50%; border: 1.5px solid var(--volt); }
+  .feature :global(.ft-pips i.on) { background: var(--volt); }
+  .feature :global(.ft-score) { min-width: 2.55em; text-align: center; white-space: nowrap; }
+  .feature :global(.ft-who) { min-height: 150px; }
   .feature :global(.ft-now.on .ft-rem) { color: var(--volt); }
   .feature :global(.ft-dot) { width: 10px; height: 10px; border-radius: 50%; background: var(--volt); box-shadow: 0 0 0 4px rgba(200, 255, 46, .2); }
   .feature :global(.ft-who.r .ft-rem) { flex-direction: row-reverse; }
-  .feature :global(.ft-meta) { display: flex; gap: 6px; align-items: center; flex-wrap: wrap; justify-content: flex-end; }
-  .feature :global(.ft-who.r .ft-meta) { justify-content: flex-start; }
+  .feature :global(.ft-meta) { display: grid; grid-template-rows: 24px 24px; gap: 5px; justify-items: end; }
+  .feature :global(.ft-who.r .ft-meta) { justify-items: start; }
+  .feature :global(.ft-row) { display: flex; align-items: center; }
   .feature :global(.ft-last), .feature :global(.ft-co) { font-style: normal; font-size: 12px; font-weight: 800; padding: 3px 8px; border-radius: 8px; white-space: nowrap; font-variant-numeric: tabular-nums; }
   .feature :global(.ft-last) { background: rgba(255, 255, 255, .08); color: var(--on-ink); }
   .feature :global(.ft-last.big) { background: var(--volt); color: var(--ink); }
@@ -399,17 +409,21 @@ const spot = loadProfile(spotRank.id);
     .feature :global(.ft-ini) { width: 96px; height: 130px; }
     .feature :global(.ft-ini span) { font-size: 40px; }
     .feature :global(.ft-stage-row) { padding: 0 8px; }
-    .feature :global(.ft-mid) { padding-bottom: 24px; max-width: 136px; }
+    .feature :global(.ft-mid) { padding-bottom: 24px; }
     .feature :global(.ft-sub) { font-size: 10px; letter-spacing: .08em; }
-    .feature :global(.ft-score) { font-size: 76px; white-space: nowrap; }
+    .feature :global(.ft-score) { font-size: 64px; white-space: nowrap; }
+    .feature :global(.ft-who) { min-height: 0; }
+    .feature :global(.ft-id) { min-height: 76px; }
         .feature :global(.ft-who) { padding: 12px 16px; flex-direction: column; align-items: flex-start; }
     .feature :global(.ft-who.r) { flex-direction: column; align-items: flex-end; }
     .feature :global(.ft-id b) { font-size: 15px; }
     .feature :global(.ft-rem) { font-size: 46px; gap: 7px; }
     .feature :global(.ft-now), .feature :global(.ft-who.r .ft-now) { align-items: inherit; margin-top: 8px; }
     .feature :global(.ft-who.l .ft-rem) { flex-direction: row-reverse; }
-    .feature :global(.ft-who.l .ft-meta) { justify-content: flex-start; }
-    .feature :global(.ft-who.r .ft-meta) { justify-content: flex-end; }
+    .feature :global(.ft-who.l .ft-meta) { justify-items: start; }
+    .feature :global(.ft-who.r .ft-meta) { justify-items: end; }
+    .feature :global(.ft-who.l .ft-num) { text-align: left; }
+    .feature :global(.ft-who.r .ft-num) { text-align: right; }
     .feature :global(.ft-180) { top: -26px; font-size: 26px; }
     .feature :global(.ft-round) { width: 96px; height: 96px; margin-bottom: 30px; box-shadow: 0 0 0 4px var(--ink-2); }
     .feature :global(.ft-also) { padding: 10px 16px 14px; }
