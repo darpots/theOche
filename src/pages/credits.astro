@@ -4,7 +4,7 @@ import portraits from '../data/portraits.json';
 import library from '../data/news-library.json';
 import extraPhotos from '../data/extra-photos.json';
 import venuePhotos from '../data/venue-photos.json';
-const venues = Object.entries(venuePhotos as Record<string, any>).sort((a, b) => a[1].venue.localeCompare(b[1].venue));
+const venues = Object.entries(venuePhotos as Record<string, any>).filter(([, v]) => v).sort((a, b) => a[1].venue.localeCompare(b[1].venue));
 import rankings from '../data/rankings.json';
 import { pdcImageKeys } from '../lib/images.mjs';
 import { keyName } from '../lib/pdc.mjs';

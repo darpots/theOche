@@ -1,5 +1,5 @@
 // Builds src/data/calendar.json: PDC events shown on Sky Sports, ITV or
-// (European Tour) PDCTV, from roughly six months ago to 15 months ahead.
+// (European Tour) PDCTV, from two years ago (shown under "Show completed") to 15 months ahead.
 import { appendFile } from 'node:fs/promises';
 import { API, BROADCASTERS, cleanName, playerName, isPlaceholder } from '../src/lib/pdc.mjs';
 import { getAll, writeJsonIfChanged, log } from './lib.mjs';
@@ -8,12 +8,12 @@ const OUT = new URL('../src/data/calendar.json', import.meta.url).pathname;
 
 const now = new Date();
 const year = now.getUTCFullYear();
-const from = new Date(now); from.setUTCMonth(from.getUTCMonth() - 6);
+const from = new Date(now); from.setUTCMonth(from.getUTCMonth() - 24);
 const to = new Date(now); to.setUTCMonth(to.getUTCMonth() + 15);
 const iso = d => d.toISOString().slice(0, 10);
 
 const rows = [];
-for (const season of [year - 1, year, year + 1]) {
+for (const season of [year - 2, year - 1, year, year + 1]) {
   rows.push(...(await getAll(API.tournaments, { seasonID: season }, 100)));
 }
 if (rows.length < 50) throw new Error(`Calendar looks incomplete (${rows.length} tournaments)`);

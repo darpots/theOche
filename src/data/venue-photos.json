@@ -286,5 +286,108 @@
   "license": "CC BY-SA 3.0",
   "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
   "source": "https://commons.wikimedia.org/wiki/File:Gent_-_Flanders_Expo_1.jpg"
+ },
+ "eissporthalle-frankfurt": null,
+ "madison-square-garden-new-york": null,
+ "spark-arena-auckland": null,
+ "pva-expo-prague": null,
+ "afas-live-amsterdam": null,
+ "aldersley-leisure-village-wolverhampton": null,
+ "the-dome-manama": null,
+ "utilita-arena-newcastle": null,
+ "the-o2-belfast": null,
+ "lokhalle-goettingen": null,
+ "marshall-arena-milton-keynes": {
+  "venue": "Marshall Arena Milton Keynes",
+  "file": "File:Marshall Arena Milton Keynes 6 July 2020.jpg",
+  "credit": "OZOO, Wikimedia Commons",
+  "license": "CC BY-SA 4.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+  "source": "https://commons.wikimedia.org/wiki/File:Marshall_Arena_Milton_Keynes_6_July_2020.jpg"
+ },
+ "sse-arena-belfast": null,
+ "westpoint-arena-exeter": null,
+ "oktoberhallen-wieze": {
+  "venue": "Oktoberhallen, Wieze",
+  "file": "File:Oktoberhallen Wieze 12-05-2019 17-17-21.jpg",
+  "credit": "Paul Hermans, Wikimedia Commons",
+  "license": "CC BY-SA 4.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+  "source": "https://commons.wikimedia.org/wiki/File:Oktoberhallen_Wieze_12-05-2019_17-17-21.jpg"
+ },
+ "lokhalle-gottingen": {
+  "venue": "Lokhalle, Gottingen",
+  "file": "File:Lokhalle Göttingen.jpg",
+  "credit": "Stefan Flöper, Wikimedia Commons",
+  "license": "CC BY-SA 4.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+  "source": "https://commons.wikimedia.org/wiki/File:Lokhalle_G%C3%B6ttingen.jpg"
+ },
+ "autotron-rosmalen": null,
+ "prezero-arena": {
+  "venue": "PreZero Arena",
+  "file": "File:PreZero Arena Gliwice (dron).jpg",
+  "credit": "Kapitel, Wikimedia Commons",
+  "license": "CC BY-SA 4.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+  "source": "https://commons.wikimedia.org/wiki/File:PreZero_Arena_Gliwice_(dron).jpg"
+ },
+ "wunderino-arena-europaplatz": {
+  "venue": "Wunderino Arena Europaplatz",
+  "file": "File:Wunderino Arena.jpg",
+  "credit": "Wunderino Arena, Wikimedia Commons",
+  "license": "CC BY-SA 4.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+  "source": "https://commons.wikimedia.org/wiki/File:Wunderino_Arena.jpg"
+ },
+ "spark-arena": null,
+ "mvm-dome": {
+  "venue": "MVM Dome",
+  "file": "File:MVM Dome, Budapest IX. kerülete.jpg",
+  "credit": "12akd, Wikimedia Commons",
+  "license": "CC BY-SA 4.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+  "source": "https://commons.wikimedia.org/wiki/File:MVM_Dome,_Budapest_IX._ker%C3%BClete.jpg"
+ },
+ "st-jakobshalle": {
+  "venue": "St. Jakobshalle",
+  "file": "File:St Jakobshalle Basel.JPG",
+  "credit": "--Wladyslaw Disk., Wikimedia Commons",
+  "license": "CC BY-SA 3.0",
+  "licenseUrl": "http://creativecommons.org/licenses/by-sa/3.0/",
+  "source": "https://commons.wikimedia.org/wiki/File:St_Jakobshalle_Basel.JPG"
+ },
+ "halle-39-hildesheim": {
+  "venue": "Halle 39, Hildesheim",
+  "file": "File:HINordstadtHalle39.JPG",
+  "credit": "Ekkehard Domning, Wikimedia Commons",
+  "license": "CC BY-SA 3.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
+  "source": "https://commons.wikimedia.org/wiki/File:HINordstadtHalle39.JPG"
+ },
+ "global-theater": null,
+ "afas-dome": {
+  "venue": "AFAS Dome",
+  "file": "File:Afas-dome-donker.jpg",
+  "credit": "Andries Schotte, Wikimedia Commons",
+  "license": "CC BY 4.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by/4.0",
+  "source": "https://commons.wikimedia.org/wiki/File:Afas-dome-donker.jpg"
+ },
+ "expo": {
+  "venue": "EXPO",
+  "file": "File:EXPO Kraków.jpg",
+  "credit": "Stanisław Rozpędzik, Wikimedia Commons",
+  "license": "CC BY 4.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by/4.0",
+  "source": "https://commons.wikimedia.org/wiki/File:EXPO_Krak%C3%B3w.jpg"
+ },
+ "stadthalle": {
+  "venue": "Stadthalle",
+  "file": "File:Grazer Stadthalle.jpg",
+  "credit": "Jacktd, Wikimedia Commons",
+  "license": "CC BY-SA 3.0",
+  "licenseUrl": "http://creativecommons.org/licenses/by-sa/3.0/",
+  "source": "https://commons.wikimedia.org/wiki/File:Grazer_Stadthalle.jpg"
  }
 }

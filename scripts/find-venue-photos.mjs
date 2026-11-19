@@ -59,7 +59,8 @@ const venues = new Map();
 for (const e of calendar.events) if (e.venue) venues.set(venueKey(e.venue), { venue: e.venue, city: e.city });
 let found = 0;
 for (const [key, { venue, city }] of venues) {
-  if (only.length ? !only.includes(key) : out[key]) continue;
+  // Already done, or rejected on review (stored as null): skip.
+  if (only.length ? !only.includes(key) : key in out) continue;
   const c = await find(venue, city);
   if (!c) { console.log(`  none   ${venue}`); continue; }
   try {
@@ -74,10 +75,10 @@ for (const [key, { venue, city }] of venues) {
   await sleep(500);
 }
 await writeFile(`${ROOT}src/data/venue-photos.json`, JSON.stringify(out, null, 1) + '\n');
-console.log(`${found} venue photos found, ${Object.keys(out).length} in total`);
+console.log(`${found} venue photos found, ${Object.values(out).filter(Boolean).length} in total`);
 const sheet = arg('sheet');
 if (sheet) {
-  const keys = Object.keys(out);
+  const keys = Object.keys(out).filter(k => out[k]);
   const tiles = await Promise.all(keys.map(k => sharp(`${ROOT}public/venues/${k}-600.webp`).resize(240, 135, { fit: 'cover' }).toBuffer()));
   await sharp({ create: { width: 8 * 244, height: Math.ceil(keys.length / 8) * 139, channels: 3, background: '#fff' } }).composite(tiles.map((t, i) => ({ input: t, left: (i % 8) * 244, top: Math.floor(i / 8) * 139 }))).jpeg().toFile(sheet);
   console.log(keys.map((k, i) => `${i}:${k}`).join('  '));

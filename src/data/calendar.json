@@ -1,6 +1,1431 @@
 {
- "updatedAt": "2026-11-19T23:16:12.930Z",
+ "updatedAt": "2026-11-19T23:52:15.545Z",
  "events": [
+  {
+   "id": "10266",
+   "name": "Players Championship Finals",
+   "tag": null,
+   "start": "2024-11-22",
+   "end": "2024-11-24",
+   "venue": "Butlins, Minehead",
+   "city": "Minehead",
+   "broadcaster": "itv",
+   "ranked": true,
+   "major": true,
+   "winner": {
+    "id": "32102",
+    "name": "Luke Humphries"
+   },
+   "fixtures": 63,
+   "image": null,
+   "logo": null
+  },
+  {
+   "id": "10268",
+   "name": "World Championship",
+   "tag": null,
+   "start": "2024-12-15",
+   "end": "2025-01-03",
+   "venue": "Alexandra Palace, London",
+   "city": "London",
+   "broadcaster": "sky",
+   "ranked": true,
+   "major": true,
+   "winner": {
+    "id": "40676",
+    "name": "Luke Littler"
+   },
+   "fixtures": 95,
+   "image": null,
+   "logo": "32bccc10-6686-11f0-b17d-3306e3556285.png"
+  },
+  {
+   "id": "10390",
+   "name": "Bahrain Darts Masters",
+   "tag": null,
+   "start": "2025-01-16",
+   "end": "2025-01-17",
+   "venue": "The Dome, Manama",
+   "city": "Manama",
+   "broadcaster": "itv",
+   "ranked": false,
+   "major": false,
+   "winner": {
+    "id": "876",
+    "name": "Stephen Bunting"
+   },
+   "fixtures": 15,
+   "image": "c83bd8d0-efc0-11f0-b0be-df44fa0618a2.jpg",
+   "logo": null
+  },
+  {
+   "id": "10391",
+   "name": "Dutch Darts Masters",
+   "tag": null,
+   "start": "2025-01-24",
+   "end": "2025-01-25",
+   "venue": "Maassport Den Bosch",
+   "city": "Den Bosch",
+   "broadcaster": "itv",
+   "ranked": false,
+   "major": false,
+   "winner": {
+    "id": "31041",
+    "name": "Rob Cross"
+   },
+   "fixtures": 15,
+   "image": null,
+   "logo": null
+  },
+  {
+   "id": "10412",
+   "name": "Winmau World Masters",
+   "tag": null,
+   "start": "2025-01-30",
+   "end": "2025-02-02",
+   "venue": "Marshall Arena Milton Keynes",
+   "city": "Milton Keynes",
+   "broadcaster": "itv",
+   "ranked": false,
+   "major": true,
+   "winner": {
+    "id": "32102",
+    "name": "Luke Humphries"
+   },
+   "fixtures": 31,
+   "image": "589d8c20-be70-11f0-a50e-335a820487fd.jpg",
+   "logo": null
+  },
+  {
+   "id": "10408",
+   "name": "Premier League",
+   "tag": "Night 1",
+   "start": "2025-02-06",
+   "end": "2025-02-06",
+   "venue": "SSE Arena, Belfast",
+   "city": "Belfast",
+   "broadcaster": "sky",
+   "ranked": false,
+   "major": false,
+   "winner": {
+    "id": "32102",
+    "name": "Luke Humphries"
+   },
+   "fixtures": 7,
+   "image": "1b3f5cb0-be6f-11f0-80b6-e7897a370fda.jpg",
+   "logo": "329fa720-6686-11f0-ba36-59f64b9805f6.png"
+  },
+  {
+   "id": "10409",
+   "name": "Premier League",
+   "tag": "Night 2",
+   "start": "2025-02-13",
+   "end": "2025-02-13",
+   "venue": "OVO Hydro, Glasgow",
+   "city": "Glasgow",
+   "broadcaster": "sky",
+   "ranked": false,
+   "major": false,
+   "winner": {
+    "id": "40676",
+    "name": "Luke Littler"
+   },
+   "fixtures": 7,
+   "image": "1b3f5cb0-be6f-11f0-80b6-e7897a370fda.jpg",
+   "logo": "329fa720-6686-11f0-ba36-59f64b9805f6.png"
+  },
+  {
+   "id": "10410",
+   "name": "Premier League",
+   "tag": "Night 3",
+   "start": "2025-02-20",
+   "end": "2025-02-20",
+   "venue": "3Arena, Dublin",
+   "city": "Dublin",
+   "broadcaster": "sky",
+   "ranked": false,
+   "major": false,
+   "winner": {
+    "id": "11788",
+    "name": "Gerwyn Price"
+   },
+   "fixtures": 7,
+   "image": "1b3f5cb0-be6f-11f0-80b6-e7897a370fda.jpg",
+   "logo": "329fa720-6686-11f0-ba36-59f64b9805f6.png"
+  },
+  {
+   "id": "10411",
+   "name": "Premier League",
+   "tag": "Night 4",
+   "start": "2025-02-27",
+   "end": "2025-02-27",
+   "venue": "Westpoint Arena, Exeter",
+   "city": "Exeter",
+   "broadcaster": "sky",
+   "ranked": false,
+   "major": false,
+   "winner": {
+    "id": "32102",
+    "name": "Luke Humphries"
+   },
+   "fixtures": 7,
+   "image": "1b3f5cb0-be6f-11f0-80b6-e7897a370fda.jpg",
+   "logo": "329fa720-6686-11f0-ba36-59f64b9805f6.png"
+  },
+  {
+   "id": "10413",
+   "name": "UK Open",
+   "tag": null,
+   "start": "2025-02-28",
+   "end": "2025-03-02",
+   "venue": "Butlins, Minehead",
+   "city": "Minehead",
+   "broadcaster": "itv",
+   "ranked": false,
+   "major": true,
+   "winner": {
+    "id": "40676",
+    "name": "Luke Littler"
+   },
+   "fixtures": 159,
+   "image": "6ea8d110-be6f-11f0-80b6-e7897a370fda.jpg",
+   "logo": "327d2b00-6686-11f0-b0e1-2f7ff63d9a66.png"
+  },
+  {
+   "id": "10414",
+   "name": "Premier League",
+   "tag": "Night 5",
+   "start": "2025-03-06",
+   "end": "2025-03-06",
+   "venue": "Brighton Centre, Brighton",
+   "city": "Brighton",
+   "broadcaster": "sky",
+   "ranked": false,
+   "major": false,
+   "winner": {
+    "id": "40676",
+    "name": "Luke Littler"
+   },
+   "fixtures": 7,
+   "image": "1b3f5cb0-be6f-11f0-80b6-e7897a370fda.jpg",
+   "logo": "329fa720-6686-11f0-ba36-59f64b9805f6.png"
+  },
+  {
+   "id": "10393",
+   "name": "Belgian Darts Open",
+   "tag": "European Tour 1",
+   "start": "2025-03-07",
+   "end": "2025-03-09",
+   "venue": "Oktoberhallen, Wieze",
+   "city": "Wieze",
+   "broadcaster": "pdctv",
+   "ranked": true,
+   "major": false,
+   "winner": {
+    "id": "40676",
+    "name": "Luke Littler"
+   },
+   "fixtures": 47,
+   "image": "3c317c20-bc10-11f0-a7ca-afbb18ece5a9.jpg",
+   "logo": null
+  },
+  {
+   "id": "10415",
+   "name": "Premier League",
+   "tag": "Night 6",
+   "start": "2025-03-13",
+   "end": "2025-03-13",
+   "venue": "Motorpoint Arena, Nottingham",
+   "city": "Nottingham",
+   "broadcaster": "sky",
+   "ranked": false,
+   "major": false,
+   "winner": {
+    "id": "11788",
+    "name": "Gerwyn Price"
+   },
+   "fixtures": 7,
+   "image": "1b3f5cb0-be6f-11f0-80b6-e7897a370fda.jpg",
+   "logo": "329fa720-6686-11f0-ba36-59f64b9805f6.png"
+  },
+  {
+   "id": "10416",
+   "name": "Premier League",
+   "tag": "Night 7",
+   "start": "2025-03-20",
+   "end": "2025-03-20",
+   "venue": "Utilita Arena Cardiff",
+   "city": "Cardiff",
+   "broadcaster": "sky",
+   "ranked": false,
+   "major": false,
+   "winner": {
+    "id": "40676",
+    "name": "Luke Littler"
+   },
+   "fixtures": 7,
+   "image": "1b3f5cb0-be6f-11f0-80b6-e7897a370fda.jpg",
+   "logo": "329fa720-6686-11f0-ba36-59f64b9805f6.png"
+  },
+  {
+   "id": "10394",
+   "name": "European Darts Trophy",
+   "tag": "European Tour 2",
+   "start": "2025-03-21",
+   "end": "2025-03-23",
+   "venue": "Lokhalle, Gottingen",
+   "city": "Gottingen",
+   "broadcaster": "pdctv",
+   "ranked": true,
+   "major": false,
+   "winner": {
+    "id": "11821",
+    "name": "Nathan Aspinall"
+   },
+   "fixtures": 47,
+   "image": "3c317c20-bc10-11f0-a7ca-afbb18ece5a9.jpg",
+   "logo": null
+  },
+  {
+   "id": "10417",
+   "name": "Premier League",
+   "tag": "Night 8",
+   "start": "2025-03-27",
+   "end": "2025-03-27",
+   "venue": "Utilita Arena, Newcastle",
+   "city": "Newcastle",
+   "broadcaster": "sky",
+   "ranked": false,
+   "major": false,
+   "winner": {
+    "id": "40676",
+    "name": "Luke Littler"
+   },
+   "fixtures": 7,
+   "image": "1b3f5cb0-be6f-11f0-80b6-e7897a370fda.jpg",
+   "logo": "329fa720-6686-11f0-ba36-59f64b9805f6.png"
+  },
+  {
+   "id": "10418",
+   "name": "Premier League",
+   "tag": "Night 9",
+   "start": "2025-04-03",
+   "end": "2025-04-03",
+   "venue": "Uber Arena, Berlin",
+   "city": "Berlin",
+   "broadcaster": "sky",
+   "ranked": false,
+   "major": false,
+   "winner": {
+    "id": "876",
+    "name": "Stephen Bunting"
+   },
+   "fixtures": 7,
+   "image": "1b3f5cb0-be6f-11f0-80b6-e7897a370fda.jpg",
+   "logo": "329fa720-6686-11f0-ba36-59f64b9805f6.png"
+  },
+  {
+   "id": "10395",
+   "name": "International Darts Open",
+   "tag": "European Tour 3",
+   "start": "2025-04-04",
+   "end": "2025-04-06",
+   "venue": "WT Energiesysteme Arena",
+   "city": "Riesa",
+   "broadcaster": "pdctv",
+   "ranked": true,
+   "major": false,
+   "winner": {
+    "id": "876",
+    "name": "Stephen Bunting"
+   },
+   "fixtures": 47,
+   "image": "3c317c20-bc10-11f0-a7ca-afbb18ece5a9.jpg",
+   "logo": null
+  },
+  {
+   "id": "10419",
+   "name": "Premier League",
+   "tag": "Night 10",
+   "start": "2025-04-10",
+   "end": "2025-04-10",
+   "venue": "AO Arena, Manchester",
+   "city": "Manchester",
+   "broadcaster": "sky",
+   "ranked": false,
+   "major": false,
+   "winner": {
+    "id": "11821",
+    "name": "Nathan Aspinall"
+   },
+   "fixtures": 7,
+   "image": "1b3f5cb0-be6f-11f0-80b6-e7897a370fda.jpg",
+   "logo": "329fa720-6686-11f0-ba36-59f64b9805f6.png"
+  },
+  {
+   "id": "10420",
+   "name": "Premier League",
+   "tag": "Night 11",
+   "start": "2025-04-17",
+   "end": "2025-04-17",
+   "venue": "Ahoy Arena, Rotterdam",
+   "city": "Rotterdam",
+   "broadcaster": "sky",
+   "ranked": false,
+   "major": false,
+   "winner": {
+    "id": "11843",
+    "name": "Chris Dobey"
+   },
+   "fixtures": 7,
+   "image": "1b3f5cb0-be6f-11f0-80b6-e7897a370fda.jpg",
+   "logo": "329fa720-6686-11f0-ba36-59f64b9805f6.png"
+  },
+  {
+   "id": "10396",
+   "name": "German Darts Grand Prix",
+   "tag": "European Tour 4",
+   "start": "2025-04-19",
+   "end": "2025-04-21",
+   "venue": "Zenith, Munich",
+   "city": "Munich",
+   "broadcaster": "pdctv",
+   "ranked": true,
+   "major": false,
+   "winner": {
+    "id": "19",
+    "name": "Michael van Gerwen"
+   },
+   "fixtures": 47,
+   "image": "3c317c20-bc10-11f0-a7ca-afbb18ece5a9.jpg",
+   "logo": null
+  },
+  {
+   "id": "10421",
+   "name": "Premier League",
+   "tag": "Night 12",
+   "start": "2025-04-24",
+   "end": "2025-04-24",
+   "venue": "M&S Bank Arena, Liverpool",
+   "city": "Liverpool",
+   "broadcaster": "sky",
+   "ranked": false,
+   "major": false,
+   "winner": {
+    "id": "11788",
+    "name": "Gerwyn Price"
+   },
+   "fixtures": 7,
+   "image": "1b3f5cb0-be6f-11f0-80b6-e7897a370fda.jpg",
+   "logo": "329fa720-6686-11f0-ba36-59f64b9805f6.png"
+  },
+  {
+   "id": "10397",
+   "name": "Austrian Darts Open",
+   "tag": "European Tour 5",
+   "start": "2025-04-25",
+   "end": "2025-04-27",
+   "venue": "Premstattner Halle, Premstatten",
+   "city": "Premstatten",
+   "broadcaster": "pdctv",
+   "ranked": true,
+   "major": false,
+   "winner": {
+    "id": "11902",
+    "name": "Martin Schindler"
+   },
+   "fixtures": 47,
+   "image": "3c317c20-bc10-11f0-a7ca-afbb18ece5a9.jpg",
+   "logo": null
+  },
+  {
+   "id": "10422",
+   "name": "Premier League",
+   "tag": "Night 13",
+   "start": "2025-05-01",
+   "end": "2025-05-01",
+   "venue": "Utilita Arena, Birmingham",
+   "city": "Birmingham",
+   "broadcaster": "sky",
+   "ranked": false,
+   "major": false,
+   "winner": {
+    "id": "40676",
+    "name": "Luke Littler"
+   },
+   "fixtures": 7,
+   "image": "1b3f5cb0-be6f-11f0-80b6-e7897a370fda.jpg",
+   "logo": "329fa720-6686-11f0-ba36-59f64b9805f6.png"
+  },
+  {
+   "id": "10398",
+   "name": "European Darts Grand Prix",
+   "tag": "European Tour 6",
+   "start": "2025-05-02",
+   "end": "2025-05-04",
+   "venue": "Glaspalast, Sindelfingen",
+   "city": "Sindelfingen",
+   "broadcaster": "pdctv",
+   "ranked": true,
+   "major": false,
+   "winner": {
+    "id": "4",
+    "name": "Gary Anderson"
+   },
+   "fixtures": 47,
+   "image": "3c317c20-bc10-11f0-a7ca-afbb18ece5a9.jpg",
+   "logo": null
+  },
+  {
+   "id": "10423",
+   "name": "Premier League",
+   "tag": "Night 14",
+   "start": "2025-05-08",
+   "end": "2025-05-08",
+   "venue": "First Direct Arena, Leeds",
+   "city": "Leeds",
+   "broadcaster": "sky",
+   "ranked": false,
+   "major": false,
+   "winner": {
+    "id": "32102",
+    "name": "Luke Humphries"
+   },
+   "fixtures": 7,
+   "image": "1b3f5cb0-be6f-11f0-80b6-e7897a370fda.jpg",
+   "logo": "329fa720-6686-11f0-ba36-59f64b9805f6.png"
+  },
+  {
+   "id": "10424",
+   "name": "Premier League",
+   "tag": "Night 15",
+   "start": "2025-05-15",
+   "end": "2025-05-15",
+   "venue": "P & J Live, Aberdeen",
+   "city": "Aberdeen",
+   "broadcaster": "sky",
+   "ranked": false,
+   "major": false,
+   "winner": {
+    "id": "11821",
+    "name": "Nathan Aspinall"
+   },
+   "fixtures": 7,
+   "image": "1b3f5cb0-be6f-11f0-80b6-e7897a370fda.jpg",
+   "logo": "329fa720-6686-11f0-ba36-59f64b9805f6.png"
+  },
+  {
+   "id": "10425",
+   "name": "Premier League",
+   "tag": "Night 16",
+   "start": "2025-05-22",
+   "end": "2025-05-22",
+   "venue": "Utilita Arena, Sheffield",
+   "city": "Sheffield",
+   "broadcaster": "sky",
+   "ranked": false,
+   "major": false,
+   "winner": {
+    "id": "40676",
+    "name": "Luke Littler"
+   },
+   "fixtures": 7,
+   "image": "1b3f5cb0-be6f-11f0-80b6-e7897a370fda.jpg",
+   "logo": "329fa720-6686-11f0-ba36-59f64b9805f6.png"
+  },
+  {
+   "id": "10399",
+   "name": "Dutch Darts Championship",
+   "tag": "European Tour 7",
+   "start": "2025-05-23",
+   "end": "2025-05-25",
+   "venue": "Autotron, Rosmalen",
+   "city": "Rosmalen",
+   "broadcaster": "pdctv",
+   "ranked": true,
+   "major": false,
+   "winner": {
+    "id": "30859",
+    "name": "Jonny Clayton"
+   },
+   "fixtures": 47,
+   "image": "3c317c20-bc10-11f0-a7ca-afbb18ece5a9.jpg",
+   "logo": null
+  },
+  {
+   "id": "10426",
+   "name": "Premier League Play Offs",
+   "tag": null,
+   "start": "2025-05-29",
+   "end": "2025-05-29",
+   "venue": "The O2, London",
+   "city": "London",
+   "broadcaster": "sky",
+   "ranked": false,
+   "major": true,
+   "winner": {
+    "id": "32102",
+    "name": "Luke Humphries"
+   },
+   "fixtures": 3,
+   "image": "1b3f5cb0-be6f-11f0-80b6-e7897a370fda.jpg",
+   "logo": "329fa720-6686-11f0-ba36-59f64b9805f6.png"
+  },
+  {
+   "id": "10400",
+   "name": "European Darts Open",
+   "tag": "European Tour 8",
+   "start": "2025-05-30",
+   "end": "2025-06-01",
+   "venue": "Ostermann-Arena, Leverkusen",
+   "city": "Leverkusen",
+   "broadcaster": "pdctv",
+   "ranked": true,
+   "major": false,
+   "winner": {
+    "id": "11821",
+    "name": "Nathan Aspinall"
+   },
+   "fixtures": 47,
+   "image": "3c317c20-bc10-11f0-a7ca-afbb18ece5a9.jpg",
+   "logo": null
+  },
+  {
+   "id": "10626",
+   "name": "Nordic Darts Masters",
+   "tag": null,
+   "start": "2025-06-06",
+   "end": "2025-06-07",
+   "venue": "Forum, Copenhagen",
+   "city": "Copenhagen",
+   "broadcaster": "itv",
+   "ranked": false,
+   "major": false,
+   "winner": {
+    "id": "876",
+    "name": "Stephen Bunting"
+   },
+   "fixtures": 15,
+   "image": "226acfb0-efc0-11f0-b0be-df44fa0618a2.jpg",
+   "logo": null
+  },
+  {
+   "id": "10625",
+   "name": "World Cup of Darts",
+   "tag": null,
+   "start": "2025-06-12",
+   "end": "2025-06-15",
+   "venue": "Eissporthalle Frankfurt",
+   "city": "Frankfurt",
+   "broadcaster": "sky",
+   "ranked": false,
+   "major": true,
+   "winner": {
+    "id": "2554",
+    "name": "Daryl Gurney"
+   },
+   "fixtures": 53,
+   "image": "4fb7d9f0-bf3b-11f0-bbdb-5da35870e15f.jpg",
+   "logo": null
+  },
+  {
+   "id": "10627",
+   "name": "US Darts Masters",
+   "tag": null,
+   "start": "2025-06-27",
+   "end": "2025-06-28",
+   "venue": "Madison Square Garden, New York",
+   "city": "New York, New York",
+   "broadcaster": "itv",
+   "ranked": false,
+   "major": false,
+   "winner": {
+    "id": "32102",
+    "name": "Luke Humphries"
+   },
+   "fixtures": 15,
+   "image": "d5ce6270-efbf-11f0-88b2-b7fc0db4e162.jpg",
+   "logo": null
+  },
+  {
+   "id": "10629",
+   "name": "Poland Darts Masters",
+   "tag": null,
+   "start": "2025-07-04",
+   "end": "2025-07-05",
+   "venue": "PreZero Arena",
+   "city": "Gliwice",
+   "broadcaster": "itv",
+   "ranked": false,
+   "major": false,
+   "winner": {
+    "id": "11788",
+    "name": "Gerwyn Price"
+   },
+   "fixtures": 15,
+   "image": null,
+   "logo": null
+  },
+  {
+   "id": "10401",
+   "name": "Baltic Sea Darts Open",
+   "tag": "European Tour 9",
+   "start": "2025-07-11",
+   "end": "2025-07-13",
+   "venue": "Wunderino Arena Europaplatz",
+   "city": "Kiel",
+   "broadcaster": "pdctv",
+   "ranked": true,
+   "major": false,
+   "winner": {
+    "id": "11788",
+    "name": "Gerwyn Price"
+   },
+   "fixtures": 47,
+   "image": "3c317c20-bc10-11f0-a7ca-afbb18ece5a9.jpg",
+   "logo": null
+  },
+  {
+   "id": "10632",
+   "name": "World Matchplay",
+   "tag": null,
+   "start": "2025-07-19",
+   "end": "2025-07-27",
+   "venue": "Winter Gardens, Blackpool",
+   "city": "Blackpool",
+   "broadcaster": "sky",
+   "ranked": true,
+   "major": true,
+   "winner": {
+    "id": "40676",
+    "name": "Luke Littler"
+   },
+   "fixtures": 31,
+   "image": "9bea3ef0-bf34-11f0-804c-a1197b305591.jpg",
+   "logo": "326d2570-6686-11f0-b17d-3306e3556285.png"
+  },
+  {
+   "id": "10630",
+   "name": "Australian Darts Masters",
+   "tag": null,
+   "start": "2025-08-08",
+   "end": "2025-08-09",
+   "venue": "WIN Entertainment Centre, Wollongong",
+   "city": "Wollongong",
+   "broadcaster": "itv",
+   "ranked": false,
+   "major": false,
+   "winner": {
+    "id": "40676",
+    "name": "Luke Littler"
+   },
+   "fixtures": 15,
+   "image": "3e088370-efc0-11f0-88b2-b7fc0db4e162.jpg",
+   "logo": null
+  },
+  {
+   "id": "10631",
+   "name": "New Zealand Darts Masters",
+   "tag": null,
+   "start": "2025-08-15",
+   "end": "2025-08-16",
+   "venue": "Spark Arena",
+   "city": "Auckland",
+   "broadcaster": "itv",
+   "ranked": false,
+   "major": false,
+   "winner": {
+    "id": "40676",
+    "name": "Luke Littler"
+   },
+   "fixtures": 15,
+   "image": "afb322b0-efbf-11f0-88b2-b7fc0db4e162.jpg",
+   "logo": "fe0ac5d0-998e-11f0-be75-3737e6a5d04b.png"
+  },
+  {
+   "id": "10402",
+   "name": "Flanders Darts Trophy",
+   "tag": "European Tour 10",
+   "start": "2025-08-29",
+   "end": "2025-08-31",
+   "venue": "Antwerp Xpo",
+   "city": "Antwerp",
+   "broadcaster": "pdctv",
+   "ranked": true,
+   "major": false,
+   "winner": {
+    "id": "40676",
+    "name": "Luke Littler"
+   },
+   "fixtures": 47,
+   "image": "3c317c20-bc10-11f0-a7ca-afbb18ece5a9.jpg",
+   "logo": null
+  },
+  {
+   "id": "10403",
+   "name": "Czech Darts Open",
+   "tag": "European Tour 11",
+   "start": "2025-09-05",
+   "end": "2025-09-07",
+   "venue": "PVA Expo, Prague",
+   "city": "Prague",
+   "broadcaster": "pdctv",
+   "ranked": true,
+   "major": false,
+   "winner": {
+    "id": "32102",
+    "name": "Luke Humphries"
+   },
+   "fixtures": 47,
+   "image": "3c317c20-bc10-11f0-a7ca-afbb18ece5a9.jpg",
+   "logo": null
+  },
+  {
+   "id": "10640",
+   "name": "World Series of Darts Finals",
+   "tag": null,
+   "start": "2025-09-12",
+   "end": "2025-09-14",
+   "venue": "AFAS Live, Amsterdam",
+   "city": "Amsterdam",
+   "broadcaster": "itv",
+   "ranked": false,
+   "major": true,
+   "winner": {
+    "id": "19",
+    "name": "Michael van Gerwen"
+   },
+   "fixtures": 31,
+   "image": "5f570a50-0e48-11f1-9a05-479114f23571.jpg",
+   "logo": null
+  },
+  {
+   "id": "10404",
+   "name": "Hungarian Darts Trophy",
+   "tag": "European Tour 12",
+   "start": "2025-09-19",
+   "end": "2025-09-21",
+   "venue": "MVM Dome",
+   "city": "Budapest",
+   "broadcaster": "pdctv",
+   "ranked": true,
+   "major": false,
+   "winner": {
+    "id": "34874",
+    "name": "Niko Springer"
+   },
+   "fixtures": 47,
+   "image": "3c317c20-bc10-11f0-a7ca-afbb18ece5a9.jpg",
+   "logo": null
+  },
+  {
+   "id": "10405",
+   "name": "Swiss Darts Trophy",
+   "tag": "European Tour 13",
+   "start": "2025-09-26",
+   "end": "2025-09-28",
+   "venue": "St. Jakobshalle",
+   "city": "Basel",
+   "broadcaster": "pdctv",
+   "ranked": true,
+   "major": false,
+   "winner": {
+    "id": "876",
+    "name": "Stephen Bunting"
+   },
+   "fixtures": 47,
+   "image": "3c317c20-bc10-11f0-a7ca-afbb18ece5a9.jpg",
+   "logo": null
+  },
+  {
+   "id": "10634",
+   "name": "World Grand Prix",
+   "tag": null,
+   "start": "2025-10-06",
+   "end": "2025-10-12",
+   "venue": "Mattioli Arena, Leicester",
+   "city": "Leicester",
+   "broadcaster": "sky",
+   "ranked": true,
+   "major": true,
+   "winner": {
+    "id": "40676",
+    "name": "Luke Littler"
+   },
+   "fixtures": 31,
+   "image": "0512fa00-b974-11f0-9dc8-5fde154f0397.jpg",
+   "logo": "ed4403d0-9d1f-11f0-a938-5b83f11733db.png"
+  },
+  {
+   "id": "10406",
+   "name": "German Darts Championship",
+   "tag": "European Tour 14",
+   "start": "2025-10-17",
+   "end": "2025-10-19",
+   "venue": "Halle 39, Hildesheim",
+   "city": "Hildesheim",
+   "broadcaster": "pdctv",
+   "ranked": true,
+   "major": false,
+   "winner": {
+    "id": "11821",
+    "name": "Nathan Aspinall"
+   },
+   "fixtures": 77,
+   "image": "3c317c20-bc10-11f0-a7ca-afbb18ece5a9.jpg",
+   "logo": null
+  },
+  {
+   "id": "10635",
+   "name": "European Championship",
+   "tag": null,
+   "start": "2025-10-23",
+   "end": "2025-10-26",
+   "venue": "Westfalenhalle, Dortmund",
+   "city": "Dortmund",
+   "broadcaster": "itv",
+   "ranked": true,
+   "major": true,
+   "winner": {
+    "id": "33091",
+    "name": "Gian van Veen"
+   },
+   "fixtures": 31,
+   "image": "30d9ca50-bbf0-11f0-9bc1-6521c0d7dd40.jpg",
+   "logo": "32689190-6686-11f0-ba36-59f64b9805f6.png"
+  },
+  {
+   "id": "10636",
+   "name": "Grand Slam of Darts",
+   "tag": null,
+   "start": "2025-11-08",
+   "end": "2025-11-16",
+   "venue": "Aldersley Leisure Village, Wolverhampton",
+   "city": "Wolverhampton",
+   "broadcaster": "sky",
+   "ranked": true,
+   "major": true,
+   "winner": {
+    "id": "40676",
+    "name": "Luke Littler"
+   },
+   "fixtures": 63,
+   "image": "e6c7d150-be88-11f0-b683-1df3aa50a425.jpg",
+   "logo": "32ae9b40-6686-11f0-b0e1-2f7ff63d9a66.png"
+  },
+  {
+   "id": "10637",
+   "name": "Players Championship Finals",
+   "tag": null,
+   "start": "2025-11-21",
+   "end": "2025-11-23",
+   "venue": "Butlins, Minehead",
+   "city": "Minehead",
+   "broadcaster": "itv",
+   "ranked": true,
+   "major": true,
+   "winner": {
+    "id": "40676",
+    "name": "Luke Littler"
+   },
+   "fixtures": 63,
+   "image": "2800e9a0-be8d-11f0-bbf2-05c127ee4631.jpg",
+   "logo": "327ed8b0-6686-11f0-ba36-59f64b9805f6.png"
+  },
+  {
+   "id": "10639",
+   "name": "World Championship",
+   "tag": null,
+   "start": "2025-12-11",
+   "end": "2026-01-03",
+   "venue": "Alexandra Palace, London",
+   "city": "London",
+   "broadcaster": "sky",
+   "ranked": true,
+   "major": true,
+   "winner": {
+    "id": "40676",
+    "name": "Luke Littler"
+   },
+   "fixtures": 127,
+   "image": "5d25b3b0-be6d-11f0-bbd2-f5b7cb549a2e.jpg",
+   "logo": "d1c266a0-6684-11f0-ba85-b38768b90d00.png"
+  },
+  {
+   "id": "10855",
+   "name": "Bahrain Darts Masters",
+   "tag": null,
+   "start": "2026-01-15",
+   "end": "2026-01-16",
+   "venue": "The Dome, Manama",
+   "city": "Manama",
+   "broadcaster": "itv",
+   "ranked": false,
+   "major": false,
+   "winner": {
+    "id": "19",
+    "name": "Michael van Gerwen"
+   },
+   "fixtures": 15,
+   "image": "c83bd8d0-efc0-11f0-b0be-df44fa0618a2.jpg",
+   "logo": "48f34030-f552-11f0-83e7-d589e97036d0.png"
+  },
+  {
+   "id": "10856",
+   "name": "Saudi Arabia Darts Masters",
+   "tag": null,
+   "start": "2026-01-19",
+   "end": "2026-01-20",
+   "venue": "Global Theater",
+   "city": "Riyadh",
+   "broadcaster": "itv",
+   "ranked": false,
+   "major": false,
+   "winner": {
+    "id": "40676",
+    "name": "Luke Littler"
+   },
+   "fixtures": 15,
+   "image": "9eb3d3f0-efc0-11f0-b0be-df44fa0618a2.jpg",
+   "logo": "183698c0-f552-11f0-83e7-d589e97036d0.png"
+  },
+  {
+   "id": "10701",
+   "name": "Winmau World Masters",
+   "tag": null,
+   "start": "2026-01-29",
+   "end": "2026-02-01",
+   "venue": "Arena MK, Milton Keynes",
+   "city": "Milton Keynes",
+   "broadcaster": "itv",
+   "ranked": true,
+   "major": true,
+   "winner": {
+    "id": "40676",
+    "name": "Luke Littler"
+   },
+   "fixtures": 31,
+   "image": "589d8c20-be70-11f0-a50e-335a820487fd.jpg",
+   "logo": "585613d0-98c9-11f0-8a05-c35fa0cf8fcd.png"
+  },
+  {
+   "id": "10702",
+   "name": "Premier League",
+   "tag": "Night 1",
+   "start": "2026-02-05",
+   "end": "2026-02-05",
+   "venue": "Utilita Arena, Newcastle",
+   "city": "Newcastle",
+   "broadcaster": "sky",
+   "ranked": false,
+   "major": false,
+   "winner": {
+    "id": "19",
+    "name": "Michael van Gerwen"
+   },
+   "fixtures": 7,
+   "image": "1b3f5cb0-be6f-11f0-80b6-e7897a370fda.jpg",
+   "logo": "329fa720-6686-11f0-ba36-59f64b9805f6.png"
+  },
+  {
+   "id": "10703",
+   "name": "Premier League",
+   "tag": "Night 2",
+   "start": "2026-02-12",
+   "end": "2026-02-12",
+   "venue": "AFAS Dome",
+   "city": "Antwerp",
+   "broadcaster": "sky",
+   "ranked": false,
+   "major": false,
+   "winner": {
+    "id": "11788",
+    "name": "Gerwyn Price"
+   },
+   "fixtures": 7,
+   "image": "1b3f5cb0-be6f-11f0-80b6-e7897a370fda.jpg",
+   "logo": "329fa720-6686-11f0-ba36-59f64b9805f6.png"
+  },
+  {
+   "id": "10704",
+   "name": "Premier League",
+   "tag": "Night 3",
+   "start": "2026-02-19",
+   "end": "2026-02-19",
+   "venue": "OVO Hydro, Glasgow",
+   "city": "Glasgow",
+   "broadcaster": "sky",
+   "ranked": false,
+   "major": false,
+   "winner": {
+    "id": "30859",
+    "name": "Jonny Clayton"
+   },
+   "fixtures": 7,
+   "image": "1b3f5cb0-be6f-11f0-80b6-e7897a370fda.jpg",
+   "logo": "329fa720-6686-11f0-ba36-59f64b9805f6.png"
+  },
+  {
+   "id": "10810",
+   "name": "Poland Darts Open",
+   "tag": "European Tour 1",
+   "start": "2026-02-20",
+   "end": "2026-02-22",
+   "venue": "EXPO",
+   "city": "Krakow",
+   "broadcaster": "pdctv",
+   "ranked": true,
+   "major": false,
+   "winner": {
+    "id": "40676",
+    "name": "Luke Littler"
+   },
+   "fixtures": 47,
+   "image": "3c317c20-bc10-11f0-a7ca-afbb18ece5a9.jpg",
+   "logo": "7f51f5f0-f326-11f0-b4ca-fd75191f26e5.png"
+  },
+  {
+   "id": "10705",
+   "name": "Premier League",
+   "tag": "Night 4",
+   "start": "2026-02-26",
+   "end": "2026-02-26",
+   "venue": "SSE Arena, Belfast",
+   "city": "Belfast",
+   "broadcaster": "sky",
+   "ranked": false,
+   "major": false,
+   "winner": {
+    "id": "876",
+    "name": "Stephen Bunting"
+   },
+   "fixtures": 7,
+   "image": "1b3f5cb0-be6f-11f0-80b6-e7897a370fda.jpg",
+   "logo": "329fa720-6686-11f0-ba36-59f64b9805f6.png"
+  },
+  {
+   "id": "10706",
+   "name": "Premier League",
+   "tag": "Night 5",
+   "start": "2026-03-05",
+   "end": "2026-03-05",
+   "venue": "Utilita Arena Cardiff",
+   "city": "Cardiff",
+   "broadcaster": "sky",
+   "ranked": false,
+   "major": false,
+   "winner": {
+    "id": "40676",
+    "name": "Luke Littler"
+   },
+   "fixtures": 7,
+   "image": "1b3f5cb0-be6f-11f0-80b6-e7897a370fda.jpg",
+   "logo": "329fa720-6686-11f0-ba36-59f64b9805f6.png"
+  },
+  {
+   "id": "10859",
+   "name": "UK Open",
+   "tag": null,
+   "start": "2026-03-06",
+   "end": "2026-03-08",
+   "venue": "Butlins, Minehead",
+   "city": "Minehead",
+   "broadcaster": "itv",
+   "ranked": false,
+   "major": true,
+   "winner": {
+    "id": "40676",
+    "name": "Luke Littler"
+   },
+   "fixtures": 159,
+   "image": "6ea8d110-be6f-11f0-80b6-e7897a370fda.jpg",
+   "logo": "327d2b00-6686-11f0-b0e1-2f7ff63d9a66.png"
+  },
+  {
+   "id": "10707",
+   "name": "Premier League",
+   "tag": "Night 6",
+   "start": "2026-03-12",
+   "end": "2026-03-12",
+   "venue": "Motorpoint Arena, Nottingham",
+   "city": "Nottingham",
+   "broadcaster": "sky",
+   "ranked": false,
+   "major": false,
+   "winner": {
+    "id": "30859",
+    "name": "Jonny Clayton"
+   },
+   "fixtures": 7,
+   "image": "1b3f5cb0-be6f-11f0-80b6-e7897a370fda.jpg",
+   "logo": "329fa720-6686-11f0-ba36-59f64b9805f6.png"
+  },
+  {
+   "id": "10811",
+   "name": "European Darts Trophy",
+   "tag": "European Tour 2",
+   "start": "2026-03-13",
+   "end": "2026-03-15",
+   "venue": "Lokhalle, Gottingen",
+   "city": "Gottingen",
+   "broadcaster": "pdctv",
+   "ranked": true,
+   "major": false,
+   "winner": {
+    "id": "32956",
+    "name": "Wessel Nijman"
+   },
+   "fixtures": 47,
+   "image": "3c317c20-bc10-11f0-a7ca-afbb18ece5a9.jpg",
+   "logo": "7f465d30-f326-11f0-8929-d11488412824.png"
+  },
+  {
+   "id": "10708",
+   "name": "Premier League",
+   "tag": "Night 7",
+   "start": "2026-03-19",
+   "end": "2026-03-19",
+   "venue": "3Arena, Dublin",
+   "city": "Dublin",
+   "broadcaster": "sky",
+   "ranked": false,
+   "major": false,
+   "winner": {
+    "id": "40676",
+    "name": "Luke Littler"
+   },
+   "fixtures": 7,
+   "image": "1b3f5cb0-be6f-11f0-80b6-e7897a370fda.jpg",
+   "logo": "329fa720-6686-11f0-ba36-59f64b9805f6.png"
+  },
+  {
+   "id": "10812",
+   "name": "Belgian Darts Open",
+   "tag": "European Tour 3",
+   "start": "2026-03-20",
+   "end": "2026-03-22",
+   "venue": "Oktoberhallen, Wieze",
+   "city": "Wieze",
+   "broadcaster": "pdctv",
+   "ranked": true,
+   "major": false,
+   "winner": {
+    "id": "32102",
+    "name": "Luke Humphries"
+   },
+   "fixtures": 47,
+   "image": "3c317c20-bc10-11f0-a7ca-afbb18ece5a9.jpg",
+   "logo": "7f417b30-f326-11f0-80b5-15032818fec6.png"
+  },
+  {
+   "id": "10709",
+   "name": "Premier League",
+   "tag": "Night 8",
+   "start": "2026-03-26",
+   "end": "2026-03-26",
+   "venue": "Uber Arena, Berlin",
+   "city": "Berlin",
+   "broadcaster": "sky",
+   "ranked": false,
+   "major": false,
+   "winner": {
+    "id": "40676",
+    "name": "Luke Littler"
+   },
+   "fixtures": 7,
+   "image": "1b3f5cb0-be6f-11f0-80b6-e7897a370fda.jpg",
+   "logo": "329fa720-6686-11f0-ba36-59f64b9805f6.png"
+  },
+  {
+   "id": "10710",
+   "name": "Premier League",
+   "tag": "Night 9",
+   "start": "2026-04-02",
+   "end": "2026-04-02",
+   "venue": "AO Arena, Manchester",
+   "city": "Manchester",
+   "broadcaster": "sky",
+   "ranked": false,
+   "major": false,
+   "winner": {
+    "id": "11788",
+    "name": "Gerwyn Price"
+   },
+   "fixtures": 7,
+   "image": "1b3f5cb0-be6f-11f0-80b6-e7897a370fda.jpg",
+   "logo": "329fa720-6686-11f0-ba36-59f64b9805f6.png"
+  },
+  {
+   "id": "10813",
+   "name": "German Darts Grand Prix",
+   "tag": "European Tour 4",
+   "start": "2026-04-04",
+   "end": "2026-04-06",
+   "venue": "Zenith, Munich",
+   "city": "Munich",
+   "broadcaster": "pdctv",
+   "ranked": true,
+   "major": false,
+   "winner": {
+    "id": "11821",
+    "name": "Nathan Aspinall"
+   },
+   "fixtures": 47,
+   "image": "3c317c20-bc10-11f0-a7ca-afbb18ece5a9.jpg",
+   "logo": "7f45e800-f326-11f0-95f5-73e35d27b6cb.png"
+  },
+  {
+   "id": "10711",
+   "name": "Premier League",
+   "tag": "Night 10",
+   "start": "2026-04-09",
+   "end": "2026-04-09",
+   "venue": "Brighton Centre, Brighton",
+   "city": "Brighton",
+   "broadcaster": "sky",
+   "ranked": false,
+   "major": false,
+   "winner": {
+    "id": "30859",
+    "name": "Jonny Clayton"
+   },
+   "fixtures": 7,
+   "image": "1b3f5cb0-be6f-11f0-80b6-e7897a370fda.jpg",
+   "logo": "329fa720-6686-11f0-ba36-59f64b9805f6.png"
+  },
+  {
+   "id": "10712",
+   "name": "Premier League",
+   "tag": "Night 11",
+   "start": "2026-04-16",
+   "end": "2026-04-16",
+   "venue": "Ahoy Arena, Rotterdam",
+   "city": "Rotterdam",
+   "broadcaster": "sky",
+   "ranked": false,
+   "major": false,
+   "winner": {
+    "id": "30859",
+    "name": "Jonny Clayton"
+   },
+   "fixtures": 7,
+   "image": "1b3f5cb0-be6f-11f0-80b6-e7897a370fda.jpg",
+   "logo": "329fa720-6686-11f0-ba36-59f64b9805f6.png"
+  },
+  {
+   "id": "10814",
+   "name": "European Darts Grand Prix",
+   "tag": "European Tour 5",
+   "start": "2026-04-17",
+   "end": "2026-04-19",
+   "venue": "Glaspalast, Sindelfingen",
+   "city": "Sindelfingen",
+   "broadcaster": "pdctv",
+   "ranked": true,
+   "major": false,
+   "winner": {
+    "id": "11788",
+    "name": "Gerwyn Price"
+   },
+   "fixtures": 47,
+   "image": "3c317c20-bc10-11f0-a7ca-afbb18ece5a9.jpg",
+   "logo": "7f45e800-f326-11f0-9335-d3d48d6eaf49.png"
+  },
+  {
+   "id": "10713",
+   "name": "Premier League",
+   "tag": "Night 12",
+   "start": "2026-04-23",
+   "end": "2026-04-23",
+   "venue": "M&S Bank Arena, Liverpool",
+   "city": "Liverpool",
+   "broadcaster": "sky",
+   "ranked": false,
+   "major": false,
+   "winner": {
+    "id": "40676",
+    "name": "Luke Littler"
+   },
+   "fixtures": 7,
+   "image": "1b3f5cb0-be6f-11f0-80b6-e7897a370fda.jpg",
+   "logo": "329fa720-6686-11f0-ba36-59f64b9805f6.png"
+  },
+  {
+   "id": "10714",
+   "name": "Premier League",
+   "tag": "Night 13",
+   "start": "2026-04-30",
+   "end": "2026-04-30",
+   "venue": "P & J Live, Aberdeen",
+   "city": "Aberdeen",
+   "broadcaster": "sky",
+   "ranked": false,
+   "major": false,
+   "winner": {
+    "id": "40676",
+    "name": "Luke Littler"
+   },
+   "fixtures": 7,
+   "image": "1b3f5cb0-be6f-11f0-80b6-e7897a370fda.jpg",
+   "logo": "329fa720-6686-11f0-ba36-59f64b9805f6.png"
+  },
+  {
+   "id": "10715",
+   "name": "Premier League",
+   "tag": "Night 14",
+   "start": "2026-05-07",
+   "end": "2026-05-07",
+   "venue": "First Direct Arena, Leeds",
+   "city": "Leeds",
+   "broadcaster": "sky",
+   "ranked": false,
+   "major": false,
+   "winner": {
+    "id": "40676",
+    "name": "Luke Littler"
+   },
+   "fixtures": 7,
+   "image": "1b3f5cb0-be6f-11f0-80b6-e7897a370fda.jpg",
+   "logo": "329fa720-6686-11f0-ba36-59f64b9805f6.png"
+  },
+  {
+   "id": "10815",
+   "name": "Austrian Darts Open",
+   "tag": "European Tour 6",
+   "start": "2026-05-08",
+   "end": "2026-05-10",
+   "venue": "Stadthalle",
+   "city": "Graz",
+   "broadcaster": "pdctv",
+   "ranked": true,
+   "major": false,
+   "winner": {
+    "id": "38552",
+    "name": "Josh Rock"
+   },
+   "fixtures": 47,
+   "image": "3c317c20-bc10-11f0-a7ca-afbb18ece5a9.jpg",
+   "logo": "7f44d690-f326-11f0-9aee-d386881a16a7.png"
+  },
+  {
+   "id": "10716",
+   "name": "Premier League",
+   "tag": "Night 15",
+   "start": "2026-05-14",
+   "end": "2026-05-14",
+   "venue": "Utilita Arena, Birmingham",
+   "city": "Birmingham",
+   "broadcaster": "sky",
+   "ranked": false,
+   "major": false,
+   "winner": {
+    "id": "32102",
+    "name": "Luke Humphries"
+   },
+   "fixtures": 7,
+   "image": "1b3f5cb0-be6f-11f0-80b6-e7897a370fda.jpg",
+   "logo": "329fa720-6686-11f0-ba36-59f64b9805f6.png"
+  },
   {
    "id": "10717",
    "name": "Premier League",
