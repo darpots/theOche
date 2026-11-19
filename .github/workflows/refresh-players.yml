@@ -27,10 +27,11 @@ jobs:
       - run: npm run data:rankings
       - run: npm run data:players
       - run: npm run data:live-race
+      - run: npm run data:images
       - uses: ./.github/actions/commit
         with:
           message: 'data: refresh player profiles and tournament history'
-          paths: src/data public/data data
+          paths: src/data public/data data public/avatars public/cutouts
       - if: failure()
         uses: ./.github/actions/report-failure
         with:

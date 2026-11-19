@@ -1,12 +1,11 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import calendar from '../data/calendar.json';
-import portraitsRaw from '../data/portraits.json';
+import { avatarSrc } from '../lib/images.mjs';
 import { tvBadge, keyName } from '../lib/pdc.mjs';
 import { dayNum, monthShort, monthLong, weekday, dateRange, initials, avatarColours } from '../lib/format.mjs';
 
-const portraits = portraitsRaw as Record<string, { image: string }>;
-const pic = (name: string) => portraits[keyName(name)]?.image;
+const pic = (name: string) => avatarSrc(name);
 const av = (name: string) => { const [c1, c2] = avatarColours(name); return `--c1:${c1};--c2:${c2}`; };
 const days = (e: { start: string; end: string }) => Math.round((Date.parse(e.end) - Date.parse(e.start)) / 864e5) + 1;
 

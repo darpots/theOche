@@ -7,7 +7,6 @@ import NewsArt from '../../components/NewsArt.astro';
 import { getCollection } from 'astro:content';
 import data from '../../data/tournament.json';
 import calendar from '../../data/calendar.json';
-import portraitsRaw from '../../data/portraits.json';
 import { tvBadge } from '../../lib/pdc.mjs';
 import { dateRange, newsDate } from '../../lib/format.mjs';
 import { matchDays, renderDay, renderTabs, progress } from '../../lib/render-matches.mjs';
@@ -28,7 +27,7 @@ const { ev } = Astro.props as { ev: any };
 const isCurrent = ev.id === (data.tournament as any).id;
 const t: any = isCurrent ? data.tournament : { ...ev, fullName: [ev.name, ev.tag].filter(Boolean).join(' '), stages: [] };
 const place = t.venue && t.city && t.venue.includes(t.city) ? t.venue : [t.venue, t.city].filter(Boolean).join(', ');
-const portraits = Object.fromEntries(Object.entries(portraitsRaw as Record<string, { image: string }>).map(([k, v]) => [k, v.image]));
+const portraits = {};
 const buildDay = new Date().toISOString().slice(0, 10);
 const { days, def } = matchDays(t, buildDay);
 const prog = progress(t);
@@ -76,7 +75,7 @@ const news = (await getCollection('news')).map(n => n.data)
       <div class="tn-grid">
         {news.map(n => (
           <a class="tn card lift" href={`/news/${n.slug}`}>
-            <NewsArt story={n} class="tn-art" label={n.kind === 'recap' ? 'Round-up' : undefined} />
+            <NewsArt story={n} class="tn-art" sizes="(max-width: 760px) 100vw, 380px" label={n.kind === 'recap' ? 'Round-up' : undefined} />
             <div class="tn-copy"><time datetime={n.date}>{newsDate(n.date)}</time><h3>{n.headline}</h3><p>{n.standfirst}</p></div>
           </a>
         ))}

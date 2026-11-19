@@ -2,6 +2,11 @@
 import Layout from '../layouts/Layout.astro';
 import portraits from '../data/portraits.json';
 import library from '../data/news-library.json';
+import rankings from '../data/rankings.json';
+import { pdcImageKeys } from '../lib/images.mjs';
+import { keyName } from '../lib/pdc.mjs';
+const nameOf = Object.fromEntries(rankings.players.map(p => [keyName(p.name), p.name]));
+const pdc = pdcImageKeys().map(k => nameOf[k] || k).sort();
 const lib = Object.entries(library as Record<string, any>);
 const list = Object.values(portraits as Record<string, any>).sort((a, b) => a.name.localeCompare(b.name));
 ---
@@ -9,7 +14,8 @@ const list = Object.values(portraits as Record<string, any>).sort((a, b) => a.na
   <section class="hero wrap">
     <span class="eyebrow">Credits</span>
     <h1>Photo credits</h1>
-    <p class="lede">Player photographs are reused under Creative Commons licences from Wikimedia Commons and cropped for display. Players without a verified free photo are shown with their initials. The cut-out player images on the homepage are adapted from the same photographs (background removed) and are shared under the same licences.</p>
+    <p class="lede">Player photographs are reused under Creative Commons licences from Wikimedia Commons and cropped for display. The cut-out player images are adapted from the same photographs (background removed) and are shared under the same licences.</p>
+    <p class="lede">Small round player pictures across the site, and cut-outs of players with no free photo, are the PDC's official player headshots (© PDC). They are used on this non-commercial fan site and will be licensed or replaced before the site carries any advertising.</p>
   </section>
   <section class="wrap">
     <h2 class="h">Player photographs</h2>
@@ -19,6 +25,8 @@ const list = Object.values(portraits as Record<string, any>).sort((a, b) => a.na
       ))}
     </ul>
     <p class="src">News covers and player pages use these photos and larger versions of them, cropped to fit.</p>
+    <h2 class="h">PDC headshots</h2>
+    <p class="src">{pdc.length} players: {pdc.join(', ')}.</p>
     <h2 class="h">News photographs</h2>
     <ul class="grid">
       {lib.map(([key, x]) => (

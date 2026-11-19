@@ -11,7 +11,7 @@ import { tvBadge, flag, surnameOf } from '../lib/pdc.mjs';
 import { cutout } from '../lib/images.mjs';
 import { newsDate, dayNum, monthShort, dateRange, money, shortDate } from '../lib/format.mjs';
 import { matchday, featureTile, nextTileInner } from '../lib/feature.mjs';
-import { chooseCover } from '../lib/covers';
+import NewsArt from '../components/NewsArt.astro';
 import { loadProfile } from '../lib/players';
 
 const t = data.tournament as any;
@@ -86,10 +86,9 @@ const spot = loadProfile(spotRank.id);
       </div>
 
       {news[0] && (() => {
-        const c = chooseCover(news[0])[0];
         return (
           <a class="tile tile-ink lead" href={`/news/${news[0].slug}`}>
-            <img class="photo" src={c.src.replace('.jpg', '-1200.webp')} srcset={`${c.src.replace('.jpg', '-600.webp')} 600w, ${c.src.replace('.jpg', '-1200.webp')} 1200w`} sizes="(max-width: 900px) 100vw, 680px" alt={c.alt} style={`object-position:${c.focus}`} />
+            <NewsArt story={news[0]} class="lead-art" sizes="(max-width: 900px) 100vw, 680px" />
             <div class="lead-box">
               <span class="lbl volt">{newsDate(news[0].date)} · {news[0].tags[0]}</span>
               <h2>{news[0].headline}</h2>
@@ -101,10 +100,9 @@ const spot = loadProfile(spotRank.id);
 
       <div class="nsub">
         {news[1] && (() => {
-          const c = chooseCover(news[1])[0];
           return (
             <a class="tile tile-card nc" href={`/news/${news[1].slug}`}>
-              <img class="photo" src={c.src.replace('.jpg', '-600.webp')} alt={c.alt} style={`object-position:${c.focus}`} loading="lazy" />
+              <NewsArt story={news[1]} class="nc-art" sizes="(max-width: 640px) 100vw, 300px" />
               <div><span class="lbl red">{newsDate(news[1].date)}</span><h3>{news[1].headline}</h3></div>
             </a>
           );
@@ -334,14 +332,14 @@ const spot = loadProfile(spotRank.id);
 
   /* Photo on top, story underneath: the text never sits over the picture */
   .lead { grid-column: span 6; min-height: 440px; display: flex; flex-direction: column; text-decoration: none; }
-  .lead img { display: block; width: 100%; flex: 1 1 240px; min-height: 240px; object-fit: cover; }
+  .lead :global(.lead-art) { flex: 1 1 240px; min-height: 240px; }
   .lead-box { position: relative; background: var(--ink); padding: 22px 24px 24px; }
   .lead-box h2 { font-size: clamp(32px, 3.2vw, 46px); margin: 10px 0 8px; }
   .lead-box p { margin: 0; color: var(--on-ink); font-size: 15px; }
   .lead:hover h2 { color: var(--volt); }
   .nsub { grid-column: span 6; display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
   .nc { display: flex; flex-direction: column; text-decoration: none; }
-  .nc img { width: 100%; height: 180px; object-fit: cover; }
+  .nc :global(.nc-art) { height: 180px; }
   .nc div { padding: 16px 20px 20px; }
   .nc h3, .nred h3, .nwide h3 { font-size: 19px; line-height: 1.2; margin-top: 8px; }
   .nc:hover h3, .nwide:hover h3 { color: var(--red); }
@@ -414,7 +412,7 @@ const spot = loadProfile(spotRank.id);
     .nsub { grid-template-columns: 1fr; }
     .nwide { grid-column: auto; }
     .lead { min-height: 0; }
-    .lead img { flex: none; height: 210px; min-height: 0; }
+    .lead :global(.lead-art) { flex: none; height: 210px; min-height: 0; }
     .lead-box { padding: 18px 20px 20px; }
     .lead-box h2 { font-size: 30px; }
     .spot { min-height: 340px; }

@@ -6,8 +6,7 @@ import Layout from '../../layouts/Layout.astro';
 import LineChart from '../../components/LineChart.astro';
 import rankings from '../../data/rankings.json';
 import { getCollection } from 'astro:content';
-import cutouts from '../../data/cutouts.json';
-import portraitsRaw from '../../data/portraits.json';
+import { cutout, avatarSrc } from '../../lib/images.mjs';
 import { rankedProfiles, playerHref } from '../../lib/players';
 import { flag, countryName, age, keyName } from '../../lib/pdc.mjs';
 import { money, avatarColours, initials, newsDate } from '../../lib/format.mjs';
@@ -21,8 +20,8 @@ export function getStaticPaths() {
 }
 
 const { rank, profile: p, prev, next } = Astro.props as any;
-const cut = (cutouts as Record<string, string>)[keyName(p.name)];
-const portrait = (portraitsRaw as Record<string, { image: string }>)[keyName(p.name)]?.image;
+const cut = cutout(p.name);
+const portrait = avatarSrc(p.name);
 const [c1, c2] = avatarColours(p.name);
 const s = p.season;
 const st = s.stats;
@@ -137,7 +136,7 @@ const news = (await getCollection('news'))
         </dl>
       </div>
       <div class="pb-pic" aria-hidden="true">
-        {cut ? <img class="cut photo" src={cut} alt="" /> : <span class="avatar big" style={`--size:220px;--c1:${c1};--c2:${c2}`}>{portrait ? <img src={portrait} alt="" /> : initials(p.name)}</span>}
+        {cut ? <img class="cut photo" src={cut.src} srcset={cut.srcset} sizes="(max-width: 900px) 240px, 340px" alt="" fetchpriority="high" /> : <span class="avatar big" style={`--size:220px;--c1:${c1};--c2:${c2}`}>{portrait ? <img src={portrait} alt="" /> : initials(p.name)}</span>}
       </div>
     </div>
   </section>

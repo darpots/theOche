@@ -13,7 +13,8 @@
     "news": "node scripts/news/run.mjs",
     "test": "node --test tests/",
     "recap-facts": "node scripts/news/recap-facts.mjs",
-    "data:live-race": "node scripts/refresh-live-race.mjs"
+    "data:live-race": "node scripts/refresh-live-race.mjs",
+    "data:images": "node scripts/make-player-images.mjs"
   },
   "type": "module",
   "dependencies": {

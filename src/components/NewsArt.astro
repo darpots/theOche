@@ -1,7 +1,8 @@
 ---
-// Cover photo for a news story (see src/lib/covers.ts for how it is chosen).
-// One photo, or two side by side for a head-to-head. Faces stay in frame at
-// every size because each photo is positioned on its detected face.
+// Cover for a news story (see src/lib/covers.ts for how it is chosen): one
+// photo, two side by side for a head-to-head, or player cut-outs on a brand
+// colour panel. Faces stay in frame at every size: photos are positioned on
+// their detected face, cut-outs sit on the bottom edge.
 import { chooseCover } from '../lib/covers';
 
 interface Props {
@@ -9,22 +10,41 @@ interface Props {
   label?: string;
   class?: string;
   eager?: boolean;
+  /** How wide the cover is shown, for picking the image size. */
+  sizes?: string;
 }
-const { story, label, class: cls = '', eager = false } = Astro.props;
+const { story, label, class: cls = '', eager = false, sizes } = Astro.props;
 const shots = chooseCover(story);
+const panel = shots[0]?.cut;
+const photoSizes = sizes || (shots.length > 1 ? '(max-width: 760px) 50vw, 400px' : '(max-width: 760px) 100vw, 700px');
 ---
-<div class:list={['art', cls, { split: shots.length > 1 }]}>
-  {shots.map(s => (
+<div class:list={['art', cls, { split: shots.length > 1, panel }, panel && `t-${shots[0].tone}`]}>
+  {panel && <svg class="rings" viewBox="-50 -50 100 100" aria-hidden="true"><circle r="46" /><circle r="34" /><circle r="22" /><circle r="8" /></svg>}
+  {shots.map(s => s.cut ? (
+    <img class="cut" src={s.src} srcset={s.srcset} sizes={shots.length > 1 ? '(max-width: 760px) 40vw, 260px' : '(max-width: 760px) 60vw, 360px'}
+      alt={s.alt} loading={eager ? 'eager' : 'lazy'} decoding="async" fetchpriority={eager ? 'high' : 'auto'} />
+  ) : (
     <img class="photo" src={s.src.replace('.jpg', '-1200.webp')} srcset={`${s.src.replace('.jpg', '-600.webp')} 600w, ${s.src.replace('.jpg', '-1200.webp')} 1200w`}
-      sizes={shots.length > 1 ? '(max-width: 760px) 50vw, 400px' : '(max-width: 760px) 100vw, 700px'}
-      alt={s.alt} style={`object-position:${s.focus}`} loading={eager ? 'eager' : 'lazy'} decoding="async" fetchpriority={eager ? 'high' : 'auto'} />
+      sizes={photoSizes} alt={s.alt} style={`object-position:${s.focus}`} loading={eager ? 'eager' : 'lazy'} decoding="async" fetchpriority={eager ? 'high' : 'auto'} />
   ))}
   {label && <span class="lbl">{label}</span>}
 </div>
 <style>
-  .art { position: relative; overflow: hidden; display: flex; gap: 3px; background: var(--ink); }
-  .art img { flex: 1; min-width: 0; width: 100%; height: 100%; object-fit: cover; transition: transform 1s var(--ease); }
-  :global(a:hover) .art img { transform: scale(1.04); }
-  .lbl { position: absolute; z-index: 1; left: 14px; top: 12px; background: var(--ink); color: #fff; font-size: 11px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; padding: 5px 10px; border-radius: 999px; }
+  /* Tinted while loading, so covers never flash black */
+  .art { position: relative; overflow: hidden; display: flex; gap: 3px; background: #2a2c33; }
+  .art img.photo { flex: 1; min-width: 0; width: 100%; height: 100%; object-fit: cover; transition: transform 1s var(--ease); }
+  :global(a:hover) .art img.photo { transform: scale(1.04); }
+  .lbl { position: absolute; z-index: 2; left: 14px; top: 12px; background: var(--ink); color: #fff; font-size: 11px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; padding: 5px 10px; border-radius: 999px; }
+  /* Colour panels with cut-outs */
+  .panel { gap: 0; align-items: flex-end; justify-content: center; }
+  .panel .cut { position: relative; z-index: 1; height: 92%; width: auto; max-width: 70%; object-fit: contain; object-position: center bottom; filter: drop-shadow(0 14px 22px rgba(0, 0, 0, .35)); transition: transform .8s var(--ease); }
+  .panel.split .cut { max-width: 50%; margin: 0 -4%; }
+  :global(a:hover) .panel .cut { transform: translateY(-4px); }
+  .rings { position: absolute; z-index: 0; width: 130%; left: 50%; top: 50%; translate: -50% -50%; fill: none; stroke-width: 1.2; }
+  .t-ink { background: radial-gradient(circle at 50% 110%, #2a2d38, var(--ink) 70%); } .t-ink .rings { stroke: rgba(255, 255, 255, .08); }
+  .t-red { background: radial-gradient(circle at 50% 110%, #ff5a4f, var(--red) 70%); } .t-red .rings { stroke: rgba(255, 255, 255, .18); }
+  .t-volt { background: radial-gradient(circle at 50% 110%, #e6ff99, var(--volt) 70%); } .t-volt .rings { stroke: rgba(11, 12, 16, .12); }
+  .t-green { background: radial-gradient(circle at 50% 110%, #1fb37e, var(--green) 70%); } .t-green .rings { stroke: rgba(255, 255, 255, .16); }
+  .t-sky { background: radial-gradient(circle at 50% 110%, #4a6bff, var(--sky) 70%); } .t-sky .rings { stroke: rgba(255, 255, 255, .16); }
   @media (prefers-reduced-motion: reduce) { .art img { transition: none; } }
 </style>

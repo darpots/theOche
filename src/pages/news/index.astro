@@ -44,7 +44,7 @@ const tags = [...new Set(stories.flatMap(s => s.tags))].slice(0, 10);
       <div class="list">
         {rest.map((s, i) => (
           <a href={`/news/${s.slug}`} class="story card lift" data-tags={s.tags.join('|')} data-reveal style={`--d:${(i % 3) * 80}ms`}>
-            <NewsArt story={s} class="story-art" />
+            <NewsArt story={s} class="story-art" sizes="(max-width: 760px) 100vw, 380px" />
             <div class="story-copy">
               {s.tags[0] && <span class="tagpill">{s.tags[0]}</span>}
               <time datetime={s.date}>{newsDate(s.date)}</time>

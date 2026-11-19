@@ -3,10 +3,6 @@
 // fixture feed (players, score) and its timeline (every visit), refreshed
 // every 15 seconds while the match is live.
 import Layout from '../layouts/Layout.astro';
-import cutouts from '../data/cutouts.json';
-import portraitsRaw from '../data/portraits.json';
-
-const portraits = Object.fromEntries(Object.entries(portraitsRaw as Record<string, { image: string }>).map(([k, v]) => [k, v.image]));
 ---
 <Layout title="Match centre" description="Live score, statistics, leg table and head to head for a PDC darts match.">
   <section class="mhead" aria-live="polite">
@@ -43,12 +39,11 @@ const portraits = Object.fromEntries(Object.entries(portraitsRaw as Record<strin
     </section>
   </div>
 
-  <script is:inline type="application/json" id="m-data" set:html={JSON.stringify({ cutouts, portraits })}></script>
-
   <script>
     import { API, flag, keyName, liveScore, liveLegs, cleanName } from '../lib/pdc.mjs';
     import { liveFor, LIVE_TICK } from '../lib/live-client.mjs';
     import { ukTime } from '../lib/format.mjs';
+    import { cutoutImg, avatarSrc } from '../lib/images.mjs';
 
     const FX = 'https://fixtures.darts.web.gc.pdcservices.co.uk/v2/';
     const C = ['#2b4bff', '#e8362d']; // player 1 blue, player 2 red (validated pair)
@@ -98,9 +93,10 @@ const portraits = Object.fromEntries(Object.entries(portraitsRaw as Record<strin
       const m = t?.attributes?.fixtureMeta;
       const avg = [m?.participant1Data?.threeDartAverage, m?.participant2Data?.threeDartAverage];
       const pic = (p: any) => {
-        const k = keyName(name(p));
-        if (data.cutouts[k]) return `<img class="cut photo" src="${data.cutouts[k]}" alt="">`;
-        if (data.portraits[k]) return `<img class="por photo" src="${data.portraits[k]}" alt="">`;
+        const cut = cutoutImg(name(p), 'cut photo', '(max-width: 760px) 96px, 170px');
+        if (cut) return cut;
+        const av = avatarSrc(name(p));
+        if (av) return `<img class="por photo" src="${av}" alt="" width="112" height="112">`;
         return `<span class="ini">${esc((p?.firstName?.[0] || '') + (p?.lastName?.[0] || ''))}</span>`;
       };
       const side = (i: number) => {
@@ -276,7 +272,7 @@ const portraits = Object.fromEntries(Object.entries(portraitsRaw as Record<strin
       const mh = document.getElementById('mh');
       if (!mh) return;
       if (!id) { mh.innerHTML = '<div class="loading">No match selected. Open a match from a tournament page.</div>'; return; }
-      const data = JSON.parse(document.getElementById('m-data')!.textContent!);
+      const data = {};
       try {
         let [f, t] = await Promise.all([fetch(FX + id, { cache: 'no-store' }).then(r => r.json()), fetch(`${FX}${id}/timeline`, { cache: 'no-store' }).then(r => (r.ok ? r.json() : null))]);
         const a = f.data;
