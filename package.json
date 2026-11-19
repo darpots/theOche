@@ -13,6 +13,7 @@
     "news": "node scripts/news/run.mjs",
     "test": "node --test tests/",
     "recap-facts": "node scripts/news/recap-facts.mjs",
+    "match-report": "node scripts/news/match-report.mjs",
     "data:live-race": "node scripts/refresh-live-race.mjs",
     "data:images": "node scripts/make-player-images.mjs"
   },

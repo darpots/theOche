@@ -61,7 +61,13 @@ a { color: inherit; }
 button { font: inherit; color: inherit; }
 h1, h2, h3, h4 { font-family: var(--display); letter-spacing: -.02em; line-height: 1.1; margin: 0; }
 /* Poster type: big condensed numbers and headlines */
+/* Type system:
+   - Anton (--poster): page titles, section titles and big numbers only
+   - Bricolage (--display): story headlines and card titles (.headline, h3)
+   - Inter (--body): everything else */
 h1, h2, .poster { font-family: var(--poster); font-weight: 400; letter-spacing: .005em; text-transform: uppercase; line-height: .92; }
+.headline { font-family: var(--display); font-weight: 800; text-transform: none; letter-spacing: -.025em; line-height: 1.06; hyphens: none; text-wrap: balance; }
+h1, h2, h3 { text-wrap: balance; hyphens: none; }
 .poster-num { font-family: var(--poster); font-weight: 400; letter-spacing: 0; line-height: .86; font-variant-numeric: tabular-nums; }
 .tile { border-radius: var(--tile); overflow: hidden; position: relative; }
 .tile-ink { background: var(--ink); color: #fff; }

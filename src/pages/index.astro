@@ -92,7 +92,7 @@ const spot = loadProfile(spotRank.id);
             <NewsArt story={news[0]} class="lead-art" sizes="(max-width: 900px) 100vw, 680px" />
             <div class="lead-box">
               <span class="lbl volt">{newsDate(news[0].date)} · {news[0].tags[0]}</span>
-              <h2>{news[0].headline}</h2>
+              <h2 class="headline">{news[0].headline}</h2>
               <p>{news[0].standfirst}</p>
             </div>
           </a>
@@ -341,7 +341,7 @@ const spot = loadProfile(spotRank.id);
   .lead { grid-column: span 6; min-height: 440px; display: flex; flex-direction: column; text-decoration: none; }
   .lead :global(.lead-art) { flex: 1 1 240px; min-height: 240px; }
   .lead-box { position: relative; background: var(--ink); padding: 22px 24px 24px; }
-  .lead-box h2 { font-size: clamp(32px, 3.2vw, 46px); margin: 10px 0 8px; }
+  .lead-box h2 { font-size: clamp(26px, 2.6vw, 36px); margin: 10px 0 8px; }
   .lead-box p { margin: 0; color: var(--on-ink); font-size: 15px; }
   .lead:hover h2 { color: var(--volt); }
   .nsub { grid-column: span 6; display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
@@ -421,7 +421,7 @@ const spot = loadProfile(spotRank.id);
     .lead { min-height: 0; }
     .lead :global(.lead-art) { flex: none; height: 210px; min-height: 0; }
     .lead-box { padding: 18px 20px 20px; }
-    .lead-box h2 { font-size: 30px; }
+    .lead-box h2 { font-size: 24px; }
     .spot { min-height: 340px; }
     .spot-top, .spot-bottom { padding: 20px 16px 20px 20px; }
     .spot-top h2 { font-size: 34px; }

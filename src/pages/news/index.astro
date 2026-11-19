@@ -3,6 +3,8 @@ import { getCollection } from 'astro:content';
 import Layout from '../../layouts/Layout.astro';
 import NewsArt from '../../components/NewsArt.astro';
 import { newsDate } from '../../lib/format.mjs';
+import calendar from '../../data/calendar.json';
+import rankings from '../../data/rankings.json';
 
 // The news page shows the last month. (Tournament round-ups stay longer and
 // are listed on their tournament's page.)
@@ -12,7 +14,11 @@ const stories = (await getCollection('news'))
   .filter(s => Date.parse(s.date) >= cutoff)
   .sort((a, b) => b.date.localeCompare(a.date));
 const [lead, ...rest] = stories;
-const tags = [...new Set(stories.flatMap(s => s.tags))].slice(0, 10);
+// Filter chips: only tournaments and players, with at least two stories, most covered first.
+const known = new Set([...calendar.events.map(e => e.name.toLowerCase()), 'world championship', 'premier league', 'grand slam of darts', 'players championship', 'players championship finals', 'order of merit', ...rankings.players.map(p => p.name.toLowerCase())]);
+const counts = new Map<string, number>();
+for (const s of stories) for (const t of s.tags) if (known.has(t.toLowerCase())) counts.set(t, (counts.get(t) || 0) + 1);
+const tags = [...counts].filter(([, n]) => n >= 2).sort((a, b) => b[1] - a[1]).map(([t]) => t).slice(0, 8);
 ---
 <Layout title="News" description="The latest PDC darts news, written by The Oche newsdesk." active="news">
   <section class="hero wrap">
@@ -36,7 +42,7 @@ const tags = [...new Set(stories.flatMap(s => s.tags))].slice(0, 10);
         <div class="lead-copy">
           {lead.tags[0] && <span class="tagpill">{lead.tags[0]}</span>}
           <time datetime={lead.date}>{newsDate(lead.date)}</time>
-          <h2 transition:name={`h-${lead.slug}`}>{lead.headline}</h2>
+          <h2 class="headline" transition:name={`h-${lead.slug}`}>{lead.headline}</h2>
           <p>{lead.standfirst}</p>
           <span class="more">Read the story <span aria-hidden="true">→</span></span>
         </div>
@@ -80,7 +86,7 @@ const tags = [...new Set(stories.flatMap(s => s.tags))].slice(0, 10);
   a.card.lead { display: grid; grid-template-columns: 1.25fr 1fr; align-items: center; }
   .lead :global(.lead-art) { height: 340px; }
   .lead-copy { padding: 32px; display: flex; flex-direction: column; justify-content: center; gap: 10px; }
-  .lead h2 { font-size: clamp(26px, 3.4vw, 40px); }
+  .lead h2 { font-size: clamp(24px, 3vw, 34px); }
   .lead p { margin: 0; color: var(--muted); font-size: 17px; }
   .more { margin-top: 8px; font-weight: 700; color: var(--ink); }
   .list { margin-top: 18px; display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 18px; }

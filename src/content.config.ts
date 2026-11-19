@@ -15,11 +15,17 @@ const news = defineCollection({
     originalTitles: z.array(z.string()).optional(),
     writtenBy: z.string().optional(),
     // 'recap' = a tournament round-up; kept while the event is on the calendar.
-    kind: z.enum(['report', 'recap']).default('report'),
+    // 'numbers' = numbers of the day; 'talking-points' = after a session; 'movers' = weekly rankings movers.
+    kind: z.enum(['report', 'recap', 'match-report', 'numbers', 'talking-points', 'movers']).default('report'),
     // PDC tournament id the story belongs to (links it to the tournament page).
     tournament: z.string().optional(),
     // Cover: a key from src/data/news-library.json, 'player' for the main player's photo, or omit to choose automatically.
     image: z.string().optional(),
+    // Up to five headline numbers for the story ("10–8" / "Final score"). Match reports in
+    // the current event get these from PDC's stats automatically when left out.
+    keyNumbers: z.array(z.object({ value: z.string(), label: z.string() })).max(5).optional(),
+    // A pull quote shown in the article: the words and who said them.
+    quote: z.object({ text: z.string(), by: z.string() }).optional(),
   }),
 });
 
