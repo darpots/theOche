@@ -97,6 +97,7 @@ const fullTitle = title === 'The Oche' ? title : `${title} · The Oche`;
 
     <script>
       import { liveScore } from '../lib/pdc.mjs';
+    import { ukTime } from '../lib/format.mjs';
       import { liveFor, LIVE_TICK } from '../lib/live-client.mjs';
       // Scroll-reveal + the sliding nav pill.
       const keyFor = (path: string) => {
@@ -201,7 +202,7 @@ const fullTitle = title === 'The Oche' ? title : `${title} · The Oche`;
             const done = fx.filter((f: any) => /result/i.test(f.status)).sort((x: any, y: any) => `${y.startDate}${y.startTime}`.localeCompare(`${x.startDate}${x.startTime}`));
             // Upcoming: "A v B" then the start time in its own pill, so a time never reads as a score.
             const chip = (f: any, kind: string) => kind === 'next'
-              ? `<a class="lb-m next" href="/match?id=${f.fixtureID}"><span>${esc(surname(f.participant1))}</span><i class="lb-v">v</i><span>${esc(surname(f.participant2))}</span>${(f.startTime || '').slice(0, 5) ? `<time class="lb-t" aria-label="starts at ${esc(f.startTime.slice(0, 5))} UK time">${esc(f.startTime.slice(0, 5))}</time>` : ''}</a>`
+              ? `<a class="lb-m next" href="/match?id=${f.fixtureID}"><span>${esc(surname(f.participant1))}</span><i class="lb-v">v</i><span>${esc(surname(f.participant2))}</span>${ukTime(f.startTime, f.startDate) ? `<time class="lb-t" aria-label="starts at ${esc(ukTime(f.startTime, f.startDate))}">${esc(ukTime(f.startTime, f.startDate))}</time>` : ''}</a>`
               : `<a class="lb-m ${kind}" href="/match?id=${f.fixtureID}"><span>${esc(surname(f.participant1))}</span><b>${kind === 'now' && !/live|progress|result/i.test(f.status) ? 'v' : `${f.participant1Score ?? 0}–${f.participant2Score ?? 0}`}</b><span>${esc(surname(f.participant2))}</span></a>`;
             let html = '';
             const ln = document.getElementById('livenav') as HTMLAnchorElement | null;

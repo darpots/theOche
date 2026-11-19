@@ -2,7 +2,7 @@
 // time (Astro) and again in the browser when live data arrives, so both
 // always produce identical markup.
 import { flag, keyName } from './pdc.mjs';
-import { avatarColours, initials, longDate, shortDate } from './format.mjs';
+import { avatarColours, initials, longDate, shortDate, ukClock, ukZone } from './format.mjs';
 
 const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]);
 
@@ -32,10 +32,10 @@ export function fixtureRow(f, portraits) {
   const scored = f.s1 !== null && f.s2 !== null && (f.status !== 'upcoming' || f.s1 + f.s2 > 0);
   const mid = scored
     ? `<span class="sc${w1 ? ' w' : ''}">${f.s1}</span><span class="dash">–</span><span class="sc${w2 ? ' w' : ''}">${f.s2}</span>`
-    : `<span class="vs">${f.time ? esc(f.time) : 'vs'}</span>`;
+    : `<span class="vs">${f.time ? esc(ukClock(f.time)) : 'vs'}</span>`;
   const group = /^group/i.test(f.stage || '') ? `${esc(f.stage)} · ` : '';
   const leg = f.status === 'live' && f.legNow ? `<span class="lg" title="Score left in the leg being played; the dot marks who is throwing"><b class="${f.legNow.throwing === 0 ? 'on' : ''}">${f.legNow.left[0]}</b><i>Leg ${f.legNow.leg}</i><b class="${f.legNow.throwing === 1 ? 'on' : ''}">${f.legNow.left[1]}</b></span>` : '';
-  const state = f.status === 'live' ? '<span class="live-dot">Live</span>' : `<span class="ft">${group}${f.status === 'result' ? 'Result' : f.time ? 'UK time' : 'Time TBC'}</span>`;
+  const state = f.status === 'live' ? '<span class="live-dot">Live</span>' : `<span class="ft">${group}${f.status === 'result' ? 'Result' : f.time ? ukZone(f.date) : 'Time TBC'}</span>`;
   const st = f.stats || null;
   const best = st && st[0] && st[1] ? (st[0].avg > st[1].avg ? 1 : st[1].avg > st[0].avg ? 2 : 0) : 0;
   return `<li class="fx ${f.status}${st ? ' has-stats' : ''}" data-id="${esc(f.id)}" data-sig="${esc(`${f.s1}-${f.s2}-${f.status}-${st ? st[0]?.avg + '/' + st[1]?.avg : ''}`)}">

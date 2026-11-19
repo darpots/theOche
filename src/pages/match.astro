@@ -48,6 +48,7 @@ const portraits = Object.fromEntries(Object.entries(portraitsRaw as Record<strin
   <script>
     import { API, flag, keyName, liveScore, liveLegs, cleanName } from '../lib/pdc.mjs';
     import { liveFor, LIVE_TICK } from '../lib/live-client.mjs';
+    import { ukTime } from '../lib/format.mjs';
 
     const FX = 'https://fixtures.darts.web.gc.pdcservices.co.uk/v2/';
     const C = ['#2b4bff', '#e8362d']; // player 1 blue, player 2 red (validated pair)
@@ -113,10 +114,11 @@ const portraits = Object.fromEntries(Object.entries(portraitsRaw as Record<strin
           </div></div>`;
       };
       const tour = a.tournament;
-      const when = new Date(`${a.startDate}T${(a.startTime || '00:00').slice(0, 5)}:00Z`);
+      // Start: "Thu 19 Nov · 9:15pm GMT" (the feed's times are UK local time).
+      const when = `${new Date(`${a.startDate}T12:00:00Z`).toLocaleDateString('en-GB', { weekday: 'short', day: 'numeric', month: 'short', timeZone: 'UTC' })}${ukTime(a.startTime, a.startDate) ? ` · ${ukTime(a.startTime, a.startDate)}` : ''}`;
       return `
         <a class="back" href="/tournament/${tour?.tournamentID}">← ${esc((tour?.name || 'Tournament').replace(/^\d{4}\s+/, ''))}</a>
-        <p class="stg">${esc(a.tournamentStage?.stage?.name || '')}${status === 'Live' ? ' · <span class="live-dot">Live</span>' : ` · ${status === 'Result' ? 'Result' : when.toLocaleString('en-GB', { weekday: 'short', day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit', timeZone: 'Europe/London' })}`}</p>
+        <p class="stg">${esc(a.tournamentStage?.stage?.name || '')}${status === 'Live' ? ' · <span class="live-dot">Live</span>' : ` · ${status === 'Result' ? 'Result' : when}`}</p>
         <div class="duel">${side(0)}
           <div class="score">${status === 'Upcoming' ? '<b class="vs">v</b>' : `<b>${a.participant1Score ?? 0}</b><span>–</span><b>${a.participant2Score ?? 0}</b>`}</div>
           ${side(1)}</div>`;

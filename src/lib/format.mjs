@@ -38,3 +38,21 @@ export function avatarColours(name = '') {
   return [`hsl(${h} 45% 38%)`, `hsl(${(h + 40) % 360} 55% 55%)`];
 }
 export const initials = name => name.split(/\s+/).filter(Boolean).map(w => w[0]).slice(0, 2).join('').toUpperCase();
+
+/** "GMT" or "BST": the UK clock on a date ("YYYY-MM-DD"), today when none given. */
+export function ukZone(date) {
+  const d = date ? new Date(`${date}T12:00:00Z`) : new Date();
+  const n = new Intl.DateTimeFormat('en-GB', { timeZone: 'Europe/London', timeZoneName: 'short' }).formatToParts(d).find(p => p.type === 'timeZoneName')?.value || '';
+  return n === 'GMT' || n === 'BST' ? n : /\+1/.test(n) ? 'BST' : 'GMT';
+}
+
+/** A UK start time ("20:15") on the 12-hour clock: "8:15pm" ("9pm" on the hour). */
+export function ukClock(hhmm) {
+  if (!hhmm) return null;
+  const [h, m] = hhmm.slice(0, 5).split(':').map(Number);
+  if (!Number.isFinite(h)) return null;
+  return `${h % 12 || 12}${m ? `:${String(m).padStart(2, '0')}` : ''}${h < 12 ? 'am' : 'pm'}`;
+}
+
+/** Start time with its UK zone: "8:15pm GMT". */
+export const ukTime = (hhmm, date) => (ukClock(hhmm) ? `${ukClock(hhmm)} ${ukZone(date)}` : null);

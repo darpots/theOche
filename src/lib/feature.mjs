@@ -1,6 +1,7 @@
 // The homepage's big match tile. Shared by the build (Astro) and the browser
 // (live refresh) so both draw identical markup.
 import { keyName, flag } from './pdc.mjs';
+import { ukTime } from './format.mjs';
 
 const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]);
 const initials = n => n.split(/\s+/).map(w => w[0]).join('').slice(0, 2).toUpperCase();
@@ -34,12 +35,12 @@ export function featureTile(f, mode, eventName, cutouts) {
   const w1 = done && f.winner === f.p1.id, w2 = done && f.winner === f.p2.id;
   const st = f.stats || null;
   const tag = mode === 'now' ? `<span class="lbl ft-live">● On now · ${esc(eventName)}</span>`
-    : mode === 'next' ? `<span class="lbl ft-next">Next up · ${esc(f.time || 'TBC')} · ${esc(eventName)}</span>`
+    : mode === 'next' ? `<span class="lbl ft-next">Next up · ${esc(ukTime(f.time, f.date) || 'TBC')} · ${esc(eventName)}</span>`
     : `<span class="lbl ft-res">Result · ${esc(eventName)}</span>`;
   const inPlay = mode === 'now' && f.status === 'live';
   const centre = done || inPlay || (f.s1 ?? 0) + (f.s2 ?? 0) > 0
     ? `${inPlay && f.legNow ? legChip(f.legNow) : ''}<div class="ft-score poster-num">${f.s1 ?? 0}<span>–</span>${f.s2 ?? 0}</div><div class="lbl ft-sub">${inPlay ? '<span class="ft-pulse"></span>Live score' : mode === 'now' ? 'Latest score' : 'Final score'}</div>`
-    : `<div class="ft-score ft-vs poster-num">V</div><div class="lbl ft-sub">${mode === 'now' ? 'Waiting for the first dart' : esc(f.time ? `${f.time} UK time` : 'Time TBC')}</div>`;
+    : `<div class="ft-score ft-vs poster-num">V</div><div class="lbl ft-sub">${mode === 'now' ? 'Waiting for the first dart' : esc(ukTime(f.time, f.date) || 'Time TBC')}</div>`;
   const side = (p, won, s, align) => `<div class="ft-who ${align}${won ? ' won' : ''}">
       <div><b>${esc(p.name)}</b><small>${flag(p.country)} ${p.ranking ? `World #${p.ranking}` : ''}${won ? ' · Winner' : ''}</small></div>
       ${s?.avg != null ? `<div class="ft-avg" title="Three-dart average"><span class="poster-num">${Number(s.avg).toFixed(2)}</span></div>` : ''}
@@ -57,7 +58,7 @@ export function featureTile(f, mode, eventName, cutouts) {
 /** HTML for the volt "Next up" tile (inside its <a>). */
 export function nextTileInner(f, eventName) {
   const last = n => n.split(' ').slice(-1)[0];
-  return `<span class="lbl">Next up · ${esc(f.time || 'TBC')}</span>
+  return `<span class="lbl">Next up · ${esc(ukTime(f.time, f.date) || 'TBC')}</span>
     <span class="poster nu-names">${esc(last(f.p1.name))}<br>v ${esc(last(f.p2.name))}</span>
     <span class="nu-sub">${esc(f.stage || '')} · ${esc(eventName)}</span>`;
 }
