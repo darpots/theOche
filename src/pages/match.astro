@@ -8,9 +8,15 @@ import portraitsRaw from '../data/portraits.json';
 
 const portraits = Object.fromEntries(Object.entries(portraitsRaw as Record<string, { image: string }>).map(([k, v]) => [k, v.image]));
 ---
-<Layout title="Match centre" description="Live score, leg-by-leg breakdown and statistics for a PDC darts match.">
+<Layout title="Match centre" description="Live score, statistics, leg table and head to head for a PDC darts match.">
   <section class="mhead" aria-live="polite">
     <div class="wrap mh-in" id="mh"><div class="loading"><span class="spinner"></span>Loading match…</div></div>
+  </section>
+
+  <section class="wrap h2h" id="h2h" hidden>
+    <h2>Head to head</h2>
+    <p class="sub" id="hh-sub"></p>
+    <div id="hh"></div>
   </section>
 
   <section class="wrap tape" id="tape" hidden>
@@ -32,12 +38,6 @@ const portraits = Object.fromEntries(Object.entries(portraitsRaw as Record<strin
     </section>
 
     <section class="block">
-      <div class="bh"><h2>Leg by leg</h2><div class="legend" id="lg2"></div></div>
-      <p class="sub">Score remaining after each visit. The leg goes to whoever reaches zero first.</p>
-      <div class="legs" id="legs"></div>
-    </section>
-
-    <section class="block">
       <h2>Leg table</h2>
       <div class="tablewrap"><table class="lt" id="lt"></table></div>
     </section>
@@ -46,7 +46,7 @@ const portraits = Object.fromEntries(Object.entries(portraitsRaw as Record<strin
   <script is:inline type="application/json" id="m-data" set:html={JSON.stringify({ cutouts, portraits })}></script>
 
   <script>
-    import { flag, keyName, liveScore, liveLegs } from '../lib/pdc.mjs';
+    import { API, flag, keyName, liveScore, liveLegs, cleanName } from '../lib/pdc.mjs';
     import { liveFor, LIVE_TICK } from '../lib/live-client.mjs';
 
     const FX = 'https://fixtures.darts.web.gc.pdcservices.co.uk/v2/';
@@ -168,30 +168,65 @@ const portraits = Object.fromEntries(Object.entries(portraitsRaw as Record<strin
         + `<script type="application/json" class="rd">${JSON.stringify({ pts, names, W, L, R, n: legs.length })}<\/script>`;
     }
 
-    // Small multiple per leg: remaining score after each visit.
-    function legCharts(legs: any[], names: string[]) {
-      return legs.map(l => {
-        const W = 200, H = 110, P = 8;
-        const n = Math.max(l.a.path.length, l.b.path.length, 2);
-        const x = (i: number) => P + (i / (n - 1)) * (W - 2 * P);
-        const y = (v: number) => P + (1 - v / 501) * (H - 2 * P);
-        const line = (path: number[], c: string) => `<polyline points="${path.map((v, i) => `${x(i)},${y(v)}`).join(' ')}" fill="none" stroke="${c}" stroke-width="2" stroke-linejoin="round"/>`;
-        const w = l.winner;
-        const darts = w == null ? '' : `${(w ? l.b : l.a).darts} darts${(w ? l.b : l.a).checkout ? ` · ${(w ? l.b : l.a).checkout} out` : ''}`;
-        const brk = w != null && w !== l.starter;
-        return `<figure class="leg${w == null ? ' open' : ''}${w === 1 ? ' p2' : ''}${brk ? ' brk' : ''}">
-          <figcaption><b>Leg ${l.n}${l.set > 1 || legs.some(x => x.set > 1) ? ` <small>Set ${l.set}</small>` : ''}${brk ? ' <em>Break</em>' : ''}</b><span>${w == null ? 'In play' : `<i style="background:${C[w]}"></i>${esc(names[w])}`}</span></figcaption>
-          <svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Leg ${l.n}: ${w == null ? 'in play' : `${names[w]} won`}"><line x1="${P}" x2="${W - P}" y1="${y(0)}" y2="${y(0)}" class="gl"/>${line(l.a.path, C[0])}${line(l.b.path, C[1])}</svg>
-          <small class="ld">${darts}${darts ? ' · ' : ''}${esc(names[l.starter])} threw first</small></figure>`;
-      }).join('');
+    // One row per leg: who won it (and whether it was a break of throw), how, and the score after it.
+    function legTable(legs: any[], names: string[]) {
+      const multiSet = legs.some(x => x.set > 1);
+      const tally = [0, 0];
+      return `<thead><tr><th>Leg</th><th>Winner</th><th class="n">Darts</th><th class="n">Checkout</th><th class="n">Score</th></tr></thead><tbody>${legs.map(l => {
+        const w = l.winner, ws = w == null ? null : w ? l.b : l.a;
+        if (w != null) tally[w]++;
+        const who = w == null
+          ? `<span class="ip">In play</span>`
+          : `<i class="dot" style="background:${C[w]}"></i>${esc(names[w])}${w !== l.starter ? ' <span class="brk">Break</span>' : ''}`;
+        return `<tr${w == null ? ' class="open"' : ''}><td class="lg-n">${multiSet ? `${l.set}.` : ''}${l.n}</td><td class="lg-w">${who}</td><td class="n">${ws?.darts ?? '–'}</td><td class="n">${ws?.checkout ?? '–'}</td><td class="n sc">${w == null ? '' : `${tally[0]}–${tally[1]}`}</td></tr>`;
+      }).join('')}</tbody>`;
     }
 
-    function legTable(legs: any[], names: string[]) {
-      const avg = (s: any) => (s.darts ? ((s.pts / s.darts) * 3).toFixed(1) : '–');
-      return `<thead><tr><th>Leg</th><th>Threw first</th><th>Winner</th><th class="n">Darts</th><th class="n">Checkout</th><th class="n">${esc(names[0])} avg</th><th class="n">${esc(names[1])} avg</th></tr></thead><tbody>${legs.map(l => {
-        const w = l.winner, ws = w == null ? null : w ? l.b : l.a;
-        return `<tr><td>${legs.some(x => x.set > 1) ? `${l.set}.` : ''}${l.n}</td><td>${esc(names[l.starter])}</td><td>${w == null ? 'In play' : `<i class="dot" style="background:${C[w]}"></i>${esc(names[w])}${w !== l.starter ? ' <span class="brk">break</span>' : ''}`}</td><td class="n">${ws?.darts ?? '–'}</td><td class="n">${ws?.checkout ?? '–'}</td><td class="n">${avg(l.a)}</td><td class="n">${avg(l.b)}</td></tr>`;
-      }).join('')}</tbody>`;
+    // Head to head from the PDC: every earlier meeting, oriented to this match's players.
+    async function headToHead(f: any) {
+      const box = document.getElementById('h2h'), out = document.getElementById('hh'), sub = document.getElementById('hh-sub');
+      if (!box || !out || !sub || box.dataset.done === f.id) return;
+      const a = f.attributes, ids = [String(a.participant1?.participantID || ''), String(a.participant2?.participantID || '')];
+      if (!ids[0] || !ids[1]) return;
+      box.dataset.done = f.id;
+      try {
+        const res = await fetch(`${API.participants}${ids[0]}/h2h/${ids[1]}`);
+        if (!res.ok) return;
+        const games = ((await res.json()).data || [])
+          .map((x: any) => ({ id: x.id, ...x.attributes }))
+          .filter((x: any) => /result/i.test(x.status) && String(x.id) !== String(f.id))
+          .map((x: any) => {
+            const flip = String(x.participant1ID) === ids[1];
+            const s = flip ? [x.participant2Score, x.participant1Score] : [x.participant1Score, x.participant2Score];
+            const w = x.winnerParticipantID ? ids.indexOf(String(x.winnerParticipantID)) : s[0] > s[1] ? 0 : s[1] > s[0] ? 1 : -1;
+            return { ...x, s, w };
+          })
+          .sort((x: any, y: any) => `${y.startDate}${y.startTime || ''}`.localeCompare(`${x.startDate}${x.startTime || ''}`));
+        const names = [last(a.participant1), last(a.participant2)];
+        if (!games.length) {
+          sub.textContent = '';
+          out.innerHTML = `<p class="muted hh-none">${esc(names[0])} and ${esc(names[1])} haven't met in a PDC event before.</p>`;
+          box.hidden = false;
+          return;
+        }
+        const wins = [0, 1].map(k => games.filter((g: any) => g.w === k).length), draws = games.length - wins[0] - wins[1];
+        const shown = games.slice(0, 6);
+        sub.textContent = `${games.length} previous meeting${games.length === 1 ? '' : 's'} in PDC events${draws ? ` · ${draws} drawn` : ''}${games.length > 6 ? ' · last 6 below' : ''}`;
+        const pct = (n: number) => (n / games.length) * 100;
+        const evName = (n: string) => { const c = cleanName(n || ''); return c.name.replace(/^European Tour \d+ - /, ''); };
+        const day = (d: string) => new Date(d + 'T12:00:00Z').toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
+        out.innerHTML = `<div class="hh-sum">
+            <div class="hh-n"><b class="poster-num${wins[0] > wins[1] ? ' lead' : ''}">${wins[0]}</b><span>${esc(names[0])}</span></div>
+            <div class="hh-bar" role="img" aria-label="${esc(names[0])} ${wins[0]} wins, ${esc(names[1])} ${wins[1]} wins${draws ? `, ${draws} drawn` : ''}"><i style="width:${pct(wins[0])}%;background:${C[0]}"></i><i class="hh-d" style="width:${pct(draws)}%"></i><i style="width:${pct(wins[1])}%;background:${C[1]}"></i></div>
+            <div class="hh-n r"><b class="poster-num${wins[1] > wins[0] ? ' lead' : ''}">${wins[1]}</b><span>${esc(names[1])}</span></div>
+          </div>
+          <ol class="hh-list">${shown.map((g: any) => `<li>
+            <span class="hh-date">${day(g.startDate)}</span>
+            <span class="hh-ev">${esc(evName(g.tournament?.name))}<small>${esc(g.stage?.name || '')}</small></span>
+            <span class="hh-sc"><b class="${g.w === 0 ? 'w' : ''}"${g.w === 0 ? ` style="color:${C[0]}"` : ''}>${g.s[0]}</b><span>–</span><b class="${g.w === 1 ? 'w' : ''}"${g.w === 1 ? ` style="color:${C[1]}"` : ''}>${g.s[1]}</b></span>
+          </li>`).join('')}</ol>`;
+        box.hidden = false;
+      } catch { /* head to head is optional */ }
     }
 
     function wireTip() {
@@ -216,7 +251,6 @@ const portraits = Object.fromEntries(Object.entries(portraitsRaw as Record<strin
       const prof = await Promise.all(ps.map(p => fetch(`/data/players/${p?.participantID}.json`).then(r => (r.ok ? r.json() : null)).catch(() => null)));
       if (!prof.some(Boolean)) { box.hidden = true; return; }
       const st = prof.map(x => x?.season?.stats || null), se = prof.map(x => x?.season || null);
-      const form = (x: any) => (x?.form || []).slice(0, 5).map((m: any) => `<i class="fm ${m.won ? 'w' : 'l'}" title="${m.won ? 'Won' : 'Lost'} ${m.my}-${m.their} v ${esc(m.opp)}">${m.won ? 'W' : 'L'}</i>`).join('') || '–';
       const rows: [string, number | null, number | null, (v: number) => string, boolean][] = [
         ['World ranking', ps[0]?.ranking ?? null, ps[1]?.ranking ?? null, v => `#${v}`, false],
         ['Season average', st[0]?.avg ?? null, st[1]?.avg ?? null, v => v.toFixed(2), true],
@@ -230,7 +264,7 @@ const portraits = Object.fromEntries(Object.entries(portraitsRaw as Record<strin
         const better = x == null || y == null || X === Y ? 0 : (X > Y) === hiGood ? 1 : 2;
         const bar = (v: number | null, k: number) => (v == null || !hiGood ? '' : `<i class="b${k}" style="width:${(v / max) * 100}%"></i>`);
         return `<div class="cr"><span class="v l${better === 1 ? ' hi' : ''}">${x == null ? '–' : fmt(X)}</span><div class="bars">${bar(x, 0)}</div><span class="lab">${label}</span><div class="bars r">${bar(y, 1)}</div><span class="v r${better === 2 ? ' hi' : ''}">${y == null ? '–' : fmt(Y)}</span></div>`;
-      }).join('') + `<div class="cr"><span class="v l fms">${form(prof[0])}</span><div class="bars"></div><span class="lab">Last 5</span><div class="bars r"></div><span class="v r fms">${form(prof[1])}</span></div>`;
+      }).join('');
       tp.innerHTML = html;
       box.hidden = false;
     }
@@ -297,6 +331,7 @@ const portraits = Object.fromEntries(Object.entries(portraitsRaw as Record<strin
         if (isLive && liveStats) mh.insertAdjacentHTML('beforeend', `<p class="inplay"><span class="live-dot">Live</span> Score and stats update every few seconds. <a href="https://www.pdc.tv/matches/${esc(id)}" target="_blank" rel="noopener">Follow it dart by dart on pdc.tv ↗</a></p>`);
         else if (isResult && noLegs) mh.insertAdjacentHTML('beforeend', `<p class="inplay"><b>Result confirmed.</b> ${liveStats ? 'Stats are from PDC live scoring; the' : 'The PDC adds averages and'} leg-by-leg detail follows when the PDC publishes it. This page checks again every two minutes and fills in on its own.</p>`);
         if (!document.getElementById('tp')!.innerHTML) tape([a.attributes.participant1, a.attributes.participant2]);
+        headToHead(a);
         if (started && noLegs && !m?.stats) mh.insertAdjacentHTML('beforeend', `<p class="inplay"><span class="live-dot">On now</span> This match should be under way. The PDC's public feed publishes scores when a match finishes, so this page fills in then. <a href="https://www.pdc.tv/matches/${esc(id)}" target="_blank" rel="noopener">Follow it dart by dart on pdc.tv ↗</a></p>`);
         // Stats show as soon as there are any; the leg charts wait for the visit data.
         const mb = document.getElementById('mb')!;
@@ -304,9 +339,8 @@ const portraits = Object.fromEntries(Object.entries(portraitsRaw as Record<strin
         mb.querySelectorAll<HTMLElement>('.block:not(:first-child)').forEach(b => { b.hidden = noLegs; });
         if (t?.data) {
           document.getElementById('cmp')!.innerHTML = compare(a, t.data);
-          document.getElementById('lg1')!.innerHTML = document.getElementById('lg2')!.innerHTML = legend(names);
+          document.getElementById('lg1')!.innerHTML = legend(names);
           document.getElementById('runavg')!.innerHTML = runAvg(legs.filter(l => l.winner != null), names);
-          document.getElementById('legs')!.innerHTML = legCharts(legs, names) || '<p class="muted">No legs yet.</p>';
           document.getElementById('lt')!.innerHTML = legTable(legs, names);
           wireTip();
         }
@@ -384,12 +418,27 @@ const portraits = Object.fromEntries(Object.entries(portraitsRaw as Record<strin
   .mh-in :global(.inplay) { margin: 0 0 22px; font-size: 14px; color: rgba(255, 255, 255, .85); background: rgba(255, 255, 255, .08); border-radius: 12px; padding: 10px 14px; }
   .mh-in :global(.inplay a) { color: #fff; font-weight: 700; }
   .mh-in :global(.inplay .live-dot) { color: #ff8a98; margin-right: 6px; }
-  .tape { margin-top: 28px; }
-  .tape :global(.fms) { display: flex; gap: 4px; }
-  .tape :global(.v.l.fms) { justify-content: flex-end; }
-  .tape :global(.fm) { font-style: normal; width: 22px; height: 22px; border-radius: 6px; display: grid; place-items: center; font-size: 11px; font-weight: 800; color: #fff; }
-  .tape :global(.fm.w) { background: var(--green); }
-  .tape :global(.fm.l) { background: var(--red); }
+  .tape, .h2h { margin-top: 28px; }
+
+  /* Head to head: wins either side of a split bar, then the latest meetings */
+  .h2h :global(.hh-sum) { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; align-items: center; gap: 18px; background: var(--card); border-radius: var(--tile) var(--tile) 0 0; padding: 18px 22px; }
+  .h2h :global(.hh-n) { display: flex; flex-direction: column; align-items: flex-start; gap: 4px; min-width: 64px; }
+  .h2h :global(.hh-n.r) { align-items: flex-end; text-align: right; }
+  .h2h :global(.hh-n b) { font-size: 52px; line-height: .9; color: var(--muted); }
+  .h2h :global(.hh-n b.lead) { color: var(--ink); }
+  .h2h :global(.hh-n span) { font-size: 13px; font-weight: 700; }
+  .h2h :global(.hh-bar) { display: flex; height: 12px; border-radius: 99px; overflow: hidden; background: var(--paper-2); }
+  .h2h :global(.hh-bar i) { display: block; height: 100%; }
+  .h2h :global(.hh-bar .hh-d) { background: #c9c2b2; }
+  .h2h :global(.hh-list) { list-style: none; margin: 0; padding: 0 22px 8px; background: var(--card); border-radius: 0 0 var(--tile) var(--tile); }
+  .h2h :global(.hh-list li) { display: grid; grid-template-columns: 104px minmax(0, 1fr) auto; align-items: center; gap: 14px; padding: 11px 0; border-top: 1px solid var(--line); font-size: 14px; }
+  .h2h :global(.hh-date) { color: var(--muted); font-weight: 600; font-size: 13px; white-space: nowrap; }
+  .h2h :global(.hh-ev) { display: flex; flex-direction: column; min-width: 0; font-weight: 700; }
+  .h2h :global(.hh-ev small) { color: var(--muted); font-weight: 600; font-size: 12px; }
+  .h2h :global(.hh-sc) { display: inline-flex; align-items: center; gap: 6px; font-family: var(--poster); font-size: 24px; font-variant-numeric: tabular-nums; }
+  .h2h :global(.hh-sc b) { font-weight: 400; color: var(--muted); min-width: 1.2ch; text-align: center; }
+  .h2h :global(.hh-sc span) { color: var(--line); }
+  .h2h :global(.hh-none) { background: var(--card); border-radius: var(--tile); padding: 18px 22px; margin: 0; }
   .mh-in :global(.kpis) { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); border-top: 1px solid var(--ink-2); }
   .mh-in :global(.kpis > div) { padding: 20px 0; display: flex; flex-direction: column; gap: 8px; }
   .mh-in :global(.kpis > div + div) { border-left: 1px solid var(--ink-2); padding-left: 22px; }
@@ -403,7 +452,7 @@ const portraits = Object.fromEntries(Object.entries(portraitsRaw as Record<strin
   .bh { display: flex; justify-content: space-between; align-items: baseline; flex-wrap: wrap; gap: 10px; }
   .legend { display: flex; gap: 16px; font-size: 13px; font-weight: 700; }
   .legend :global(span) { display: inline-flex; align-items: center; gap: 6px; }
-  .legend :global(i), .legs :global(i), .lt :global(.dot) { display: inline-block; width: 10px; height: 10px; border-radius: 3px; }
+  .legend :global(i), .lt :global(.dot) { display: inline-block; width: 10px; height: 10px; border-radius: 3px; }
 
   .cmp { background: var(--card); border-radius: var(--tile); padding: 10px 24px; }
   .cmp :global(.cr) { display: grid; grid-template-columns: 130px 1fr 150px 1fr 130px; align-items: center; gap: 12px; padding: 10px 0; border-top: 1px solid var(--line); font-variant-numeric: tabular-nums; }
@@ -428,27 +477,19 @@ const portraits = Object.fromEntries(Object.entries(portraitsRaw as Record<strin
   .chart :global(.tip span) { display: inline-flex; align-items: center; gap: 6px; font-variant-numeric: tabular-nums; }
   .chart :global(.tip i) { width: 8px; height: 8px; border-radius: 2px; display: inline-block; }
 
-  .legs { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 10px; }
-  .legs :global(.leg) { margin: 0; background: var(--card); border-radius: 20px; padding: 12px 14px; }
-  .legs :global(.leg.p2) { background: var(--red-soft); }
-  .legs :global(.leg.brk) { background: var(--ink); color: #fff; }
-  .legs :global(.leg.brk .ld), .legs :global(.leg.brk figcaption small) { color: var(--on-ink); }
-  .legs :global(.leg.brk .gl) { stroke: var(--ink-2); }
-  .legs :global(figcaption em) { font-style: normal; font-size: 10px; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; background: var(--volt); color: var(--ink); padding: 2px 6px; border-radius: 6px; margin-left: 4px; }
-  .legs :global(.leg.open) { border-color: var(--red); }
-  .legs :global(figcaption) { display: flex; justify-content: space-between; gap: 8px; font-size: 13px; }
-  .legs :global(figcaption span) { display: inline-flex; align-items: center; gap: 6px; font-weight: 700; }
-  .legs :global(figcaption small) { color: var(--muted); font-weight: 600; }
-  .legs :global(svg) { width: 100%; height: auto; display: block; margin: 6px 0 4px; }
-  .legs :global(.ld) { color: var(--muted); font-size: 12px; }
 
   .tablewrap { overflow-x: auto; background: var(--card); border-radius: var(--tile); }
   .lt { width: 100%; border-collapse: collapse; font-size: 14px; font-variant-numeric: tabular-nums; }
   .lt :global(th) { text-align: left; font-size: 12px; color: var(--muted); font-weight: 700; padding: 10px 14px; border-bottom: 1px solid var(--line); white-space: nowrap; }
   .lt :global(td) { padding: 9px 14px; border-top: 1px solid var(--line); white-space: nowrap; }
   .lt :global(.n) { text-align: right; }
-  .lt :global(.dot) { margin-right: 6px; }
-  .lt :global(.brk) { font-size: 11px; font-weight: 800; color: var(--red); margin-left: 4px; }
+  .lt :global(.dot) { margin-right: 8px; vertical-align: -1px; }
+  .lt :global(.brk) { font-size: 10px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; color: var(--ink); background: var(--volt); border-radius: 6px; padding: 2px 6px; margin-left: 8px; vertical-align: 1px; }
+  .lt :global(.lg-n) { width: 48px; color: var(--muted); font-weight: 700; }
+  .lt :global(.lg-w) { font-weight: 700; }
+  .lt :global(.sc) { font-family: var(--poster); font-size: 18px; }
+  .lt :global(tr.open td) { color: var(--muted); }
+  .lt :global(.ip) { font-weight: 700; color: var(--red); }
 
   @media (max-width: 760px) {
     .mh-in :global(.kpis) { grid-template-columns: repeat(2, minmax(0, 1fr)); }
@@ -462,6 +503,14 @@ const portraits = Object.fromEntries(Object.entries(portraitsRaw as Record<strin
     .cmp :global(.cr) { grid-template-columns: 1fr 1fr; row-gap: 4px; }
     .cmp :global(.lab) { grid-column: 1 / -1; grid-row: 1; }
     .cmp :global(.bars) { display: none; }
-    .cmp :global(.v.l) { text-align: left; } .cmp :global(.v.r) { grid-column: 2; text-align: right; } .tape :global(.v.l.fms) { justify-content: flex-start; } .tape :global(.v.r.fms) { justify-content: flex-end; }
+    .cmp :global(.v.l) { text-align: left; } .cmp :global(.v.r) { grid-column: 2; text-align: right; }
+    .lt :global(th), .lt :global(td) { padding-left: 10px; padding-right: 10px; }
+    .lt :global(.lg-n) { width: 32px; }
+    .h2h :global(.hh-sum) { padding: 16px; gap: 12px; }
+    .h2h :global(.hh-n) { min-width: 0; }
+    .h2h :global(.hh-n b) { font-size: 40px; }
+    .h2h :global(.hh-list) { padding: 0 16px 6px; }
+    .h2h :global(.hh-list li) { grid-template-columns: minmax(0, 1fr) auto; gap: 2px 12px; }
+    .h2h :global(.hh-date) { grid-column: 1 / -1; font-size: 12px; }
   }
 </style>

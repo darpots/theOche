@@ -49,6 +49,8 @@ const fullTitle = title === 'The Oche' ? title : `${title} · The Oche`;
             <a href={n.href} class:list={['nav', { on: active === n.key }]} aria-current={active === n.key ? 'page' : undefined} data-nav={n.key}>{n.label}</a>
           ))}
           <span class="pill" aria-hidden="true"></span>
+          <!-- Shown by the live bar script while a match is in play; goes to that match -->
+          <a class="livenav" id="livenav" href="/" hidden><span class="ln-dot" aria-hidden="true"></span>Live</a>
         </nav>
         <button class="searchbtn" type="button" data-open-search aria-label="Search players, events and news">
           <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><circle cx="11" cy="11" r="7" fill="none" stroke="currentColor" stroke-width="2" /><path d="M20 20l-4-4" stroke="currentColor" stroke-width="2" stroke-linecap="round" /></svg>
@@ -197,13 +199,20 @@ const fullTitle = title === 'The Oche' ? title : `${title} · The Oche`;
             const live = fx.filter((f: any) => /live|progress/i.test(f.status)).concat(pending.filter((f: any) => !/live|progress/i.test(f.status) && (f.startTime || '99').slice(0, 5) <= nowLdn).slice(-1));
             const upcoming = pending.filter((f: any) => !live.includes(f));
             const done = fx.filter((f: any) => /result/i.test(f.status)).sort((x: any, y: any) => `${y.startDate}${y.startTime}`.localeCompare(`${x.startDate}${x.startTime}`));
-            const chip = (f: any, kind: string) => `<a class="lb-m ${kind}" href="/match?id=${f.fixtureID}"><span>${esc(surname(f.participant1))}</span><b>${kind === 'next' ? esc((f.startTime || '').slice(0, 5) || 'vs') : kind === 'now' && !/live|progress|result/i.test(f.status) ? 'v' : `${f.participant1Score ?? 0}–${f.participant2Score ?? 0}`}</b><span>${esc(surname(f.participant2))}</span></a>`;
+            // Upcoming: "A v B" then the start time in its own pill, so a time never reads as a score.
+            const chip = (f: any, kind: string) => kind === 'next'
+              ? `<a class="lb-m next" href="/match?id=${f.fixtureID}"><span>${esc(surname(f.participant1))}</span><i class="lb-v">v</i><span>${esc(surname(f.participant2))}</span>${(f.startTime || '').slice(0, 5) ? `<time class="lb-t" aria-label="starts at ${esc(f.startTime.slice(0, 5))} UK time">${esc(f.startTime.slice(0, 5))}</time>` : ''}</a>`
+              : `<a class="lb-m ${kind}" href="/match?id=${f.fixtureID}"><span>${esc(surname(f.participant1))}</span><b>${kind === 'now' && !/live|progress|result/i.test(f.status) ? 'v' : `${f.participant1Score ?? 0}–${f.participant2Score ?? 0}`}</b><span>${esc(surname(f.participant2))}</span></a>`;
             let html = '';
-            const follow = (f: any) => `<a class="lb-pdc" href="https://www.pdc.tv/matches/${f.fixtureID}" target="_blank" rel="noopener">Live scoring on pdc.tv ↗</a>`;
-            if (live.length) html = `<span class="lb-tag live">On now</span>${live.slice(0, 3).map((f: any) => chip(f, 'now')).join('')}${follow(live[0])}${upcoming[0] ? `<span class="lb-sep">Next</span>${chip(upcoming[0], 'next')}` : ''}`;
+            const ln = document.getElementById('livenav') as HTMLAnchorElement | null;
+            if (ln) {
+              ln.hidden = !live.length;
+              if (live.length) { ln.href = `/match?id=${live[0].fixtureID}`; ln.setAttribute('aria-label', `Live: ${surname(live[0].participant1)} v ${surname(live[0].participant2)}`); }
+            }
+            if (live.length) html = `<span class="lb-tag live">On now</span>${live.slice(0, 3).map((f: any) => chip(f, 'now')).join('')}${upcoming[0] ? `<span class="lb-sep">Next</span>${chip(upcoming[0], 'next')}` : ''}`;
             else if (upcoming.length) html = `<span class="lb-tag">Next</span>${chip(upcoming[0], 'next')}${done[0] ? `<span class="lb-sep">Latest</span>${chip(done[0], 'done')}` : ''}`;
             else if (done[0] && done[0].startDate === d) html = `<span class="lb-tag">Latest</span>${chip(done[0], 'done')}`;
-            if (!html) { bar.hidden = true; return; }
+            if (!html) { bar.hidden = true; if (ln) ln.hidden = true; return; }
             inner.innerHTML = `<a class="lb-ev" href="/tournament/${id}">${esc(name)}</a>${html}`;
             bar.hidden = false;
           } catch { /* keep the last state */ }
@@ -285,8 +294,15 @@ const fullTitle = title === 'The Oche' ? title : `${title} · The Oche`;
   .lb-in :global(.lb-m:hover) { background: rgba(255, 255, 255, .1); color: #fff; }
   .lb-in :global(.lb-m b) { font-family: var(--poster); font-weight: 400; font-size: 17px; font-variant-numeric: tabular-nums; color: #fff; }
   .lb-in :global(.lb-m.now b) { color: var(--volt); }
-  .lb-in :global(.lb-pdc) { color: rgba(255, 255, 255, .7); font-size: 12px; font-weight: 600; text-decoration: none; margin-left: 4px; }
-  .lb-in :global(.lb-pdc:hover) { color: #fff; text-decoration: underline; }
+  .lb-in :global(.lb-v) { font-style: normal; color: rgba(255, 255, 255, .5); font-size: 12px; }
+  .lb-in :global(.lb-t) { font-size: 11px; font-weight: 800; letter-spacing: .04em; color: rgba(255, 255, 255, .85); border: 1px solid rgba(255, 255, 255, .25); border-radius: 6px; padding: 1px 6px; font-variant-numeric: tabular-nums; }
+  /* LIVE in the menu while a match is on */
+  .livenav { position: relative; z-index: 1; display: inline-flex; align-items: center; gap: 7px; margin-left: 6px; padding: 8px 14px; border-radius: 999px; background: var(--red); color: #fff; text-decoration: none; font-weight: 800; font-size: 13px; letter-spacing: .08em; text-transform: uppercase; transition: background .2s; }
+  .livenav:hover { background: #ff4a3d; }
+  .livenav[hidden] { display: none; }
+  .ln-dot { width: 7px; height: 7px; border-radius: 50%; background: #fff; animation: lnblink 1.4s ease-in-out infinite; }
+  @keyframes lnblink { 50% { opacity: .25; } }
+  @media (prefers-reduced-motion: reduce) { .ln-dot { animation: none; } }
 
   .tabbar { display: none; }
 
@@ -309,7 +325,8 @@ const fullTitle = title === 'The Oche' ? title : `${title} · The Oche`;
   .foot p { margin: 0 0 6px; max-width: 760px; }
   @media (max-width: 640px) {
     .bar { height: 58px; }
-    .bar nav, .searchbtn { display: none; }
+    .searchbtn, .bar nav .nav, .bar nav .pill { display: none; }
+    .bar nav { padding: 0; }
     .tabbar {
       display: grid; grid-template-columns: repeat(6, 1fr); gap: 2px; position: fixed; z-index: 60; left: 10px; right: 10px; bottom: calc(10px + env(safe-area-inset-bottom));
       background: var(--ink); border-radius: 24px; padding: 6px; box-shadow: 0 16px 40px -12px rgba(11, 12, 16, .55);
