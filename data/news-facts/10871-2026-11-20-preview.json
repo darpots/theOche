@@ -1,0 +1,113 @@
+{
+ "event": "Grand Slam of Darts",
+ "date": "2026-11-20",
+ "kind": "preview",
+ "matches": [
+  {
+   "fixture": "517023",
+   "stage": "Quarter-Final",
+   "format": "First to 16 legs",
+   "time": "7:15pm GMT",
+   "winnerGuaranteed": "£60,000",
+   "losersTake": "£35,000",
+   "players": [
+    {
+     "name": "Jermaine Wattimena",
+     "worldRank": 18,
+     "last12Months": {
+      "average": 94.71,
+      "won": 92,
+      "played": 149,
+      "titles": 1
+     },
+     "last5": [
+      "W 10-8 v Luke Littler",
+      "W 5-4 v Alan Soutar",
+      "W 5-2 v Lisa Ashton",
+      "L 3-6 v Tommy Morris",
+      "W 6-5 v Stephen Bunting"
+     ],
+     "previousBestAtEvent": "Quarter-Final (2024)"
+    },
+    {
+     "name": "Kevin Doets",
+     "worldRank": 23,
+     "last12Months": {
+      "average": 96.44,
+      "won": 127,
+      "played": 180,
+      "titles": 1
+     },
+     "last5": [
+      "W 10-5 v Cameron Menzies",
+      "W 5-1 v Tommy Morris",
+      "W 5-3 v Josh Rock",
+      "L 5-6 v Stefan Bellmont",
+      "L 4-6 v Mensur Suljovic"
+     ],
+     "previousBestAtEvent": "first appearance on record"
+    }
+   ],
+   "headToHead": {
+    "meetings": 13,
+    "wins": {
+     "Jermaine Wattimena": 6,
+     "Kevin Doets": 7
+    }
+   }
+  },
+  {
+   "fixture": "517024",
+   "stage": "Quarter-Final",
+   "format": "First to 16 legs",
+   "time": "8:45pm GMT",
+   "winnerGuaranteed": "£60,000",
+   "losersTake": "£35,000",
+   "players": [
+    {
+     "name": "Gerwyn Price",
+     "worldRank": 4,
+     "last12Months": {
+      "average": 98.67,
+      "won": 94,
+      "played": 137,
+      "titles": 4
+     },
+     "last5": [
+      "W 10-7 v Ryan Searle",
+      "W 5-2 v Sebastian Bialecki",
+      "W 5-3 v Joe Hunt",
+      "L 2-6 v Luke Humphries",
+      "W 6-2 v Luke Woodhouse"
+     ],
+     "previousBestAtEvent": "Winner (2018)"
+    },
+    {
+     "name": "Niko Springer",
+     "worldRank": 34,
+     "last12Months": {
+      "average": 91.85,
+      "won": 60,
+      "played": 109,
+      "titles": 0
+     },
+     "last5": [
+      "W 10-8 v Rob Cross",
+      "W 5-3 v Wessel Nijman",
+      "W 5-1 v Adam Sevada",
+      "L 5-6 v Tom Bissell",
+      "L 5-6 v Luke Woodhouse"
+     ],
+     "previousBestAtEvent": "Last 16 (2025)"
+    }
+   ],
+   "headToHead": {
+    "meetings": 1,
+    "wins": {
+     "Gerwyn Price": 1,
+     "Niko Springer": 0
+    }
+   }
+  }
+ ]
+}
