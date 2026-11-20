@@ -1,5 +1,5 @@
 {
- "updatedAt": "2026-11-19T13:39:42.236Z",
+ "updatedAt": "2026-11-20T13:20:10.471Z",
  "event": {
   "id": "10871",
   "name": "2026 Grand Slam of Darts",
@@ -953,8 +953,8 @@
    "pos": 3,
    "live": 2,
    "move": 1,
-   "money": 1050750,
-   "plus": 20000,
+   "money": 1065750,
+   "plus": 35000,
    "minus": 28000,
    "expiring": [
     {
@@ -968,7 +968,7 @@
      "round": "Last 64"
     }
    ],
-   "round": "Last 16",
+   "round": "Quarter-Final",
    "alive": true,
    "estimated": false
   },
@@ -995,7 +995,7 @@
     }
    ],
    "round": "Last 16",
-   "alive": true,
+   "alive": false,
    "estimated": false
   },
   {
@@ -1089,7 +1089,7 @@
     }
    ],
    "round": "Last 16",
-   "alive": true,
+   "alive": false,
    "estimated": false
   },
   {
@@ -1099,8 +1099,8 @@
    "pos": 12,
    "live": 8,
    "move": 4,
-   "money": 609000,
-   "plus": 20000,
+   "money": 624000,
+   "plus": 35000,
    "minus": 6500,
    "expiring": [
     {
@@ -1109,7 +1109,7 @@
      "round": "Last 32"
     }
    ],
-   "round": "Last 16",
+   "round": "Quarter-Final",
    "alive": true,
    "estimated": false
   },
@@ -1120,8 +1120,8 @@
    "pos": 11,
    "live": 9,
    "move": 2,
-   "money": 607500,
-   "plus": 20000,
+   "money": 622500,
+   "plus": 35000,
    "minus": 8000,
    "expiring": [
     {
@@ -1135,7 +1135,7 @@
      "round": "Last 64"
     }
    ],
-   "round": "Last 16",
+   "round": "Quarter-Final",
    "alive": true,
    "estimated": false
   },
@@ -1402,7 +1402,7 @@
     }
    ],
    "round": "Last 16",
-   "alive": true,
+   "alive": false,
    "estimated": false
   },
   {
@@ -1881,7 +1881,7 @@
     }
    ],
    "round": "Last 16",
-   "alive": true,
+   "alive": false,
    "estimated": false
   },
   {
@@ -2450,12 +2450,27 @@
    "estimated": false
   },
   {
+   "id": "32627",
+   "name": "Tom Sykes",
+   "slug": "tom-sykes-32627",
+   "pos": 81,
+   "live": 71,
+   "move": 10,
+   "money": 97250,
+   "plus": 35000,
+   "minus": 0,
+   "expiring": [],
+   "round": "Quarter-Final",
+   "alive": true,
+   "estimated": false
+  },
+  {
    "id": "33876",
    "name": "Wesley Plaisier",
    "slug": "wesley-plaisier",
    "pos": 70,
-   "live": 71,
-   "move": -1,
+   "live": 72,
+   "move": -2,
    "money": 97000,
    "plus": 0,
    "minus": 6500,
@@ -2475,8 +2490,8 @@
    "name": "Thibault Tricole",
    "slug": "thibault-tricole",
    "pos": 72,
-   "live": 72,
-   "move": 0,
+   "live": 73,
+   "move": -1,
    "money": 92000,
    "plus": 0,
    "minus": 6500,
@@ -2496,29 +2511,14 @@
    "name": "Tom Bissell",
    "slug": "tom-bissell",
    "pos": 73,
-   "live": 73,
-   "move": 0,
+   "live": 74,
+   "move": -1,
    "money": 84250,
    "plus": 0,
    "minus": 0,
    "expiring": [],
    "round": null,
    "alive": null,
-   "estimated": false
-  },
-  {
-   "id": "32627",
-   "name": "Tom Sykes",
-   "slug": "tom-sykes-32627",
-   "pos": 81,
-   "live": 74,
-   "move": 7,
-   "money": 82250,
-   "plus": 20000,
-   "minus": 0,
-   "expiring": [],
-   "round": "Last 16",
-   "alive": true,
    "estimated": false
   },
   {
