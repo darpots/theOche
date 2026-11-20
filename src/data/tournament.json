@@ -1,5 +1,5 @@
 {
- "updatedAt": "2026-11-19T21:49:43.688Z",
+ "updatedAt": "2026-11-20T01:13:00.675Z",
  "tournament": {
   "id": "10871",
   "name": "Grand Slam of Darts",
@@ -2351,7 +2351,7 @@
       "id": "517019",
       "date": "2026-11-19",
       "time": "21:15",
-      "status": "upcoming",
+      "status": "result",
       "p1": {
        "id": "32102",
        "name": "Luke Humphries",
@@ -2368,15 +2368,31 @@
        "country": "GB-ENG",
        "ranking": 81
       },
-      "s1": 0,
-      "s2": 0,
-      "winner": null
+      "s1": 9,
+      "s2": 10,
+      "winner": "32627",
+      "stats": [
+       {
+        "avg": 102.02,
+        "f9": 109.95,
+        "t80": 4,
+        "co": 37.5,
+        "hi": 95
+       },
+       {
+        "avg": 99.32,
+        "f9": 114.04,
+        "t80": 8,
+        "co": 43.48,
+        "hi": 114
+       }
+      ]
      },
      {
       "id": "517020",
       "date": "2026-11-19",
-      "time": "22:15",
-      "status": "upcoming",
+      "time": "22:14",
+      "status": "result",
       "p1": {
        "id": "22",
        "name": "James Wade",
@@ -2393,9 +2409,30 @@
        "country": "NL",
        "ranking": 11
       },
-      "s1": 0,
-      "s2": 0,
-      "winner": null
+      "s1": 8,
+      "s2": 10,
+      "winner": "19",
+      "stats": [
+       {
+        "avg": 98.21,
+        "f9": null,
+        "t80": 3,
+        "t140": 16,
+        "t100": 29,
+        "co": 42.11,
+        "hi": 130
+       },
+       {
+        "avg": 103.83,
+        "f9": null,
+        "t80": 6,
+        "t140": 18,
+        "t100": 19,
+        "co": 34.48,
+        "hi": 121
+       }
+      ],
+      "statsLive": true
      },
      {
       "id": "517021",
@@ -2424,24 +2461,19 @@
       "stats": [
        {
         "avg": 101.69,
-        "f9": null,
+        "f9": 112.04,
         "t80": 4,
-        "t140": 19,
-        "t100": 17,
         "co": 37.04,
         "hi": 93
        },
        {
         "avg": 99.51,
-        "f9": null,
+        "f9": 111.78,
         "t80": 6,
-        "t140": 14,
-        "t100": 16,
         "co": 28,
         "hi": 94
        }
-      ],
-      "statsLive": true
+      ]
      },
      {
       "id": "517022",
@@ -2470,24 +2502,19 @@
       "stats": [
        {
         "avg": 96.55,
-        "f9": null,
+        "f9": 108.53,
         "t80": 10,
-        "t140": 9,
-        "t100": 15,
         "co": 31.82,
         "hi": 86
        },
        {
         "avg": 100.72,
-        "f9": null,
+        "f9": 107.65,
         "t80": 7,
-        "t140": 10,
-        "t100": 18,
         "co": 52.63,
         "hi": 170
        }
-      ],
-      "statsLive": true
+      ]
      }
     ]
    },
@@ -2555,8 +2582,22 @@
       "date": "2026-11-21",
       "time": "19:15",
       "status": "upcoming",
-      "p1": null,
-      "p2": null,
+      "p1": {
+       "id": "32627",
+       "name": "Tom Sykes",
+       "last": "Sykes",
+       "nick": "The Castleford Tiger",
+       "country": "GB-ENG",
+       "ranking": 81
+      },
+      "p2": {
+       "id": "19",
+       "name": "Michael van Gerwen",
+       "last": "van Gerwen",
+       "nick": "Mighty Mike",
+       "country": "NL",
+       "ranking": 11
+      },
       "s1": 0,
       "s2": 0,
       "winner": null
@@ -2564,7 +2605,7 @@
      {
       "id": "517026",
       "date": "2026-11-21",
-      "time": "19:15",
+      "time": "20:45",
       "status": "upcoming",
       "p1": {
        "id": "33091",
