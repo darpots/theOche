@@ -1,0 +1,176 @@
+{
+ "fixture": "517024",
+ "event": "Grand Slam of Darts",
+ "stage": "Quarter-Final",
+ "format": "First to 16 legs",
+ "date": "2026-11-20",
+ "venue": "Aldersley Leisure Village, Wolverhampton, Wolverhampton",
+ "winner": "Gerwyn Price",
+ "loser": "Niko Springer",
+ "score": "16-15",
+ "angles": [
+  {
+   "angle": "decider",
+   "score": 50,
+   "evidence": "Springer had the throw in the final leg; Price won it in 14 darts, finishing on 78"
+  },
+  {
+   "angle": "fightback",
+   "score": 40,
+   "evidence": "Price led 7-3, Springer came back to 15-14"
+  },
+  {
+   "angle": "run",
+   "score": 23,
+   "evidence": "Price won 4 legs in a row"
+  },
+  {
+   "angle": "result",
+   "score": 10,
+   "evidence": "Gerwyn Price beat Niko Springer 16-15"
+  }
+ ],
+ "notable": true,
+ "players": [
+  {
+   "name": "Gerwyn Price",
+   "worldRank": 4,
+   "average": null,
+   "t80s": null,
+   "checkoutPct": null,
+   "highestCheckout": null,
+   "breaks": 6,
+   "biggestLead": 4,
+   "longestRun": 4,
+   "previousBestAtEvent": "Winner (2018)",
+   "form": {
+    "period": "last 12 months",
+    "played": 137,
+    "won": 94,
+    "average": 98.67,
+    "titles": 4,
+    "last5": [
+     "W 10-7 v Ryan Searle",
+     "W 5-2 v Sebastian Bialecki",
+     "W 5-3 v Joe Hunt",
+     "L 2-6 v Luke Humphries",
+     "W 6-2 v Luke Woodhouse"
+    ]
+   }
+  },
+  {
+   "name": "Niko Springer",
+   "worldRank": 34,
+   "average": null,
+   "t80s": null,
+   "checkoutPct": null,
+   "highestCheckout": null,
+   "breaks": 5,
+   "biggestLead": 1,
+   "longestRun": 3,
+   "previousBestAtEvent": "Last 16 (2025)",
+   "form": {
+    "period": "last 12 months",
+    "played": 109,
+    "won": 60,
+    "average": 91.85,
+    "titles": 0,
+    "last5": [
+     "W 10-8 v Rob Cross",
+     "W 5-3 v Wessel Nijman",
+     "W 5-1 v Adam Sevada",
+     "L 5-6 v Tom Bissell",
+     "L 5-6 v Luke Woodhouse"
+    ]
+   }
+  }
+ ],
+ "swings": {
+  "fightback": {
+   "leaderWas": "Gerwyn Price",
+   "ledBy": "7-3",
+   "trailerReached": "15-14"
+  },
+  "turningPoint": "leg 31: Price broke throw for 16-15, finishing on 78"
+ },
+ "decidingLeg": {
+  "thrower": "Niko Springer",
+  "won": "Gerwyn Price",
+  "darts": 14,
+  "finish": 78
+ },
+ "bestFinish": {
+  "player": "Gerwyn Price",
+  "score": 143,
+  "leg": 30
+ },
+ "quickestLeg": {
+  "player": "Niko Springer",
+  "darts": 11,
+  "leg": 6
+ },
+ "nineDarters": [],
+ "finishes170": [],
+ "stakes": {
+  "loserTakes": "£35,000",
+  "winnerGuaranteed": "£60,000",
+  "next": {
+   "stage": "Semi-Final",
+   "opponent": "Kevin Doets",
+   "when": "Sunday 22 November, 1:15pm GMT"
+  }
+ },
+ "headToHead": {
+  "meetingsBefore": 1,
+  "wins": {
+   "Gerwyn Price": 1,
+   "Niko Springer": 0
+  },
+  "lastMeeting": "2025-09-06: Czech Darts Open, 6-2 (Gerwyn Price first)"
+ },
+ "milestone": null,
+ "records": {
+  "highestAverageOfEvent": null,
+  "highestLosingAverage": null,
+  "bestCheckoutOfEvent": null,
+  "most180sInAMatchAtEvent": null
+ },
+ "legs": [
+  "L1: Price (break) 13 darts, out 40 -> 1-0",
+  "L2: Price 12 darts, out 136 -> 2-0",
+  "L3: Springer 13 darts, out 32 -> 2-1",
+  "L4: Price 12 darts, out 40 -> 3-1",
+  "L5: Springer 13 darts, out 24 -> 3-2",
+  "L6: Springer (break) 11 darts, out 52 -> 3-3",
+  "L7: Price (break) 15 darts, out 84 -> 4-3",
+  "L8: Price 17 darts, out 12 -> 5-3",
+  "L9: Price (break) 13 darts, out 10 -> 6-3",
+  "L10: Price 15 darts, out 67 -> 7-3",
+  "L11: Springer 15 darts, out 91 -> 7-4",
+  "L12: Price 14 darts, out 24 -> 8-4",
+  "L13: Springer 16 darts, out 40 -> 8-5",
+  "L14: Springer (break) 13 darts, out 20 -> 8-6",
+  "L15: Price (break) 14 darts, out 40 -> 9-6",
+  "L16: Price 11 darts, out 31 -> 10-6",
+  "L17: Springer 16 darts, out 40 -> 10-7",
+  "L18: Springer (break) 16 darts, out 16 -> 10-8",
+  "L19: Springer 16 darts, out 16 -> 10-9",
+  "L20: Price 13 darts, out 40 -> 11-9",
+  "L21: Price (break) 14 darts, out 40 -> 12-9",
+  "L22: Price 18 darts, out 10 -> 13-9",
+  "L23: Springer 20 darts, out 40 -> 13-10",
+  "L24: Springer (break) 14 darts, out 40 -> 13-11",
+  "L25: Springer 17 darts, out 16 -> 13-12",
+  "L26: Price 17 darts, out 40 -> 14-12",
+  "L27: Springer 17 darts, out 18 -> 14-13",
+  "L28: Springer (break) 13 darts, out 40 -> 14-14",
+  "L29: Springer 18 darts, out 60 -> 14-15",
+  "L30: Price 15 darts, out 143 -> 15-15",
+  "L31: Price (break) 14 darts, out 78 -> 16-15"
+ ],
+ "source": {
+  "name": "PDC",
+  "url": "https://www.pdc.tv/matches/517024",
+  "title": "Gerwyn Price v Niko Springer"
+ }
+}

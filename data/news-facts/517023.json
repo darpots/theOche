@@ -1,0 +1,166 @@
+{
+ "fixture": "517023",
+ "event": "Grand Slam of Darts",
+ "stage": "Quarter-Final",
+ "format": "First to 16 legs",
+ "date": "2026-11-20",
+ "venue": "Aldersley Leisure Village, Wolverhampton, Wolverhampton",
+ "winner": "Kevin Doets",
+ "loser": "Jermaine Wattimena",
+ "score": "16-7",
+ "angles": [
+  {
+   "angle": "milestone",
+   "score": 35,
+   "evidence": "Kevin Doets reaches a major semi-final for the first time on record"
+  },
+  {
+   "angle": "run",
+   "score": 35,
+   "evidence": "Doets won 10 legs in a row"
+  },
+  {
+   "angle": "high-average-defeat",
+   "score": 30,
+   "evidence": "Wattimena averaged 100.06 and lost"
+  },
+  {
+   "angle": "170",
+   "score": 25,
+   "evidence": "Kevin Doets, leg 14; Kevin Doets, leg 19"
+  },
+  {
+   "angle": "result",
+   "score": 10,
+   "evidence": "Kevin Doets beat Jermaine Wattimena 16-7"
+  }
+ ],
+ "notable": true,
+ "players": [
+  {
+   "name": "Jermaine Wattimena",
+   "worldRank": 18,
+   "average": 100.06,
+   "t80s": 5,
+   "checkoutPct": 53.9,
+   "highestCheckout": 104,
+   "breaks": 3,
+   "biggestLead": 2,
+   "longestRun": 3,
+   "previousBestAtEvent": "Quarter-Final (2024)",
+   "form": {
+    "period": "last 12 months",
+    "played": 149,
+    "won": 92,
+    "average": 94.71,
+    "titles": 1,
+    "last5": [
+     "W 10-8 v Luke Littler",
+     "W 5-4 v Alan Soutar",
+     "W 5-2 v Lisa Ashton",
+     "L 3-6 v Tommy Morris",
+     "W 6-5 v Stephen Bunting"
+    ]
+   }
+  },
+  {
+   "name": "Kevin Doets",
+   "worldRank": 23,
+   "average": 102.63,
+   "t80s": 8,
+   "checkoutPct": 45.7,
+   "highestCheckout": 170,
+   "breaks": 7,
+   "biggestLead": 9,
+   "longestRun": 10,
+   "previousBestAtEvent": "first appearance on record",
+   "form": {
+    "period": "last 12 months",
+    "played": 180,
+    "won": 127,
+    "average": 96.44,
+    "titles": 1,
+    "last5": [
+     "W 10-5 v Cameron Menzies",
+     "W 5-1 v Tommy Morris",
+     "W 5-3 v Josh Rock",
+     "L 5-6 v Stefan Bellmont",
+     "L 4-6 v Mensur Suljovic"
+    ]
+   }
+  }
+ ],
+ "swings": {
+  "fightback": null,
+  "turningPoint": "leg 11: Doets held for 6-5, finishing on 25"
+ },
+ "decidingLeg": null,
+ "bestFinish": {
+  "player": "Kevin Doets",
+  "score": 170,
+  "leg": 14
+ },
+ "quickestLeg": {
+  "player": "Jermaine Wattimena",
+  "darts": 11,
+  "leg": 3
+ },
+ "nineDarters": [],
+ "finishes170": [
+  {
+   "player": "Kevin Doets",
+   "leg": 14
+  },
+  {
+   "player": "Kevin Doets",
+   "leg": 19
+  }
+ ],
+ "stakes": {
+  "loserTakes": "£35,000",
+  "winnerGuaranteed": "£60,000",
+  "next": {
+   "stage": "Semi-Final",
+   "opponent": "Gerwyn Price",
+   "when": "Sunday 22 November, 1:15pm GMT"
+  }
+ },
+ "headToHead": null,
+ "milestone": "first major semi-final on record for Kevin Doets",
+ "records": {
+  "highestAverageOfEvent": null,
+  "highestLosingAverage": 100.06,
+  "bestCheckoutOfEvent": null,
+  "most180sInAMatchAtEvent": null
+ },
+ "legs": [
+  "L1: Doets 17 darts, out 89 -> 0-1",
+  "L2: Wattimena 15 darts, out 62 -> 1-1",
+  "L3: Wattimena (break) 11 darts, out 86 -> 2-1",
+  "L4: Wattimena 13 darts, out 36 -> 3-1",
+  "L5: Doets 18 darts, out 72 -> 3-2",
+  "L6: Doets (break) 11 darts, out 85 -> 3-3",
+  "L7: Doets 11 darts, out 88 -> 3-4",
+  "L8: Wattimena 15 darts, out 104 -> 4-4",
+  "L9: Wattimena (break) 14 darts, out 70 -> 5-4",
+  "L10: Doets (break) 16 darts, out 16 -> 5-5",
+  "L11: Doets 15 darts, out 25 -> 5-6",
+  "L12: Doets (break) 17 darts, out 16 -> 5-7",
+  "L13: Doets 16 darts, out 8 -> 5-8",
+  "L14: Doets (break) 15 darts, out 170 -> 5-9",
+  "L15: Doets 15 darts, out 24 -> 5-10",
+  "L16: Doets (break) 14 darts, out 32 -> 5-11",
+  "L17: Doets 15 darts, out 82 -> 5-12",
+  "L18: Doets (break) 16 darts, out 14 -> 5-13",
+  "L19: Doets 12 darts, out 170 -> 5-14",
+  "L20: Wattimena 11 darts, out 81 -> 6-14",
+  "L21: Wattimena (break) 11 darts, out 82 -> 7-14",
+  "L22: Doets (break) 11 darts, out 51 -> 7-15",
+  "L23: Doets 14 darts, out 36 -> 7-16"
+ ],
+ "source": {
+  "name": "PDC",
+  "url": "https://www.pdc.tv/matches/517023",
+  "title": "Jermaine Wattimena v Kevin Doets"
+ }
+}
