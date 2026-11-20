@@ -33,16 +33,18 @@ jobs:
           git fetch origin "${GITHUB_REF_NAME}"
           changed=$(git diff --name-only origin/main...FETCH_HEAD)
           echo "$changed"
-          if echo "$changed" | grep -vqE '^src/content/news/[^/]+\.json$'; then
-            echo "::error::Branch changes files outside src/content/news — not auto-publishing."
+          if echo "$changed" | grep -vqE '^(src/content/news|data/news-facts)/[^/]+\.json$'; then
+            echo "::error::Branch changes files outside src/content/news and data/news-facts — not auto-publishing."
             exit 1
           fi
           git checkout FETCH_HEAD -- $changed
       - run: npm ci
+      - name: Check story quality
+        run: npm run news:check
       - uses: ./.github/actions/commit
         with:
           message: 'news: publish newsdesk update'
-          paths: src/content/news
+          paths: src/content/news data/news-facts
       - name: Delete the branch
         run: git push origin --delete "${GITHUB_REF_NAME}" || true
       - if: failure()

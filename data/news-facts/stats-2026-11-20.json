@@ -1,0 +1,527 @@
+{
+ "date": "2026-11-20",
+ "window": "last 12 months",
+ "minimumMatches": 20,
+ "players": 141,
+ "averageLeaders": [
+  {
+   "name": "Luke Littler",
+   "worldRank": 1,
+   "value": 101.57
+  },
+  {
+   "name": "Luke Humphries",
+   "worldRank": 2,
+   "value": 99.84
+  },
+  {
+   "name": "Gerwyn Price",
+   "worldRank": 4,
+   "value": 98.67
+  },
+  {
+   "name": "Gary Anderson",
+   "worldRank": 14,
+   "value": 98.22
+  },
+  {
+   "name": "Wessel Nijman",
+   "worldRank": 13,
+   "value": 97.33
+  },
+  {
+   "name": "Chris Dobey",
+   "worldRank": 16,
+   "value": 97.15
+  },
+  {
+   "name": "Nathan Aspinall",
+   "worldRank": 12,
+   "value": 96.5
+  },
+  {
+   "name": "Kevin Doets",
+   "worldRank": 23,
+   "value": 96.44
+  },
+  {
+   "name": "Michael van Gerwen",
+   "worldRank": 11,
+   "value": 96.22
+  },
+  {
+   "name": "Rob Cross",
+   "worldRank": 24,
+   "value": 96.2
+  }
+ ],
+ "checkoutLeaders": [
+  {
+   "name": "Maximilian Czerwinski",
+   "worldRank": 124,
+   "value": 75
+  },
+  {
+   "name": "Martijn Dragt",
+   "worldRank": 109,
+   "value": 47.7
+  },
+  {
+   "name": "Marvin van Velzen",
+   "worldRank": 93,
+   "value": 45.5
+  },
+  {
+   "name": "Nathan Potter",
+   "worldRank": 128,
+   "value": 44.7
+  },
+  {
+   "name": "David Sharp",
+   "worldRank": 104,
+   "value": 44.4
+  },
+  {
+   "name": "Tom Sykes",
+   "worldRank": 81,
+   "value": 43.6
+  },
+  {
+   "name": "Wessel Nijman",
+   "worldRank": 13,
+   "value": 43.6
+  },
+  {
+   "name": "Sebastian Bialecki",
+   "worldRank": 51,
+   "value": 43.4
+  },
+  {
+   "name": "Jack Tweddell",
+   "worldRank": 122,
+   "value": 43.3
+  },
+  {
+   "name": "Gian van Veen",
+   "worldRank": 3,
+   "value": 43.2
+  }
+ ],
+ "t80PerMatchLeaders": [
+  {
+   "name": "Luke Littler",
+   "worldRank": 1,
+   "value": 5.43
+  },
+  {
+   "name": "Gary Anderson",
+   "worldRank": 14,
+   "value": 4.21
+  },
+  {
+   "name": "Nathan Aspinall",
+   "worldRank": 12,
+   "value": 3.79
+  },
+  {
+   "name": "Luke Humphries",
+   "worldRank": 2,
+   "value": 3.67
+  },
+  {
+   "name": "Gerwyn Price",
+   "worldRank": 4,
+   "value": 3.55
+  },
+  {
+   "name": "Ross Smith",
+   "worldRank": 6,
+   "value": 3.5
+  },
+  {
+   "name": "Dirk van Duijvenbode",
+   "worldRank": 21,
+   "value": 3.42
+  },
+  {
+   "name": "Niels Zonneveld",
+   "worldRank": 28,
+   "value": 3.42
+  },
+  {
+   "name": "Kevin Doets",
+   "worldRank": 23,
+   "value": 3.39
+  },
+  {
+   "name": "Josh Rock",
+   "worldRank": 8,
+   "value": 3.32
+  }
+ ],
+ "finishes170": [
+  {
+   "name": "Rob Cross",
+   "worldRank": 24,
+   "value": 9
+  },
+  {
+   "name": "Luke Littler",
+   "worldRank": 1,
+   "value": 8
+  },
+  {
+   "name": "Kevin Doets",
+   "worldRank": 23,
+   "value": 6
+  },
+  {
+   "name": "Nathan Aspinall",
+   "worldRank": 12,
+   "value": 5
+  },
+  {
+   "name": "Cameron Menzies",
+   "worldRank": 26,
+   "value": 4
+  },
+  {
+   "name": "Krzysztof Ratajski",
+   "worldRank": 19,
+   "value": 4
+  },
+  {
+   "name": "Dirk van Duijvenbode",
+   "worldRank": 21,
+   "value": 4
+  },
+  {
+   "name": "Danny Noppert",
+   "worldRank": 10,
+   "value": 4
+  },
+  {
+   "name": "Ryan Searle",
+   "worldRank": 15,
+   "value": 4
+  },
+  {
+   "name": "Gian van Veen",
+   "worldRank": 3,
+   "value": 4
+  }
+ ],
+ "winRateLeaders": [
+  {
+   "name": "Luke Littler",
+   "worldRank": 1,
+   "value": 81.25
+  },
+  {
+   "name": "Wessel Nijman",
+   "worldRank": 13,
+   "value": 73.8
+  },
+  {
+   "name": "Luke Humphries",
+   "worldRank": 2,
+   "value": 73.38
+  },
+  {
+   "name": "Kevin Doets",
+   "worldRank": 23,
+   "value": 70.56
+  },
+  {
+   "name": "Gerwyn Price",
+   "worldRank": 4,
+   "value": 68.61
+  },
+  {
+   "name": "Ross Smith",
+   "worldRank": 6,
+   "value": 68.49
+  },
+  {
+   "name": "Chris Dobey",
+   "worldRank": 16,
+   "value": 67.27
+  },
+  {
+   "name": "Jonny Clayton",
+   "worldRank": 5,
+   "value": 66.88
+  },
+  {
+   "name": "James Wade",
+   "worldRank": 7,
+   "value": 65.6
+  },
+  {
+   "name": "Nathan Aspinall",
+   "worldRank": 12,
+   "value": 64.89
+  }
+ ],
+ "hot": [
+  {
+   "name": "Nathan Aspinall",
+   "worldRank": 12,
+   "recent": 101.13,
+   "twelveMonths": 96.5,
+   "events": [
+    "Grand Slam of Darts 106.81",
+    "European Championship 100.07",
+    "Dutch Darts Championship 96.52"
+   ],
+   "change": 4.63
+  },
+  {
+   "name": "Wesley Plaisier",
+   "worldRank": 70,
+   "recent": 92.71,
+   "twelveMonths": 88.81,
+   "events": [
+    "UK Open 86.62",
+    "World Championship 95.52",
+    "Players Championship Finals 95.98"
+   ],
+   "change": 3.9
+  },
+  {
+   "name": "Stephen Burton",
+   "worldRank": 105,
+   "recent": 93.36,
+   "twelveMonths": 89.56,
+   "events": [
+    "Dutch Darts Championship 92.89",
+    "Flanders Darts Trophy 96.11",
+    "Czech Darts Open 91.09"
+   ],
+   "change": 3.8
+  },
+  {
+   "name": "James Wade",
+   "worldRank": 7,
+   "recent": 98.82,
+   "twelveMonths": 95.11,
+   "events": [
+    "Grand Slam of Darts 100.27",
+    "European Championship 96.48",
+    "Swiss Darts Trophy 99.72"
+   ],
+   "change": 3.71
+  },
+  {
+   "name": "William O'Connor",
+   "worldRank": 29,
+   "recent": 97.19,
+   "twelveMonths": 93.58,
+   "events": [
+    "European Championship 97.28",
+    "Dutch Darts Championship 95.36",
+    "Swiss Darts Trophy 98.93"
+   ],
+   "change": 3.61
+  },
+  {
+   "name": "Martin Schindler",
+   "worldRank": 20,
+   "recent": 96.41,
+   "twelveMonths": 93.02,
+   "events": [
+    "Grand Slam of Darts 96.53",
+    "European Championship 94.92",
+    "Dutch Darts Championship 97.79"
+   ],
+   "change": 3.39
+  },
+  {
+   "name": "Shane McGuirk",
+   "worldRank": 92,
+   "recent": 94.91,
+   "twelveMonths": 91.59,
+   "events": [
+    "European Darts Trophy 96.27",
+    "UK Open 87.97",
+    "Winmau World Masters 100.5"
+   ],
+   "change": 3.32
+  },
+  {
+   "name": "Gian van Veen",
+   "worldRank": 3,
+   "recent": 98.35,
+   "twelveMonths": 95.28,
+   "events": [
+    "Grand Slam of Darts 103.09",
+    "European Championship 92.9",
+    "Dutch Darts Championship 99.06"
+   ],
+   "change": 3.07
+  }
+ ],
+ "cold": [
+  {
+   "name": "Joe Cullen",
+   "worldRank": 32,
+   "recent": 84.16,
+   "twelveMonths": 93.19,
+   "events": [
+    "Grand Slam of Darts 88.86",
+    "Swiss Darts Trophy 84.7",
+    "World Grand Prix 78.91"
+   ],
+   "change": -9.03
+  },
+  {
+   "name": "Nick Kenny",
+   "worldRank": 64,
+   "recent": 80.61,
+   "twelveMonths": 87.4,
+   "events": [
+    "Dutch Darts Championship 78.78",
+    "Swiss Darts Trophy 85.61",
+    "Austrian Darts Open 77.43"
+   ],
+   "change": -6.79
+  },
+  {
+   "name": "Raymond van Barneveld",
+   "worldRank": 47,
+   "recent": 82.41,
+   "twelveMonths": 89.19,
+   "events": [
+    "Swiss Darts Trophy 87.4",
+    "Flanders Darts Trophy 82.04",
+    "Austrian Darts Open 77.79"
+   ],
+   "change": -6.78
+  },
+  {
+   "name": "Mervyn King",
+   "worldRank": 107,
+   "recent": 83.4,
+   "twelveMonths": 89.57,
+   "events": [
+    "Slovak Darts Open 90.51",
+    "UK Open 89.86",
+    "World Championship 69.83"
+   ],
+   "change": -6.17
+  },
+  {
+   "name": "Gary Anderson",
+   "worldRank": 14,
+   "recent": 92.57,
+   "twelveMonths": 98.22,
+   "events": [
+    "World Grand Prix 97.15",
+    "Czech Darts Open 84.63",
+    "Hungarian Darts Trophy 95.93"
+   ],
+   "change": -5.65
+  },
+  {
+   "name": "Alan Soutar",
+   "worldRank": 61,
+   "recent": 87.57,
+   "twelveMonths": 93.14,
+   "events": [
+    "Grand Slam of Darts 91.71",
+    "Swiss Darts Trophy 90.12",
+    "Baltic Sea Darts Open 80.89"
+   ],
+   "change": -5.57
+  },
+  {
+   "name": "Luke Littler",
+   "worldRank": 1,
+   "recent": 96.47,
+   "twelveMonths": 101.57,
+   "events": [
+    "Grand Slam of Darts 103.88",
+    "European Championship 105.86",
+    "World Grand Prix 79.66"
+   ],
+   "change": -5.1
+  },
+  {
+   "name": "Andrew Gilding",
+   "worldRank": 27,
+   "recent": 87.57,
+   "twelveMonths": 92.62,
+   "events": [
+    "Grand Slam of Darts 84.31",
+    "European Championship 93.62",
+    "Dutch Darts Championship 84.77"
+   ],
+   "change": -5.05
+  }
+ ],
+ "aboveTheirRanking": [
+  {
+   "name": "Justin Hood",
+   "worldRank": 38,
+   "average": 95.59
+  },
+  {
+   "name": "Beau Greaves",
+   "worldRank": 74,
+   "average": 94.4
+  },
+  {
+   "name": "Henry Coates",
+   "worldRank": 96,
+   "average": 94.34
+  },
+  {
+   "name": "Cristo Reyes",
+   "worldRank": 65,
+   "average": 94.17
+  },
+  {
+   "name": "Tom Sykes",
+   "worldRank": 81,
+   "average": 93.75
+  },
+  {
+   "name": "Kim Huybrechts",
+   "worldRank": 44,
+   "average": 93.64
+  }
+ ],
+ "belowTheirRanking": [
+  {
+   "name": "Dave Chisnall",
+   "worldRank": 31,
+   "average": 90.21
+  },
+  {
+   "name": "Ryan Joyce",
+   "worldRank": 25,
+   "average": 90.76
+  },
+  {
+   "name": "Daryl Gurney",
+   "worldRank": 30,
+   "average": 91.46
+  },
+  {
+   "name": "Andrew Gilding",
+   "worldRank": 27,
+   "average": 92.62
+  },
+  {
+   "name": "Cameron Menzies",
+   "worldRank": 26,
+   "average": 92.65
+  },
+  {
+   "name": "Martin Schindler",
+   "worldRank": 20,
+   "average": 93.02
+  }
+ ],
+ "rankingMovers": []
+}

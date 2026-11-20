@@ -1,0 +1,149 @@
+{
+ "fixture": "517018",
+ "event": "Grand Slam of Darts",
+ "stage": "Last 16",
+ "format": "First to 10 legs",
+ "date": "2026-11-18",
+ "venue": "Aldersley Leisure Village, Wolverhampton, Wolverhampton",
+ "winner": "Niko Springer",
+ "loser": "Rob Cross",
+ "score": "10-8",
+ "angles": [
+  {
+   "angle": "milestone",
+   "score": 35,
+   "evidence": "Niko Springer reaches a major quarter-final for the first time on record"
+  },
+  {
+   "angle": "run",
+   "score": 25,
+   "evidence": "Springer won 5 legs in a row"
+  },
+  {
+   "angle": "result",
+   "score": 10,
+   "evidence": "Niko Springer beat Rob Cross 10-8"
+  }
+ ],
+ "notable": true,
+ "players": [
+  {
+   "name": "Rob Cross",
+   "worldRank": 24,
+   "average": 96.05,
+   "t80s": 6,
+   "checkoutPct": 29.6,
+   "highestCheckout": 116,
+   "breaks": 2,
+   "biggestLead": 1,
+   "longestRun": 3,
+   "previousBestAtEvent": "Runner-up (2023)",
+   "form": {
+    "period": "last 12 months",
+    "played": 122,
+    "won": 76,
+    "average": 96.2,
+    "titles": 1,
+    "last5": [
+     "W 5-1 v Anton Ostlund",
+     "W 5-1 v Jonny Clayton",
+     "L 3-6 v Tommy Morris",
+     "L 3-6 v Gary Anderson",
+     "W 6-4 v Christian Kist"
+    ]
+   }
+  },
+  {
+   "name": "Niko Springer",
+   "worldRank": 34,
+   "average": 88.59,
+   "t80s": 5,
+   "checkoutPct": 47.6,
+   "highestCheckout": 111,
+   "breaks": 3,
+   "biggestLead": 4,
+   "longestRun": 5,
+   "previousBestAtEvent": "Last 16 (2025)",
+   "form": {
+    "period": "last 12 months",
+    "played": 109,
+    "won": 60,
+    "average": 91.85,
+    "titles": 0,
+    "last5": [
+     "W 5-3 v Wessel Nijman",
+     "W 5-1 v Adam Sevada",
+     "L 5-6 v Tom Bissell",
+     "L 5-6 v Luke Woodhouse",
+     "W 6-1 v Shane McGuirk"
+    ]
+   }
+  }
+ ],
+ "swings": {
+  "fightback": null,
+  "turningPoint": "leg 11: Springer broke throw for 6-5, finishing on 16"
+ },
+ "decidingLeg": null,
+ "bestFinish": {
+  "player": "Rob Cross",
+  "score": 116,
+  "leg": 5
+ },
+ "quickestLeg": {
+  "player": "Niko Springer",
+  "darts": 11,
+  "leg": 6
+ },
+ "nineDarters": [],
+ "finishes170": [],
+ "stakes": {
+  "loserTakes": "£20,000",
+  "winnerGuaranteed": "£35,000",
+  "next": {
+   "stage": "Quarter-Final",
+   "opponent": "Gerwyn Price",
+   "when": "Friday 20 November, 8:45pm GMT"
+  }
+ },
+ "headToHead": {
+  "meetingsBefore": 1,
+  "wins": {
+   "Rob Cross": 0,
+   "Niko Springer": 1
+  },
+  "lastMeeting": "2025-09-21: Hungarian Darts Trophy, 3-6 (Rob Cross first)"
+ },
+ "milestone": "first major quarter-final on record for Niko Springer",
+ "records": {
+  "highestAverageOfEvent": null,
+  "highestLosingAverage": null,
+  "bestCheckoutOfEvent": null,
+  "most180sInAMatchAtEvent": null
+ },
+ "legs": [
+  "L1: Cross 16 darts, out 12 -> 1-0",
+  "L2: Springer 14 darts, out 80 -> 1-1",
+  "L3: Cross 16 darts, out 16 -> 2-1",
+  "L4: Springer 16 darts, out 20 -> 2-2",
+  "L5: Cross 12 darts, out 116 -> 3-2",
+  "L6: Springer 11 darts, out 90 -> 3-3",
+  "L7: Springer (break) 14 darts, out 25 -> 3-4",
+  "L8: Cross (break) 11 darts, out 58 -> 4-4",
+  "L9: Cross 15 darts, out 70 -> 5-4",
+  "L10: Springer 18 darts, out 40 -> 5-5",
+  "L11: Springer (break) 17 darts, out 16 -> 5-6",
+  "L12: Springer 17 darts, out 56 -> 5-7",
+  "L13: Springer (break) 15 darts, out 76 -> 5-8",
+  "L14: Springer 19 darts, out 10 -> 5-9",
+  "L15: Cross 16 darts, out 36 -> 6-9",
+  "L16: Cross (break) 14 darts, out 60 -> 7-9",
+  "L17: Cross 19 darts, out 16 -> 8-9",
+  "L18: Springer 18 darts, out 111 -> 8-10"
+ ],
+ "source": {
+  "name": "PDC",
+  "url": "https://www.pdc.tv/matches/517018",
+  "title": "Rob Cross v Niko Springer"
+ }
+}

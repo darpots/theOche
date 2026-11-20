@@ -1,0 +1,113 @@
+{
+ "event": "Grand Slam of Darts",
+ "date": "2026-11-21",
+ "kind": "preview",
+ "matches": [
+  {
+   "fixture": "517025",
+   "stage": "Quarter-Final",
+   "format": "First to 16 legs",
+   "time": "7:15pm GMT",
+   "winnerGuaranteed": "£60,000",
+   "losersTake": "£35,000",
+   "players": [
+    {
+     "name": "Tom Sykes",
+     "worldRank": 81,
+     "last12Months": {
+      "average": 93.75,
+      "won": 53,
+      "played": 90,
+      "titles": 0
+     },
+     "last5": [
+      "W 10-9 v Luke Humphries",
+      "W 5-1 v Krzysztof Ratajski",
+      "W 5-3 v Luke Woodhouse",
+      "L 2-6 v Danny Noppert",
+      "W 6-3 v Mensur Suljovic"
+     ],
+     "previousBestAtEvent": "first appearance on record"
+    },
+    {
+     "name": "Michael van Gerwen",
+     "worldRank": 11,
+     "last12Months": {
+      "average": 96.22,
+      "won": 93,
+      "played": 148,
+      "titles": 4
+     },
+     "last5": [
+      "W 10-8 v James Wade",
+      "W 5-4 v Jeffrey De Graaf",
+      "W 5-4 v Henry Coates",
+      "L 3-6 v Luke Humphries",
+      "W 6-3 v Derek Coulson"
+     ],
+     "previousBestAtEvent": "Winner (2017)"
+    }
+   ],
+   "headToHead": {
+    "meetings": 1,
+    "wins": {
+     "Tom Sykes": 0,
+     "Michael van Gerwen": 1
+    }
+   }
+  },
+  {
+   "fixture": "517026",
+   "stage": "Quarter-Final",
+   "format": "First to 16 legs",
+   "time": "8:45pm GMT",
+   "winnerGuaranteed": "£60,000",
+   "losersTake": "£35,000",
+   "players": [
+    {
+     "name": "Gian van Veen",
+     "worldRank": 3,
+     "last12Months": {
+      "average": 95.28,
+      "won": 98,
+      "played": 162,
+      "titles": 0
+     },
+     "last5": [
+      "W 10-7 v Martin Schindler",
+      "W 5-2 v Bradley Brooks",
+      "W 5-2 v Carl Sneyd",
+      "L 4-6 v Jeffrey De Graaf",
+      "W 6-3 v Jim Long"
+     ],
+     "previousBestAtEvent": "Quarter-Final (2024)"
+    },
+    {
+     "name": "Nathan Aspinall",
+     "worldRank": 12,
+     "last12Months": {
+      "average": 96.5,
+      "won": 61,
+      "played": 94,
+      "titles": 1
+     },
+     "last5": [
+      "W 10-7 v Gabriel Clemens",
+      "W 5-0 v Karel Sedlacek",
+      "W 5-1 v Maik Kuivenhoven",
+      "L 2-6 v Carl Sneyd",
+      "L 5-10 v Luke Littler"
+     ],
+     "previousBestAtEvent": "Quarter-Final (2020)"
+    }
+   ],
+   "headToHead": {
+    "meetings": 8,
+    "wins": {
+     "Gian van Veen": 5,
+     "Nathan Aspinall": 3
+    }
+   }
+  }
+ ]
+}

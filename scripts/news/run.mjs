@@ -29,12 +29,23 @@ if (!TOKEN && !process.argv.includes('--dry')) console.warn('NEWS_API_KEY not se
 const DUMP = process.argv.find(a => a.startsWith('--dump='))?.slice(7);
 const dumped = [];
 
+// News: PDC's own newsroom first (official announcements, match reports with
+// post-match quotes), then the outlets. type: rss | atom | sitemap | pdc.
+// Gear: equipment launches and retail news, kept separate so the newsdesk
+// can keep them to a small share (see NEWSDESK.md).
 const FEEDS = [
+  { id: 'pdc', name: 'PDC', type: 'pdc', url: 'https://news.cms.web.gc.pdcservices.co.uk/v2/search?page.size=30&sort=publishedDateTime:desc' },
   { id: 'bbc', name: 'BBC Sport', url: 'https://feeds.bbci.co.uk/sport/darts/rss.xml' },
-  { id: 'dartsnews', name: 'Dartsnews', url: 'https://dartsnews.com/sitemap/news.xml' },
+  { id: 'dartsnews', name: 'Dartsnews', url: 'https://dartsnews.com/sitemap/news.xml' }, // RSS, despite the address
   { id: 'dartsworld', name: 'Darts World', url: 'https://www.dartsworld.com/feed/' },
   { id: 'guardian', name: 'The Guardian', url: 'https://www.theguardian.com/sport/darts/rss' },
+  { id: 'mirror', name: 'The Mirror', url: 'https://www.mirror.co.uk/sport/other-sports/darts/?service=rss' },
+  { id: 'dartscorner', name: 'Darts Corner', type: 'atom', gear: true, url: 'https://www.dartscorner.co.uk/blogs/news.atom' },
+  { id: 'reddragon', name: 'Red Dragon Darts', type: 'atom', gear: true, url: 'https://www.reddragondarts.com/blogs/news.atom' },
+  { id: 'reddragon-new', name: 'Red Dragon Darts (new products)', type: 'atom', gear: true, url: 'https://www.reddragondarts.com/collections/new.atom' },
 ];
+// Betting odds, tips and "how to watch" pages are never news for us.
+const NOT_NEWS = /\b(odds|betting tips?|tips|predictions?|how to watch|tv schedule|live stream)\b/i;
 
 // Non-PDC circuits to leave out.
 const EXCLUDE = /\b(wdf|bdo|lakeside|winmau world masters|modus|mardle|women'?s world matchplay qualifier)\b/i;
@@ -67,18 +78,38 @@ const entities = text => names.filter(n => new RegExp(`\\b${n.last.replace(/[.*+
 // ---- 1. discover -----------------------------------------------------------
 const xml = new XMLParser({ ignoreAttributes: true, cdataPropName: false });
 const items = [];
+// Every feed type as { title, summary, url, date }.
+async function readFeed(feed) {
+  if (feed.type === 'pdc') {
+    const d = await get(feed.url);
+    return (d.data || []).map(x => x.attributes).map(a => ({ title: a.postTitle, summary: a.postSummary || a.description || '', url: `https://www.pdc.tv${a.postSlug}`, date: a.publishedDateTime }));
+  }
+  const text = await get(feed.url, { as: 'text' });
+  if (feed.type === 'atom') {
+    // Atom keeps the link in an attribute, so parse with attributes kept.
+    const doc = new XMLParser({ ignoreAttributes: false, attributeNamePrefix: '@_' }).parse(text);
+    const href = l => [].concat(l ?? []).map(x => (typeof x === 'string' ? x : x?.['@_href'])).find(Boolean);
+    const txt = v => (typeof v === 'string' ? v : v?.['#text'] ?? '');
+    return [].concat(doc?.feed?.entry ?? []).map(e => ({ title: txt(e.title), summary: txt(e.summary) || txt(e.content) || '', url: href(e.link) || txt(e.id), date: e.published || e.updated }));
+  }
+  const doc = xml.parse(text);
+  if (feed.type === 'sitemap') return [].concat(doc?.urlset?.url ?? []).map(u => ({ title: u['news:news']?.['news:title'], summary: '', url: u.loc, date: u['news:news']?.['news:publication_date'] || u.lastmod }));
+  return [].concat(doc?.rss?.channel?.item ?? []).map(it => ({ title: it.title, summary: it.description, url: it.link, date: it.pubDate || it['dc:date'] }));
+}
+const gearItems = [];
 for (const feed of FEEDS) {
   try {
-    const doc = xml.parse(await get(feed.url, { as: 'text' }));
-    const list = [].concat(doc?.rss?.channel?.item ?? []);
+    const list = await readFeed(feed);
     for (const it of list) {
-      const date = Date.parse(it.pubDate || it['dc:date'] || '');
+      const date = Date.parse(it.date || '');
       const title = strip(it.title);
-      const summary = strip(it.description).slice(0, 600);
-      const url = String(it.link || '').trim();
+      const summary = strip(it.summary).slice(0, 600);
+      const url = String(it.url || '').trim();
       if (!url || !title || !Number.isFinite(date)) continue;
-      if ((now - date) / 36e5 > LOOKBACK_HOURS) continue;
-      if (EXCLUDE.test(`${title} ${summary}`)) continue;
+      if ((now - date) / 36e5 > (feed.gear ? 7 * 24 : LOOKBACK_HOURS)) continue;
+      if (EXCLUDE.test(`${title} ${summary}`) || NOT_NEWS.test(title)) continue;
+      // Equipment and retail items go to their own list (a small share of the news).
+      if (feed.gear) { if (!/look back in time|podcast/i.test(title)) gearItems.push({ source: feed.name, url, title, summary, date: new Date(date).toISOString() }); continue; }
       const ents = entities(`${title} ${summary}`);
       if (feed.id === 'guardian' && !/darts|pdc/i.test(`${title} ${summary} ${url}`)) continue;
       items.push({ source: feed.name, url, title, summary, date: new Date(date).toISOString(), ents, tok: tokens(title) });
@@ -202,5 +233,10 @@ Return JSON:
 }
 // Surface a broken model connection as a failed run (opens an issue).
 if (llmFailed && written === 0) process.exitCode = 1;
-if (DUMP) await writeFile(DUMP, JSON.stringify(dumped, null, 1));
+if (DUMP) {
+  await writeFile(DUMP, JSON.stringify(dumped, null, 1));
+  // Equipment and retail items from the last week, for at most one gear story a week.
+  await writeFile(DUMP.replace(/\.json$/, '') + '-gear.json', JSON.stringify(gearItems, null, 1));
+  log(`gear: ${gearItems.length} items written to ${DUMP.replace(/\.json$/, '')}-gear.json`);
+}
 log(`done: ${written} ${DRY ? 'candidate(s) (dry run)' : 'new report(s)'}`);

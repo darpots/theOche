@@ -1,0 +1,143 @@
+{
+ "fixture": "517021",
+ "event": "Grand Slam of Darts",
+ "stage": "Last 16",
+ "format": "First to 10 legs",
+ "date": "2026-11-19",
+ "venue": "Aldersley Leisure Village, Wolverhampton, Wolverhampton",
+ "winner": "Gian van Veen",
+ "loser": "Martin Schindler",
+ "score": "10-7",
+ "angles": [
+  {
+   "angle": "run",
+   "score": 23,
+   "evidence": "van Veen won 4 legs in a row"
+  },
+  {
+   "angle": "result",
+   "score": 10,
+   "evidence": "Gian van Veen beat Martin Schindler 10-7"
+  }
+ ],
+ "notable": false,
+ "players": [
+  {
+   "name": "Gian van Veen",
+   "worldRank": 3,
+   "average": 101.69,
+   "t80s": 4,
+   "checkoutPct": 37,
+   "highestCheckout": 93,
+   "breaks": 5,
+   "biggestLead": 6,
+   "longestRun": 4,
+   "previousBestAtEvent": "Quarter-Final (2024)",
+   "form": {
+    "period": "last 12 months",
+    "played": 162,
+    "won": 98,
+    "average": 95.28,
+    "titles": 0,
+    "last5": [
+     "W 5-2 v Bradley Brooks",
+     "W 5-2 v Carl Sneyd",
+     "L 4-6 v Jeffrey De Graaf",
+     "W 6-3 v Jim Long",
+     "W 6-2 v Connor Scutt"
+    ]
+   }
+  },
+  {
+   "name": "Martin Schindler",
+   "worldRank": 20,
+   "average": 99.51,
+   "t80s": 6,
+   "checkoutPct": 28,
+   "highestCheckout": 94,
+   "breaks": 3,
+   "biggestLead": 1,
+   "longestRun": 4,
+   "previousBestAtEvent": "Last 16 (2025)",
+   "form": {
+    "period": "last 12 months",
+    "played": 111,
+    "won": 56,
+    "average": 93.02,
+    "titles": 0,
+    "last5": [
+     "W 5-3 v Chris Dobey",
+     "W 5-0 v Jan Schmidt",
+     "L 1-6 v Nick Kenny",
+     "W 6-4 v Mickey Mansell",
+     "L 2-6 v Michael Smith"
+    ]
+   }
+  }
+ ],
+ "swings": {
+  "fightback": null,
+  "turningPoint": "leg 5: van Veen broke throw for 3-2, finishing on 81"
+ },
+ "decidingLeg": null,
+ "bestFinish": {
+  "player": "Martin Schindler",
+  "score": 94,
+  "leg": 4
+ },
+ "quickestLeg": {
+  "player": "Martin Schindler",
+  "darts": 10,
+  "leg": 16
+ },
+ "nineDarters": [],
+ "finishes170": [],
+ "stakes": {
+  "loserTakes": "£20,000",
+  "winnerGuaranteed": "£35,000",
+  "next": {
+   "stage": "Quarter-Final",
+   "opponent": "Nathan Aspinall",
+   "when": "Saturday 21 November, 8:45pm GMT"
+  }
+ },
+ "headToHead": {
+  "meetingsBefore": 8,
+  "wins": {
+   "Gian van Veen": 4,
+   "Martin Schindler": 4
+  },
+  "lastMeeting": "2026-06-17: Players Championship 22, 6-5 (Gian van Veen first)"
+ },
+ "milestone": null,
+ "records": {
+  "highestAverageOfEvent": null,
+  "highestLosingAverage": null,
+  "bestCheckoutOfEvent": null,
+  "most180sInAMatchAtEvent": null
+ },
+ "legs": [
+  "L1: Schindler 15 darts, out 36 -> 0-1",
+  "L2: van Veen 18 darts, out 62 -> 1-1",
+  "L3: van Veen (break) 17 darts, out 90 -> 2-1",
+  "L4: Schindler (break) 18 darts, out 94 -> 2-2",
+  "L5: van Veen (break) 12 darts, out 81 -> 3-2",
+  "L6: van Veen 13 darts, out 16 -> 4-2",
+  "L7: van Veen (break) 12 darts, out 87 -> 5-2",
+  "L8: van Veen 15 darts, out 28 -> 6-2",
+  "L9: Schindler 13 darts, out 16 -> 6-3",
+  "L10: van Veen 13 darts, out 32 -> 7-3",
+  "L11: van Veen (break) 15 darts, out 40 -> 8-3",
+  "L12: van Veen 14 darts, out 63 -> 9-3",
+  "L13: Schindler 17 darts, out 10 -> 9-4",
+  "L14: Schindler (break) 17 darts, out 32 -> 9-5",
+  "L15: Schindler 14 darts, out 31 -> 9-6",
+  "L16: Schindler (break) 10 darts, out 32 -> 9-7",
+  "L17: van Veen (break) 11 darts, out 93 -> 10-7"
+ ],
+ "source": {
+  "name": "PDC",
+  "url": "https://www.pdc.tv/matches/517021",
+  "title": "Gian van Veen v Martin Schindler"
+ }
+}

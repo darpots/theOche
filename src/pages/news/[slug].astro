@@ -21,7 +21,7 @@ const quote = pullQuote(story);
 const paras = linkedBody(story);
 const jsonld = {
   '@context': 'https://schema.org', '@type': 'NewsArticle',
-  headline: story.headline, description: story.standfirst, datePublished: story.date, dateModified: story.date,
+  headline: story.headline, description: story.standfirst, datePublished: story.date, dateModified: story.updated || story.date,
   image: [new URL(shareImage, Astro.site).href],
   author: { '@type': 'Organization', name: SITE.name, url: Astro.site?.href },
   publisher: { '@type': 'Organization', name: SITE.name, logo: { '@type': 'ImageObject', url: new URL('/icon-512.png', Astro.site).href } },
@@ -36,7 +36,7 @@ const jsonld = {
       <div class="tags">{story.tags.map(t => <span>{t}</span>)}</div>
       <h1 class="headline" transition:name={`h-${story.slug}`}>{story.headline}</h1>
       <p class="stand">{story.standfirst}</p>
-      <p class="byline muted">By The Oche newsdesk · <time datetime={story.date}>{published}</time></p>
+      <p class="byline muted">By The Oche newsdesk · <time datetime={story.date}>{published}</time>{story.updated && <> · Updated <time datetime={story.updated}>{new Date(story.updated).toLocaleString('en-GB', { day: 'numeric', month: 'short', hour: 'numeric', minute: '2-digit', timeZone: 'Europe/London' })}</time></>}</p>
     </header>
     <NewsArt story={story} class="cover" eager />
     {keys.numbers.length > 0 && (

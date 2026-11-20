@@ -1,0 +1,179 @@
+{
+ "fixture": "517019",
+ "event": "Grand Slam of Darts",
+ "stage": "Last 16",
+ "format": "First to 10 legs",
+ "date": "2026-11-19",
+ "venue": "Aldersley Leisure Village, Wolverhampton, Wolverhampton",
+ "winner": "Tom Sykes",
+ "loser": "Luke Humphries",
+ "score": "10-9",
+ "angles": [
+  {
+   "angle": "upset",
+   "score": 90,
+   "evidence": "world No 81 beat world No 2 (79 places higher)"
+  },
+  {
+   "angle": "decider",
+   "score": 50,
+   "evidence": "Humphries had the throw in the final leg; Sykes won it in 13 darts, finishing on 36"
+  },
+  {
+   "angle": "fightback",
+   "score": 40,
+   "evidence": "Sykes led 4-0, Humphries came back to 6-5"
+  },
+  {
+   "angle": "milestone",
+   "score": 35,
+   "evidence": "Tom Sykes reaches a major quarter-final for the first time on record"
+  },
+  {
+   "angle": "high-average-defeat",
+   "score": 30,
+   "evidence": "Humphries averaged 102.02 and lost"
+  },
+  {
+   "angle": "run",
+   "score": 23,
+   "evidence": "Sykes won 4 legs in a row"
+  },
+  {
+   "angle": "result",
+   "score": 10,
+   "evidence": "Tom Sykes beat Luke Humphries 10-9"
+  }
+ ],
+ "notable": true,
+ "players": [
+  {
+   "name": "Luke Humphries",
+   "worldRank": 2,
+   "average": 102.02,
+   "t80s": 4,
+   "checkoutPct": 37.5,
+   "highestCheckout": 95,
+   "breaks": 4,
+   "biggestLead": 1,
+   "longestRun": 4,
+   "previousBestAtEvent": "Winner (2023)",
+   "form": {
+    "period": "last 12 months",
+    "played": 139,
+    "won": 102,
+    "average": 99.84,
+    "titles": 8,
+    "last5": [
+     "W 5-2 v Joe Cullen",
+     "W 5-3 v Paolo Nebrida",
+     "L 5-8 v Tommy Morris",
+     "W 7-5 v Jack Aldridge",
+     "W 6-3 v Michael van Gerwen"
+    ]
+   }
+  },
+  {
+   "name": "Tom Sykes",
+   "worldRank": 81,
+   "average": 99.32,
+   "t80s": 8,
+   "checkoutPct": 43.5,
+   "highestCheckout": 114,
+   "breaks": 5,
+   "biggestLead": 4,
+   "longestRun": 4,
+   "previousBestAtEvent": "first appearance on record",
+   "form": {
+    "period": "last 12 months",
+    "played": 90,
+    "won": 53,
+    "average": 93.75,
+    "titles": 0,
+    "last5": [
+     "W 5-1 v Krzysztof Ratajski",
+     "W 5-3 v Luke Woodhouse",
+     "L 2-6 v Danny Noppert",
+     "W 6-3 v Mensur Suljovic",
+     "W 6-4 v Gabriel Clemens"
+    ]
+   }
+  }
+ ],
+ "swings": {
+  "fightback": {
+   "leaderWas": "Tom Sykes",
+   "ledBy": "4-0",
+   "trailerReached": "6-5"
+  },
+  "turningPoint": "leg 19: Sykes broke throw for 10-9, finishing on 36"
+ },
+ "decidingLeg": {
+  "thrower": "Luke Humphries",
+  "won": "Tom Sykes",
+  "darts": 13,
+  "finish": 36
+ },
+ "bestFinish": {
+  "player": "Tom Sykes",
+  "score": 114,
+  "leg": 13
+ },
+ "quickestLeg": {
+  "player": "Tom Sykes",
+  "darts": 11,
+  "leg": 4
+ },
+ "nineDarters": [],
+ "finishes170": [],
+ "stakes": {
+  "loserTakes": "£20,000",
+  "winnerGuaranteed": "£35,000",
+  "next": {
+   "stage": "Quarter-Final",
+   "opponent": "Michael van Gerwen",
+   "when": "Saturday 21 November, 7:15pm GMT"
+  }
+ },
+ "headToHead": {
+  "meetingsBefore": 0,
+  "wins": {
+   "Luke Humphries": 0,
+   "Tom Sykes": 0
+  },
+  "lastMeeting": null
+ },
+ "milestone": "first major quarter-final on record for Tom Sykes",
+ "records": {
+  "highestAverageOfEvent": null,
+  "highestLosingAverage": 102.02,
+  "bestCheckoutOfEvent": null,
+  "most180sInAMatchAtEvent": null
+ },
+ "legs": [
+  "L1: Sykes (break) 16 darts, out 40 -> 0-1",
+  "L2: Sykes 15 darts, out 73 -> 0-2",
+  "L3: Sykes (break) 13 darts, out 20 -> 0-3",
+  "L4: Sykes 11 darts, out 85 -> 0-4",
+  "L5: Humphries 14 darts, out 76 -> 1-4",
+  "L6: Humphries (break) 12 darts, out 92 -> 2-4",
+  "L7: Sykes (break) 14 darts, out 25 -> 2-5",
+  "L8: Humphries (break) 14 darts, out 95 -> 3-5",
+  "L9: Humphries 17 darts, out 40 -> 4-5",
+  "L10: Humphries (break) 16 darts, out 40 -> 5-5",
+  "L11: Humphries 18 darts, out 18 -> 6-5",
+  "L12: Sykes 18 darts, out 20 -> 6-6",
+  "L13: Sykes (break) 15 darts, out 114 -> 6-7",
+  "L14: Sykes 18 darts, out 72 -> 6-8",
+  "L15: Humphries 13 darts, out 40 -> 7-8",
+  "L16: Sykes 13 darts, out 40 -> 7-9",
+  "L17: Humphries 11 darts, out 87 -> 8-9",
+  "L18: Humphries (break) 11 darts, out 81 -> 9-9",
+  "L19: Sykes (break) 13 darts, out 36 -> 9-10"
+ ],
+ "source": {
+  "name": "PDC",
+  "url": "https://www.pdc.tv/matches/517019",
+  "title": "Luke Humphries v Tom Sykes"
+ }
+}

@@ -1,14 +1,14 @@
 {
  "slug": "van-veen-leads-6-2-and-beats-schindler-10-7",
  "date": "2026-11-19T21:45:00.000Z",
- "headline": "Van Veen builds 6-2 lead and sees off Schindler 10-7",
- "standfirst": "Gian van Veen averaged 101.69 and survived a late Martin Schindler rally to reach the Grand Slam of Darts quarter-finals.",
+ "headline": "Van Veen holds off Schindler surge to win 10-7",
+ "standfirst": "Gian van Veen led 9-3 and needed an 11-dart break to stop Martin Schindler’s four-leg run, reaching the Grand Slam quarter-finals to face Nathan Aspinall.",
  "body": [
-  "Gian van Veen booked a place in the Grand Slam of Darts quarter-finals with a 10-7 win over Martin Schindler in the last 16 at Wolverhampton on Thursday. The Dutchman averaged 101.69 to Schindler’s 99.51.",
-  "Schindler took the opening leg, but van Veen won four of the next five legs to lead 4-2 and then took the next two to go 6-2 clear. Three breaks of throw along the way helped him into a 9-3 lead, and the match appeared to be over as a contest.",
-  "Schindler had other ideas. He won four legs in a row, including two breaks of throw and a 10-dart leg, to cut the gap to 9-7. He hit six 180s to van Veen’s four, but missed too many doubles: his checkout rate was 28 per cent, against 37.04 for his opponent.",
-  "Van Veen did not let the comeback go further. He broke the Schindler throw in 11 darts, finishing on 93, to complete the win. He had broken throw five times in all.",
-  "He now plays Nathan Aspinall in the quarter-finals on Saturday evening."
+  "Gian van Veen reached the quarter-finals of the Grand Slam of Darts with a 10-7 win over Martin Schindler, but a match that looked finished at 9-3 ended with the world No 3 needing his best leg of the night to close it.",
+  "Schindler won four in a row, the last a 10-dart break, to pull back to 9-7. Van Veen broke back at once in 11 darts, checking out 93 to win it. “You feel like you’re down because you’ve lost the last four or five legs,” he told Dartsnews.",
+  "Until then he had been in control. He broke throw five times in all and averaged 101.69, well above the 95.28 he has averaged over the last 12 months, and won nine of the first 12 legs.",
+  "Schindler averaged 99.51 and hit six 180s, but converted only 28 per cent of his chances at a double. That was the difference: Van Veen was at 37.",
+  "Van Veen equals his best Grand Slam run, a quarter-final in 2024. He plays Nathan Aspinall on Saturday at 8:45pm, with at least £35,000 already secured."
  ],
  "players": [
   "Gian van Veen",
@@ -19,33 +19,27 @@
    "name": "PDC",
    "url": "https://www.pdc.tv/matches/517021",
    "title": "Gian van Veen v Martin Schindler"
+  },
+  {
+   "name": "Dartsnews",
+   "url": "https://dartsnews.com/pdc/both-of-us-are-showing-how-you-can-get-out-of-those-dark-times-gian-van-veen-sees-special-significance-in-his-match-against-nathan-aspinall-after-dartitis-struggles",
+   "title": "\"Both of us are showing how you can get out of those dark times\": Gian van Veen"
   }
  ],
  "originalTitles": [
-  "Gian van Veen v Martin Schindler"
- ],
- "keyNumbers": [
-  {
-   "value": "101.69",
-   "label": "Van Veen average"
-  },
-  {
-   "value": "6",
-   "label": "Biggest lead (legs)"
-  },
-  {
-   "value": "5",
-   "label": "Van Veen breaks"
-  },
-  {
-   "value": "10",
-   "label": "Schindler’s quickest leg (darts)"
-  }
+  "Gian van Veen v Martin Schindler",
+  "\"Both of us are showing how you can get out of those dark times\": Gian van Veen"
  ],
  "tags": [
   "Grand Slam of Darts"
  ],
  "writtenBy": "The Oche newsdesk (Claude)",
  "tournament": "10871",
- "kind": "match-report"
+ "kind": "match-report",
+ "facts": "517021",
+ "quote": {
+  "text": "Luckily, I got the job done just in time",
+  "by": "Gian van Veen, to Dartsnews"
+ },
+ "updated": "2026-11-20T07:26:00.000Z"
 }

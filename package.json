@@ -14,6 +14,10 @@
     "test": "node --test tests/",
     "recap-facts": "node scripts/news/recap-facts.mjs",
     "match-report": "node scripts/news/match-report.mjs",
+    "day-facts": "node scripts/news/day-facts.mjs",
+    "stats-facts": "node scripts/news/stats-facts.mjs",
+    "news:check": "node scripts/news/check.mjs",
+    "news:quality": "node scripts/news/quality.mjs",
     "data:live-race": "node scripts/refresh-live-race.mjs",
     "data:images": "node scripts/make-player-images.mjs"
   },

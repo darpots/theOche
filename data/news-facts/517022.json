@@ -1,0 +1,146 @@
+{
+ "fixture": "517022",
+ "event": "Grand Slam of Darts",
+ "stage": "Last 16",
+ "format": "First to 10 legs",
+ "date": "2026-11-19",
+ "venue": "Aldersley Leisure Village, Wolverhampton, Wolverhampton",
+ "winner": "Nathan Aspinall",
+ "loser": "Gabriel Clemens",
+ "score": "10-7",
+ "angles": [
+  {
+   "angle": "170",
+   "score": 25,
+   "evidence": "Nathan Aspinall, leg 15"
+  },
+  {
+   "angle": "run",
+   "score": 23,
+   "evidence": "Aspinall won 4 legs in a row"
+  },
+  {
+   "angle": "result",
+   "score": 10,
+   "evidence": "Nathan Aspinall beat Gabriel Clemens 10-7"
+  }
+ ],
+ "notable": false,
+ "players": [
+  {
+   "name": "Gabriel Clemens",
+   "worldRank": 53,
+   "average": 96.55,
+   "t80s": 10,
+   "checkoutPct": 31.8,
+   "highestCheckout": 86,
+   "breaks": 3,
+   "biggestLead": 1,
+   "longestRun": 3,
+   "previousBestAtEvent": "Group stage (2020)",
+   "form": {
+    "period": "last 12 months",
+    "played": 86,
+    "won": 46,
+    "average": 91.14,
+    "titles": 1,
+    "last5": [
+     "W 5-3 v Rusty-Jake Rodriguez",
+     "L 4-5 v Ross Smith",
+     "L 4-6 v Tom Sykes",
+     "L 4-6 v Justin Hood",
+     "W 6-4 v Karel Sedlacek"
+    ]
+   }
+  },
+  {
+   "name": "Nathan Aspinall",
+   "worldRank": 12,
+   "average": 100.72,
+   "t80s": 7,
+   "checkoutPct": 52.6,
+   "highestCheckout": 170,
+   "breaks": 5,
+   "biggestLead": 3,
+   "longestRun": 4,
+   "previousBestAtEvent": "Quarter-Final (2020)",
+   "form": {
+    "period": "last 12 months",
+    "played": 94,
+    "won": 61,
+    "average": 96.5,
+    "titles": 1,
+    "last5": [
+     "W 5-0 v Karel Sedlacek",
+     "W 5-1 v Maik Kuivenhoven",
+     "L 2-6 v Carl Sneyd",
+     "L 5-10 v Luke Littler",
+     "W 6-3 v Cristo Reyes"
+    ]
+   }
+  }
+ ],
+ "swings": {
+  "fightback": null,
+  "turningPoint": "leg 13: Aspinall broke throw for 7-6, finishing on 32"
+ },
+ "decidingLeg": null,
+ "bestFinish": {
+  "player": "Nathan Aspinall",
+  "score": 170,
+  "leg": 15
+ },
+ "quickestLeg": {
+  "player": "Nathan Aspinall",
+  "darts": 11,
+  "leg": 2
+ },
+ "nineDarters": [],
+ "finishes170": [
+  {
+   "player": "Nathan Aspinall",
+   "leg": 15
+  }
+ ],
+ "stakes": {
+  "loserTakes": "£20,000",
+  "winnerGuaranteed": "£35,000",
+  "next": {
+   "stage": "Quarter-Final",
+   "opponent": "Gian van Veen",
+   "when": "Saturday 21 November, 8:45pm GMT"
+  }
+ },
+ "headToHead": null,
+ "milestone": null,
+ "records": {
+  "highestAverageOfEvent": null,
+  "highestLosingAverage": null,
+  "bestCheckoutOfEvent": null,
+  "most180sInAMatchAtEvent": null
+ },
+ "legs": [
+  "L1: Aspinall (break) 17 darts, out 25 -> 0-1",
+  "L2: Aspinall 11 darts, out 36 -> 0-2",
+  "L3: Clemens 14 darts, out 71 -> 1-2",
+  "L4: Clemens (break) 15 darts, out 86 -> 2-2",
+  "L5: Clemens 13 darts, out 32 -> 3-2",
+  "L6: Aspinall 20 darts, out 16 -> 3-3",
+  "L7: Aspinall (break) 12 darts, out 41 -> 3-4",
+  "L8: Aspinall 11 darts, out 56 -> 3-5",
+  "L9: Clemens 20 darts, out 5 -> 4-5",
+  "L10: Clemens (break) 14 darts, out 56 -> 5-5",
+  "L11: Clemens 12 darts, out 41 -> 6-5",
+  "L12: Aspinall 14 darts, out 32 -> 6-6",
+  "L13: Aspinall (break) 14 darts, out 32 -> 6-7",
+  "L14: Aspinall 15 darts, out 72 -> 6-8",
+  "L15: Aspinall (break) 12 darts, out 170 -> 6-9",
+  "L16: Clemens (break) 14 darts, out 25 -> 7-9",
+  "L17: Aspinall (break) 13 darts, out 32 -> 7-10"
+ ],
+ "source": {
+  "name": "PDC",
+  "url": "https://www.pdc.tv/matches/517022",
+  "title": "Gabriel Clemens v Nathan Aspinall"
+ }
+}

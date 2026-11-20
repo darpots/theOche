@@ -1,7 +1,7 @@
 {
  "slug": "menzies-edges-raymond-smith-and-talks-weight-loss",
  "date": "2026-11-15T18:00:00.000Z",
- "headline": "Menzies edges Raymond Smith 5-4 at the Grand Slam and discusses weight loss",
+ "headline": "Menzies edges Raymond Smith 5-4 and talks weight loss",
  "standfirst": "Cameron Menzies won a deciding leg against Raymond Smith in Wolverhampton and now faces Stephen Bunting in a straight shootout.",
  "body": [
   "Cameron Menzies beat Raymond Smith 5-4 in his opening Grand Slam of Darts match on Sunday afternoon, setting up a group decider with Stephen Bunting.",
@@ -10,10 +10,24 @@
   "He described himself as a chronic overthinker, saying the mental side of the game is harder for him than the scoring. He joked that he would be giving Bunting \"a few jabs\" before they meet.",
   "With only the winner of each three-player group advancing, Monday's meeting with Bunting is effectively a knockout tie for a place in the last 16."
  ],
- "tags": ["Grand Slam of Darts"],
- "players": ["Cameron Menzies", "Raymond Smith", "Stephen Bunting"],
- "sources": [{"name": "Dartsnews", "url": "https://dartsnews.com/pdc/i-didnt-actually-know-how-bad-i-was-cameron-menzies-loses-nearly-five-stone-in-weight-after-wake-up-call-on-flight-sees-stark-reality", "title": "\"I didn't actually know how bad I was\": Cameron Menzies loses nearly five stone in weight after wake-up call on flight sees stark reality"}],
- "originalTitles": ["\"I didn't actually know how bad I was\": Cameron Menzies loses nearly five stone in weight after wake-up call on flight sees stark reality"],
+ "tags": [
+  "Grand Slam of Darts"
+ ],
+ "players": [
+  "Cameron Menzies",
+  "Raymond Smith",
+  "Stephen Bunting"
+ ],
+ "sources": [
+  {
+   "name": "Dartsnews",
+   "url": "https://dartsnews.com/pdc/i-didnt-actually-know-how-bad-i-was-cameron-menzies-loses-nearly-five-stone-in-weight-after-wake-up-call-on-flight-sees-stark-reality",
+   "title": "\"I didn't actually know how bad I was\": Cameron Menzies loses nearly five stone in weight after wake-up call on flight sees stark reality"
+  }
+ ],
+ "originalTitles": [
+  "\"I didn't actually know how bad I was\": Cameron Menzies loses nearly five stone in weight after wake-up call on flight sees stark reality"
+ ],
  "writtenBy": "The Oche newsdesk (Claude)",
  "tournament": "10871",
  "kind": "report"

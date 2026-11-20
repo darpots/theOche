@@ -1,0 +1,144 @@
+{
+ "fixture": "517020",
+ "event": "Grand Slam of Darts",
+ "stage": "Last 16",
+ "format": "First to 10 legs",
+ "date": "2026-11-19",
+ "venue": "Aldersley Leisure Village, Wolverhampton, Wolverhampton",
+ "winner": "Michael van Gerwen",
+ "loser": "James Wade",
+ "score": "10-8",
+ "angles": [
+  {
+   "angle": "run",
+   "score": 23,
+   "evidence": "van Gerwen won 4 legs in a row"
+  },
+  {
+   "angle": "result",
+   "score": 10,
+   "evidence": "Michael van Gerwen beat James Wade 10-8"
+  }
+ ],
+ "notable": false,
+ "players": [
+  {
+   "name": "James Wade",
+   "worldRank": 7,
+   "average": 98.21,
+   "t80s": 3,
+   "checkoutPct": 42.1,
+   "highestCheckout": 130,
+   "breaks": 4,
+   "biggestLead": 2,
+   "longestRun": 3,
+   "previousBestAtEvent": "Runner-up (2020)",
+   "form": {
+    "period": "last 12 months",
+    "played": 125,
+    "won": 82,
+    "average": 95.11,
+    "titles": 3,
+    "last5": [
+     "W 5-0 v Ricky Evans",
+     "W 5-1 v Cam Crabtree",
+     "L 2-6 v Kim Huybrechts",
+     "W 6-3 v Harry Ward",
+     "W 6-3 v Adam Leek"
+    ]
+   }
+  },
+  {
+   "name": "Michael van Gerwen",
+   "worldRank": 11,
+   "average": 103.83,
+   "t80s": 6,
+   "checkoutPct": 34.5,
+   "highestCheckout": 121,
+   "breaks": 5,
+   "biggestLead": 2,
+   "longestRun": 4,
+   "previousBestAtEvent": "Winner (2017)",
+   "form": {
+    "period": "last 12 months",
+    "played": 148,
+    "won": 93,
+    "average": 96.22,
+    "titles": 4,
+    "last5": [
+     "W 5-4 v Jeffrey De Graaf",
+     "W 5-4 v Henry Coates",
+     "L 3-6 v Luke Humphries",
+     "W 6-3 v Derek Coulson",
+     "W 6-0 v Dirk van Duijvenbode"
+    ]
+   }
+  }
+ ],
+ "swings": {
+  "fightback": null,
+  "turningPoint": "leg 15: van Gerwen held for 8-7, finishing on 32"
+ },
+ "decidingLeg": null,
+ "bestFinish": {
+  "player": "James Wade",
+  "score": 130,
+  "leg": 12
+ },
+ "quickestLeg": {
+  "player": "Michael van Gerwen",
+  "darts": 11,
+  "leg": 9
+ },
+ "nineDarters": [],
+ "finishes170": [],
+ "stakes": {
+  "loserTakes": "£20,000",
+  "winnerGuaranteed": "£35,000",
+  "next": {
+   "stage": "Quarter-Final",
+   "opponent": "Tom Sykes",
+   "when": "Saturday 21 November, 7:15pm GMT"
+  }
+ },
+ "headToHead": {
+  "meetingsBefore": 77,
+  "wins": {
+   "James Wade": 20,
+   "Michael van Gerwen": 53
+  },
+  "lastMeeting": "2026-03-07: UK Open, 10-3 (James Wade first)"
+ },
+ "milestone": null,
+ "records": {
+  "highestAverageOfEvent": null,
+  "highestLosingAverage": null,
+  "bestCheckoutOfEvent": null,
+  "most180sInAMatchAtEvent": null
+ },
+ "legs": [
+  "L1: Wade (break) 15 darts, out 82 -> 1-0",
+  "L2: Wade 12 darts, out 81 -> 2-0",
+  "L3: van Gerwen 14 darts, out 44 -> 2-1",
+  "L4: Wade 18 darts, out 105 -> 3-1",
+  "L5: van Gerwen 14 darts, out 8 -> 3-2",
+  "L6: van Gerwen (break) 17 darts, out 37 -> 3-3",
+  "L7: Wade (break) 16 darts, out 40 -> 4-3",
+  "L8: van Gerwen (break) 15 darts, out 120 -> 4-4",
+  "L9: van Gerwen 11 darts, out 32 -> 4-5",
+  "L10: Wade 20 darts, out 40 -> 5-5",
+  "L11: Wade (break) 15 darts, out 106 -> 6-5",
+  "L12: Wade 15 darts, out 130 -> 7-5",
+  "L13: van Gerwen 11 darts, out 84 -> 7-6",
+  "L14: van Gerwen (break) 12 darts, out 121 -> 7-7",
+  "L15: van Gerwen 13 darts, out 32 -> 7-8",
+  "L16: van Gerwen (break) 13 darts, out 32 -> 7-9",
+  "L17: Wade (break) 12 darts, out 130 -> 8-9",
+  "L18: van Gerwen (break) 17 darts, out 32 -> 8-10"
+ ],
+ "source": {
+  "name": "PDC",
+  "url": "https://www.pdc.tv/matches/517020",
+  "title": "James Wade v Michael van Gerwen"
+ }
+}

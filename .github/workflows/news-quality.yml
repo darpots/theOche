@@ -1,0 +1,18 @@
+name: Newsdesk quality report
+# Weekly: what the newsdesk published, how much is our own, what fails the checker.
+on:
+  schedule:
+    - cron: '0 8 * * 1' # Mondays, 08:00 UTC
+  workflow_dispatch:
+jobs:
+  report:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: node scripts/news/quality.mjs --days=7

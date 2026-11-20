@@ -15,8 +15,14 @@ const news = defineCollection({
     originalTitles: z.array(z.string()).optional(),
     writtenBy: z.string().optional(),
     // 'recap' = a tournament round-up; kept while the event is on the calendar.
-    // 'numbers' = numbers of the day; 'talking-points' = after a session; 'movers' = weekly rankings movers.
-    kind: z.enum(['report', 'recap', 'match-report', 'numbers', 'talking-points', 'movers']).default('report'),
+    // Data-led formats: 'match-report' (notable TV match), 'session' (results round-up of a
+    // session), 'numbers' (numbers of the day), 'preview', 'analysis', 'movers' (weekly rankings);
+    // 'talking-points' after a session; 'gear' = equipment launches (kept to a small share).
+    kind: z.enum(['report', 'recap', 'match-report', 'session', 'numbers', 'talking-points', 'movers', 'preview', 'analysis', 'gear']).default('report'),
+    // Facts file the story was written from (data/news-facts/<facts>.json); the checker verifies its numbers.
+    facts: z.string().optional(),
+    // Set when a story is revised (a quote added, a correction): shown on the article.
+    updated: z.string().optional(),
     // PDC tournament id the story belongs to (links it to the tournament page).
     tournament: z.string().optional(),
     // Cover: a key from src/data/news-library.json, 'player' for the main player's photo, or omit to choose automatically.

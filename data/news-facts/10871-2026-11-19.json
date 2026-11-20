@@ -1,0 +1,112 @@
+{
+ "event": "Grand Slam of Darts",
+ "date": "2026-11-19",
+ "kind": "results",
+ "matches": [
+  {
+   "fixture": "517022",
+   "stage": "Last 16",
+   "time": "7:19pm GMT",
+   "winner": "Nathan Aspinall",
+   "loser": "Gabriel Clemens",
+   "score": "10-7",
+   "averages": {
+    "Nathan Aspinall": 100.72,
+    "Gabriel Clemens": 96.55
+   },
+   "t80s": {
+    "Nathan Aspinall": 7,
+    "Gabriel Clemens": 10
+   },
+   "bestCheckout": 170,
+   "worldRanks": {
+    "Nathan Aspinall": 12,
+    "Gabriel Clemens": 53
+   },
+   "flags": []
+  },
+  {
+   "fixture": "517020",
+   "stage": "Last 16",
+   "time": "10:14pm GMT",
+   "winner": "Michael van Gerwen",
+   "loser": "James Wade",
+   "score": "10-8",
+   "averages": {
+    "Michael van Gerwen": 103.83,
+    "James Wade": 98.21
+   },
+   "t80s": {
+    "Michael van Gerwen": 6,
+    "James Wade": 3
+   },
+   "bestCheckout": 130,
+   "worldRanks": {
+    "Michael van Gerwen": 11,
+    "James Wade": 7
+   },
+   "flags": []
+  },
+  {
+   "fixture": "517019",
+   "stage": "Last 16",
+   "time": "9:15pm GMT",
+   "winner": "Tom Sykes",
+   "loser": "Luke Humphries",
+   "score": "10-9",
+   "averages": {
+    "Tom Sykes": 99.32,
+    "Luke Humphries": 102.02
+   },
+   "t80s": {
+    "Tom Sykes": 8,
+    "Luke Humphries": 4
+   },
+   "bestCheckout": 114,
+   "worldRanks": {
+    "Tom Sykes": 81,
+    "Luke Humphries": 2
+   },
+   "flags": [
+    "upset: world No 81 beat world No 2",
+    "went to a deciding leg",
+    "Luke Humphries averaged 102.02 and lost"
+   ]
+  },
+  {
+   "fixture": "517021",
+   "stage": "Last 16",
+   "time": "8:15pm GMT",
+   "winner": "Gian van Veen",
+   "loser": "Martin Schindler",
+   "score": "10-7",
+   "averages": {
+    "Gian van Veen": 101.69,
+    "Martin Schindler": 99.51
+   },
+   "t80s": {
+    "Gian van Veen": 4,
+    "Martin Schindler": 6
+   },
+   "bestCheckout": 94,
+   "worldRanks": {
+    "Gian van Veen": 3,
+    "Martin Schindler": 20
+   },
+   "flags": []
+  }
+ ],
+ "leaders": {
+  "highestAverage": {
+   "n": "Michael van Gerwen",
+   "v": 103.83
+  },
+  "most180s": {
+   "n": "Gabriel Clemens",
+   "v": 10
+  },
+  "total180s": 48,
+  "bestCheckout": 170,
+  "hundredPlusAverages": 4
+ }
+}

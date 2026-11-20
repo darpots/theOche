@@ -1,7 +1,7 @@
 {
   "slug": "van-den-bergh-tour-card-loss-analyst-cites-injuries-and-confidence",
   "date": "2026-11-17T15:30:00.000Z",
-  "headline": "Van den Bergh's Tour Card loss blamed on injuries and lost confidence",
+  "headline": "Van den Bergh’s Tour Card loss put down to injury and confidence",
   "standfirst": "Belgian analyst Rudy Lanssens says the former world number five should consider a break from competing as he rebuilds.",
   "body": [
     "Dimitri Van den Bergh has lost his PDC Tour Card, according to Dartsnews, ending the guaranteed place on the professional circuit that he held through his years among the sport's leading players. The 32-year-old Belgian now faces a period of rebuilding.",
@@ -11,8 +11,13 @@
     "The analyst recalled a player who was consistently ranked in the top five and acted as an ambassador for the PDC. Van den Bergh's walk-on, set to Pharrell Williams' \"Happy\", made him a favourite with crowds, and Lanssens credited him with helping to broaden the audience for darts in Belgium, where VTM 2 has broadcast the sport.",
     "Lanssens fears that simply playing more matches would do little for Van den Bergh at present, and he suggests a break from the sport. A related Dartsnews headline refers to the Tour Card being lost after the World Championship, so the exact timing of the change is unclear from the sources."
   ],
-  "tags": ["Dimitri van den Bergh", "Tour Card"],
-  "players": ["Dimitri van den Bergh"],
+  "tags": [
+    "Dimitri van den Bergh",
+    "Tour Card"
+  ],
+  "players": [
+    "Dimitri van den Bergh"
+  ],
   "sources": [
     {
       "name": "Dartsnews",
@@ -20,7 +25,9 @@
       "title": "\"The cheerful, dancing boy on stage has disappeared for now\" – Major concerns for Dimitri Van den Bergh after losing his Tour Card"
     }
   ],
-  "originalTitles": ["\"The cheerful, dancing boy on stage has disappeared for now\" – Major concerns for Dimitri Van den Bergh after losing his Tour Card"],
+  "originalTitles": [
+    "\"The cheerful, dancing boy on stage has disappeared for now\" – Major concerns for Dimitri Van den Bergh after losing his Tour Card"
+  ],
   "writtenBy": "The Oche newsdesk (Claude)",
   "kind": "report"
 }
