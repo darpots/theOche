@@ -7,7 +7,7 @@
    "fixture": "517025",
    "stage": "Quarter-Final",
    "format": "First to 16 legs",
-   "time": "7:15pm GMT",
+   "time": "7:20pm GMT",
    "winnerGuaranteed": "£60,000",
    "losersTake": "£35,000",
    "players": [
@@ -15,7 +15,7 @@
      "name": "Tom Sykes",
      "worldRank": 81,
      "last12Months": {
-      "average": 93.75,
+      "average": 93.88,
       "won": 53,
       "played": 90,
       "titles": 0
@@ -86,7 +86,7 @@
      "name": "Nathan Aspinall",
      "worldRank": 12,
      "last12Months": {
-      "average": 96.5,
+      "average": 96.58,
       "won": 61,
       "played": 94,
       "titles": 1
