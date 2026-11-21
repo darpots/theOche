@@ -1,5 +1,5 @@
 {
- "updatedAt": "2026-11-20T13:20:10.471Z",
+ "updatedAt": "2026-11-21T12:53:03.818Z",
  "event": {
   "id": "10871",
   "name": "2026 Grand Slam of Darts",
@@ -1005,8 +1005,8 @@
    "pos": 4,
    "live": 4,
    "move": 0,
-   "money": 865500,
-   "plus": 35000,
+   "money": 890500,
+   "plus": 60000,
    "minus": 3000,
    "expiring": [
     {
@@ -1015,7 +1015,7 @@
      "round": "Last 64"
     }
    ],
-   "round": "Quarter-Final",
+   "round": "Semi-Final",
    "alive": true,
    "estimated": false
   },
@@ -1355,7 +1355,7 @@
     }
    ],
    "round": "Quarter-Final",
-   "alive": true,
+   "alive": false,
    "estimated": false
   },
   {
@@ -1412,8 +1412,8 @@
    "pos": 23,
    "live": 21,
    "move": 2,
-   "money": 431750,
-   "plus": 35000,
+   "money": 456750,
+   "plus": 60000,
    "minus": 3000,
    "expiring": [
     {
@@ -1422,7 +1422,7 @@
      "round": "Last 64"
     }
    ],
-   "round": "Quarter-Final",
+   "round": "Semi-Final",
    "alive": true,
    "estimated": false
   },
@@ -1621,7 +1621,7 @@
    "minus": 0,
    "expiring": [],
    "round": "Quarter-Final",
-   "alive": true,
+   "alive": false,
    "estimated": false
   },
   {
