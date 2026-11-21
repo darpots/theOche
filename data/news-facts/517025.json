@@ -1,0 +1,187 @@
+{
+ "fixture": "517025",
+ "event": "Grand Slam of Darts",
+ "stage": "Quarter-Final",
+ "format": "First to 16 legs",
+ "date": "2026-11-21",
+ "venue": "Aldersley Leisure Village, Wolverhampton, Wolverhampton",
+ "winner": "Michael van Gerwen",
+ "loser": "Tom Sykes",
+ "score": "16-11",
+ "angles": [
+  {
+   "angle": "nine-darter",
+   "score": 100,
+   "evidence": "Michael van Gerwen, leg 1; Tom Sykes, leg 6"
+  },
+  {
+   "angle": "big-average",
+   "score": 33,
+   "evidence": "van Gerwen averaged 105.84"
+  },
+  {
+   "angle": "high-average-defeat",
+   "score": 30,
+   "evidence": "Sykes averaged 101.5 and lost"
+  },
+  {
+   "angle": "170",
+   "score": 25,
+   "evidence": "Tom Sykes, leg 9"
+  },
+  {
+   "angle": "run",
+   "score": 23,
+   "evidence": "van Gerwen won 4 legs in a row"
+  },
+  {
+   "angle": "result",
+   "score": 10,
+   "evidence": "Michael van Gerwen beat Tom Sykes 16-11"
+  }
+ ],
+ "notable": true,
+ "players": [
+  {
+   "name": "Tom Sykes",
+   "worldRank": 81,
+   "average": 101.5,
+   "t80s": 12,
+   "checkoutPct": 36.7,
+   "highestCheckout": 170,
+   "breaks": 4,
+   "biggestLead": 2,
+   "longestRun": 2,
+   "previousBestAtEvent": "first appearance on record",
+   "form": {
+    "period": "last 12 months",
+    "played": 90,
+    "won": 53,
+    "average": 93.88,
+    "titles": 0,
+    "last5": [
+     "W 10-9 v Luke Humphries",
+     "W 5-1 v Krzysztof Ratajski",
+     "W 5-3 v Luke Woodhouse",
+     "L 2-6 v Danny Noppert",
+     "W 6-3 v Mensur Suljovic"
+    ]
+   }
+  },
+  {
+   "name": "Michael van Gerwen",
+   "worldRank": 11,
+   "average": 105.84,
+   "t80s": 14,
+   "checkoutPct": 50,
+   "highestCheckout": 141,
+   "breaks": 7,
+   "biggestLead": 5,
+   "longestRun": 4,
+   "previousBestAtEvent": "Winner (2017)",
+   "form": {
+    "period": "last 12 months",
+    "played": 148,
+    "won": 93,
+    "average": 96.22,
+    "titles": 4,
+    "last5": [
+     "W 10-8 v James Wade",
+     "W 5-4 v Jeffrey De Graaf",
+     "W 5-4 v Henry Coates",
+     "L 3-6 v Luke Humphries",
+     "W 6-3 v Derek Coulson"
+    ]
+   }
+  }
+ ],
+ "swings": {
+  "fightback": null,
+  "turningPoint": "leg 17: van Gerwen broke throw for 9-8, finishing on 20"
+ },
+ "decidingLeg": null,
+ "bestFinish": {
+  "player": "Tom Sykes",
+  "score": 170,
+  "leg": 9
+ },
+ "quickestLeg": {
+  "player": "Michael van Gerwen",
+  "darts": 9,
+  "leg": 1
+ },
+ "nineDarters": [
+  {
+   "player": "Michael van Gerwen",
+   "leg": 1
+  },
+  {
+   "player": "Tom Sykes",
+   "leg": 6
+  }
+ ],
+ "finishes170": [
+  {
+   "player": "Tom Sykes",
+   "leg": 9
+  }
+ ],
+ "stakes": {
+  "loserTakes": "£35,000",
+  "winnerGuaranteed": "£60,000",
+  "next": {
+   "stage": "Semi-Final",
+   "opponent": "Gian van Veen",
+   "when": "Sunday 22 November, 2:45pm GMT"
+  }
+ },
+ "headToHead": {
+  "meetingsBefore": 1,
+  "wins": {
+   "Tom Sykes": 0,
+   "Michael van Gerwen": 1
+  },
+  "lastMeeting": "2026-10-28: Players Championship 31, 5-6 (Tom Sykes first)"
+ },
+ "milestone": null,
+ "records": {
+  "highestAverageOfEvent": null,
+  "highestLosingAverage": 101.5,
+  "bestCheckoutOfEvent": null,
+  "most180sInAMatchAtEvent": null
+ },
+ "legs": [
+  "L1: van Gerwen (break) 9 darts, out 141 -> 0-1",
+  "L2: van Gerwen 14 darts, out 65 -> 0-2",
+  "L3: Sykes 11 darts, out 95 -> 1-2",
+  "L4: van Gerwen 16 darts, out 32 -> 1-3",
+  "L5: Sykes 12 darts, out 92 -> 2-3",
+  "L6: Sykes (break) 9 darts, out 141 -> 3-3",
+  "L7: van Gerwen (break) 17 darts, out 25 -> 3-4",
+  "L8: Sykes (break) 14 darts, out 70 -> 4-4",
+  "L9: Sykes 12 darts, out 170 -> 5-4",
+  "L10: van Gerwen 14 darts, out 100 -> 5-5",
+  "L11: Sykes 18 darts, out 52 -> 6-5",
+  "L12: van Gerwen 12 darts, out 104 -> 6-6",
+  "L13: Sykes 16 darts, out 4 -> 7-6",
+  "L14: Sykes (break) 13 darts, out 36 -> 8-6",
+  "L15: van Gerwen (break) 15 darts, out 45 -> 8-7",
+  "L16: van Gerwen 17 darts, out 16 -> 8-8",
+  "L17: van Gerwen (break) 13 darts, out 20 -> 8-9",
+  "L18: van Gerwen 14 darts, out 40 -> 8-10",
+  "L19: Sykes 14 darts, out 80 -> 9-10",
+  "L20: van Gerwen 13 darts, out 40 -> 9-11",
+  "L21: van Gerwen (break) 12 darts, out 50 -> 9-12",
+  "L22: van Gerwen 14 darts, out 60 -> 9-13",
+  "L23: van Gerwen (break) 15 darts, out 52 -> 9-14",
+  "L24: Sykes (break) 16 darts, out 16 -> 10-14",
+  "L25: Sykes 18 darts, out 19 -> 11-14",
+  "L26: van Gerwen 11 darts, out 76 -> 11-15",
+  "L27: van Gerwen (break) 12 darts, out 84 -> 11-16"
+ ],
+ "source": {
+  "name": "PDC",
+  "url": "https://www.pdc.tv/matches/517025",
+  "title": "Tom Sykes v Michael van Gerwen"
+ }
+}

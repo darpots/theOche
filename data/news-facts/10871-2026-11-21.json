@@ -1,0 +1,66 @@
+{
+ "event": "Grand Slam of Darts",
+ "date": "2026-11-21",
+ "kind": "results",
+ "matches": [
+  {
+   "fixture": "517026",
+   "stage": "Quarter-Final",
+   "time": "8:46pm GMT",
+   "winner": "Gian van Veen",
+   "loser": "Nathan Aspinall",
+   "score": "16-14",
+   "averages": {
+    "Gian van Veen": 95.17,
+    "Nathan Aspinall": 95.54
+   },
+   "t80s": {
+    "Gian van Veen": 9,
+    "Nathan Aspinall": 11
+   },
+   "bestCheckout": 121,
+   "worldRanks": {
+    "Gian van Veen": 3,
+    "Nathan Aspinall": 12
+   },
+   "flags": []
+  },
+  {
+   "fixture": "517025",
+   "stage": "Quarter-Final",
+   "time": "7:19pm GMT",
+   "winner": "Michael van Gerwen",
+   "loser": "Tom Sykes",
+   "score": "16-11",
+   "averages": {
+    "Michael van Gerwen": 105.84,
+    "Tom Sykes": 101.5
+   },
+   "t80s": {
+    "Michael van Gerwen": 14,
+    "Tom Sykes": 12
+   },
+   "bestCheckout": 170,
+   "worldRanks": {
+    "Michael van Gerwen": 11,
+    "Tom Sykes": 81
+   },
+   "flags": [
+    "Tom Sykes averaged 101.5 and lost"
+   ]
+  }
+ ],
+ "leaders": {
+  "highestAverage": {
+   "n": "Michael van Gerwen",
+   "v": 105.84
+  },
+  "most180s": {
+   "n": "Michael van Gerwen",
+   "v": 14
+  },
+  "total180s": 46,
+  "bestCheckout": 170,
+  "hundredPlusAverages": 2
+ }
+}

@@ -1,0 +1,158 @@
+{
+ "fixture": "517026",
+ "event": "Grand Slam of Darts",
+ "stage": "Quarter-Final",
+ "format": "First to 16 legs",
+ "date": "2026-11-21",
+ "venue": "Aldersley Leisure Village, Wolverhampton, Wolverhampton",
+ "winner": "Gian van Veen",
+ "loser": "Nathan Aspinall",
+ "score": "16-14",
+ "angles": [
+  {
+   "angle": "fightback",
+   "score": 40,
+   "evidence": "van Veen led 7-2, Aspinall came back to 12-12"
+  },
+  {
+   "angle": "run",
+   "score": 23,
+   "evidence": "van Veen won 4 legs in a row"
+  },
+  {
+   "angle": "result",
+   "score": 10,
+   "evidence": "Gian van Veen beat Nathan Aspinall 16-14"
+  }
+ ],
+ "notable": true,
+ "players": [
+  {
+   "name": "Gian van Veen",
+   "worldRank": 3,
+   "average": 95.17,
+   "t80s": 9,
+   "checkoutPct": 44.4,
+   "highestCheckout": 121,
+   "breaks": 6,
+   "biggestLead": 5,
+   "longestRun": 4,
+   "previousBestAtEvent": "Quarter-Final (2024)",
+   "form": {
+    "period": "last 12 months",
+    "played": 162,
+    "won": 98,
+    "average": 95.28,
+    "titles": 0,
+    "last5": [
+     "W 10-7 v Martin Schindler",
+     "W 5-2 v Bradley Brooks",
+     "W 5-2 v Carl Sneyd",
+     "L 4-6 v Jeffrey De Graaf",
+     "W 6-3 v Jim Long"
+    ]
+   }
+  },
+  {
+   "name": "Nathan Aspinall",
+   "worldRank": 12,
+   "average": 95.54,
+   "t80s": 11,
+   "checkoutPct": 42.4,
+   "highestCheckout": 116,
+   "breaks": 5,
+   "biggestLead": 0,
+   "longestRun": 3,
+   "previousBestAtEvent": "Quarter-Final (2020)",
+   "form": {
+    "period": "last 12 months",
+    "played": 94,
+    "won": 61,
+    "average": 96.58,
+    "titles": 1,
+    "last5": [
+     "W 10-7 v Gabriel Clemens",
+     "W 5-0 v Karel Sedlacek",
+     "W 5-1 v Maik Kuivenhoven",
+     "L 2-6 v Carl Sneyd",
+     "L 5-10 v Luke Littler"
+    ]
+   }
+  }
+ ],
+ "swings": {
+  "fightback": {
+   "leaderWas": "Gian van Veen",
+   "ledBy": "7-2",
+   "trailerReached": "12-12"
+  },
+  "turningPoint": "leg 29: van Veen held for 15-14, finishing on 32"
+ },
+ "decidingLeg": null,
+ "bestFinish": {
+  "player": "Gian van Veen",
+  "score": 121,
+  "leg": 8
+ },
+ "quickestLeg": {
+  "player": "Nathan Aspinall",
+  "darts": 11,
+  "leg": 11
+ },
+ "nineDarters": [],
+ "finishes170": [],
+ "stakes": {
+  "loserTakes": "£35,000",
+  "winnerGuaranteed": "£60,000",
+  "next": {
+   "stage": "Semi-Final",
+   "opponent": "Michael van Gerwen",
+   "when": "Sunday 22 November, 2:45pm GMT"
+  }
+ },
+ "headToHead": null,
+ "milestone": null,
+ "records": {
+  "highestAverageOfEvent": null,
+  "highestLosingAverage": null,
+  "bestCheckoutOfEvent": null,
+  "most180sInAMatchAtEvent": null
+ },
+ "legs": [
+  "L1: van Veen 15 darts, out 72 -> 1-0",
+  "L2: van Veen (break) 18 darts, out 25 -> 2-0",
+  "L3: van Veen 15 darts, out 85 -> 3-0",
+  "L4: van Veen (break) 15 darts, out 28 -> 4-0",
+  "L5: Aspinall (break) 14 darts, out 25 -> 4-1",
+  "L6: Aspinall 15 darts, out 16 -> 4-2",
+  "L7: van Veen 14 darts, out 16 -> 5-2",
+  "L8: van Veen (break) 12 darts, out 121 -> 6-2",
+  "L9: van Veen 14 darts, out 32 -> 7-2",
+  "L10: Aspinall 12 darts, out 116 -> 7-3",
+  "L11: Aspinall (break) 11 darts, out 56 -> 7-4",
+  "L12: van Veen (break) 15 darts, out 88 -> 8-4",
+  "L13: Aspinall (break) 16 darts, out 16 -> 8-5",
+  "L14: Aspinall 15 darts, out 82 -> 8-6",
+  "L15: Aspinall (break) 14 darts, out 70 -> 8-7",
+  "L16: van Veen (break) 12 darts, out 41 -> 9-7",
+  "L17: van Veen 15 darts, out 75 -> 10-7",
+  "L18: Aspinall 17 darts, out 24 -> 10-8",
+  "L19: van Veen 12 darts, out 82 -> 11-8",
+  "L20: Aspinall 21 darts, out 16 -> 11-9",
+  "L21: van Veen 13 darts, out 24 -> 12-9",
+  "L22: Aspinall 15 darts, out 80 -> 12-10",
+  "L23: Aspinall (break) 17 darts, out 43 -> 12-11",
+  "L24: Aspinall 15 darts, out 24 -> 12-12",
+  "L25: van Veen 17 darts, out 60 -> 13-12",
+  "L26: Aspinall 14 darts, out 56 -> 13-13",
+  "L27: van Veen 17 darts, out 40 -> 14-13",
+  "L28: Aspinall 13 darts, out 40 -> 14-14",
+  "L29: van Veen 13 darts, out 32 -> 15-14",
+  "L30: van Veen (break) 17 darts, out 16 -> 16-14"
+ ],
+ "source": {
+  "name": "PDC",
+  "url": "https://www.pdc.tv/matches/517026",
+  "title": "Gian van Veen v Nathan Aspinall"
+ }
+}
