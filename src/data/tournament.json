@@ -1,5 +1,5 @@
 {
- "updatedAt": "2026-11-21T08:13:46.613Z",
+ "updatedAt": "2026-11-21T22:09:43.705Z",
  "tournament": {
   "id": "10871",
   "name": "Grand Slam of Darts",
@@ -2607,8 +2607,8 @@
      {
       "id": "517025",
       "date": "2026-11-21",
-      "time": "19:20",
-      "status": "upcoming",
+      "time": "19:19",
+      "status": "result",
       "p1": {
        "id": "32627",
        "name": "Tom Sykes",
@@ -2625,15 +2625,36 @@
        "country": "NL",
        "ranking": 11
       },
-      "s1": 0,
-      "s2": 0,
-      "winner": null
+      "s1": 11,
+      "s2": 16,
+      "winner": "19",
+      "stats": [
+       {
+        "avg": 101.5,
+        "f9": null,
+        "t80": 12,
+        "t140": 15,
+        "t100": 22,
+        "co": 36.67,
+        "hi": 170
+       },
+       {
+        "avg": 105.84,
+        "f9": null,
+        "t80": 14,
+        "t140": 17,
+        "t100": 27,
+        "co": 50,
+        "hi": 141
+       }
+      ],
+      "statsLive": true
      },
      {
       "id": "517026",
       "date": "2026-11-21",
-      "time": "20:45",
-      "status": "upcoming",
+      "time": "20:46",
+      "status": "result",
       "p1": {
        "id": "33091",
        "name": "Gian van Veen",
@@ -2650,9 +2671,30 @@
        "country": "GB-ENG",
        "ranking": 12
       },
-      "s1": 0,
-      "s2": 0,
-      "winner": null
+      "s1": 16,
+      "s2": 14,
+      "winner": "33091",
+      "stats": [
+       {
+        "avg": 95.17,
+        "f9": null,
+        "t80": 9,
+        "t140": 21,
+        "t100": 34,
+        "co": 44.44,
+        "hi": 121
+       },
+       {
+        "avg": 95.54,
+        "f9": null,
+        "t80": 11,
+        "t140": 16,
+        "t100": 34,
+        "co": 42.42,
+        "hi": 116
+       }
+      ],
+      "statsLive": true
      }
     ]
    },
@@ -2695,7 +2737,14 @@
       "date": "2026-11-22",
       "time": "14:45",
       "status": "upcoming",
-      "p1": null,
+      "p1": {
+       "id": "19",
+       "name": "Michael van Gerwen",
+       "last": "van Gerwen",
+       "nick": "Mighty Mike",
+       "country": "NL",
+       "ranking": 11
+      },
       "p2": null,
       "s1": 0,
       "s2": 0,
