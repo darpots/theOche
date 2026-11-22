@@ -54,7 +54,8 @@ import Layout from '../layouts/Layout.astro';
     import { fetchH2H, h2hSummary, renderH2H } from '../lib/h2h.mjs';
     import { liveFor, watchLive, unwatch, isPushing, pushedLegFor, LIVE_TICK, PUSH_TICK } from '../lib/live-client.mjs';
     import { ukTime } from '../lib/format.mjs';
-    import { cutoutImg, avatarSrc } from '../lib/images.mjs';
+    import { watchWins, flashWin } from '../lib/leg-flash.mjs';
+    import { cutoutImg, avatarSrc, pairPrefer } from '../lib/images.mjs';
 
     const FX = 'https://fixtures.darts.web.gc.pdcservices.co.uk/v2/';
     const C = ['#2b4bff', '#e8362d']; // player 1 blue, player 2 red (validated pair)
@@ -121,7 +122,7 @@ import Layout from '../layouts/Layout.astro';
       const m = t?.attributes?.fixtureMeta;
       const avg = [m?.participant1Data?.threeDartAverage, m?.participant2Data?.threeDartAverage];
       const pic = (p: any) => {
-        const cut = cutoutImg(name(p), 'cut photo', '(max-width: 760px) 96px, 170px');
+        const cut = cutoutImg(name(p), 'cut photo', '(max-width: 760px) 96px, 170px', '', pairPrefer(name(ps[0]), name(ps[1])));
         if (cut) return cut;
         const av = avatarSrc(name(p));
         if (av) return `<img class="por photo" src="${av}" alt="" width="112" height="112">`;
@@ -316,6 +317,11 @@ import Layout from '../layouts/Layout.astro';
           const won = [0, 1].map(k => legs.filter(l => l.winner === k).length);
           if (won[0] + won[1] > (a.attributes.participant1Score ?? 0) + (a.attributes.participant2Score ?? 0)) Object.assign(a.attributes, { participant1Score: won[0], participant2Score: won[1] });
         }
+        // "Leg · name" flash when a leg or set is won.
+        if (m?.status === 'live') {
+          const setPlay = (t?.data?.attributes?.stage?.numberOfSets || a.attributes.tournamentStage?.numberOfSets || 0) > 1;
+          watchWins(id, setPlay ? m.legs : [a.attributes.participant1Score ?? 0, a.attributes.participant2Score ?? 0], setPlay ? m.sets : null, names);
+        }
         document.title = `${name(a.attributes.participant1)} v ${name(a.attributes.participant2)} · The Oche`;
         mh.innerHTML = header(a, t?.data, data, m?.status === 'live' ? m : null);
         const playing = m?.status === 'live' ? t?.data?.attributes?.legs?.find((l: any) => (l.setNumber ?? 1) === (m.set || 1) && l.legNumber === m.leg) : null;
@@ -388,6 +394,17 @@ import Layout from '../layouts/Layout.astro';
     const onPush = () => { if (document.getElementById('mh')) { clearTimeout(timer); load(); } };
     document.addEventListener('astro:before-swap', () => unwatch(onPush));
     document.addEventListener('astro:page-load', () => { clearTimeout(timer); if (document.getElementById('mh')) load(); });
+    // Preview the leg-won flash: /match?id=…&demo=leg plays it for each player in turn.
+    document.addEventListener('astro:page-load', () => {
+      if (new URLSearchParams(location.search).get('demo') !== 'leg' || !document.getElementById('mh')) return;
+      let n = 0;
+      const tick = () => {
+        const who = [...document.querySelectorAll('#mh .who a, #mh .who > span')].map(e => (e.textContent || '').trim().split(' ').slice(1).join(' '));
+        if (who.length === 2) flashWin(who[n % 2], n === 3 ? 'Set' : 'Leg');
+        if (++n < 4 && document.getElementById('mh')) setTimeout(tick, 3500);
+      };
+      setTimeout(tick, 1500);
+    });
   </script>
 </Layout>
 

@@ -6,7 +6,7 @@
 // averages are small and labelled. Set play also shows the legs in the set.
 import { flag, formatLabel, surnameOf } from './pdc.mjs';
 import { ukTime } from './format.mjs';
-import { avatarSrc, cutoutImg } from './images.mjs';
+import { avatarSrc, cutoutImg, pairPrefer } from './images.mjs';
 import { checkout } from './checkout.mjs';
 
 const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]);
@@ -27,8 +27,8 @@ export function matchday(t, today, nowHHMM) {
 }
 
 /** Player picture: the cut-out, else their round headshot, else initials. */
-function pic(p, side) {
-  const cut = p && cutoutImg(p.name, `ft-cut ${side}`, '(max-width: 640px) 40vw, 300px', p.name);
+function pic(p, side, prefer) {
+  const cut = p && cutoutImg(p.name, `ft-cut ${side}`, '(max-width: 640px) 40vw, 300px', p.name, prefer);
   if (cut) return cut;
   const av = p && avatarSrc(p.name);
   if (av) return `<span class="ft-round ${side}"><img src="${av}" alt="${esc(p.name)}" width="112" height="112" decoding="async"></span>`;
@@ -84,11 +84,11 @@ export function featureTile(f, mode, eventName, also = []) {
   return `<a class="ft-link" href="/match?id=${esc(f.id)}" aria-label="${esc(`${f.p1.name} v ${f.p2.name}`)}"></a>
     <div class="ft-top">${tag}<span class="lbl ft-stage">${esc(f.stage || '')}${fmt ? ` · ${esc(fmt)}` : ''}${inPlay && f.legNow ? ` · Leg ${f.legNow.leg}` : ''}</span></div>
     <div class="ft-stage-row">
-      <div class="ft-p l">${pic(f.p1, 'l')}</div>
+      <div class="ft-p l">${pic(f.p1, 'l', pairPrefer(f.p1?.name, f.p2?.name))}</div>
       <div class="ft-mid">${centre}</div>
-      <div class="ft-p r">${pic(f.p2, 'r')}</div>
+      <div class="ft-p r">${pic(f.p2, 'r', pairPrefer(f.p1?.name, f.p2?.name))}</div>
     </div>
-    <div class="ft-bottom">${side(f.p1, w1, st?.[0], 0)}${side(f.p2, w2, st?.[1], 1)}</div>${others}`;
+    <div class="ft-bottom${inPlay && f.legNow ? ' live' : ''}">${side(f.p1, w1, st?.[0], 0)}${side(f.p2, w2, st?.[1], 1)}</div>${others}`;
 }
 
 /** HTML for the volt "Next up" tile (inside its <a>). */

@@ -21,12 +21,15 @@ export function cutout(name, prefer = 'cc') {
 }
 
 /** <img> markup for a cut-out; `sizes` is how wide it is shown. */
-export function cutoutImg(name, cls = '', sizes = '300px', alt = '') {
-  const c = cutout(name);
+export function cutoutImg(name, cls = '', sizes = '300px', alt = '', prefer = 'cc') {
+  const c = cutout(name, prefer);
   if (!c) return '';
   const esc = s => String(s).replace(/[&<>"']/g, ch => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[ch]);
   return `<img class="${cls}" src="${c.src}" srcset="${c.srcset}" sizes="${sizes}" alt="${esc(alt)}" decoding="async">`;
 }
+
+/** For a pair shown side by side: PDC studio cut-outs when both players have one (same framing), else the default. */
+export const pairPrefer = (a, b) => (flags(a).includes('p') && flags(b).includes('p') ? 'pdc' : 'cc');
 
 /** Keys of players whose pictures come from PDC rather than a licensed source (for /credits). */
 export const pdcImageKeys = () => Object.entries(index).filter(([, f]) => f.includes('a') && f.includes('h') || f.includes('p')).map(([k]) => k);

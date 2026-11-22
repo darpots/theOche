@@ -169,6 +169,7 @@ const spot = loadProfile(spotRank.id);
     import { normaliseTournament, applyLive, surnameOf } from '../lib/pdc.mjs';
     import { liveFor, watchLive, unwatch, isPushing, currentLeg, LIVE_TICK, PUSH_TICK } from '../lib/live-client.mjs';
     import { matchday, featureTile, nextTileInner } from '../lib/feature.mjs';
+    import { watchWins } from '../lib/leg-flash.mjs';
     import { shortDate } from '../lib/format.mjs';
 
     let timer: number | undefined;
@@ -214,6 +215,8 @@ const spot = loadProfile(spotRank.id);
             const pick = md.now ? [md.now, 'now'] : md.next ? [md.next, 'next'] : md.results[0] ? [md.results[0], 'result'] : null;
             // The leg in play: what each player needs.
             if (md.now?.status === 'live') (md.now as any).legNow = await currentLeg(box.dataset.id!, lv.get(String(md.now.id))).catch(() => null);
+            // "Leg · name" flash when a leg or set is won in the featured match.
+            if (md.now?.status === 'live') watchWins(md.now.id, md.now.fmt?.sets ? ((md.now as any).liveLegs || [0, 0]) : [md.now.s1 ?? 0, md.now.s2 ?? 0], md.now.fmt?.sets ? [md.now.s1 ?? 0, md.now.s2 ?? 0] : null, [surnameOf(md.now.p1), surnameOf(md.now.p2)]);
             if (pick) draw(box, featureTile(pick[0] as any, pick[1] as string, box.dataset.name!, pick[1] === 'now' ? md.also : []));
             const nu = document.getElementById('nextup') as HTMLAnchorElement | null;
             const after = md.todays.find((f: any) => f.status !== 'result' && f !== pick?.[0] && (!md.now || f !== md.now) && !md.also.includes(f) && f.time >= ((pick?.[0] as any)?.time || ''));
@@ -292,7 +295,8 @@ const spot = loadProfile(spotRank.id);
   .feature :global(.ft-who.r .ft-num) { text-align: left; }
   .feature :global(.ft-mark) { display: inline-flex; flex-direction: column; align-items: center; justify-content: center; gap: 5px; width: 14px; height: .9em; overflow: visible; }
   .feature :global(.ft-score) { min-width: 2.55em; text-align: center; white-space: nowrap; }
-  .feature :global(.ft-who) { min-height: 150px; }
+  /* Room for the leg in play only while there is one; before a match the names sit snug */
+  .feature :global(.ft-bottom.live .ft-who) { min-height: 150px; }
   .feature :global(.ft-now.on .ft-rem) { color: var(--volt); }
   .feature :global(.ft-dot) { width: 10px; height: 10px; border-radius: 50%; background: var(--volt); box-shadow: 0 0 0 4px rgba(200, 255, 46, .2); }
   .feature :global(.ft-who.r .ft-rem) { flex-direction: row-reverse; }

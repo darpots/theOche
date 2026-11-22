@@ -195,3 +195,11 @@ h1, h2, h3 { text-wrap: balance; hyphens: none; }
   .h2h .hh-date { grid-column: 1 / -1; font-size: 12px; }
 }
 .h2h .hh-sc { text-decoration: none; color: inherit; }
+
+/* Leg won: "LEG · Aspinall" flashes up for two seconds (src/lib/leg-flash.mjs) */
+.leg-flash { position: fixed; z-index: 200; left: 50%; top: 42%; transform: translate(-50%, -50%) rotate(-4deg); display: flex; flex-direction: column; align-items: center; gap: 2px; padding: 10px 26px 12px; background: var(--volt); color: var(--ink); border-radius: 16px; box-shadow: 0 18px 50px rgba(0, 0, 0, .45), 0 0 0 4px rgba(11, 12, 16, .9); pointer-events: none; animation: leg-pop .55s var(--spring) both; max-width: calc(100vw - 32px); }
+.leg-flash span { font-weight: 800; font-size: 14px; letter-spacing: .2em; text-transform: uppercase; }
+.leg-flash b { font-family: var(--poster); font-weight: 400; font-size: clamp(48px, 9vw, 96px); line-height: .95; text-transform: uppercase; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 100%; }
+.leg-flash.out { transition: opacity .4s, transform .4s; opacity: 0; transform: translate(-50%, -50%) rotate(-4deg) scale(.9); }
+@keyframes leg-pop { from { transform: translate(-50%, -50%) scale(.3) rotate(-18deg); opacity: 0; } }
+@media (prefers-reduced-motion: reduce) { .leg-flash { animation: none; } }
