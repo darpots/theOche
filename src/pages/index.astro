@@ -273,7 +273,7 @@ const spot = loadProfile(spotRank.id);
   .feature :global(.ft-ini span) { font-family: var(--poster); font-size: 64px; color: var(--volt); margin-top: 40%; text-shadow: 0 2px 10px rgba(0, 0, 0, .8); }
   .feature :global(.ft-mid) { position: relative; z-index: 1; text-align: center; padding-bottom: 64px; }
   .feature :global(.ft-score) { font-size: clamp(110px, 13vw, 200px); color: var(--volt); }
-  .feature :global(.ft-score span) { color: rgba(255, 255, 255, .45); padding: 0 .12em; }
+  .feature :global(.ft-score span) { color: rgba(255, 255, 255, .45); padding: 0 .06em; }
   .feature :global(.ft-vs) { color: #fff; }
   .feature :global(.ft-sub) { color: var(--on-ink-2); margin-top: 14px; }
   .feature :global(.ft-pulse) { display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: var(--red); margin-right: 7px; vertical-align: 1px; animation: pulse 1.6s infinite; }
@@ -298,7 +298,11 @@ const spot = loadProfile(spotRank.id);
   .feature :global(.ft-num) { display: inline-block; min-width: 3ch; text-align: right; font-variant-numeric: tabular-nums; }
   .feature :global(.ft-who.r .ft-num) { text-align: left; }
   .feature :global(.ft-mark) { display: inline-flex; flex-direction: column; align-items: center; justify-content: center; gap: 5px; width: 14px; height: .9em; overflow: visible; }
-  .feature :global(.ft-score) { min-width: 2.55em; text-align: center; white-space: nowrap; }
+  .feature :global(.ft-score) { text-align: center; white-space: nowrap; letter-spacing: -.01em; }
+  /* Two-digit scores (10-10 and up) a size down, so they stay clear of the pictures */
+  .feature :global(.ft-score.wide) { font-size: clamp(84px, 9.5vw, 150px); }
+  /* Pictures only tuck in under the centre before a match (behind the V); once there's a score they stop at its edge */
+  .feature :global(.ft-stage-row:not(:has(.ft-vs)) .ft-p) { overflow-x: clip; }
   /* Before a match: just the V, so the centre column is narrow and the pictures have room */
   .feature :global(.ft-score.ft-vs) { min-width: 0; padding: 0 .25em; }
   /* Room for the leg in play only while there is one; before a match the names sit snug */
@@ -419,6 +423,7 @@ const spot = loadProfile(spotRank.id);
     .feature :global(.ft-mid) { padding-bottom: 24px; }
     .feature :global(.ft-sub) { font-size: 10px; letter-spacing: .08em; }
     .feature :global(.ft-score) { font-size: 64px; white-space: nowrap; }
+    .feature :global(.ft-score.wide) { font-size: 50px; }
     .feature :global(.ft-who) { min-height: 0; }
     .feature :global(.ft-id) { min-height: 76px; }
         .feature :global(.ft-who) { padding: 12px 16px; flex-direction: column; align-items: flex-start; }
