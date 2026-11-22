@@ -355,7 +355,7 @@ import Layout from '../layouts/Layout.astro';
         else if (isResult && noLegs) mh.insertAdjacentHTML('beforeend', `<p class="inplay"><b>Result confirmed.</b> ${liveStats ? 'Stats are from PDC live scoring; the' : 'The PDC adds averages and'} leg-by-leg detail follows when the PDC publishes it. This page checks again every two minutes and fills in on its own.</p>`);
         if (!document.getElementById('tp')!.innerHTML) tape([a.attributes.participant1, a.attributes.participant2]);
         headToHead(a);
-        if (started && noLegs && !m?.stats) mh.insertAdjacentHTML('beforeend', `<p class="inplay"><span class="live-dot">On now</span> This match should be under way. Scores appear here as soon as the PDC's live scoring has them.</p>`);
+        if (started && noLegs && !m?.stats) mh.insertAdjacentHTML('beforeend', `<p class="inplay"><span class="live-dot">On now</span> Scores will show here as soon as the game is in play.</p>`);
         // Stats show as soon as there are any; the leg charts wait for the visit data.
         const mb = document.getElementById('mb')!;
         // Before a match: head to head and form only. Once it starts: tabs, with Match stats first.
