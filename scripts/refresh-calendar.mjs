@@ -1,7 +1,7 @@
 // Builds src/data/calendar.json: PDC events shown on Sky Sports, ITV or
 // (European Tour) PDCTV, from two years ago (shown under "Show completed") to 15 months ahead.
 import { appendFile, writeFile } from 'node:fs/promises';
-import { API, BROADCASTERS, broadcasterFor, cleanName, playerName, isPlaceholder } from '../src/lib/pdc.mjs';
+import { API, BROADCASTERS, broadcasterFor, eventWinner, cleanName, playerName, isPlaceholder } from '../src/lib/pdc.mjs';
 import { getAll, writeJsonIfChanged, log } from './lib.mjs';
 
 const OUT = new URL('../src/data/calendar.json', import.meta.url).pathname;
@@ -42,7 +42,8 @@ for (const r of rows) {
     broadcaster,
     ranked: !!a.isRanked,
     major: a.tournamentCategoryID === '2' && a.tournamentTypeID !== '3',
-    winner: a.winner && !isPlaceholder(a.winner) ? { id: String(a.winner.participantID), name: playerName(a.winner) } : null,
+    // Only once the event is over: the feed can name a winner before the final.
+    winner: eventWinner(a),
     // Matches published so far: when above zero the draw and schedule are out.
     fixtures: a.fixtureCount || 0,
     image: a.tournamentListingImage || null,

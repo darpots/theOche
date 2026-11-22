@@ -1,5 +1,5 @@
 {
- "updatedAt": "2026-11-22T17:43:12.302Z",
+ "updatedAt": "2026-11-22T18:49:06.954Z",
  "events": [
   {
    "id": "10266",
@@ -1817,10 +1817,7 @@
    "broadcaster": "sky",
    "ranked": true,
    "major": true,
-   "winner": {
-    "id": "33091",
-    "name": "Gian van Veen"
-   },
+   "winner": null,
    "fixtures": 63,
    "image": "e6c7d150-be88-11f0-b683-1df3aa50a425.jpg",
    "logo": "32ae9b40-6686-11f0-b0e1-2f7ff63d9a66.png"

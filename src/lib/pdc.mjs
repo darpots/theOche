@@ -133,6 +133,9 @@ export function normaliseTournament(payload) {
     }))
     .sort((x, y) => y.round - x.round);
   return {
+    // The feed can name a winner before the final is played (it did for the 2026
+    // Grand Slam), so the champion is the final's winner once it has a result.
+    winner: eventWinner(a, stages),
     id: String(d.id),
     name, tag,
     fullName: a.name,
@@ -144,9 +147,27 @@ export function normaliseTournament(payload) {
     broadcaster: broadcasterFor(a),
     logo: a.tournamentLogo || null,
     image: a.tournamentPromoImage || a.tournamentListingImage || null,
-    winner: a.winner && !isPlaceholder(a.winner) ? { id: String(a.winner.participantID), name: playerName(a.winner) } : null,
     stages,
   };
+}
+
+/** Today in London, as YYYY-MM-DD. */
+const ukToday = () => new Date().toLocaleDateString('en-CA', { timeZone: 'Europe/London' });
+
+/**
+ * A tournament's champion, trusted only once it's decided: the final's winner when
+ * the final has a result; with no final in the data (round-robin or not drawn), the
+ * feed's winner once the event's last day has passed.
+ */
+export function eventWinner(a, stages = null) {
+  const fin = stages ? stages.find(s => /^final$/i.test(s.name))?.fixtures?.[0] : null;
+  if (fin) {
+    if (fin.status !== 'result' || !fin.winner) return null;
+    const p = [fin.p1, fin.p2].find(x => x && x.id === fin.winner);
+    return p ? { id: p.id, name: p.name } : null;
+  }
+  if (!a?.winner || isPlaceholder(a.winner) || !a.endDate || a.endDate >= ukToday()) return null;
+  return { id: String(a.winner.participantID), name: playerName(a.winner) };
 }
 
 /** Normalise the World Rankings payload. */

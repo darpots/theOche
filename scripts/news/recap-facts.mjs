@@ -37,7 +37,8 @@ await pool(rows, 8, async r => {
 const line = r => `${r.stage}: ${r.p1} ${r.s1}-${r.s2} ${r.p2}${r.stats1 ? ` (averages ${r.stats1.avg} v ${r.stats2?.avg})` : ''}`;
 const ko = rows.filter(r => r.cup < 99).sort((x, y) => x.cup - y.cup || x.date.localeCompare(y.date));
 const final = ko.find(r => r.cup === 1);
-const champ = a.winner && !isPlaceholder(a.winner) ? playerName(a.winner) : final?.winner || null;
+// The final's winner first: the feed can name a tournament winner before the final is played.
+const champ = final?.winner || (a.winner && !isPlaceholder(a.winner) && a.endDate < new Date().toLocaleDateString('en-CA', { timeZone: 'Europe/London' }) ? playerName(a.winner) : null);
 const sideOf = (r, n) => (r.p1 === n ? { me: r.p1, opp: r.p2, my: r.s1, their: r.s2, st: r.stats1 } : { me: r.p2, opp: r.p1, my: r.s2, their: r.s1, st: r.stats2 });
 const route = champ ? rows.filter(r => r.p1 === champ || r.p2 === champ).sort((x, y) => y.cup - x.cup || x.date.localeCompare(y.date))
   .map(r => { const s = sideOf(r, champ); return `${r.stage}: beat ${s.opp} ${s.my}-${s.their}${s.st ? ` (average ${s.st.avg})` : ''}`.replace('beat', r.winner === champ ? 'beat' : 'lost to'); }) : [];

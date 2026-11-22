@@ -1,6 +1,7 @@
 {
- "updatedAt": "2026-11-22T17:42:44.592Z",
+ "updatedAt": "2026-11-22T18:48:11.453Z",
  "tournament": {
+  "winner": null,
   "id": "10871",
   "name": "Grand Slam of Darts",
   "tag": null,
@@ -13,10 +14,6 @@
   "broadcaster": "sky",
   "logo": "32ae9b40-6686-11f0-b0e1-2f7ff63d9a66.png",
   "image": "e6b70870-be88-11f0-8ac7-3dbf71b97733.jpg",
-  "winner": {
-   "id": "33091",
-   "name": "Gian van Veen"
-  },
   "stages": [
    {
     "name": "Group P",
