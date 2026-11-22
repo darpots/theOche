@@ -12,10 +12,10 @@ export function flashWin(name, kind = 'Leg', anchor = '') {
 
 /** A 180: '180!' big with the player's name over it, the same zoom and wobble, over their score. */
 export function flash180(name, anchor = '') {
-  show(name, '180!', anchor, ' t180');
+  show(name, '180!', anchor, ' t180', 'top');
 }
 
-function show(small, big, anchor, variant = '') {
+function show(small, big, anchor, variant = '', at = 'centre') {
   if (typeof document === 'undefined') return;
   document.querySelector('.leg-flash')?.remove();
   const el = document.createElement('div');
@@ -35,14 +35,15 @@ function show(small, big, anchor, variant = '') {
       // Keep the whole sticker on screen (a player's score can sit near the edge on a phone).
       const w = el.offsetWidth / 2 + 10, h = el.offsetHeight / 2 + 10;
       el.style.left = `${Math.min(Math.max(r.left + r.width / 2, w), innerWidth - w)}px`;
-      el.style.top = `${Math.min(Math.max(r.top + r.height / 2, h), innerHeight - h)}px`;
+      // The 180 sits on the top edge of the player's score (where the old sticker was); a leg flash covers the legs score.
+      el.style.top = `${Math.min(Math.max(at === 'top' ? r.top + 4 : r.top + r.height / 2, h), innerHeight - h)}px`;
     }
     el.style.visibility = '';
     // Restart the animation now it's placed.
     el.style.animation = 'none'; void el.offsetWidth; el.style.animation = '';
   }));
-  // Zoom in, wobble, hold, then shrink away: about three seconds in all.
-  setTimeout(() => el.remove(), 3000);
+  // Zoom in, wobble, hold, then shrink away: three seconds for a leg, a quick 1.6 for a 180.
+  setTimeout(() => el.remove(), variant.includes('t180') ? 1600 : 3000);
 }
 
 const seen180 = new Map(); // fixture id -> key of the latest visit seen
