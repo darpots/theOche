@@ -49,7 +49,7 @@ import Layout from '../layouts/Layout.astro';
   </div>
 
   <script>
-    import { API, flag, keyName, liveScore, liveLegs, cleanName, formatLabel } from '../lib/pdc.mjs';
+    import { onBreak, API, flag, keyName, liveScore, liveLegs, cleanName, formatLabel } from '../lib/pdc.mjs';
     import { fetchH2H, h2hSummary, renderH2H } from '../lib/h2h.mjs';
     import { liveFor, watchLive, unwatch, isPushing, pushedLegFor, LIVE_TICK, PUSH_TICK } from '../lib/live-client.mjs';
     import { ukTime, scoreHtml } from '../lib/format.mjs';
@@ -81,7 +81,7 @@ import Layout from '../layouts/Layout.astro';
       });
     }
 
-    function header(f: any, t: any, data: any, live: any = null, leg: any = null) {
+    function header(f: any, t: any, data: any, live: any = null, leg: any = null, brk = false) {
       const a = f.attributes, ps = [a.participant1, a.participant2];
       const ts = a.tournamentStage || {};
       const sets = (ts.numberOfSets || 0) > 1;
@@ -125,11 +125,11 @@ import Layout from '../layouts/Layout.astro';
             <span class="lb-av" title="Three-dart average">${avg[k] != null ? `${Number(avg[k]).toFixed(2)} <i>avg</i>` : ''}</span></div>`;
         const who = (k: number) => { const p = ps[k]; const href = p?.participantSlug ? `/players/${p.participantSlug}` : null;
           return `<div class="who w${k}">${href ? `<a href="${href}">${esc(name(p))}</a>` : `<span>${esc(name(p))}</span>`}<small>${flag(p?.countryCode)} ${p?.ranking ? `World #${p.ranking}` : ''}</small></div>`; };
-        const mid = `<div class="lb-mid"><span class="lbl">${sets ? 'Sets' : 'Legs'}</span><b class="poster-num">${scoreHtml(a.participant1Score, a.participant2Score)}</b>${sets && live ? `<span class="lbl">Legs <b>${scoreHtml(live.legs[0], live.legs[1])}</b></span>` : ''}</div>`;
+        const mid = `<div class="lb-mid"><span class="lbl">${sets ? 'Sets' : 'Legs'}</span><b class="poster-num">${scoreHtml(a.participant1Score, a.participant2Score)}</b>${sets && live ? `<span class="lbl">Legs <b>${scoreHtml(live.legs[0], live.legs[1])}</b></span>` : ''}${brk ? '<span class="brk-tag">Break</span>' : ''}</div>`;
         return `
         <a class="back" href="/tournament/${tour?.tournamentID}">← ${esc((tour?.name || 'Tournament').replace(/^\d{4}\s+/, ''))}</a>
         <p class="stg">${esc(a.tournamentStage?.stage?.name || '')}${fmt ? ` · ${esc(fmt)}` : ''} · Leg ${leg.legNumber} · <span class="live-dot">Live</span></p>
-        <div class="board">
+        <div class="board${brk ? ' brk' : ''}">
           <div class="pic p0">${pic(ps[0])}</div><div class="pic p1">${pic(ps[1])}</div>
           ${big(0)}${mid}${big(1)}
           ${who(0)}${who(1)}
@@ -326,7 +326,9 @@ import Layout from '../layouts/Layout.astro';
         }
         // Just after a checkout, keep the leg that was won on the board until the next leg's first dart.
         const boardLeg = prevLeg?.visits?.some((x: any) => x.remaining === 0) ? prevLeg : playing;
-        mh.innerHTML = header(a, t?.data, data, m?.status === 'live' ? m : null, boardLeg);
+        // No darts for a while since the last leg ended: a break (PDC's data has no flag for it).
+        const brk = !!playing && onBreak(playing, prevLeg?.lastAt);
+        mh.innerHTML = header(a, t?.data, data, m?.status === 'live' ? m : null, boardLeg, brk);
         // Key numbers under the score (the averages are already by each name): 180s, breaks of throw, best checkout, shortest leg.
         const meta = t?.data?.attributes?.fixtureMeta;
         if (meta?.participant1Data && legs.length) {

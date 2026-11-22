@@ -152,10 +152,10 @@ const fullTitle = title === 'The Oche' ? title : `${title} · The Oche`;
     </footer>
 
     <script>
-      import { liveScore } from '../lib/pdc.mjs';
+      import { liveScore, onBreak } from '../lib/pdc.mjs';
     import { ukTime, scoreHtml } from '../lib/format.mjs';
     import { followed, notifyLive } from '../lib/follow.mjs';
-      import { liveFor, watchLive, isPushing, LIVE_TICK, PUSH_TICK } from '../lib/live-client.mjs';
+      import { liveFor, watchLive, isPushing, currentLeg, LIVE_TICK, PUSH_TICK } from '../lib/live-client.mjs';
       // Scroll-reveal + the sliding nav pill.
       const keyFor = (path: string) => {
         const p = path.replace(/\/$/, '') || '/';
@@ -265,10 +265,17 @@ const fullTitle = title === 'The Oche' ? title : `${title} · The Oche`;
             notifyLive(live.filter((f: any) => /live|progress/i.test(f.status)).map((f: any) => ({ id: f.fixtureID, p1: { id: f.participant1?.participantID, name: `${f.participant1?.firstName} ${f.participant1?.lastName}` }, p2: { id: f.participant2?.participantID, name: `${f.participant2?.firstName} ${f.participant2?.lastName}` }, label: `${surname(f.participant1)} v ${surname(f.participant2)} · ${name}` })));
             // Matches under way: have PDC push every change to us (the bar redraws on each).
             if (live.length) watchLive(id!, live.map((f: any) => String(f.fixtureID)), tick);
+            // Players on a break (no darts for a while at the start of a leg): say so after the score.
+            const onBrk = new Set<string>();
+            await Promise.all(live.slice(0, 3).map(async (f: any) => {
+              const m = lv.get(String(f.fixtureID));
+              if (m?.status !== 'live') return;
+              if (onBreak(await currentLeg(id!, m).catch(() => null))) onBrk.add(String(f.fixtureID));
+            }));
             // Upcoming: "A v B" then the start time in its own pill, so a time never reads as a score.
             const chip = (f: any, kind: string) => kind === 'next'
               ? `<a class="lb-m next" href="/match?id=${f.fixtureID}"><span>${esc(surname(f.participant1))}</span><i class="lb-v">v</i><span>${esc(surname(f.participant2))}</span>${ukTime(f.startTime, f.startDate) ? `<time class="lb-t" aria-label="starts at ${esc(ukTime(f.startTime, f.startDate))}">${esc(ukTime(f.startTime, f.startDate))}</time>` : ''}</a>`
-              : `<a class="lb-m ${kind}" href="/match?id=${f.fixtureID}">${starred(f) ? '<i class="lb-fav" aria-label="You follow a player in this match">★</i>' : ''}<span>${esc(surname(f.participant1))}</span><b>${kind === 'now' && !/live|progress|result/i.test(f.status) ? 'v' : scoreHtml(f.participant1Score, f.participant2Score)}</b><span>${esc(surname(f.participant2))}</span></a>`;
+              : `<a class="lb-m ${kind}" href="/match?id=${f.fixtureID}">${starred(f) ? '<i class="lb-fav" aria-label="You follow a player in this match">★</i>' : ''}<span>${esc(surname(f.participant1))}</span><b>${kind === 'now' && !/live|progress|result/i.test(f.status) ? 'v' : scoreHtml(f.participant1Score, f.participant2Score)}</b><span>${esc(surname(f.participant2))}</span>${onBrk.has(String(f.fixtureID)) ? '<i class="lb-brk">Break</i>' : ''}</a>`;
             let html = '';
             const ln = document.getElementById('livenav') as HTMLAnchorElement | null;
             if (ln) {

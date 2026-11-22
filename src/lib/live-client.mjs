@@ -81,9 +81,11 @@ export async function watchLive(tournamentId, ids, onChange) {
           // Who threw first in the leg just finished: they don't throw first in the next one.
           const before = pushedLeg.get(id);
           const prevFirst = before?.data.visits[0] ? (before.data.visits[0].isParticipant1 ? 0 : 1) : before?.prevFirst ?? null;
+          const prevLastAt = before?.data.lastAt ?? before?.prevLastAt ?? null;
           if (lk) {
             const set = m.set || 1, leg = m.leg;
-            pushedLeg.set(id, { set, leg, data: legFromTurns([], set, leg), prevFirst: before && before.leg === leg - 1 ? prevFirst : null, ready: false });
+            const follows = before && before.leg === leg - 1;
+            pushedLeg.set(id, { set, leg, data: legFromTurns([], set, leg), prevFirst: follows ? prevFirst : null, prevLastAt: follows ? prevLastAt : null, ready: false });
             legOff = fs.onSnapshot(fs.collection(store, `tournaments/${tournamentId}/matches/${id}/sets/${set}/legs/${leg}/turns`), q => {
               const cur = pushedLeg.get(id);
               pushedLeg.set(id, { ...cur, data: legFromTurns(q.docs.map(d => d.data()), set, leg), ready: true });
@@ -108,8 +110,8 @@ export async function currentLeg(tournamentId, m) {
   const p = pushedLeg.get(String(m.id));
   if (isPushing() && p?.ready && p.leg === m.leg && p.set === (m.set || 1)) {
     // A new leg with no darts yet and no memory of the last one: ask once.
-    if (p.data.throwing == null && p.prevFirst == null && m.leg > 1) return liveCurrentLeg(tournamentId, m);
-    return legSummary(p.data, m, p.prevFirst);
+    if (!p.data.visits.length && (p.prevFirst == null || p.prevLastAt == null) && m.leg > 1) return liveCurrentLeg(tournamentId, m);
+    return legSummary(p.data, m, p.prevFirst, p.prevLastAt);
   }
   return liveCurrentLeg(tournamentId, m);
 }

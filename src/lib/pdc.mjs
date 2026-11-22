@@ -467,7 +467,22 @@ export function legFromTurns(turns, set, leg) {
   const last = sorted[sorted.length - 1];
   const inVisit = last && last.isComplete === false;
   const throwing = !last ? null : inVisit ? (last.scoringParticipant === 0 ? 0 : 1) : (last.activeParticipant === 0 ? 0 : 1);
-  return { setNumber: set, legNumber: leg, visits, throwing, dartsIn: inVisit ? Math.min(3, last.dartsThrown || 0) : 0 };
+  // When the last dart of this leg went in (ms), for spotting breaks.
+  const lastAt = sorted.reduce((t, x) => Math.max(t, Date.parse(x.timestamp) || 0), 0) || null;
+  return { setNumber: set, legNumber: leg, visits, throwing, dartsIn: inVisit ? Math.min(3, last.dartsThrown || 0) : 0, lastAt };
+}
+
+/** How long without a dart counts as a break. Real gaps between legs: 9–36s; the breaks after every fifth leg: 4–6 minutes. */
+export const BREAK_AFTER = 90_000;
+/**
+ * PDC's live data has no break flag, so: a leg with no darts in it yet, and the
+ * last dart (end of the previous leg) more than BREAK_AFTER ago.
+ * Takes a leg summary (legSummary) or a leg plus the previous leg's lastAt.
+ */
+export function onBreak(l, prevLastAt = null, now = Date.now()) {
+  if (!l || (l.visits || []).length || l.dartsIn) return false;
+  const last = l.lastAt || prevLastAt;
+  return !!last && now - last > BREAK_AFTER;
 }
 
 async function liveLeg(tid, mid, set, leg) {
@@ -475,12 +490,12 @@ async function liveLeg(tid, mid, set, leg) {
 }
 
 /** What the tiles need from a leg: score left each side, who's throwing and how many darts are in. `prevFirst` = 0/1 who threw first last leg. */
-export function legSummary(leg, m, prevFirst = null) {
+export function legSummary(leg, m, prevFirst = null, prevLastAt = null) {
   const left = p1 => { const v = leg.visits.filter(x => x.isParticipant1 === p1); return v.length ? v[v.length - 1].remaining : 501; };
   // No darts in this leg yet: the throw alternates, so whoever didn't start the last leg starts this one.
   let throwing = leg.throwing;
   if (throwing == null && prevFirst != null) throwing = prevFirst ? 0 : 1;
-  return { set: m.set || 1, leg: m.leg, left: [left(true), left(false)], throwing, dartsIn: leg.dartsIn || 0, visits: leg.visits };
+  return { set: m.set || 1, leg: m.leg, left: [left(true), left(false)], throwing, dartsIn: leg.dartsIn || 0, visits: leg.visits, lastAt: leg.lastAt || prevLastAt || null };
 }
 
 /**
@@ -515,12 +530,14 @@ export async function liveLegs(tid, mid, m, cache = new Map()) {
 export async function liveCurrentLeg(tid, m) {
   if (!m || m.status !== 'live' || !m.leg) return null;
   const leg = await liveLeg(tid, m.id, m.set || 1, m.leg);
-  let prevFirst = null;
-  if (leg.throwing == null && m.leg > 1) {
+  let prevFirst = null, prevLastAt = null;
+  // No darts yet in this leg: the previous leg says who starts and when the last dart went in.
+  if ((leg.throwing == null || !leg.visits.length) && m.leg > 1) {
     const prev = await liveLeg(tid, m.id, m.set || 1, m.leg - 1).catch(() => null);
     if (prev?.visits[0]) prevFirst = prev.visits[0].isParticipant1 ? 0 : 1;
+    prevLastAt = prev?.lastAt ?? null;
   }
-  return legSummary(leg, m, prevFirst);
+  return legSummary(leg, m, prevFirst, prevLastAt);
 }
 
 /** "First to 10 legs" / "First to 4 sets" for a stage ({ sets, bestOf, twoClear }). */

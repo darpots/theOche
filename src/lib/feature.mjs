@@ -4,7 +4,7 @@
 // Size order while a match is live: the match score (sets in set play) is the
 // biggest thing, each player's score left in the leg comes second, and the
 // averages are small and labelled. Set play also shows the legs in the set.
-import { flag, formatLabel, surnameOf } from './pdc.mjs';
+import { flag, formatLabel, surnameOf, onBreak } from './pdc.mjs';
 import { ukTime, scoreHtml } from './format.mjs';
 import { avatarSrc, cutoutImg, pairPrefer } from './images.mjs';
 
@@ -67,7 +67,9 @@ export function featureTile(f, mode, eventName, also = []) {
   const playing = inPlay && f.legNow;
   const parts = playing ? [legParts(f.legNow, 0, st?.[0]), legParts(f.legNow, 1, st?.[1])] : null;
   // In play the score left is the hero; the match score sits small in the middle, labelled.
-  const playCentre = playing ? `<span class="lbl ft-legs-l">${sets ? 'Sets' : 'Legs'}</span><div class="ft-legs poster-num">${scoreHtml(f.s1, f.s2)}</div>${sets && legs ? `<span class="lbl ft-legs-l">Legs <b>${scoreHtml(legs[0], legs[1])}</b></span>` : ''}` : '';
+  // No darts for a while at the start of a leg: the players are on a break.
+  const brk = playing && onBreak(f.legNow);
+  const playCentre = playing ? `<span class="lbl ft-legs-l">${sets ? 'Sets' : 'Legs'}</span><div class="ft-legs poster-num">${scoreHtml(f.s1, f.s2)}</div>${sets && legs ? `<span class="lbl ft-legs-l">Legs <b>${scoreHtml(legs[0], legs[1])}</b></span>` : ''}${brk ? '<span class="brk-tag">Break</span>' : ''}` : '';
   const centre = playing ? playCentre : done || inPlay || (f.s1 ?? 0) + (f.s2 ?? 0) > 0
     ? `<div class="ft-score poster-num${Math.max(f.s1 ?? 0, f.s2 ?? 0) >= 10 ? ' wide' : ''}">${f.s1 ?? 0}<span>–</span>${f.s2 ?? 0}</div>${setLine}${inPlay ? (sets ? '<div class="lbl ft-sub">Sets</div>' : '') : `<div class="lbl ft-sub">${mode === 'now' ? 'Latest score' : `Final${sets ? ' · sets' : ''}`}</div>`}`
     : `<div class="ft-score ft-vs poster-num">V</div>${mode === 'now' ? '<div class="lbl ft-sub">Waiting for the first dart</div>' : ''}`;
@@ -81,7 +83,7 @@ export function featureTile(f, mode, eventName, also = []) {
     : '';
   return `<a class="ft-link" href="/match?id=${esc(f.id)}" aria-label="${esc(`${f.p1.name} v ${f.p2.name}`)}"></a>
     <div class="ft-top">${tag}<span class="lbl ft-stage">${esc(f.stage || '')}${fmt ? ` · ${esc(fmt)}` : ''}${inPlay && f.legNow ? ` · Leg ${f.legNow.leg}` : ''}</span></div>
-    <div class="ft-stage-row${playing ? ' play' : ''}">
+    <div class="ft-stage-row${playing ? ' play' : ''}${brk ? ' brk' : ''}">
       <div class="ft-p l">${pic(f.p1, 'l', pairPrefer(f.p1?.name, f.p2?.name))}</div>
       <div class="ft-mid">${centre}</div>
       <div class="ft-p r">${pic(f.p2, 'r', pairPrefer(f.p1?.name, f.p2?.name))}</div>

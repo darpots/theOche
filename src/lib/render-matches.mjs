@@ -1,7 +1,7 @@
 // Renders the Matches page body from a normalised tournament. Used at build
 // time (Astro) and again in the browser when live data arrives, so both
 // always produce identical markup.
-import { flag, tvBadge, surnameOf, formatLabel } from './pdc.mjs';
+import { flag, tvBadge, surnameOf, formatLabel, onBreak } from './pdc.mjs';
 import { avatarSrc } from './images.mjs';
 import { avatarColours, initials, longDate, shortDate, ukClock, ukZone, money } from './format.mjs';
 
@@ -45,7 +45,8 @@ export function fixtureRow(f, portraits) {
         <b class="ls-n poster-num">${l.throwing === k ? '<i class="ls-dot" aria-label="throwing"></i>' : ''}${l.left[k]}</b>
         <span class="ls-who">${esc(who[k])}</span>
       </div>`;
-    return `<div class="legstrip" title="Score left in the leg being played; the dot marks who is throwing">${side(0)}<span class="ls-mid"><span>${f.fmt?.sets || f.sets ? `Set ${l.set}` : 'Leg'}</span><b>${f.fmt?.sets || f.sets ? `Leg ${l.leg}` : l.leg}</b></span>${side(1)}</div>`;
+    const brk = onBreak(l);
+    return `<div class="legstrip${brk ? ' brk' : ''}" title="Score left in the leg being played; the dot marks who is throwing">${side(0)}<span class="ls-mid">${brk ? '<span class="brk-tag">Break</span>' : `<span>${f.fmt?.sets || f.sets ? `Set ${l.set}` : 'Leg'}</span><b>${f.fmt?.sets || f.sets ? `Leg ${l.leg}` : l.leg}</b>`}</span>${side(1)}</div>`;
   })();
   const state = f.status === 'live' ? '<span class="live-dot">Live</span>' : `<span class="ft">${group}${f.status === 'result' ? 'Result' : f.time ? ukZone(f.date) : 'Time TBC'}</span>`;
   const st = f.stats || null;
