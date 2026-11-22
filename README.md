@@ -25,6 +25,16 @@ All automation is in `.github/workflows/`. Each job validates the data by buildi
 | `news.yml` | 5am and 5pm UK | deletes reports older than a month (round-ups after 200 days) (and writes reports via an API if `NEWS_API_KEY` is set) |
 | `refresh-players.yml` | daily | player profiles, season records, tournament history |
 
+GitHub runs scheduled jobs late, or skips them, on quiet repositories (the "hourly" job was running every 6-8 hours), so an outside scheduler starts them on time. **cron-job.org** calls GitHub's `workflow_dispatch` API with a fine-grained token (this repository only, permission *Actions: read and write*):
+
+| cron-job.org job | Calls | Schedule (Europe/London) |
+|---|---|---|
+| Refresh data | `POST https://api.github.com/repos/darpots/theOche/actions/workflows/refresh-data.yml/dispatches` | every hour at :07 |
+| News clean-up | `…/workflows/news.yml/dispatches` | 05:05 and 17:05 |
+| Player profiles | `…/workflows/refresh-players.yml/dispatches` | 04:40 |
+
+Each request sends the headers `Accept: application/vnd.github+json`, `Authorization: Bearer <token>`, `X-GitHub-Api-Version: 2022-11-28` and the body `{"ref":"main"}`. GitHub answers `204` when a run starts. The GitHub schedules stay as a backup; an extra run does no harm (each job commits only when something changed, and they queue rather than overlap). When the token expires, make a new one and paste it into the three jobs.
+
 If a job fails, it opens a GitHub issue (and comments on it for repeat failures). The site keeps serving the last good data. All jobs can also be run by hand from the **Actions** tab (**Run workflow**).
 
 ### Newsdesk and duplicates
