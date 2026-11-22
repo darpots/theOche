@@ -44,6 +44,25 @@ const todayIds = new Set(md.todays.flatMap(f => [f.p1.id, f.p2.id]));
 const spotRank = rankings.players.find(p => todayIds.has(p.id) && cutout(p.name)) || rankings.players[0];
 const spot = loadProfile(spotRank.id);
 import { isStale } from '../lib/news';
+// Play cards: what each is, and a starting line the browser replaces with this visitor's own state.
+const wcEvent = calendar.events.find(e => /world championship/i.test(e.name) && e.end >= today);
+const wcStart = wcEvent?.start;
+const daysTo = (d?: string) => (d ? Math.max(0, Math.round((Date.parse(d) - Date.parse(today)) / 864e5)) : null);
+const openToday = isOn ? md.todays.filter(f => f.status !== 'result' && f.p1 && f.p2).length : 0;
+const playCards = [
+  { key: 'predictor', href: '/play/predictor', kick: 'Predictor', title: isOn ? "Call tonight's winners" : 'Predict the winners', text: 'Pick who wins before they throw. A point for every right call, two for an upset.',
+    live: openToday ? `${openToday} match${openToday === 1 ? '' : 'es'} to call today` : 'Picks open when the draw is out',
+    icon: '<svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M8 12.5l2.5 2.5L16 9.5"/></svg>' },
+  { key: 'guess', href: '/play/guess', kick: 'Daily', title: 'Guess the player', text: 'A new mystery player every day. Six clues, six guesses.',
+    live: "Today's player is waiting",
+    icon: '<svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c1.5-4 4.5-6 8-6s6.5 2 8 6"/><path d="M11 6.5c.3-.9 2-.9 2.1.1.1.8-1.1 1-1.1 1.9"/></svg>' },
+  { key: 'checkout', href: '/play/checkout', kick: 'Practice', title: 'Checkout trainer', text: '60 seconds on the clock. How many finishes can you take out?',
+    live: 'Set your first score',
+    icon: '<svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.3" fill="currentColor"/><path d="M15 9l5-5M17 4h3v3"/></svg>' },
+  { key: 'wc', href: '/world-championship', kick: 'Ally Pally', title: 'World Championship hub', text: 'Seeds, the form players and the road to the Sid Waddell Trophy.',
+    live: wcStart ? (daysTo(wcStart) ? `Starts in ${daysTo(wcStart)} days` : 'On now') : 'Roll of honour and more',
+    icon: '<svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M7 4h10v4a5 5 0 0 1-10 0z"/><path d="M7 6H4a3 3 0 0 0 3 4M17 6h3a3 3 0 0 1-3 4M12 13v4M8 21h8M9 17h6"/></svg>' },
+];
 ---
 <Layout title="The Oche" description="PDC darts today: the match on now, results, news, the live rankings race and every event on Sky Sports, ITV and PDCTV." active="home"
   jsonld={{ '@context': 'https://schema.org', '@type': 'WebSite', name: 'The Oche', url: Astro.site?.href }}>
@@ -166,14 +185,47 @@ import { isStale } from '../lib/news';
       </section>
 
     </div>
-    <nav class="playstrip" aria-label="Games and tools">
-      <a href="/play/predictor"><span class="lbl">Predictor</span><b>Call tonight's winners</b></a>
-      <a href="/play/guess"><span class="lbl">Daily</span><b>Guess the player</b></a>
-      <a href="/play/checkout"><span class="lbl">Practice</span><b>Checkout trainer</b></a>
-      <a href="/world-championship"><span class="lbl">Ally Pally</span><b>World Championship hub</b></a>
-    </nav>
+    <!-- Games and tools: each card says what it is and something live from this device (picks, streak, best) -->
+    <section class="play" aria-label="Games and tools" data-play data-tid={t.id} data-wc={wcStart || ''}>
+      {playCards.map(c => (
+        <a class={`pc pc-${c.key}`} href={c.href} data-card={c.key}>
+          <span class="pc-ic" aria-hidden="true" set:html={c.icon} />
+          <span class="lbl">{c.kick}</span>
+          <b class="pc-t">{c.title}</b>
+          <span class="pc-x">{c.text}</span>
+          <span class="pc-live" data-live>{c.live}</span>
+          <i class="pc-go" aria-hidden="true">→</i>
+        </a>
+      ))}
+    </section>
   </div>
 
+  <script>
+    // Play cards: replace the starting line with this visitor's own state (all from this device).
+    function playState() {
+      const box = document.querySelector<HTMLElement>('[data-play]');
+      if (!box) return;
+      const set = (k: string, txt: string) => { const el = box.querySelector(`[data-card="${k}"] [data-live]`); if (el && txt) el.textContent = txt; };
+      const read = (k: string) => { try { return JSON.parse(localStorage.getItem(k) || 'null'); } catch { return null; } };
+      // Predictor: how many of today's open matches are already picked.
+      const picks = read('oche:picks') || {};
+      const mine = Object.values(picks).filter((x: any) => x.t === box.dataset.tid).length;
+      const live = box.querySelector('[data-card="predictor"] [data-live]')?.textContent || '';
+      const open = Number(live.match(/^(\d+)/)?.[1] || 0);
+      if (mine && open) set('predictor', `${mine} pick${mine === 1 ? '' : 's'} in · ${open} to call today`);
+      else if (mine) set('predictor', `${mine} pick${mine === 1 ? '' : 's'} made this event`);
+      // Guess the player: today's result and streak.
+      const day = new Date().toLocaleDateString('en-CA', { timeZone: 'Europe/London' });
+      const g = read('oche:guess');
+      if (g && g.day === day && (g.won || g.tries?.length >= 6)) set('guess', g.won ? `Solved in ${g.tries.length} · streak ${g.streak}` : 'Missed today · back tomorrow');
+      else if (g && g.day === day && g.tries?.length) set('guess', `${6 - g.tries.length} guesses left today`);
+      else if (g?.streak) set('guess', `Keep your ${g.streak}-day streak going`);
+      // Checkout trainer: personal best.
+      let best = 0; try { best = Number(localStorage.getItem('oche:checkout-best') || 0); } catch { /* private mode */ }
+      if (best) set('checkout', `Your best: ${best} in 60 seconds`);
+    }
+    document.addEventListener('astro:page-load', playState);
+  </script>
   <script>
     import { normaliseTournament, applyLive, surnameOf } from '../lib/pdc.mjs';
     import { liveFor, watchLive, unwatch, isPushing, currentLeg, LIVE_TICK, PUSH_TICK } from '../lib/live-client.mjs';
@@ -517,12 +569,26 @@ import { isStale } from '../lib/news';
     .spot-avg { font-size: 60px; }
     .ne-name { font-size: 56px; }
   }
-  .playstrip { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-top: 16px; }
-  .playstrip a { display: flex; flex-direction: column; gap: 4px; padding: 16px 18px; border-radius: 20px; background: var(--card); text-decoration: none; transition: transform .25s var(--ease); }
-  .playstrip a:first-child { background: var(--volt); color: var(--ink); }
-  .playstrip a:hover { transform: translateY(-2px); }
-  .playstrip .lbl { color: var(--red-text); }
-  .playstrip a:first-child .lbl { color: var(--ink); }
-  .playstrip b { font-family: var(--display); font-size: 18px; }
-  @media (max-width: 760px) { .playstrip { grid-template-columns: 1fr 1fr; } }
+  .play { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-top: 16px; }
+  .pc { position: relative; display: flex; flex-direction: column; gap: 8px; min-height: 230px; padding: 22px 22px 20px; border-radius: var(--tile); background: var(--card); color: var(--fg); text-decoration: none; overflow: hidden; transition: transform .3s var(--ease), box-shadow .3s; }
+  .pc:hover { transform: translateY(-3px); box-shadow: var(--shadow); }
+  .pc-ic { width: 46px; height: 46px; border-radius: 14px; display: grid; place-items: center; background: var(--paper-2); color: var(--red-text); margin-bottom: 4px; }
+  .pc .lbl { color: var(--red-text); }
+  .pc-t { font-family: var(--display); font-weight: 800; font-size: 22px; line-height: 1.15; letter-spacing: -.02em; }
+  .pc-x { font-size: 14px; line-height: 1.45; color: var(--muted); }
+  .pc-live { margin-top: auto; align-self: flex-start; font-size: 12.5px; font-weight: 800; padding: 5px 11px; border-radius: 999px; background: var(--paper-2); color: var(--fg); }
+  .pc-go { position: absolute; right: 20px; bottom: 18px; font-style: normal; font-weight: 800; font-size: 20px; transition: transform .3s var(--spring); }
+  .pc:hover .pc-go { transform: translateX(4px); }
+  /* The predictor leads in volt; the hub gets the Ally Pally glow */
+  .pc-predictor { background: var(--volt); color: var(--ink); }
+  .pc-predictor .lbl, .pc-predictor .pc-x { color: rgba(11, 12, 16, .75); }
+  .pc-predictor .pc-ic { background: var(--ink); color: var(--volt); }
+  .pc-predictor .pc-live { background: var(--ink); color: var(--volt); }
+  .pc-wc { background: radial-gradient(90% 80% at 100% 0%, #3b1a6b, transparent 70%), var(--ink); color: #fff; }
+  .pc-wc .lbl { color: var(--volt); }
+  .pc-wc .pc-x { color: var(--on-ink); }
+  .pc-wc .pc-ic { background: rgba(255, 255, 255, .08); color: var(--volt); }
+  .pc-wc .pc-live { background: rgba(255, 255, 255, .1); color: #fff; }
+  @media (max-width: 1000px) { .play { grid-template-columns: 1fr 1fr; } }
+  @media (max-width: 560px) { .play { gap: 12px; } .pc { min-height: 0; padding: 18px; } .pc-go { display: none; } .pc-live { font-size: 12px; } .pc-t { font-size: 19px; } .pc-x { font-size: 13px; } }
 </style>
