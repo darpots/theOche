@@ -405,7 +405,24 @@ const news = (await getCollection('news')).map(n => n.data)
   .board :global(.avg.best i) { color: var(--ink); }
   .board :global(.fx.stats-in .avg) { animation: statsin .6s var(--ease); }
   @keyframes statsin { from { opacity: 0; transform: translateY(4px); } }
-  .board :global(.mid) { text-align: center; min-width: 96px; }
+  .board :global(.mid) { text-align: center; min-width: 96px; display: flex; flex-direction: column; align-items: center; gap: 6px; }
+  /* Each player's legs (sets in set play) in the box on the end: the winner in volt, a live match in ink */
+  .board :global(.lgs) { margin-left: auto; flex: none; display: inline-flex; flex-direction: column; align-items: center; min-width: 52px; line-height: 1; padding: 6px 10px 7px; border-radius: 12px; background: var(--paper-2); font-family: var(--poster); font-weight: 400; font-size: 34px; font-variant-numeric: tabular-nums; color: var(--ink-2); }
+  .board :global(.pl.r .lgs) { margin-left: 0; margin-right: auto; }
+  .board :global(.lgs i) { font-style: normal; font-family: var(--body); font-size: 9px; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); margin-bottom: 3px; }
+  .board :global(.lgs.w) { background: var(--volt); color: var(--ink); }
+  .board :global(.lgs.w i) { color: var(--ink); }
+  .board :global(.lgs.live) { background: var(--ink); color: #fff; }
+  .board :global(.lgs.live i) { color: var(--on-ink-2); }
+  /* Averages in the middle, as on the scoreboards: the number, then a small-caps AVG */
+  .board :global(.mav) { display: inline-flex; align-items: baseline; gap: 8px; white-space: nowrap; }
+  .board :global(.ma) { font-size: 15px; font-weight: 800; color: var(--muted); font-variant-numeric: tabular-nums; }
+  .board :global(.ma.hi) { color: var(--ink); }
+  .board :global(.ma i) { font-style: normal; font-size: 10px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+  .board :global(.mdash) { color: var(--line); font-weight: 800; }
+  /* Live: a clear way into the match centre */
+  .board :global(.mc-link) { position: relative; z-index: 2; display: inline-block; margin-left: 10px; padding: 4px 10px; border-radius: 999px; background: var(--ink); color: #fff; text-decoration: none; font-size: 11px; font-weight: 800; letter-spacing: .06em; text-transform: uppercase; }
+  .board :global(.mc-link:hover) { background: var(--red); }
   .board :global(.sc) { font-family: var(--poster); font-size: 40px; font-weight: 400; color: var(--muted); font-variant-numeric: tabular-nums; }
   .board :global(.sc.w) { color: var(--ink); }
   .board :global(.dash) { margin: 0 6px; color: var(--line); font-size: 24px; }
@@ -441,5 +458,10 @@ const news = (await getCollection('news')).map(n => n.data)
     .board :global(.legstrip) { grid-template-columns: 1fr auto 1fr; padding: 12px 12px 10px; gap: 8px; }
     .board :global(.ls-n) { font-size: 54px; }
     .board :global(.pl.r .avg) { margin-left: auto; margin-right: 0; }
+    /* Phones: players stacked, the legs box on the right of each, averages and state on the line between */
+    .board :global(.pl.r .lgs) { margin-left: auto; margin-right: 0; }
+    .board :global(.mid) { flex-direction: row; flex-wrap: wrap; justify-content: flex-start; min-width: 0; gap: 4px 10px; padding: 2px 10px; }
+    .board :global(.lgs) { font-size: 30px; min-width: 46px; }
+    .board :global(.mc-link) { margin-left: 6px; }
     }
 </style>
