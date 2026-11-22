@@ -1,0 +1,139 @@
+---
+// The month sections of the calendar: used by /calendar (this season) and
+// /calendar/past (past seasons, fetched when "Include past 2 years" is ticked).
+import { tvBadge } from '../lib/pdc.mjs';
+import { dayNum, monthShort, monthLong, weekday, dateRange, initials } from '../lib/format.mjs';
+import { type Ev, pic, av, days, place, kind, isPast, badges, featured, bgFor, champCut } from '../lib/calendar-cards';
+
+interface Props { entries: [string, Ev[]][] }
+const { entries } = Astro.props;
+---
+    {entries.map(([k, list]) => (
+      <div class="month" data-month={k} hidden={list.every(isPast)}>
+        <h2 class="month-title"><span>{monthLong(k + '-01')}</span><small>{list.length} event{list.length === 1 ? '' : 's'}</small></h2>
+        <div class="grid">
+          {list.map(e => (
+            <a href={`/tournament/${e.id}`} class={`ev ev-${e.broadcaster}${isPast(e) ? ' past' : ''}${featured(e) ? ' feat' : ''}`} hidden={isPast(e)}
+              data-kind={kind(e)} data-start={e.start} data-end={e.end}>
+              {(
+                <span class="ev-art" aria-hidden="true">
+                  <img src={bgFor(e)} alt="" loading="lazy" decoding="async" />
+                  {champCut(e) && <img class="champ" src={champCut(e)!.src} alt="" loading="lazy" decoding="async" />}
+                </span>
+              )}
+              <span class="ev-date" aria-hidden="true">
+                <span class="wd">{weekday(e.start)}</span>
+                <b class="poster-num">{dayNum(e.start)}</b>
+                <span class="mo">{monthShort(e.start)}</span>
+              </span>
+              <span class="ev-main">
+                <span class="ev-top"><Fragment set:html={tvBadge(e.broadcaster)} /><span class="len">{days(e) === 1 ? 'One night' : `${days(e)} days`}</span></span>
+                <h3 class="headline">{e.name}{e.tag && <small>{e.tag}</small>}</h3>
+                <span class="where">{place(e) || 'Venue to be announced'}</span>
+                {badges(e).length > 0 && <span class="badges">{badges(e).map(b => <i class={`bd ${b.cls}`}>{b.text}</i>)}</span>}
+                <span class="when sr-only">{dateRange(e.start, e.end)}</span>
+                <span class="ev-foot">
+                  {e.winner
+                    ? <span class="winner"><span class="avatar" style={`--size:26px;${av(e.winner.name)}`}>{pic(e.winner.name) ? <img src={pic(e.winner.name)} alt="" width="26" height="26" loading="lazy" /> : initials(e.winner.name)}</span><span><small>Winner</small>{e.winner.name}</span></span>
+                    : <span class="status" data-status></span>}
+                  <span class="go" aria-hidden="true">→</span>
+                </span>
+              </span>
+            </a>
+          ))}
+        </div>
+      </div>
+    ))}
+
+<style>
+  .month { margin-top: 32px; }
+  .month-title { font-size: 15px; font-family: var(--body); font-weight: 800; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); display: flex; align-items: center; gap: 14px; margin-bottom: 12px; line-height: 1; }
+  .month-title::after { content: ''; flex: 1; height: 1px; background: var(--line); order: 1; }
+  .month-title span { font-family: var(--poster); font-weight: 400; font-size: 30px; letter-spacing: .01em; color: var(--fg); }
+  .month-title small { order: 2; font-size: 12px; letter-spacing: .1em; color: var(--muted); }
+  /* Every card is the wide feature layout, two to a row on desktop */
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 520px), 1fr)); gap: 14px; }
+
+  /* Event tiles: the site's white cards with the dark date block used on the home page */
+  .ev { position: relative; overflow: hidden; display: grid; grid-template-columns: 76px minmax(0, 1fr); gap: 16px; padding: 14px; border-radius: 22px; background: var(--card); box-shadow: var(--shadow-sm); text-decoration: none; color: inherit; transition: transform .3s var(--ease), box-shadow .3s; }
+  /* Broadcaster stripe along the top */
+  .ev::before { content: ''; position: absolute; z-index: 3; left: 0; right: 0; top: 0; height: 4px; background: var(--bc, var(--line)); }
+  .ev-sky { --bc: var(--sky); } .ev-itv { --bc: var(--itv); } .ev-pdctv { --bc: var(--red); }
+  /* What the event page has */
+  .badges { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 6px; }
+  .bd { font-style: normal; font-size: 11px; font-weight: 800; letter-spacing: .04em; padding: 3px 8px; border-radius: 7px; background: var(--paper-2); color: var(--fg-2); }
+  .bd.live { background: var(--red); color: #fff; }
+  .bd.live::before { content: '● '; }
+  .bd.draw::before { content: '⇶ '; }
+  .bd.res { background: var(--green-soft); color: var(--green-text); }
+  .bd.sched { background: var(--volt); color: var(--ink); }
+  .bd.news { background: var(--ink); color: #fff; }
+  /* Every card: dark, with its background faded in behind the text */
+  .ev { background: var(--ink); color: #fff; isolation: isolate; }
+  .ev { grid-template-columns: 76px minmax(0, 1fr) minmax(0, 40%); min-height: 170px; }
+  .ev .ev-art { position: absolute; inset: 0 0 0 auto; width: 50%; z-index: 0; overflow: hidden; }
+  .ev .ev-date, .ev .ev-main { position: relative; z-index: 1; }
+  .ev .ev-art img:not(.champ) { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: .75; transition: transform .8s var(--ease), opacity .4s; }
+  .ev .ev-art::after { content: ''; position: absolute; inset: 0; background: linear-gradient(90deg, var(--ink) 0%, rgba(11, 12, 16, .35) 55%, rgba(11, 12, 16, .1)); }
+  .ev:hover .ev-art img:not(.champ) { transform: scale(1.04); opacity: .9; }
+  .ev .ev-date { background: rgba(255, 255, 255, .1); color: #fff; backdrop-filter: blur(4px); }
+  .ev .ev-date .wd, .ev .ev-date .mo { color: var(--on-ink); }
+  .ev .where, .ev .len { color: var(--on-ink); }
+  .ev h3 small { color: #ff7a72; }
+  .ev .go { color: var(--volt); }
+  .ev .winner { color: #fff; }
+  .ev .bd:not(.live):not(.res):not(.sched) { background: rgba(255, 255, 255, .12); color: #fff; }
+  .ev .status.done { background: rgba(255, 255, 255, .12); color: var(--on-ink); }
+  .ev .status { color: var(--on-ink); }
+  .ev .status.soon { color: var(--ink); }
+  .ev:hover h3 { color: var(--volt); }
+  /* Majors: a wide feature card with a photo and the champion */
+  .ev.feat { background: var(--ink); color: #fff; }
+
+
+  /* Champion: anchored from the top so the face is always in the card; the body runs off the bottom */
+  .ev .champ { position: absolute; z-index: 1; right: 6%; top: 10%; bottom: auto; height: 135%; width: auto; filter: drop-shadow(0 10px 20px rgba(0, 0, 0, .5)); }
+  .ev.feat .ev-date { background: var(--volt); color: var(--ink); }
+  .ev.feat .ev-date .wd, .ev.feat .ev-date .mo { color: var(--ink); }
+  .ev.feat h3 { font-size: 24px; }
+  .ev.feat .where, .ev.feat .len { color: var(--on-ink); }
+  .ev.feat .bd:not(.live):not(.res):not(.sched) { background: rgba(255, 255, 255, .12); color: #fff; }
+  .ev.feat .go { color: var(--volt); }
+  .ev.feat .winner { color: #fff; }
+  .ev:hover { transform: translateY(-3px); box-shadow: var(--shadow); }
+  .ev-date { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; border-radius: 16px; background: var(--ink); color: #fff; padding: 10px 0; min-height: 96px; }
+  .ev-date b { font-size: 40px; line-height: .9; }
+  .ev-date .wd, .ev-date .mo { font-size: 11px; font-weight: 800; letter-spacing: .14em; text-transform: uppercase; color: var(--on-ink); }
+  .ev-main { display: flex; flex-direction: column; min-width: 0; gap: 4px; }
+  .ev-top { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+  .len { font-size: 11px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+  .ev h3 { font-size: 20px; margin-top: 6px; }
+  .ev h3 small { display: block; font-family: var(--body); font-size: 13px; font-weight: 700; letter-spacing: 0; color: var(--red-text); margin-top: 2px; }
+  .ev:hover h3 { color: var(--red-text); }
+  .where { font-size: 13px; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .ev-foot { margin-top: auto; padding-top: 8px; display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+  .go { font-weight: 800; color: var(--muted); transition: transform .3s var(--spring), color .2s; }
+  .ev:hover .go { transform: translateX(4px); color: var(--ink); }
+  .status { font-size: 12px; font-weight: 800; color: var(--muted); letter-spacing: .02em; }
+  .status.soon { color: var(--ink); background: var(--volt); padding: 3px 10px; border-radius: 999px; }
+  .status.done { background: var(--paper-2); padding: 3px 10px; border-radius: 999px; }
+  .winner { display: inline-flex; align-items: center; gap: 8px; font-weight: 700; font-size: 14px; line-height: 1.15; min-width: 0; }
+  .winner small { display: block; font-size: 10px; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; color: var(--gold); }
+  .winner .avatar { box-shadow: 0 0 0 2px var(--gold); }
+
+  /* On now: the dark live tile */
+  .ev.live { background: var(--ink); color: #fff; box-shadow: 0 0 0 2px var(--red), 0 20px 40px -18px rgba(232, 54, 45, .5); }
+  .ev.live .ev-date { background: var(--red); }
+  .ev.live .ev-date .wd, .ev.live .ev-date .mo { color: #fff; }
+  .ev.live .where, .ev.live .len { color: var(--on-ink); }
+  .ev.live h3 small { color: var(--volt); }
+  .ev.live .go { color: var(--volt); }
+  .ev.past { opacity: .8; }
+  .ev.past .ev-date { background: rgba(255, 255, 255, .06); color: var(--on-ink-2); }
+  .ev.past .ev-date .wd, .ev.past .ev-date .mo { color: var(--on-ink-2); }
+  .ev.past .ev-art img:not(.champ) { filter: grayscale(.6); }
+  .ev.past:hover { opacity: 1; }
+
+  @media (max-width: 760px) { .ev, .ev.feat { grid-template-columns: 64px minmax(0, 1fr); } .ev .ev-art { inset: 0; width: auto; } .ev .ev-art img:not(.champ) { opacity: .45; } .ev .ev-art::after { background: linear-gradient(100deg, var(--ink) 25%, rgba(11, 12, 16, .55) 75%, rgba(11, 12, 16, .3)); } .ev.feat .ev-date, .ev.feat .ev-main { position: relative; z-index: 1; } .ev .champ { top: 12%; height: 130%; right: 2%; opacity: .55; } }
+  @media (max-width: 420px) { .grid { grid-template-columns: 1fr; } .ev { grid-template-columns: 64px minmax(0, 1fr); gap: 12px; } .ev-date b { font-size: 34px; } }
+</style>

@@ -5,7 +5,7 @@
 
 const seen = new Map(); // fixture id -> { legs: [a, b], sets: [a, b] }
 
-/** Show the flash now, centred over `anchor` (a CSS selector for the score) when it's on screen. kind: 'Leg' | 'Set'. */
+/** Show the flash now, pinned over `anchor` (a CSS selector for the score); nothing shows without one. kind: 'Leg' | 'Set'. */
 export function flashWin(name, kind = 'Leg', anchor = '') {
   show(kind, name, anchor);
 }
@@ -39,15 +39,18 @@ function show(small, big, anchor, variant = '', at = 'centre') {
       b.style.fontSize = `${fs}px`;
       while (b.scrollWidth > b.clientWidth && fs > 20) { fs -= 2; b.style.fontSize = `${fs}px`; }
     }
+    // Pinned to the page over its anchor (the legs score, or a player's score), so it
+    // scrolls with the page: someone scrolled down to the stats doesn't get a sticker
+    // over what they're reading. No anchor on the page, no flash.
     const a = anchor && document.querySelector(anchor);
     const r = a?.getBoundingClientRect();
-    if (r && r.bottom > 0 && r.top < innerHeight) {
-      // Keep the whole sticker on screen (a player's score can sit near the edge on a phone).
-      const w = el.offsetWidth / 2 + 10, h = el.offsetHeight / 2 + 10;
-      el.style.left = `${Math.min(Math.max(r.left + r.width / 2, w), innerWidth - w)}px`;
-      // The 180 sits on the top edge of the player's score (where the old sticker was); a leg flash covers the legs score.
-      el.style.top = `${Math.min(Math.max(at === 'top' ? r.top + 4 : r.top + r.height / 2, h), innerHeight - h)}px`;
-    }
+    if (!r || !r.width) { el.remove(); return; }
+    // Keep the whole sticker inside the page width (a player's score can sit near the edge on a phone).
+    const vw = document.documentElement.clientWidth;
+    const w = el.offsetWidth / 2 + 10, h = el.offsetHeight / 2 + 10;
+    el.style.left = `${Math.min(Math.max(r.left + scrollX + r.width / 2, w), vw - w)}px`;
+    // The 180 sits on the top edge of the player's score; a leg flash covers the legs score.
+    el.style.top = `${Math.max((at === 'top' ? r.top + 4 : r.top + r.height / 2) + scrollY, h)}px`;
     el.style.visibility = '';
     // Restart the animation now it's placed.
     el.style.animation = 'none'; void el.offsetWidth; el.style.animation = '';

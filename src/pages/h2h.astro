@@ -1,0 +1,107 @@
+---
+// Head to head: any two ranked players, their last-12-month numbers side by side
+// and every PDC meeting (src/lib/h2h.mjs). Shareable: /h2h?a=<slug>&b=<slug>.
+import Layout from '../layouts/Layout.astro';
+import { playPlayers, jsonForHtml } from '../lib/play-data';
+
+const players = playPlayers(128).map(p => ({ id: p.id, name: p.name, slug: p.slug, pos: p.pos, cut: p.cut, avatar: p.avatar, country: p.countryName, avg: p.avg, f9: p.f9, t80: p.t80, co: p.co, hi: p.hi, titles: p.titles, won: p.won, lost: p.lost, nine: p.nine }));
+---
+<Layout title="Head to head" description="Compare any two PDC players: every meeting and their numbers side by side." active="play">
+  <section class="hero wrap">
+    <span class="eyebrow">Head to head</span>
+    <h1>Settle the <span class="accent">argument.</span></h1>
+    <p class="lede">Pick two players for their record against each other and the last 12 months side by side.</p>
+  </section>
+
+  <section class="wrap">
+    <form class="pickers" id="h-form" autocomplete="off">
+      <input id="h-a" list="h-names" placeholder="First player" aria-label="First player" />
+      <span class="vs poster">v</span>
+      <input id="h-b" list="h-names" placeholder="Second player" aria-label="Second player" />
+      <datalist id="h-names">{players.map(p => <option value={p.name} />)}</datalist>
+      <button type="submit">Compare</button>
+    </form>
+    <div id="h-out"></div>
+  </section>
+
+  <script is:inline type="application/json" id="h-data" set:html={jsonForHtml(players)} />
+
+  <script>
+    import { fetchH2H, h2hSummary, renderH2H } from '../lib/h2h.mjs';
+    const esc = (x: unknown) => String(x ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]!);
+    function init() {
+      const form = document.getElementById('h-form') as HTMLFormElement | null;
+      if (!form) return;
+      const players: any[] = JSON.parse(document.getElementById('h-data')!.textContent!);
+      const byName = (v: string) => players.find(p => p.name.toLowerCase() === v.trim().toLowerCase());
+      const bySlug = (v: string | null) => players.find(p => p.slug === v);
+      const ia = document.getElementById('h-a') as HTMLInputElement, ib = document.getElementById('h-b') as HTMLInputElement;
+      const out = document.getElementById('h-out')!;
+      async function show(a: any, b: any) {
+        history.replaceState(null, '', `/h2h?a=${a.slug}&b=${b.slug}`);
+        const rows: [string, (p: any) => number | null, (n: number) => string, boolean][] = [
+          ['World ranking', p => p.pos, n => `#${n}`, false],
+          ['3-dart average', p => p.avg, n => n.toFixed(2), true],
+          ['First-9 average', p => p.f9, n => n.toFixed(2), true],
+          ['180s', p => p.t80, n => String(n), true],
+          ['Checkout %', p => p.co, n => `${n.toFixed(1)}%`, true],
+          ['Best checkout', p => p.hi, n => String(n), true],
+          ['Titles', p => p.titles, n => String(n), true],
+          ['Win rate', p => (p.won + p.lost ? (p.won / (p.won + p.lost)) * 100 : null), n => `${n.toFixed(0)}%`, true],
+          ['Career nine-darters', p => p.nine, n => String(n), true],
+        ];
+        const pic = (p: any) => p.cut ? `<img src="${esc(p.cut)}" alt="">` : '';
+        out.innerHTML = `<div class="duel">
+            <a class="who l" href="/players/${esc(a.slug)}">${pic(a)}<b class="poster">${esc(a.name)}</b><span>${esc(a.country)} · World #${a.pos}</span></a>
+            <a class="who r" href="/players/${esc(b.slug)}">${pic(b)}<b class="poster">${esc(b.name)}</b><span>${esc(b.country)} · World #${b.pos}</span></a>
+          </div>
+          <div class="cmp tile tile-card"><h2 class="lbl">Last 12 months</h2>${rows.map(([label, f, fmt, high]) => {
+            const x = f(a), y = f(b);
+            const better = x == null || y == null || x === y ? -1 : (high ? x > y : x < y) ? 0 : 1;
+            return `<div class="row"><b class="${better === 0 ? 'win' : ''}">${x == null ? '–' : fmt(x)}</b><span>${label}</span><b class="${better === 1 ? 'win' : ''}">${y == null ? '–' : fmt(y)}</b></div>`;
+          }).join('')}</div>
+          <div class="tile tile-card meet"><h2 class="lbl">Every meeting</h2><p class="muted" id="h-sum">Loading…</p><div class="h2h" id="h-list"></div></div>`;
+        try {
+          const games = await fetchH2H(a.id, b.id);
+          const sn = (p: any) => p.name.split(' ').slice(1).join(' ') || p.name;
+          document.getElementById('h-sum')!.textContent = h2hSummary(games, 'meeting') || '';
+          document.getElementById('h-list')!.innerHTML = renderH2H(games, [sn(a), sn(b)]);
+        } catch { document.getElementById('h-sum')!.textContent = 'The head-to-head record could not be loaded just now.'; }
+      }
+      form.onsubmit = e => {
+        e.preventDefault();
+        const a = byName(ia.value), b = byName(ib.value);
+        if (!a || !b || a === b) { out.innerHTML = '<p class="muted">Pick two different players from the list.</p>'; return; }
+        show(a, b);
+      };
+      const q = new URLSearchParams(location.search);
+      const a = bySlug(q.get('a')) || players[0], b = bySlug(q.get('b')) || players[1];
+      ia.value = a.name; ib.value = b.name;
+      show(a, b);
+    }
+    document.addEventListener('astro:page-load', init);
+  </script>
+</Layout>
+
+<style>
+  .pickers { display: grid; grid-template-columns: 1fr auto 1fr auto; gap: 10px; align-items: center; margin-bottom: 22px; }
+  .pickers input { font: inherit; font-size: 17px; padding: 12px 16px; border-radius: 14px; border: 2px solid var(--line); background: var(--card); color: var(--fg); min-width: 0; }
+  .pickers .vs { font-size: 28px; color: var(--red-text); }
+  .pickers button { border: 0; border-radius: 14px; background: var(--ink); color: var(--volt); font-weight: 800; padding: 13px 20px; cursor: pointer; }
+  #h-out :global(.duel) { display: grid; grid-template-columns: 1fr 1fr; gap: 3px; border-radius: var(--tile); overflow: hidden; margin-bottom: 16px; }
+  #h-out :global(.who) { position: relative; display: flex; flex-direction: column; justify-content: flex-end; gap: 4px; min-height: 220px; padding: 20px; color: #fff; text-decoration: none; overflow: hidden; background: linear-gradient(160deg, #111a4a, var(--ink) 75%); }
+  #h-out :global(.who.r) { align-items: flex-end; text-align: right; background: linear-gradient(200deg, #3a0f0d, var(--ink) 75%); }
+  #h-out :global(.who img) { position: absolute; top: 12px; height: 175%; width: auto; max-width: none; right: 6%; opacity: .9; z-index: 0; }
+  #h-out :global(.who.r img) { right: auto; left: 6%; }
+  #h-out :global(.who b), #h-out :global(.who span) { position: relative; z-index: 1; text-shadow: 0 2px 12px rgba(0, 0, 0, .6); }
+  #h-out :global(.who b) { font-size: clamp(26px, 4vw, 44px); }
+  #h-out :global(.who span) { font-size: 13px; font-weight: 700; color: var(--on-ink); }
+  #h-out :global(.cmp), #h-out :global(.meet) { padding: 20px 22px; margin-bottom: 16px; }
+  #h-out :global(.cmp .lbl), #h-out :global(.meet .lbl) { margin-bottom: 10px; }
+  #h-out :global(.row) { display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 12px; padding: 9px 0; border-top: 1px solid var(--line); }
+  #h-out :global(.row span) { font-size: 13px; font-weight: 700; color: var(--muted); text-align: center; }
+  #h-out :global(.row b) { font-family: var(--poster); font-weight: 400; font-size: 26px; }
+  #h-out :global(.row b:last-child) { text-align: right; }
+  #h-out :global(.row b.win) { color: var(--green-text); }
+  @media (max-width: 640px) { .pickers { grid-template-columns: 1fr; } .pickers .vs { text-align: center; } #h-out :global(.who) { min-height: 170px; padding: 14px; } #h-out :global(.who b) { font-size: 22px; } }
+</style>

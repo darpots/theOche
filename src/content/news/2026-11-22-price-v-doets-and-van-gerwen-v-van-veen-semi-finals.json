@@ -10,15 +10,37 @@
   "Doets is ranked 23rd and is making his first appearance at the event on record. His 12-month average is 96.53, almost two points below Price's, yet he beat Jermaine Wattimena 16-7 in the quarter-finals and has won 128 of 181 matches over the last year.",
   "If the first tie is about whether Doets can keep his momentum against a former champion, the second is about whether Van Veen can turn a head-to-head record of four wins in 14 around."
  ],
- "tags": ["Grand Slam of Darts"],
- "players": ["Gerwyn Price", "Kevin Doets", "Michael van Gerwen", "Gian van Veen"],
- "sources": [
-  {"name": "PDC", "url": "https://www.pdc.tv/news/2026/november/21/Van-Gerwen-topples-Sykes-in-nine-dart-classic/", "title": "Van Gerwen topples Sykes in nine-dart classic"},
-  {"name": "PDC", "url": "https://www.pdc.tv/news/2026/november/20/Price-wins-Grand-Slam-belter-to-set-up-Doets-semi-final/", "title": "Price wins Grand Slam belter to set up Doets semi-final"}
+ "tags": [
+  "Grand Slam of Darts"
  ],
- "originalTitles": ["Van Gerwen topples Sykes in nine-dart classic", "Price wins Grand Slam belter to set up Doets semi-final"],
- "writtenBy": "The Oche newsdesk (Claude)",
+ "players": [
+  "Gerwyn Price",
+  "Kevin Doets",
+  "Michael van Gerwen",
+  "Gian van Veen"
+ ],
+ "sources": [
+  {
+   "name": "PDC",
+   "url": "https://www.pdc.tv/news/2026/november/21/Van-Gerwen-topples-Sykes-in-nine-dart-classic/",
+   "title": "Van Gerwen topples Sykes in nine-dart classic"
+  },
+  {
+   "name": "PDC",
+   "url": "https://www.pdc.tv/news/2026/november/20/Price-wins-Grand-Slam-belter-to-set-up-Doets-semi-final/",
+   "title": "Price wins Grand Slam belter to set up Doets semi-final"
+  }
+ ],
+ "originalTitles": [
+  "Van Gerwen topples Sykes in nine-dart classic",
+  "Price wins Grand Slam belter to set up Doets semi-final"
+ ],
+ "writtenBy": "The Oche newsdesk",
  "kind": "preview",
  "facts": "10871-2026-11-22-preview",
- "tournament": "10871"
+ "tournament": "10871",
+ "matches": [
+  "517027",
+  "517028"
+ ]
 }

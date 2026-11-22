@@ -21,12 +21,12 @@ export function cutout(name, prefer = 'cc') {
 }
 
 /** <img> markup for a cut-out; `sizes` is how wide it is shown. */
-export function cutoutImg(name, cls = '', sizes = '300px', alt = '', prefer = 'cc') {
+export function cutoutImg(name, cls = '', sizes = '300px', alt = '', prefer = 'cc', priority = false) {
   const c = cutout(name, prefer);
   if (!c) return '';
   const esc = s => String(s).replace(/[&<>"']/g, ch => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[ch]);
   // Studio cut-outs are full length: tagged 'studio' so a page can crop them to head and chest.
-  return `<img class="${cls}${c.src.includes('-pdc-') ? ' studio' : ''}" src="${c.src}" srcset="${c.srcset}" sizes="${sizes}" alt="${esc(alt)}" decoding="async">`;
+  return `<img class="${cls}${c.src.includes('-pdc-') ? ' studio' : ''}" src="${c.src}" srcset="${c.srcset}" sizes="${sizes}" alt="${esc(alt)}"${priority ? ' fetchpriority="high"' : ' decoding="async"'}>`;
 }
 
 /** For a pair shown side by side: PDC studio cut-outs when both players have one (same framing), else the default. */

@@ -21,12 +21,14 @@ const isOn = t.start <= today && t.end >= today;
 const md = matchday(t, today, nowHHMM);
 const feature = isOn ? (md.now ? { f: md.now, mode: 'now' } : md.next ? { f: md.next, mode: 'next' } : md.results[0] ? { f: md.results[0], mode: 'result' } : null) : null;
 const nextUp = isOn ? (md.now ? md.next : md.next && feature?.f !== md.next ? md.next : md.todays.find(f => f.status !== 'result' && f !== feature?.f) || null) : null;
-const resultsList = (md.results.filter(f => f.date === today).length ? md.results.filter(f => f.date === today) : md.results).slice(0, 5);
+// Newest first, topped up from earlier days so the tile is never one lonely row.
+const resultsList = md.results.slice(0, 6);
 
 const upcoming = calendar.events.filter(e => e.start > today && e.id !== t.id);
 const nextEvent = upcoming[0];
 
-const news = (await getCollection('news')).map(n => n.data).sort((a, b) => b.date.localeCompare(a.date)).slice(0, 4);
+// Previews leave the homepage once their matches are within 90 minutes (builds run hourly).
+const news = (await getCollection('news')).map(n => n.data).filter(s => !isStale(s, Date.now() + 90 * 6e4)).sort((a, b) => b.date.localeCompare(a.date)).slice(0, 4);
 const bigFigure = (h: string) => (h.match(/£[\d,.]+(?:k|m)?|\b\d{1,2}-\d{1,2}\b|\b1\d\d\.\d\d\b/i) || [null])[0]?.replace(/,000$/, 'K').replace(/^(£\d+),(\d{3})$/, '$1K');
 
 const prev = (rankings.previous || {}) as Record<string, number>;
@@ -41,13 +43,14 @@ const raceUpdated = liveOn ? new Date(lrd.updatedAt).toLocaleDateString('en-GB',
 const todayIds = new Set(md.todays.flatMap(f => [f.p1.id, f.p2.id]));
 const spotRank = rankings.players.find(p => todayIds.has(p.id) && cutout(p.name)) || rankings.players[0];
 const spot = loadProfile(spotRank.id);
+import { isStale } from '../lib/news';
 ---
 <Layout title="The Oche" description="PDC darts today: the match on now, results, news, the live rankings race and every event on Sky Sports, ITV and PDCTV." active="home"
   jsonld={{ '@context': 'https://schema.org', '@type': 'WebSite', name: 'The Oche', url: Astro.site?.href }}>
   <div class="wrap bento-wrap">
     <div class="bento">
 
-      <section class="tile tile-ink feature" id="feature" data-id={t.id} data-name={t.name} data-on={isOn ? '1' : ''} aria-live="polite">
+      <section class="tile tile-ink feature" id="feature" data-live-push data-id={t.id} data-name={t.name} data-on={isOn ? '1' : ''} aria-live="polite">
         {feature ? (
           <Fragment set:html={featureTile(feature.f, feature.mode, t.name, feature.mode === 'now' ? md.also : [])} />
         ) : nextEvent ? (
@@ -65,7 +68,7 @@ const spot = loadProfile(spotRank.id);
         {nextUp ? (
           <a class="tile tile-volt nu" href={`/match?id=${nextUp.id}`} id="nextup" set:html={nextTileInner(nextUp, t.name)} />
         ) : nextEvent && (
-          <a class="tile tile-volt nu" href={`/tournament/${nextEvent.id}`}>
+          <a class:list={['tile', 'tile-volt', 'nu', { compact: isOn }]} href={`/tournament/${nextEvent.id}`}>
             <span class="lbl">Next event · {dayNum(nextEvent.start)} {monthShort(nextEvent.start)}</span>
             <span class="poster nu-names">{nextEvent.name}</span>
             <span class="nu-sub">{nextEvent.venue || nextEvent.city}</span>
@@ -163,6 +166,12 @@ const spot = loadProfile(spotRank.id);
       </section>
 
     </div>
+    <nav class="playstrip" aria-label="Games and tools">
+      <a href="/play/predictor"><span class="lbl">Predictor</span><b>Call tonight's winners</b></a>
+      <a href="/play/guess"><span class="lbl">Daily</span><b>Guess the player</b></a>
+      <a href="/play/checkout"><span class="lbl">Practice</span><b>Checkout trainer</b></a>
+      <a href="/world-championship"><span class="lbl">Ally Pally</span><b>World Championship hub</b></a>
+    </nav>
   </div>
 
   <script>
@@ -227,8 +236,7 @@ const spot = loadProfile(spotRank.id);
             }
             const ol = document.getElementById('results');
             if (ol) {
-              const todays = md.results.filter((f: any) => f.date === today());
-              const list = (todays.length ? todays : md.results).slice(0, 5);
+              const list = md.results.slice(0, 6);
               const e = (x: unknown) => String(x ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]!);
               draw(ol, list.map((f: any) => `<li><a href="/match?id=${e(f.id)}"><span class="rd">${e(shortDate(f.date))}</span><span class="rn${f.winner === f.p1.id ? ' w' : ''}">${e(surnameOf(f.p1))}</span><span class="poster-num rs">${scoreHtml(f.s1, f.s2)}</span><span class="rn r${f.winner === f.p2.id ? ' w' : ''}">${e(surnameOf(f.p2))}</span></a></li>`).join(''));
             }
@@ -248,11 +256,11 @@ const spot = loadProfile(spotRank.id);
 <style>
   .bento-wrap { padding-top: 28px; }
   .bento { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: 16px; }
-  .lbl.volt { color: var(--volt); } .lbl.red { color: var(--red); } .lbl.muted { color: var(--muted); }
+  .lbl.volt { color: var(--volt); } .lbl.red { color: var(--red-text); } .lbl.muted { color: var(--muted); }
   .th { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; margin-bottom: 8px; }
   .th h2 { margin: 0; }
   .th a { font-size: 13px; font-weight: 700; text-decoration: none; }
-  .th a:hover { color: var(--red); }
+  .th a:hover { color: var(--red-text); }
 
   /* feature */
   .feature { grid-column: span 8; min-height: 520px; display: flex; flex-direction: column; }
@@ -381,13 +389,16 @@ const spot = loadProfile(spotRank.id);
   .nu :global(.nu-sub) { font-weight: 600; font-size: 14px; }
   .nu { display: flex; flex-direction: column; gap: 10px; padding: 24px 26px; text-decoration: none; }
   .nu-names { font-size: 60px; }
+  /* While an event is on, the next one is a footnote, not the headline */
+  .nu.compact { padding: 16px 20px; gap: 4px; flex: none; }
+  .nu.compact .nu-names, .nu.compact :global(.nu-names) { font-size: 28px !important; }
   .nu-sub { font-weight: 600; font-size: 14px; }
   .res { padding: 20px 22px; flex: 1; }
   .res ol, .race ol { list-style: none; margin: 0; padding: 0; }
   .res :global(li a) { display: grid; grid-template-columns: 48px minmax(0, 1fr) auto minmax(0, 1fr); gap: 10px; align-items: center; padding: 10px 0; border-top: 1px solid var(--line); text-decoration: none; }
   .res :global(.rn) { color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   .res :global(.rd) { font-size: 12px; font-weight: 700; color: var(--muted); white-space: nowrap; }
-  .res :global(.rn.w) { color: var(--ink); font-weight: 700; }
+  .res :global(.rn.w) { color: var(--fg); font-weight: 700; }
   .res :global(.rn.r) { text-align: right; }
   .res :global(.rs) { font-size: 22px; }
 
@@ -403,22 +414,22 @@ const spot = loadProfile(spotRank.id);
   .nc :global(.nc-art) { height: 180px; }
   .nc div { padding: 16px 20px 20px; }
   .nc h3, .nred h3, .nwide h3 { font-size: 19px; line-height: 1.2; margin-top: 8px; }
-  .nc:hover h3, .nwide:hover h3 { color: var(--red); }
+  .nc:hover h3, .nwide:hover h3 { color: var(--red-text); }
   .nred { background: var(--red); color: #fff; padding: 22px; display: flex; flex-direction: column; justify-content: space-between; text-decoration: none; }
   .nred-sf { margin: 10px 0 0; font-size: 15px; line-height: 1.45; color: rgba(255, 255, 255, .88); }
   .big { font-size: 96px; }
   .nwide { grid-column: span 2; display: flex; align-items: center; gap: 22px; padding: 20px 24px; text-decoration: none; }
   .nwide .big { font-size: 64px; flex: none; }
-  .big.red { color: var(--red); }
+  .big.red { color: var(--red-text); }
 
   .race { grid-column: span 5; padding: 22px 26px; }
   .race h2 { font-size: 38px; }
   .race :global(li a) { display: grid; grid-template-columns: 52px 1fr auto; align-items: center; gap: 12px; padding: 9px 0; border-top: 1px solid var(--line); text-decoration: none; }
-  .race :global(li.hi a) { background: var(--volt); border-radius: 14px; padding: 9px 12px; margin: 4px -12px 0; border: 0; }
+  .race :global(li.hi a) { background: var(--volt); color: var(--ink); border-radius: 14px; padding: 9px 12px; margin: 4px -12px 0; border: 0; }
   .race :global(.rp) { font-size: 34px; }
   .race :global(b) { font-size: 16px; }
   .race :global(i) { font-style: normal; font-size: 12px; margin-left: 6px; }
-  .race :global(.up) { color: #0a7a3a; } .race :global(.down) { color: var(--red); }
+  .race :global(.up) { color: #0a7a3a; } .race :global(.down) { color: var(--red-text); }
   .race :global(.hi .up) { color: var(--ink); }
   .race :global(.rm) { font-weight: 700; font-variant-numeric: tabular-nums; }
   .rk-note { margin: 12px 0 0; }
@@ -506,4 +517,12 @@ const spot = loadProfile(spotRank.id);
     .spot-avg { font-size: 60px; }
     .ne-name { font-size: 56px; }
   }
+  .playstrip { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-top: 16px; }
+  .playstrip a { display: flex; flex-direction: column; gap: 4px; padding: 16px 18px; border-radius: 20px; background: var(--card); text-decoration: none; transition: transform .25s var(--ease); }
+  .playstrip a:first-child { background: var(--volt); color: var(--ink); }
+  .playstrip a:hover { transform: translateY(-2px); }
+  .playstrip .lbl { color: var(--red-text); }
+  .playstrip a:first-child .lbl { color: var(--ink); }
+  .playstrip b { font-family: var(--display); font-size: 18px; }
+  @media (max-width: 760px) { .playstrip { grid-template-columns: 1fr 1fr; } }
 </style>

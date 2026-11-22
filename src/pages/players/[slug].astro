@@ -10,6 +10,7 @@ import { cutout, avatarSrc } from '../../lib/images.mjs';
 import { rankedProfiles, playerHref } from '../../lib/players';
 import { flag, countryName, age, keyName, cleanName, surnameOf, formatLabel } from '../../lib/pdc.mjs';
 import tournament from '../../data/tournament.json';
+import liveRace from '../../data/live-race.json';
 import { ukTime } from '../../lib/format.mjs';
 import { money, avatarColours, initials, newsDate } from '../../lib/format.mjs';
 
@@ -56,6 +57,10 @@ const groups = [
 const finishClass = (label: string) => label === 'Winner' ? 'f-win' : label === 'Runner-up' ? 'f-ru' : /semi/i.test(label) ? 'f-sf' : /quarter/i.test(label) ? 'f-qf' : '';
 // This season's titles as table rows: one per event, details grouped
 // (e.g. Premier League nights), linked to the tournament page when we have it.
+// While a ranking event is on, the rankings page shows projected money: say which figure is which.
+const lrx = liveRace as any;
+const todayLdn = new Date().toLocaleDateString('en-CA', { timeZone: 'Europe/London' });
+const projected = lrx.event && lrx.event.startDate <= todayLdn && lrx.event.endDate >= todayLdn ? lrx.race.find((r: any) => String(r.id) === String(p.id)) : null;
 const titleRows = (() => {
   const rows = new Map<string, { name: string; details: string[]; count: number; href: string | null }>();
   for (const t of s.titles as string[]) {
@@ -149,7 +154,8 @@ const news = (await getCollection('news'))
         <p class="where"><Fragment set:html={flag(p.country)} /> {countryName(p.country)}{p.hometown && <> · {p.hometown}</>}</p>
         <button class="follow" type="button" data-follow={p.id} data-name={p.name} aria-pressed="false"><span class="f-off">☆ Follow</span><span class="f-on">★ Following</span></button>
         <dl class="kpis">
-          <div><dt>Prize money (2 yrs)</dt><dd>{money(rank.money)}</dd></div>
+          <div><dt>Prize money (official, 2 yrs)</dt><dd>{money(rank.money)}</dd></div>
+          {projected?.money != null && <div><dt>Projected after {lrx.event.name.replace(/^\d{4}\s+/, '')}</dt><dd>{money(projected.money)} <small class="muted">#{projected.live}</small></dd></div>}
           <div><dt>12-month average</dt><dd>{st ? st.avg.toFixed(2) : '–'}</dd></div>
           <div><dt>Titles · 12 months</dt><dd>{s.titles.length}</dd></div>
           <div><dt>Win rate</dt><dd>{s.played ? `${winPct}%` : '–'}</dd></div>
@@ -194,12 +200,12 @@ const news = (await getCollection('news'))
           <div class="titles">
             <table>
               <caption>Titles in the last 12 months · {s.titles.length}</caption>
-              <thead><tr><th scope="col">Event</th><th scope="col">Detail</th><th scope="col" class="n">Wins</th></tr></thead>
+              <thead><tr><th scope="col">Event</th>{titleRows.some(r => r.detail) && <th scope="col">Detail</th>}<th scope="col" class="n">Wins</th></tr></thead>
               <tbody>
                 {titleRows.map(r => (
                   <tr>
                     <td>{r.href ? <a href={r.href}>{r.name}</a> : r.name}</td>
-                    <td class="muted">{r.detail || '–'}</td>
+                    {titleRows.some(r => r.detail) && <td class="muted">{r.detail || '–'}</td>}
                     <td class="n">{r.count}</td>
                   </tr>
                 ))}
@@ -416,7 +422,7 @@ const news = (await getCollection('news'))
   .titles tbody tr:first-child td { border-top: 0; }
   .titles td:first-child { font-weight: 700; white-space: nowrap; }
   .titles td a { text-decoration: none; }
-  .titles td a:hover { color: var(--red); }
+  .titles td a:hover { color: var(--red-text); }
   .titles .n { text-align: right; font-variant-numeric: tabular-nums; font-weight: 800; width: 56px; }
   .note { font-size: 12px; color: var(--muted); margin: 10px 0 0; }
 
@@ -433,13 +439,13 @@ const news = (await getCollection('news'))
   .yr li[hidden] { display: none; }
   .yr li:hover { background: var(--card); }
   .ev { text-decoration: none; font-weight: 600; }
-  .ev:hover { color: var(--red); }
+  .ev:hover { color: var(--red-text); }
   .ev small { display: block; color: var(--muted); font-weight: 500; font-size: 13px; }
-  .havg { font-style: normal; font-size: 13px; font-weight: 800; font-variant-numeric: tabular-nums; color: var(--ink-2); text-align: right; }
-  .fin { font-size: 12px; font-weight: 700; padding: 3px 10px; border-radius: 99px; background: var(--paper-2); color: var(--ink-2); text-align: center; white-space: nowrap; }
+  .havg { font-style: normal; font-size: 13px; font-weight: 800; font-variant-numeric: tabular-nums; color: var(--fg-2); text-align: right; }
+  .fin { font-size: 12px; font-weight: 700; padding: 3px 10px; border-radius: 99px; background: var(--paper-2); color: var(--fg-2); text-align: center; white-space: nowrap; }
   .f-win { background: linear-gradient(135deg, #e8c766, var(--gold)); color: #3d2e05; }
   .f-ru { background: #e9ecf2; color: #39404f; }
-  .f-sf { background: var(--green-soft); color: #075c3f; }
+  .f-sf { background: var(--green-soft); color: var(--green-text); }
   .f-qf { background: var(--sky-soft); color: #1b2f8f; }
 
   .rm-head { margin-bottom: 12px; }
@@ -474,23 +480,23 @@ const news = (await getCollection('news'))
   .rm-e b { line-height: 1.25; }
   .rm-e small { color: var(--muted); font-size: 12px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   .rm-s { font-weight: 800; font-size: 14px; }
-  .rm-s.w { color: var(--green); } .rm-s.l { color: var(--red); }
-  .rm-a { text-align: right; font-weight: 700; color: var(--ink-2); }
+  .rm-s.w { color: var(--green); } .rm-s.l { color: var(--red-text); }
+  .rm-a { text-align: right; font-weight: 700; color: var(--fg-2); }
   .facts dl { margin: 0; }
   .facts dl div { display: flex; justify-content: space-between; gap: 12px; padding: 8px 0; border-top: 1px solid var(--line); font-size: 14px; }
   .facts dl div:first-child { border-top: 0; }
   .facts dt { color: var(--muted); font-weight: 600; }
   .facts dd { margin: 0; font-weight: 700; text-align: right; }
-  .ext { display: inline-block; margin-top: 12px; font-size: 13px; font-weight: 700; color: var(--red); text-decoration: none; }
+  .ext { display: inline-block; margin-top: 12px; font-size: 13px; font-weight: 700; color: var(--red-text); text-decoration: none; }
   .pnews { list-style: none; margin: 0; padding: 0; }
   .pnews li + li { border-top: 1px solid var(--line); }
   .pnews a { display: flex; flex-direction: column; gap: 2px; padding: 10px 0; text-decoration: none; }
-  .pnews time { font-size: 11px; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; color: var(--red); }
+  .pnews time { font-size: 11px; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; color: var(--red-text); }
   .pnews span { font-weight: 700; font-size: 15px; line-height: 1.3; }
-  .pnews a:hover span { color: var(--red); }
+  .pnews a:hover span { color: var(--red-text); }
   .pn { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 18px; }
   .pn a { display: flex; flex-direction: column; padding: 12px 14px; border-radius: 14px; border: 1px solid var(--line); background: var(--card); text-decoration: none; font-weight: 700; font-size: 14px; transition: transform .3s var(--spring), border-color .2s; }
-  .pn a:hover { transform: translateY(-2px); border-color: var(--ink); }
+  .pn a:hover { transform: translateY(-2px); border-color: var(--fg); }
   .pn small { font-size: 11px; color: var(--muted); font-weight: 800; letter-spacing: .08em; }
   .pn .nx { text-align: right; grid-column: 2; }
 

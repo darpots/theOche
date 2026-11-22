@@ -1,0 +1,138 @@
+---
+// Checkout trainer: a score between 2 and 170 comes up, you build a route of up to
+// three darts that ends on a double (or the bull). Any valid route counts; the
+// "pro route" is shown after each one (src/lib/checkout.mjs).
+import Layout from '../../layouts/Layout.astro';
+---
+<Layout title="Checkout trainer" description="Practise darts checkouts from 2 to 170 against the clock." active="play">
+  <section class="hero wrap">
+    <span class="eyebrow">Practice</span>
+    <h1>What's your <span class="accent">route?</span></h1>
+    <p class="lede">Finish the score in three darts or fewer, ending on a double or the bull. Sixty seconds on the clock: how many can you take out?</p>
+  </section>
+
+  <section class="wrap trainer">
+    <div class="tile tile-ink board">
+      <div class="top"><span class="lbl">You need</span><span class="lbl" id="c-clock">60s</span></div>
+      <b class="poster-num left" id="c-left">–</b>
+      <div class="route" id="c-route" aria-live="polite"></div>
+      <p class="msg" id="c-msg">Press start, then tap your darts.</p>
+      <div class="stats"><span>Checked out <b id="c-done">0</b></span><span>Best <b id="c-best">0</b></span></div>
+      <button class="go" type="button" id="c-start">Start · 60 seconds</button>
+    </div>
+    <div class="pad" id="c-pad" aria-label="Dartboard pad">
+      <div class="mods" role="group" aria-label="Ring">
+        <button type="button" data-mod="S" aria-pressed="true">Single</button>
+        <button type="button" data-mod="D" aria-pressed="false">Double</button>
+        <button type="button" data-mod="T" aria-pressed="false">Treble</button>
+      </div>
+      <div class="nums">
+        {Array.from({ length: 20 }, (_, i) => 20 - i).map(n => <button type="button" data-n={n}>{n}</button>)}
+        <button type="button" data-bull="25">25</button>
+        <button type="button" data-bull="50">Bull</button>
+      </div>
+      <div class="acts"><button type="button" id="c-undo">Undo</button><button type="button" id="c-skip">Skip</button></div>
+    </div>
+  </section>
+
+  <script>
+    import { checkout } from '../../lib/checkout.mjs';
+    type Dart = { label: string; v: number; dbl: boolean };
+    function init() {
+      const pad = document.getElementById('c-pad');
+      if (!pad) return;
+      const $ = (id: string) => document.getElementById(id)!;
+      let mod = 'S', left = 0, darts: Dart[] = [], done = 0, running = false, ends = 0, timer = 0;
+      let best = 0; try { best = Number(localStorage.getItem('oche:checkout-best') || 0); } catch { /* private mode */ }
+      $('c-best').textContent = String(best);
+      // Scores with a three-dart finish (no bogey numbers).
+      const pool = Array.from({ length: 169 }, (_, i) => i + 2).filter(n => checkout(n));
+      const next = () => {
+        // Mostly the big finishes people practise, some low ones for variety.
+        const big = pool.filter(n => n >= 61);
+        left = Math.random() < .75 ? big[Math.floor(Math.random() * big.length)] : pool[Math.floor(Math.random() * pool.length)];
+        darts = []; draw();
+      };
+      const sum = () => darts.reduce((s, d) => s + d.v, 0);
+      function draw(msg = '') {
+        $('c-left').textContent = running || left ? String(left - sum()) : '–';
+        $('c-route').innerHTML = [0, 1, 2].map(i => `<span class="${darts[i] ? 'on' : ''}">${darts[i]?.label ?? ''}</span>`).join('');
+        if (msg) $('c-msg').innerHTML = msg;
+      }
+      function throwDart(d: Dart) {
+        if (!running || darts.length >= 3) return;
+        darts.push(d);
+        const rem = left - sum();
+        if (rem === 0 && d.dbl) {
+          done++; $('c-done').textContent = String(done);
+          const pro = checkout(left)!.join(' ');
+          const mine = darts.map(x => x.label).join(' ');
+          draw(mine === pro ? `Textbook. <b>${mine}</b>` : `Checked out with <b>${mine}</b>. The usual route: ${pro}`);
+          setTimeout(next, 700);
+        } else if (rem <= 1 || darts.length === 3) {
+          draw(`Bust! ${left} goes ${checkout(left)!.join(' ')}`);
+          setTimeout(next, 1100);
+        } else draw();
+      }
+      pad.onclick = e => {
+        const b = (e.target as HTMLElement).closest<HTMLButtonElement>('button');
+        if (!b) return;
+        if (b.dataset.mod) { mod = b.dataset.mod; pad.querySelectorAll('[data-mod]').forEach(x => x.setAttribute('aria-pressed', String(x === b))); return; }
+        if (b.dataset.n) {
+          const n = Number(b.dataset.n), m = mod === 'T' ? 3 : mod === 'D' ? 2 : 1;
+          throwDart({ label: `${mod === 'S' ? '' : mod}${n}`, v: n * m, dbl: mod === 'D' });
+          mod = 'S'; pad.querySelectorAll('[data-mod]').forEach(x => x.setAttribute('aria-pressed', String((x as HTMLElement).dataset.mod === 'S')));
+        }
+        if (b.dataset.bull) throwDart(b.dataset.bull === '50' ? { label: 'Bull', v: 50, dbl: true } : { label: '25', v: 25, dbl: false });
+        if (b.id === 'c-undo') { darts.pop(); draw(); }
+        if (b.id === 'c-skip' && running) { draw(`${left}: ${checkout(left)!.join(' ')}`); next(); }
+      };
+      $('c-start').onclick = () => {
+        running = true; done = 0; $('c-done').textContent = '0'; ends = Date.now() + 60_000;
+        ($('c-start') as HTMLButtonElement).disabled = true;
+        next(); draw('Go!');
+        clearInterval(timer);
+        timer = window.setInterval(() => {
+          const s = Math.max(0, Math.ceil((ends - Date.now()) / 1000));
+          $('c-clock').textContent = `${s}s`;
+          if (!s) {
+            clearInterval(timer); running = false;
+            if (done > best) { best = done; try { localStorage.setItem('oche:checkout-best', String(best)); } catch { /* private mode */ } $('c-best').textContent = String(best); }
+            draw(`Time! <b>${done}</b> checkout${done === 1 ? '' : 's'}${done >= best && done ? ', a new best' : ''}.`);
+            ($('c-start') as HTMLButtonElement).disabled = false; $('c-start').textContent = 'Go again';
+          }
+        }, 250);
+      };
+    }
+    document.addEventListener('astro:page-load', init);
+  </script>
+</Layout>
+
+<style>
+  .trainer { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 20px; align-items: start; }
+  .board { padding: 24px; display: flex; flex-direction: column; gap: 14px; }
+  .top { display: flex; justify-content: space-between; color: var(--volt); }
+  .left { font-size: clamp(96px, 14vw, 160px); color: #fff; text-align: center; }
+  .route { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+  .route :global(span) { height: 54px; border-radius: 12px; border: 2px dashed rgba(255, 255, 255, .2); display: grid; place-items: center; font-family: var(--poster); font-size: 26px; }
+  .route :global(span.on) { border: 0; background: var(--volt); color: var(--ink); }
+  .msg { margin: 0; min-height: 48px; color: var(--on-ink); }
+  .msg :global(b) { color: #fff; }
+  .stats { display: flex; justify-content: space-between; color: var(--on-ink); font-weight: 700; }
+  .stats b { color: var(--volt); font-family: var(--poster); font-weight: 400; font-size: 24px; margin-left: 6px; }
+  .go { border: 0; border-radius: 14px; background: var(--volt); color: var(--ink); font-weight: 800; font-size: 16px; padding: 14px; cursor: pointer; }
+  .go:disabled { opacity: .5; cursor: default; }
+  .pad { background: var(--card); border-radius: var(--tile); padding: 16px; display: flex; flex-direction: column; gap: 12px; box-shadow: var(--shadow-sm); }
+  .pad button { font: inherit; font-weight: 800; border: 0; border-radius: 12px; background: var(--paper-2); color: var(--fg); padding: 14px 0; cursor: pointer; touch-action: manipulation; }
+  .pad button:active { transform: scale(.95); }
+  .mods { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+  .mods button[aria-pressed='true'] { background: var(--ink); color: var(--volt); }
+  .mods button[data-mod='D'][aria-pressed='true'] { background: var(--green); color: #fff; }
+  .mods button[data-mod='T'][aria-pressed='true'] { background: var(--red); color: #fff; }
+  .nums { display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px; }
+  .nums button { font-family: var(--poster); font-weight: 400; font-size: 22px; }
+  .nums [data-bull] { grid-column: span 2; background: var(--ink); color: var(--volt); }
+  .nums [data-bull='50'] { grid-column: span 3; }
+  .acts { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  @media (max-width: 760px) { .trainer { grid-template-columns: 1fr; } .left { font-size: 96px; } }
+</style>

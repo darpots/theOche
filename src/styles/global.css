@@ -1,6 +1,53 @@
-@import '@fontsource-variable/bricolage-grotesque';
-@import '@fontsource-variable/inter';
-@import '@fontsource/anton';
+/* Fonts: Latin and Latin-extended only (accented names such as Sedláček or Ratajski), so
+   the build ships no Cyrillic, Greek or Vietnamese files. Copied from the fontsource packages. */
+@font-face {
+  font-family: 'Bricolage Grotesque Variable';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 200 800;
+  src: url(../../node_modules/@fontsource-variable/bricolage-grotesque/files/bricolage-grotesque-latin-ext-wght-normal.woff2) format('woff2-variations');
+  unicode-range: U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF;
+}
+@font-face {
+  font-family: 'Bricolage Grotesque Variable';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 200 800;
+  src: url(../../node_modules/@fontsource-variable/bricolage-grotesque/files/bricolage-grotesque-latin-wght-normal.woff2) format('woff2-variations');
+  unicode-range: U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;
+}
+@font-face {
+  font-family: 'Inter Variable';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 100 900;
+  src: url(../../node_modules/@fontsource-variable/inter/files/inter-latin-ext-wght-normal.woff2) format('woff2-variations');
+  unicode-range: U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF;
+}
+@font-face {
+  font-family: 'Inter Variable';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 100 900;
+  src: url(../../node_modules/@fontsource-variable/inter/files/inter-latin-wght-normal.woff2) format('woff2-variations');
+  unicode-range: U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;
+}
+@font-face {
+  font-family: 'Anton';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 400;
+  src: url(../../node_modules/@fontsource/anton/files/anton-latin-ext-400-normal.woff2) format('woff2');
+  unicode-range: U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF;
+}
+@font-face {
+  font-family: 'Anton';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 400;
+  src: url(../../node_modules/@fontsource/anton/files/anton-latin-400-normal.woff2) format('woff2');
+  unicode-range: U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;
+}
 
 :root {
   /* Floodlight Bento: chalk ground, ink tiles, volt for live numbers, red for urgency */
@@ -10,6 +57,13 @@
   --ink: #0b0c10;
   --ink-2: #23252d;
   --ink-3: #1c1e25;
+  /* Text on the page and on cards (--ink stays the dark tile colour in both themes) */
+  --fg: #0b0c10;
+  --fg-2: #23252d;
+  --red-text: #c4271f; /* red for small text: 4.5:1 on chalk */
+  --green-text: #075c3f;
+  --track: #d9d2c4;
+  --hover: #fffaf0; /* row hover */
   --on-ink: #b9bdc9;
   --on-ink-2: #8e93a0;
   --muted: #5d6170;
@@ -41,13 +95,26 @@
   --spring: cubic-bezier(.34, 1.56, .64, 1);
   color-scheme: light;
 }
+/* Dark theme is the default; the footer switch sets data-theme="light" on <html> for the light one */
+:root:not([data-theme='light']) {
+  --paper: #121419; --paper-2: #1a1d24; --card: #1d2029; --line: #2b2f3a;
+  --ink: #07080b; --ink-2: #262a34; --ink-3: #1f222b;
+  --fg: #eef0f4; --fg-2: #cdd1da; --muted: #9ca2b0; --on-ink: #b9bdc9;
+  --red-text: #ff6b61; --red-soft: #3a1715; --green: #1fae7a; --green-soft: #10291f; --green-text: #74d8ad;
+  --gold-soft: #302712; --sky: #5b7bff; --sky-soft: #161e40; --itv-soft: #0f2c2d; --pdctv-soft: #33141a; --track: #3a3f4b;
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, .3); --shadow: 0 12px 32px -8px rgba(0, 0, 0, .5); --shadow-lg: 0 30px 80px -20px rgba(0, 0, 0, .7);
+  color-scheme: dark;
+  --hover: #252935;
+}
+/* Ink tiles sit on a dark page in the dark theme: a hairline keeps their edges */
+:root:not([data-theme='light']) .tile-ink { box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .06); }
 
 *, *::before, *::after { box-sizing: border-box; }
 html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; }
 body {
   margin: 0;
   font-family: var(--body);
-  color: var(--ink);
+  color: var(--fg);
   background: var(--paper);
   font-size: 16px;
   line-height: 1.55;
@@ -82,11 +149,11 @@ h1, h2, h3 { text-wrap: balance; hyphens: none; }
 .hero { position: relative; padding: 56px 0 28px; }
 .hero .eyebrow {
   display: inline-flex; align-items: center; gap: 8px;
-  font-size: 12px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: var(--red);
+  font-size: 12px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: var(--red-text);
 }
 .hero .eyebrow::before { content: ''; width: 22px; height: 2px; background: currentColor; border-radius: 2px; }
 .hero h1 { font-size: clamp(48px, 7.4vw, 96px); margin: 10px 0 14px; }
-.hero h1 .accent { color: var(--red); }
+.hero h1 .accent { color: var(--red-text); }
 .hero p.lede { font-size: clamp(16px, 2vw, 19px); color: var(--muted); max-width: 640px; margin: 0; }
 
 /* ---------- chips / badges ---------- */
@@ -108,7 +175,7 @@ h1, h2, h3 { text-wrap: balance; hyphens: none; }
 .tv-pdctv { background: #14161f; border-color: #14161f; }
 .tv-pdctv img { height: 13px; }
 
-.live-dot { display: inline-flex; align-items: center; gap: 7px; color: var(--red); font-weight: 800; font-size: 12px; letter-spacing: .1em; text-transform: uppercase; }
+.live-dot { display: inline-flex; align-items: center; gap: 7px; color: var(--red-text); font-weight: 800; font-size: 12px; letter-spacing: .1em; text-transform: uppercase; }
 .live-dot::before { content: ''; width: 9px; height: 9px; border-radius: 50%; background: var(--red); box-shadow: 0 0 0 0 rgba(215, 38, 61, .6); animation: pulse 1.6s infinite; }
 @keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(215, 38, 61, .55); } 70% { box-shadow: 0 0 0 10px rgba(215, 38, 61, 0); } 100% { box-shadow: 0 0 0 0 rgba(215, 38, 61, 0); } }
 
@@ -135,11 +202,13 @@ h1, h2, h3 { text-wrap: balance; hyphens: none; }
 }
 
 /* ---------- reveal on scroll ---------- */
-[data-reveal] { opacity: 0; transform: translateY(18px); transition: opacity .7s var(--ease), transform .7s var(--ease); transition-delay: var(--d, 0ms); }
+/* Short and early: things start revealing a quarter-screen before they scroll in, so a fast scroll never shows blank cards */
+[data-reveal] { opacity: 0; transform: translateY(10px); transition: opacity .35s var(--ease), transform .35s var(--ease); transition-delay: var(--d, 0ms); }
+@media (max-width: 640px) { [data-reveal] { transition-delay: 0ms; } }
 [data-reveal].in { opacity: 1; transform: none; }
 
 .empty { text-align: center; padding: 64px 16px; color: var(--muted); }
-.empty h3 { color: var(--ink); font-size: 22px; margin-bottom: 6px; }
+.empty h3 { color: var(--fg); font-size: 22px; margin-bottom: 6px; }
 
 .muted { color: var(--muted); }
 
@@ -160,7 +229,7 @@ h1, h2, h3 { text-wrap: balance; hyphens: none; }
 .prose h2 { font-size: 30px; margin: 34px 0 10px; }
 .prose p, .prose ul { margin: 0 0 1em; }
 .prose li { margin-bottom: .4em; }
-.prose a { color: var(--red); font-weight: 600; }
+.prose a { color: var(--red-text); font-weight: 600; }
 
 /* Rankings / Stats switch */
 .rsw { display: flex; gap: 4px; margin-bottom: 14px; }
@@ -172,7 +241,7 @@ h1, h2, h3 { text-wrap: balance; hyphens: none; }
 .h2h .hh-n { display: flex; flex-direction: column; align-items: flex-start; gap: 4px; min-width: 64px; }
 .h2h .hh-n.r { align-items: flex-end; text-align: right; }
 .h2h .hh-n b { font-size: 52px; line-height: .9; color: var(--muted); }
-.h2h .hh-n b.lead { color: var(--ink); }
+.h2h .hh-n b.lead { color: var(--fg); }
 .h2h .hh-n span { font-size: 13px; font-weight: 700; }
 .h2h .hh-bar { display: flex; height: 12px; border-radius: 99px; overflow: hidden; background: var(--paper-2); }
 .h2h .hh-bar i { display: block; height: 100%; }
@@ -197,7 +266,7 @@ h1, h2, h3 { text-wrap: balance; hyphens: none; }
 .h2h .hh-sc { text-decoration: none; color: inherit; }
 
 /* Leg won: "LEG · Aspinall" zooms in over the score, wobbles, then shrinks away (src/lib/leg-flash.mjs) */
-.leg-flash { position: fixed; z-index: 200; left: 50%; top: 45%; transform: translate(-50%, -50%) rotate(-4deg); display: flex; flex-direction: column; align-items: center; gap: 0; padding: 14px 36px 18px; background: var(--volt); color: var(--ink); border-radius: 22px; box-shadow: 0 24px 70px rgba(0, 0, 0, .55), 0 0 0 5px rgba(11, 12, 16, .9); pointer-events: none; max-width: calc(100vw - 24px); animation: leg-flash 3s both; }
+.leg-flash { position: absolute; z-index: 40; left: 50%; top: 45%; transform: translate(-50%, -50%) rotate(-4deg); display: flex; flex-direction: column; align-items: center; gap: 0; padding: 14px 36px 18px; background: var(--volt); color: var(--ink); border-radius: 22px; box-shadow: 0 24px 70px rgba(0, 0, 0, .55), 0 0 0 5px rgba(11, 12, 16, .9); pointer-events: none; max-width: calc(100vw - 24px); animation: leg-flash 3s both; }
 .leg-flash span { font-weight: 800; font-size: clamp(16px, 2.2vw, 24px); letter-spacing: .24em; text-transform: uppercase; }
 .leg-flash b { font-family: var(--poster); font-weight: 400; font-size: clamp(76px, 13vw, 170px); line-height: .92; text-transform: uppercase; white-space: nowrap; overflow: hidden; max-width: 100%; } /* sized to fit in leg-flash.mjs */
 /* 180: the original small sticker size ('180!' only), with the same zoom and wobble, on top */

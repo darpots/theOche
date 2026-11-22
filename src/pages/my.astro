@@ -1,0 +1,100 @@
+---
+// My Oche: everything about the players you follow (kept in this browser, see
+// src/lib/follow.mjs): their matches in the current event, recent form and news.
+import Layout from '../layouts/Layout.astro';
+import { getCollection } from 'astro:content';
+import data from '../data/tournament.json';
+import { playPlayers, jsonForHtml } from '../lib/play-data';
+
+const t = data.tournament as any;
+const players = playPlayers(128).map(p => ({ id: p.id, name: p.name, slug: p.slug, pos: p.pos, avatar: p.avatar, cut: p.cut, avg: p.avg, country: p.countryName }));
+const news = (await getCollection('news')).map(n => n.data).sort((a, b) => b.date.localeCompare(a.date)).slice(0, 80)
+  .map(s => ({ slug: s.slug, headline: s.headline, date: s.date, players: s.players }));
+---
+<Layout title="My Oche" description="The players you follow: their matches, form and news in one place." active="play">
+  <section class="hero wrap">
+    <span class="eyebrow">My Oche</span>
+    <h1>Your players, <span class="accent">your darts.</span></h1>
+    <p class="lede">Follow players from their profile pages (★ Follow) and this page fills with their matches, form and news. Saved on this device only.</p>
+  </section>
+  <section class="wrap" id="my"><p class="muted">Loading…</p></section>
+
+  <script is:inline type="application/json" id="my-data" set:html={jsonForHtml({ t: { id: t.id, name: t.name }, players, news })} />
+
+  <script>
+    import { followed, toggleFollow } from '../lib/follow.mjs';
+    import { API, normaliseTournament } from '../lib/pdc.mjs';
+    const esc = (x: unknown) => String(x ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]!);
+    const sn = (n: string) => n.split(' ').slice(1).join(' ') || n;
+    async function init() {
+      const root = document.getElementById('my');
+      if (!root) return;
+      const { t, players, news } = JSON.parse(document.getElementById('my-data')!.textContent!);
+      const draw = async () => {
+        const mine = followed();
+        if (!mine.length) {
+          // Nobody followed yet: one tap on a top player to start.
+          root.innerHTML = `<div class="empty"><h3>Follow a few players to start</h3><p>Tap to follow, or find anyone with search.</p></div>
+            <div class="sugg">${players.slice(0, 16).map((p: any) => `<button type="button" class="chip" data-add="${esc(p.id)}" data-name="${esc(p.name)}">☆ ${esc(p.name)}</button>`).join('')}</div>`;
+          return;
+        }
+        const ids = new Set(mine.map((p: any) => p.id));
+        let tour: any = null;
+        try { tour = normaliseTournament(await (await fetch(`${API.tournaments}${t.id}`)).json()); } catch { /* offline */ }
+        const fx = tour ? tour.stages.flatMap((s: any) => s.fixtures.map((f: any) => ({ ...f, stage: s.name }))).filter((f: any) => (f.p1 && ids.has(f.p1.id)) || (f.p2 && ids.has(f.p2.id))) : [];
+        const profiles = await Promise.all(mine.map((p: any) => fetch(`/data/players/${p.id}.json`).then(r => (r.ok ? r.json() : null)).catch(() => null)));
+        const card = (p: any, prof: any) => {
+          const meta = players.find((x: any) => x.id === p.id);
+          const form = (prof?.form || []).slice(0, 5).map((m: any) => `<i class="${m.won ? 'w' : 'l'}" title="${esc(`v ${m.opp || ''} ${m.my}–${m.their}`)}">${m.won ? 'W' : 'L'}</i>`).join('');
+          const theirs = news.filter((n: any) => n.players.includes(p.name)).slice(0, 3);
+          const games = fx.filter((f: any) => f.p1?.id === p.id || f.p2?.id === p.id).sort((a: any, b: any) => `${b.date}${b.time}`.localeCompare(`${a.date}${a.time}`)).slice(0, 3);
+          return `<article class="pc tile tile-card">
+            <header>${meta?.avatar ? `<img src="${esc(meta.avatar)}" alt="" width="52" height="52">` : ''}<div><a class="nm" href="/players/${esc(meta?.slug || '')}">${esc(p.name)}</a><span class="muted">${meta ? `World #${meta.pos} · ${meta.avg ? meta.avg.toFixed(2) + ' avg' : ''}` : ''}</span></div>
+              <button type="button" class="unf" data-drop="${esc(p.id)}" data-name="${esc(p.name)}" aria-label="Unfollow ${esc(p.name)}">★</button></header>
+            ${form ? `<div class="form"><span class="lbl">Form</span>${form}</div>` : ''}
+            ${games.length ? `<ul class="gm">${games.map((f: any) => {
+              const opp = f.p1?.id === p.id ? f.p2 : f.p1;
+              const sc = f.status === 'upcoming' ? `${f.date ? new Date(f.date + 'T12:00:00Z').toLocaleDateString('en-GB', { weekday: 'short', day: 'numeric' }) : ''} ${f.time || ''}` : f.p1?.id === p.id ? `${f.s1}–${f.s2}` : `${f.s2}–${f.s1}`;
+              const res = f.status === 'result' ? (f.winner === p.id ? 'w' : 'l') : f.status;
+              return `<li><a href="/match?id=${esc(f.id)}"><span>${esc(f.stage)} v ${esc(opp ? sn(opp.name) : 'TBC')}</span><b class="${res}">${esc(sc)}</b></a></li>`;
+            }).join('')}</ul>` : `<p class="muted small">Not in the ${esc(t.name)}.</p>`}
+            ${theirs.length ? `<ul class="nw">${theirs.map((n: any) => `<li><a href="/news/${esc(n.slug)}">${esc(n.headline)}</a></li>`).join('')}</ul>` : ''}
+          </article>`;
+        };
+        root.innerHTML = `<div class="cards">${mine.map((p: any, i: number) => card(p, profiles[i])).join('')}</div>`;
+      };
+      root.onclick = e => {
+        const b = (e.target as HTMLElement).closest<HTMLButtonElement>('[data-add],[data-drop]');
+        if (!b) return;
+        toggleFollow(b.dataset.add || b.dataset.drop, b.dataset.name);
+        draw();
+      };
+      draw();
+    }
+    document.addEventListener('astro:page-load', init);
+  </script>
+</Layout>
+
+<style>
+  #my :global(.sugg) { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 16px; }
+  #my :global(.cards) { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 16px; }
+  #my :global(.pc) { padding: 18px 20px; display: flex; flex-direction: column; gap: 12px; }
+  #my :global(.pc header) { display: flex; align-items: center; gap: 12px; }
+  #my :global(.pc header img) { border-radius: 50%; object-fit: cover; }
+  #my :global(.pc header div) { display: flex; flex-direction: column; flex: 1; min-width: 0; }
+  #my :global(.nm) { font-family: var(--display); font-weight: 800; font-size: 20px; text-decoration: none; }
+  #my :global(.unf) { border: 0; background: var(--volt); color: var(--ink); border-radius: 50%; width: 34px; height: 34px; font-size: 16px; cursor: pointer; }
+  #my :global(.form) { display: flex; align-items: center; gap: 4px; }
+  #my :global(.form .lbl) { margin-right: 8px; color: var(--muted); }
+  #my :global(.form i) { font-style: normal; font-weight: 800; font-size: 12px; width: 24px; height: 24px; border-radius: 6px; display: grid; place-items: center; background: var(--red-soft); color: var(--red-text); }
+  #my :global(.form i.w) { background: var(--green-soft); color: var(--green-text); }
+  #my :global(.gm), #my :global(.nw) { list-style: none; margin: 0; padding: 0; }
+  #my :global(.gm a) { display: flex; justify-content: space-between; gap: 10px; padding: 8px 0; border-top: 1px solid var(--line); text-decoration: none; font-size: 14px; font-weight: 600; }
+  #my :global(.gm b) { font-variant-numeric: tabular-nums; }
+  #my :global(.gm b.w) { color: var(--green-text); }
+  #my :global(.gm b.l) { color: var(--red-text); }
+  #my :global(.gm b.live) { color: var(--red-text); }
+  #my :global(.nw a) { display: block; padding: 6px 0; font-size: 14px; font-weight: 700; text-decoration: none; }
+  #my :global(.nw a:hover) { color: var(--red-text); }
+  #my :global(.small) { font-size: 13px; margin: 0; }
+</style>

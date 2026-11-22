@@ -10,14 +10,31 @@
   "Both men are chasing a first semi-final here. Van Veen's previous best at the event is a quarter-final in 2024, and Aspinall's is a quarter-final in 2020. Aspinall comes in off a 10-7 win over Gabriel Clemens, Van Veen off a 10-7 win over Martin Schindler.",
   "Pick of the two is Sykes v Van Gerwen. The numbers favour the Dutchman, but a first-to-16 format leaves the underdog more time to recover from a slow start than a short match would."
  ],
- "tags": ["Grand Slam of Darts"],
- "players": ["Tom Sykes", "Michael van Gerwen", "Gian van Veen", "Nathan Aspinall"],
- "sources": [
-  {"name": "PDC", "url": "https://www.pdc.tv/news/2026/november/19/Sykes-stuns-Humphries-set-up-Van-Gerwen-clash/", "title": "Sykes stuns Humphries to set up Van Gerwen clash"}
+ "tags": [
+  "Grand Slam of Darts"
  ],
- "originalTitles": ["Sykes stuns Humphries to set up Van Gerwen clash"],
- "writtenBy": "The Oche newsdesk (Claude)",
+ "players": [
+  "Tom Sykes",
+  "Michael van Gerwen",
+  "Gian van Veen",
+  "Nathan Aspinall"
+ ],
+ "sources": [
+  {
+   "name": "PDC",
+   "url": "https://www.pdc.tv/news/2026/november/19/Sykes-stuns-Humphries-set-up-Van-Gerwen-clash/",
+   "title": "Sykes stuns Humphries to set up Van Gerwen clash"
+  }
+ ],
+ "originalTitles": [
+  "Sykes stuns Humphries to set up Van Gerwen clash"
+ ],
+ "writtenBy": "The Oche newsdesk",
  "kind": "preview",
  "facts": "10871-2026-11-21-preview",
- "tournament": "10871"
+ "tournament": "10871",
+ "matches": [
+  "517025",
+  "517026"
+ ]
 }

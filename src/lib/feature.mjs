@@ -27,7 +27,7 @@ export function matchday(t, today, nowHHMM) {
 
 /** Player picture: the cut-out, else their round headshot, else initials. */
 function pic(p, side, prefer) {
-  const cut = p && cutoutImg(p.name, `ft-cut ${side}`, '(max-width: 640px) 40vw, 300px', p.name, prefer);
+  const cut = p && cutoutImg(p.name, `ft-cut ${side}`, '(max-width: 640px) 40vw, 300px', p.name, prefer, true);
   if (cut) return cut;
   const av = p && avatarSrc(p.name);
   if (av) return `<span class="ft-round ${side}"><img src="${av}" alt="${esc(p.name)}" width="112" height="112" decoding="async"></span>`;

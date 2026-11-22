@@ -1,0 +1,7 @@
+---
+// Past seasons for /calendar, fetched by the page when "Include past 2 years" is ticked.
+import CalendarMonths from '../../components/CalendarMonths.astro';
+import { months, isPast } from '../../lib/calendar-cards';
+const past = [...months.entries()].filter(([, list]) => list.every(isPast));
+---
+<div id="past-months"><CalendarMonths entries={past} /></div>

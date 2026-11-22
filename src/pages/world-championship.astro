@@ -1,0 +1,131 @@
+---
+// World Championship hub: countdown, the event page (schedule and draw), the seeds,
+// the form players, past champions and the latest Ally Pally news.
+import Layout from '../layouts/Layout.astro';
+import { getCollection } from 'astro:content';
+import calendar from '../data/calendar.json';
+import { playPlayers } from '../lib/play-data';
+import { tvBadge } from '../lib/pdc.mjs';
+import { dateRange } from '../lib/format.mjs';
+import NewsArt from '../components/NewsArt.astro';
+
+const today = new Date().toLocaleDateString('en-CA', { timeZone: 'Europe/London' });
+const wcs = calendar.events.filter(e => /world championship/i.test(e.name));
+const wc = wcs.find(e => e.end >= today) || wcs[wcs.length - 1];
+const players = playPlayers(128);
+const seeds = players.slice(0, 32);
+const form = [...players].filter(p => p.avg).sort((a, b) => b.avg! - a.avg!).slice(0, 8);
+// Roll of honour (PDC era, recent first): year the final was played, and the champion.
+const ROLL: [number, string][] = [[2026, 'Luke Littler'], [2025, 'Luke Littler'], [2024, 'Luke Humphries'], [2023, 'Michael Smith'], [2022, 'Peter Wright'], [2021, 'Gerwyn Price'], [2020, 'Peter Wright'], [2019, 'Michael van Gerwen'], [2018, 'Rob Cross'], [2017, 'Michael van Gerwen'], [2016, 'Gary Anderson'], [2015, 'Gary Anderson'], [2014, 'Michael van Gerwen'], [2013, 'Phil Taylor'], [2012, 'Adrian Lewis'], [2011, 'Adrian Lewis'], [2010, 'Phil Taylor']];
+const slugOf = new Map(players.map(p => [p.name, p.slug]));
+const titles = new Map<string, number>();
+for (const [, n] of ROLL) titles.set(n, (titles.get(n) || 0) + 1);
+const news = (await getCollection('news')).map(n => n.data)
+  .filter(s => s.tournament === wc?.id || s.tags.some(t => /world championship/i.test(t)) || /world championship|ally pally/i.test(s.headline))
+  .sort((a, b) => b.date.localeCompare(a.date)).slice(0, 6);
+const champ = ROLL[0][1];
+---
+<Layout title="World Championship" description="The PDC World Championship at Alexandra Palace: dates, countdown, seeds, favourites, roll of honour and the latest news." active="play">
+  <section class="wc-hero">
+    <div class="wrap">
+      <span class="eyebrow">Alexandra Palace · {wc && dateRange(wc.start, wc.end)}</span>
+      <h1>World <span class="accent">Championship</span></h1>
+      <p class="lede">Three weeks, the best players on the planet and one Sid Waddell Trophy. {champ} is the defending champion.</p>
+      {wc && (
+        <div class="count" data-count={wc.start}>
+          {['d', 'h', 'm', 's'].map(u => <div><b class="poster-num" data-u={u}>–</b><span class="lbl">{{ d: 'Days', h: 'Hours', m: 'Mins', s: 'Secs' }[u]}</span></div>)}
+        </div>
+      )}
+      <div class="cta">
+        {wc && <a class="btn volt" href={`/tournament/${wc.id}`}>Schedule, draw &amp; prize money →</a>}
+        <a class="btn" href="/play/predictor">Play the predictor</a>
+        {wc && <span class="tvb" set:html={tvBadge(wc.broadcaster)} />}
+      </div>
+    </div>
+  </section>
+
+  <section class="wrap grid">
+    <article class="tile tile-card">
+      <h2 class="lbl">The seeds · top 32 in the world</h2>
+      <ol class="seeds">
+        {seeds.map(p => <li><span class="poster-num">{p.pos}</span><a href={`/players/${p.slug}`}>{p.name}</a></li>)}
+      </ol>
+    </article>
+    <article class="tile tile-ink">
+      <h2 class="lbl">In form · last 12 months</h2>
+      <ol class="formlist">
+        {form.map((p, i) => <li><span class="poster-num">{i + 1}</span><a href={`/players/${p.slug}`}>{p.name}</a><b class="poster-num">{p.avg!.toFixed(2)}</b></li>)}
+      </ol>
+      <p class="note">Three-dart average across every main-tour match with stats.</p>
+    </article>
+    <article class="tile tile-volt">
+      <h2 class="lbl">Roll of honour</h2>
+      <ol class="roll">
+        {ROLL.map(([y, n]) => <li><span class="poster-num">{y}</span>{slugOf.get(n) ? <a href={`/players/${slugOf.get(n)}`}>{n}</a> : <span>{n}</span>}</li>)}
+      </ol>
+      <p class="note">Most titles in this list: {[...titles].sort((a, b) => b[1] - a[1]).slice(0, 3).map(([n, c]) => `${n} ${c}`).join(' · ')}</p>
+    </article>
+  </section>
+
+  {news.length > 0 && (
+    <section class="wrap">
+      <h2 class="sec">Ally Pally news</h2>
+      <div class="news">
+        {news.map(s => <a class="card lift" href={`/news/${s.slug}`}><NewsArt story={s} class="na" sizes="(max-width: 760px) 100vw, 360px" /><div><strong>{s.headline}</strong><span class="muted">{s.standfirst}</span></div></a>)}
+      </div>
+    </section>
+  )}
+
+  <script>
+    function init() {
+      const box = document.querySelector<HTMLElement>('.wc-hero .count');
+      if (!box) return;
+      const start = Date.parse(`${box.dataset.count}T19:00:00Z`);
+      const tick = () => {
+        let s = Math.max(0, Math.floor((start - Date.now()) / 1000));
+        const v = { d: Math.floor(s / 86400), h: Math.floor((s % 86400) / 3600), m: Math.floor((s % 3600) / 60), s: s % 60 };
+        box.querySelectorAll<HTMLElement>('[data-u]').forEach(b => { b.textContent = String(v[b.dataset.u as 'd']).padStart(2, '0'); });
+        if (!s) box.hidden = true;
+      };
+      tick();
+      clearInterval((window as any).__wcTimer);
+      (window as any).__wcTimer = setInterval(tick, 1000);
+    }
+    document.addEventListener('astro:page-load', init);
+  </script>
+</Layout>
+
+<style>
+  .wc-hero { background: radial-gradient(70% 90% at 80% 0%, #3b1a6b 0%, transparent 60%), radial-gradient(60% 80% at 0% 100%, #6b1a1a 0%, transparent 60%), var(--ink); color: #fff; padding: 56px 0 40px; margin-bottom: 24px; }
+  .wc-hero .eyebrow { color: var(--volt); display: inline-block; font-size: 12px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; }
+  .wc-hero h1 { font-size: clamp(48px, 8vw, 110px); margin: 10px 0 14px; }
+  .wc-hero .accent { color: var(--volt); }
+  .wc-hero .lede { color: var(--on-ink); font-size: 19px; max-width: 620px; margin: 0; }
+  .count { display: flex; gap: 12px; margin: 26px 0; }
+  .count div { background: rgba(255, 255, 255, .08); border-radius: 16px; padding: 12px 16px; min-width: 84px; text-align: center; display: flex; flex-direction: column; gap: 6px; }
+  .count b { font-size: 48px; }
+  .count .lbl { color: var(--on-ink); }
+  .cta { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+  .btn { border-radius: 999px; padding: 12px 18px; font-weight: 800; text-decoration: none; background: rgba(255, 255, 255, .12); color: #fff; }
+  .btn.volt { background: var(--volt); color: var(--ink); }
+  .grid { display: grid; grid-template-columns: 1.2fr 1fr 1fr; gap: 16px; }
+  .grid .tile { padding: 22px; }
+  .lbl { margin-bottom: 12px; }
+  .tile-ink .lbl { color: var(--volt); }
+  .seeds { list-style: none; margin: 0; padding: 0; columns: 2; column-gap: 18px; }
+  .seeds li, .roll li, .formlist li { display: flex; align-items: center; gap: 10px; padding: 5px 0; break-inside: avoid; font-weight: 700; font-size: 14px; }
+  .seeds span, .roll span.poster-num, .formlist > li > span { width: 34px; font-size: 20px; opacity: .65; }
+  .seeds a, .roll a, .formlist a { text-decoration: none; }
+  .formlist { list-style: none; margin: 0; padding: 0; }
+  .formlist b { margin-left: auto; font-size: 22px; color: var(--volt); }
+  .roll { list-style: none; margin: 0; padding: 0; columns: 2; column-gap: 14px; }
+  .roll span.poster-num { width: 44px; }
+  .note { font-size: 12px; font-weight: 600; opacity: .7; margin: 12px 0 0; }
+  .sec { font-size: 32px; margin: 36px 0 14px; }
+  .news { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 14px; }
+  .news a { text-decoration: none; display: flex; flex-direction: column; overflow: hidden; }
+  .news :global(.na) { aspect-ratio: 16 / 8; }
+  .news div { padding: 14px 16px; display: flex; flex-direction: column; gap: 6px; }
+  .news span { font-size: 14px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+  @media (max-width: 900px) { .grid { grid-template-columns: 1fr; } .count b { font-size: 36px; } .count div { min-width: 64px; padding: 10px; } }
+</style>

@@ -1,0 +1,125 @@
+---
+// Guess the player: one mystery player a day (the same for everyone, picked from
+// the date), six clues revealed one per wrong guess, a silhouette that clears at the end.
+import Layout from '../../layouts/Layout.astro';
+import { playPlayers, jsonForHtml } from '../../lib/play-data';
+
+// The top 64 with a cut-out and some numbers make fair puzzles.
+const pool = playPlayers(128);
+const puzzles = pool.filter(p => p.pos <= 64 && p.cut && p.avg);
+---
+<Layout title="Guess the player" description="One mystery darts player a day. Six clues, six guesses." active="play">
+  <section class="hero wrap">
+    <span class="eyebrow">Daily · <span id="g-day"></span></span>
+    <h1>Who's <span class="accent">on the oche?</span></h1>
+    <p class="lede">A new mystery player every day, from the world's top 64. Each wrong guess unlocks another clue. Six goes.</p>
+  </section>
+
+  <section class="wrap game">
+    <div class="tile tile-ink pic"><img id="g-img" alt="Mystery player" /><span class="lbl" id="g-left">6 guesses left</span></div>
+    <div class="side">
+      <ol class="clues" id="g-clues"></ol>
+      <form id="g-form" class="guess" autocomplete="off">
+        <input id="g-in" list="g-names" placeholder="Type a player's name" aria-label="Your guess" required />
+        <datalist id="g-names">{pool.map(p => <option value={p.name} />)}</datalist>
+        <button type="submit">Guess</button>
+      </form>
+      <ul class="tries" id="g-tries"></ul>
+      <div class="done" id="g-done" hidden></div>
+    </div>
+  </section>
+
+  <script is:inline type="application/json" id="g-data" set:html={jsonForHtml({ puzzles, names: pool.map(p => p.name) })} />
+
+  <script>
+    const KEY = 'oche:guess';
+    const esc = (x: unknown) => String(x ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]!);
+    const norm = (s: string) => s.normalize('NFKD').replace(/[̀-ͯ]/g, '').toLowerCase().replace(/[^a-z]/g, '');
+    function init() {
+      const form = document.getElementById('g-form') as HTMLFormElement | null;
+      if (!form) return;
+      const { puzzles } = JSON.parse(document.getElementById('g-data')!.textContent!);
+      const day = new Date().toLocaleDateString('en-CA', { timeZone: 'Europe/London' });
+      document.getElementById('g-day')!.textContent = new Date(day + 'T12:00:00Z').toLocaleDateString('en-GB', { weekday: 'long', day: 'numeric', month: 'long' });
+      // Same player for everyone today: a hash of the date picks from the list.
+      let h = 0; for (const c of `oche${day}`) h = (h * 31 + c.charCodeAt(0)) >>> 0;
+      const p = puzzles[h % puzzles.length];
+      const clues = [
+        `Plays for ${p.countryName}`,
+        `Averaging ${p.avg.toFixed(2)} over the last 12 months`,
+        `${p.titles} title${p.titles === 1 ? '' : 's'} and a ${p.won}–${p.lost} record in the last year`,
+        p.age ? `${p.age} years old, throws ${p.hand}-handed` : `Throws ${p.hand}-handed`,
+        p.walkOn ? `Walks on to “${p.walkOn}”` : p.darts ? `Throws ${p.darts}` : `Ranked between ${Math.max(1, p.pos - 5)} and ${p.pos + 5}`,
+        p.nick ? `Known as “${p.nick}”` : `World number ${p.pos}`,
+      ];
+      let state: { day: string; tries: string[]; won: boolean; streak: number; best: number; last?: string };
+      try { state = JSON.parse(localStorage.getItem(KEY) || 'null'); } catch { state = null as any; }
+      if (!state || state.day !== day) {
+        const prev = state;
+        const yesterday = new Date(Date.parse(day) - 864e5).toISOString().slice(0, 10);
+        state = { day, tries: [], won: false, streak: prev && prev.won && prev.day === yesterday ? prev.streak : 0, best: prev?.best || 0 };
+      }
+      const persist = () => { try { localStorage.setItem(KEY, JSON.stringify(state)); } catch { /* private mode */ } };
+      const img = document.getElementById('g-img') as HTMLImageElement;
+      img.src = p.cut;
+      const over = () => state.won || state.tries.length >= 6;
+      function draw() {
+        const shown = Math.min(6, state.tries.length + 1);
+        document.getElementById('g-clues')!.innerHTML = clues.map((c, i) => `<li class="${i < shown || over() ? 'on' : ''}">${i < shown || over() ? esc(c) : 'Locked'}</li>`).join('');
+        document.getElementById('g-tries')!.innerHTML = state.tries.map(t => `<li class="${norm(t) === norm(p.name) ? 'hit' : 'miss'}">${norm(t) === norm(p.name) ? '✓' : '✗'} ${esc(t)}</li>`).join('');
+        document.getElementById('g-left')!.textContent = over() ? (state.won ? 'Got it!' : 'Unlucky') : `${6 - state.tries.length} guess${6 - state.tries.length === 1 ? '' : 'es'} left`;
+        img.classList.toggle('reveal', over());
+        form!.hidden = over();
+        const done = document.getElementById('g-done')!;
+        done.hidden = !over();
+        if (over()) {
+          const grid = state.tries.map(t => (norm(t) === norm(p.name) ? '🎯' : '⬛')).join('');
+          done.innerHTML = `<p class="poster big">${esc(p.name)}</p>
+            <p>${state.won ? `Nailed it in ${state.tries.length}. Streak: <b>${state.streak}</b> (best ${state.best}).` : 'Better luck tomorrow. Streak reset.'}</p>
+            <div class="row"><a class="btn" href="/players/${esc(p.slug)}">Their profile →</a><button class="btn share" type="button">Share ${grid}</button></div>
+            <p class="muted small">A new player at midnight, UK time.</p>`;
+          done.querySelector<HTMLButtonElement>('.share')!.onclick = async () => {
+            const text = `The Oche · Guess the player ${day}\n${grid} ${state.won ? `${state.tries.length}/6` : 'X/6'}`;
+            try { if (navigator.share) await navigator.share({ text, url: location.href }); else await navigator.clipboard.writeText(`${text}\n${location.href}`); } catch { /* cancelled */ }
+          };
+        }
+      }
+      form.onsubmit = e => {
+        e.preventDefault();
+        const input = document.getElementById('g-in') as HTMLInputElement;
+        const v = input.value.trim();
+        if (!v || over()) return;
+        state.tries.push(v); input.value = '';
+        if (norm(v) === norm(p.name)) { state.won = true; state.streak = (state.streak || 0) + 1; state.best = Math.max(state.best || 0, state.streak); }
+        else if (state.tries.length >= 6) state.streak = 0;
+        persist(); draw();
+      };
+      draw();
+    }
+    document.addEventListener('astro:page-load', init);
+  </script>
+</Layout>
+
+<style>
+  .game { display: grid; grid-template-columns: minmax(0, 380px) minmax(0, 1fr); gap: 22px; align-items: start; }
+  .pic { position: relative; aspect-ratio: 3 / 4; display: flex; align-items: flex-end; justify-content: center; overflow: hidden; background: radial-gradient(90% 70% at 50% 100%, #2b4bff55, transparent 70%), var(--ink); }
+  .pic img { height: 92%; width: auto; filter: brightness(0) drop-shadow(0 0 1px rgba(255, 255, 255, .5)); transition: filter 1.2s var(--ease); }
+  .pic img.reveal { filter: none; }
+  .pic .lbl { position: absolute; top: 16px; left: 16px; color: var(--volt); }
+  .clues { list-style: none; counter-reset: c; margin: 0 0 16px; padding: 0; display: grid; gap: 8px; }
+  .clues :global(li) { counter-increment: c; display: flex; gap: 12px; align-items: center; padding: 12px 14px; border-radius: 14px; background: var(--paper-2); color: var(--muted); font-weight: 600; }
+  .clues :global(li)::before { content: counter(c); font-family: var(--poster); font-size: 22px; width: 24px; text-align: center; }
+  .clues :global(li.on) { background: var(--card); color: var(--fg); box-shadow: var(--shadow-sm); }
+  .clues :global(li.on)::before { color: var(--red-text); }
+  .guess { display: flex; gap: 8px; }
+  .guess input { flex: 1; min-width: 0; font: inherit; font-size: 17px; padding: 12px 16px; border-radius: 14px; border: 2px solid var(--line); background: var(--card); color: var(--fg); }
+  .guess button, .btn { border: 0; border-radius: 14px; background: var(--ink); color: var(--volt); font-weight: 800; padding: 12px 18px; cursor: pointer; text-decoration: none; display: inline-flex; align-items: center; }
+  .tries { list-style: none; padding: 0; margin: 12px 0; display: flex; flex-wrap: wrap; gap: 6px; }
+  .tries :global(li) { padding: 4px 10px; border-radius: 999px; font-size: 13px; font-weight: 700; background: var(--red-soft); color: var(--red-text); }
+  .tries :global(li.hit) { background: var(--green-soft); color: var(--green-text); }
+  .done :global(.big) { font-size: 44px; margin: 6px 0; }
+  .done :global(.row) { display: flex; gap: 8px; flex-wrap: wrap; margin: 12px 0; }
+  .done :global(.btn) { border: 0; border-radius: 14px; background: var(--ink); color: var(--volt); font-weight: 800; padding: 12px 18px; cursor: pointer; text-decoration: none; }
+  .small { font-size: 13px; }
+  @media (max-width: 760px) { .game { grid-template-columns: 1fr; } .pic { max-height: 340px; aspect-ratio: auto; height: 340px; } }
+</style>

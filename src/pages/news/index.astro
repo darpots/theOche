@@ -3,6 +3,7 @@ import { getCollection } from 'astro:content';
 import Layout from '../../layouts/Layout.astro';
 import NewsArt from '../../components/NewsArt.astro';
 import { newsDate } from '../../lib/format.mjs';
+import { isStale, expiresAt, EXPIRE_SCRIPT } from '../../lib/news';
 import calendar from '../../data/calendar.json';
 import rankings from '../../data/rankings.json';
 
@@ -13,7 +14,11 @@ const stories = (await getCollection('news'))
   .map(s => s.data)
   .filter(s => Date.parse(s.date) >= cutoff)
   .sort((a, b) => b.date.localeCompare(a.date));
-const [lead, ...rest] = stories;
+// A preview never leads, and once its matches start it drops off the list
+// (at build, and in the browser via data-expires between hourly builds).
+const live = stories.filter(s => !isStale(s));
+const lead = live.find(s => s.kind !== 'preview') || live[0];
+const rest = live.filter(s => s !== lead);
 // Filter chips: only tournaments and players, with at least two stories, most covered first.
 const known = new Set([...calendar.events.map(e => e.name.toLowerCase()), 'world championship', 'premier league', 'grand slam of darts', 'players championship', 'players championship finals', 'order of merit', ...rankings.players.map(p => p.name.toLowerCase())]);
 const counts = new Map<string, number>();
@@ -24,7 +29,7 @@ const tags = [...counts].filter(([, n]) => n >= 2).sort((a, b) => b[1] - a[1]).m
   <section class="hero wrap">
     <span class="eyebrow">Newsdesk</span>
     <h1>The latest from <span class="accent">the tour.</span></h1>
-    <p class="lede">Original reports on the PDC, refreshed through the day. Every story is dated and links to its sources, and the page covers the last month.</p>
+    <p class="lede">Results, upsets, rows and big numbers from the PDC tour. Fresh editions land at 5am and 5pm, UK time.</p>
   </section>
 
   {!lead ? (
@@ -49,12 +54,12 @@ const tags = [...counts].filter(([, n]) => n >= 2).sort((a, b) => b[1] - a[1]).m
       </a>
       <div class="list">
         {rest.map((s, i) => (
-          <a href={`/news/${s.slug}`} class="story card lift" data-tags={s.tags.join('|')} data-reveal style={`--d:${(i % 3) * 80}ms`}>
+          <a href={`/news/${s.slug}`} class="story card lift" data-tags={s.tags.join('|')} data-expires={expiresAt(s) ?? undefined} data-reveal style={`--d:${(i % 3) * 80}ms`}>
             <NewsArt story={s} class="story-art" sizes="(max-width: 760px) 100vw, 380px" />
             <div class="story-copy">
               {s.tags[0] && <span class="tagpill">{s.tags[0]}</span>}
               <time datetime={s.date}>{newsDate(s.date)}</time>
-              <h3 transition:name={`h-${s.slug}`}>{s.headline}</h3>
+              <h3>{s.headline}</h3>
               <p>{s.standfirst}</p>
             </div>
           </a>
@@ -63,6 +68,7 @@ const tags = [...counts].filter(([, n]) => n >= 2).sort((a, b) => b[1] - a[1]).m
     </section>
   )}
 
+  <script is:inline set:html={EXPIRE_SCRIPT} />
   <script>
     function init() {
       const chips = document.querySelectorAll<HTMLButtonElement>('[data-tag]');
@@ -70,7 +76,7 @@ const tags = [...counts].filter(([, n]) => n >= 2).sort((a, b) => b[1] - a[1]).m
         const tag = c.dataset.tag!;
         chips.forEach(x => x.setAttribute('aria-pressed', String(x === c)));
         document.querySelectorAll<HTMLElement>('[data-tags]').forEach(el => {
-          el.hidden = !!tag && !el.dataset.tags!.split('|').includes(tag);
+          el.hidden = (!!tag && !el.dataset.tags!.split('|').includes(tag)) || Number(el.dataset.expires || Infinity) <= Date.now();
           el.classList.add('in');
         });
       }));
@@ -82,13 +88,13 @@ const tags = [...counts].filter(([, n]) => n >= 2).sort((a, b) => b[1] - a[1]).m
 <style>
   .chips { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 22px; }
   a.card { text-decoration: none; display: block; overflow: hidden; }
-  time { font-size: 12px; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; color: var(--red); }
+  time { font-size: 12px; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; color: var(--red-text); }
   a.card.lead { display: grid; grid-template-columns: 1.25fr 1fr; align-items: center; }
   .lead :global(.lead-art) { height: 340px; }
   .lead-copy { padding: 32px; display: flex; flex-direction: column; justify-content: center; gap: 10px; }
   .lead h2 { font-size: clamp(24px, 3vw, 34px); }
   .lead p { margin: 0; color: var(--muted); font-size: 17px; }
-  .more { margin-top: 8px; font-weight: 700; color: var(--ink); }
+  .more { margin-top: 8px; font-weight: 700; color: var(--fg); }
   .list { margin-top: 18px; display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 18px; }
   .story { display: flex; flex-direction: column; }
   .story :global(.story-art) { aspect-ratio: 16 / 8; }

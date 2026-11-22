@@ -1,37 +1,46 @@
-// Checkout routes: the usual way to finish a score of 2–170 in three darts or
-// fewer, ending on a double (or the bull). Built once from every combination,
-// preferring fewest darts, then a balance of favourite doubles (D20, D16,
-// D18…) and big set-up trebles (T20, T19…), so the familiar pro routes come
-// out: 170 T20 T20 Bull, 141 T20 T19 D12, 120 T20 20 D20, 100 T20 D20.
+// Checkout routes: the standard finish pros go for today on every score from
+// 2 to 170, as on a modern checkout chart. Hand-picked, not generated, because
+// the "right" route is about what's left after a miss, not just adding up:
+//  - three-dart finishes open on the treble that leaves a two-dart finish
+//    (or a familiar double) if it drops into the single
+//  - two-dart finishes avoid awkward doubles and favour D20, D16, D18, D12, D8
+//  - odd numbers under 40 set up D16 or D8, which split evenly when missed
+//    (33 is 1, D16; 25 is 9, D8)
+// 159, 162, 163, 165, 166, 168 and 169 have no three-dart finish.
+// The trainer (/play/checkout) accepts any valid route; this is the hint it shows.
 
-const darts = [];
-for (let n = 20; n >= 1; n--) {
-  darts.push({ label: `T${n}`, v: n * 3, rank: (20 - n) * 2 });
-  darts.push({ label: `${n}`, v: n, rank: 6 + (20 - n) * 0.3 + (n < 5 ? 8 : 0) }); // any single is an easy set-up dart (1–4 aren't aimed at)
-}
-darts.push({ label: '25', v: 25, rank: 30 }, { label: 'Bull', v: 50, rank: 31 });
-for (let n = 20; n >= 1; n--) darts.push({ label: `D${n}`, v: n * 2, rank: 40 + (20 - n) });
-
-const DOUBLE_PREF = [20, 16, 18, 12, 10, 8, 19, 17, 15, 14, 13, 11, 9, 7, 6, 5, 4, 3, 2, 1];
-const finishers = [...DOUBLE_PREF.map((n, i) => ({ label: `D${n}`, v: n * 2, rank: i })), { label: 'Bull', v: 50, rank: 8 }];
-
-const best = new Map();
-const consider = (route, cost) => {
-  const total = route.reduce((s, d) => s + d.v, 0);
-  const cur = best.get(total);
-  if (!cur || cost < cur.cost) best.set(total, { route: route.map(d => d.label), cost });
+const ROUTES = {
+  170: 'T20 T20 Bull', 167: 'T20 T19 Bull', 164: 'T20 T18 Bull', 161: 'T20 T17 Bull',
+  160: 'T20 T20 D20', 158: 'T20 T20 D19', 157: 'T20 T19 D20', 156: 'T20 T20 D18', 155: 'T20 T19 D19',
+  154: 'T20 T18 D20', 153: 'T20 T19 D18', 152: 'T20 T20 D16', 151: 'T20 T17 D20', 150: 'T20 T18 D18',
+  149: 'T20 T19 D16', 148: 'T20 T16 D20', 147: 'T20 T17 D18', 146: 'T20 T18 D16', 145: 'T20 T15 D20',
+  144: 'T20 T20 D12', 143: 'T20 T17 D16', 142: 'T20 T14 D20', 141: 'T20 T19 D12', 140: 'T20 T20 D10',
+  139: 'T20 T13 D20', 138: 'T20 T18 D12', 137: 'T20 T19 D10', 136: 'T20 T20 D8', 135: 'T20 T17 D12',
+  134: 'T20 T14 D16', 133: 'T20 T19 D8', 132: 'T20 T16 D12', 131: 'T20 T13 D16', 130: 'T20 T20 D5',
+  129: 'T19 T16 D12', 128: 'T18 T14 D16', 127: 'T20 T17 D8', 126: 'T19 T19 D6', 125: '25 T20 D20',
+  124: 'T20 T16 D8', 123: 'T19 T16 D9', 122: 'T18 T20 D4', 121: 'T20 T11 D14', 120: 'T20 20 D20',
+  119: 'T19 T12 D13', 118: 'T20 18 D20', 117: 'T20 17 D20', 116: 'T20 16 D20', 115: 'T20 15 D20',
+  114: 'T20 14 D20', 113: 'T20 13 D20', 112: 'T20 12 D20', 111: 'T20 19 D16', 110: 'T20 Bull',
+  109: 'T20 9 D20', 108: 'T20 16 D16', 107: 'T19 Bull', 106: 'T20 10 D18', 105: 'T20 13 D16',
+  104: 'T18 Bull', 103: 'T19 10 D18', 102: 'T20 10 D16', 101: 'T17 Bull',
+  100: 'T20 D20', 99: 'T19 10 D16', 98: 'T20 D19', 97: 'T19 D20', 96: 'T20 D18', 95: 'T19 D19',
+  94: 'T18 D20', 93: 'T19 D18', 92: 'T20 D16', 91: 'T17 D20', 90: 'T20 D15', 89: 'T19 D16',
+  88: 'T16 D20', 87: 'T17 D18', 86: 'T18 D16', 85: 'T15 D20', 84: 'T20 D12', 83: 'T17 D16',
+  82: 'Bull D16', 81: 'T19 D12', 80: 'T20 D10', 79: 'T19 D11', 78: 'T18 D12', 77: 'T19 D10',
+  76: 'T20 D8', 75: 'T17 D12', 74: 'T14 D16', 73: 'T19 D8', 72: 'T16 D12', 71: 'T13 D16',
+  70: 'T18 D8', 69: 'T19 D6', 68: 'T20 D4', 67: 'T17 D8', 66: 'T10 D18', 65: 'T19 D4',
+  64: 'T16 D8', 63: 'T13 D12', 62: 'T10 D16', 61: 'T15 D8',
+  60: '20 D20', 59: '19 D20', 58: '18 D20', 57: '17 D20', 56: '16 D20', 55: '15 D20', 54: '14 D20',
+  53: '13 D20', 52: '20 D16', 51: '19 D16', 50: '18 D16', 49: '17 D16', 48: '16 D16', 47: '15 D16',
+  46: '6 D20', 45: '13 D16', 44: '12 D16', 43: '11 D16', 42: '10 D16', 41: '9 D16',
+  40: 'D20', 39: '7 D16', 38: 'D19', 37: '5 D16', 36: 'D18', 35: '3 D16', 34: 'D17', 33: '1 D16',
+  32: 'D16', 31: '15 D8', 30: 'D15', 29: '13 D8', 28: 'D14', 27: '11 D8', 26: 'D13', 25: '9 D8',
+  24: 'D12', 23: '7 D8', 22: 'D11', 21: '5 D8', 20: 'D10', 19: '3 D8', 18: 'D9', 17: '1 D8',
+  16: 'D8', 15: '7 D4', 14: 'D7', 13: '5 D4', 12: 'D6', 11: '3 D4', 10: 'D5', 9: '1 D4',
+  8: 'D4', 7: '3 D2', 6: 'D3', 5: '1 D2', 4: 'D2', 3: '1 D1', 2: 'D1',
 };
-for (const f of finishers) {
-  consider([f], 1000 + f.rank);
-  for (const a of darts) {
-    consider([a, f], 2000 + f.rank * 3 + a.rank);
-    // Three-dart routes open on a treble where possible, so a hit leaves a two-dart finish.
-    const opener = a.label.startsWith('T') ? 0 : 20;
-    for (const b of darts) consider([a, b, f], 3000 + f.rank * 3 + a.rank + b.rank + opener);
-  }
-}
 
 /** The route for a score, e.g. ['T20', '20', 'D20'], or null when there's no three-dart finish. */
 export function checkout(n) {
-  return n >= 2 && n <= 170 ? best.get(n)?.route || null : null;
+  return ROUTES[n] ? ROUTES[n].split(' ') : null;
 }

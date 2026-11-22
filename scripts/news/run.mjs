@@ -163,11 +163,18 @@ async function llm(messages) {
   throw new Error('News model API rate limit');
 }
 
-const SYSTEM = `You are a sports journalist for "The Oche", an independent PDC darts news site.
-Write ORIGINAL reports in British English. Use the supplied source material only as research:
-never copy sentences or distinctive phrasing, do not invent facts, quotes, scores or statistics,
-and attribute any quote to the person and outlet it came from ("told Sky Sports"). Keep quotes short (under 20 words) and use at most two.
-Only cover the Professional Darts Corporation (PDC) tour and its players.
+const SYSTEM = `You are a sports writer for "The Oche", an independent PDC darts site.
+Write ORIGINAL reports in British English, in our house voice: like a mate at the pub who knows every stat.
+Warm, quick, a bit cheeky; short punchy sentences mixed with longer ones; a nickname or a bit of colour
+(the crowd, a walk-on, a missed double that hurt); one clear opinion near the end. Facts stay strict.
+Use the supplied source material only as research: never copy sentences or distinctive phrasing,
+do not invent facts, quotes, scores or statistics.
+NEVER name or refer to the outlets, websites or newspapers the research came from: no "according to",
+"told <outlet>", "reported by". The story must read as our own reporting. Credit quotes to the player only
+("said afterwards"), use at most two, under 20 words each, and only words said at a press conference, on TV
+or on the player's own social media; an outlet's one-to-one interview is reported without quote marks.
+Avoid stock phrases ("had other ideas", "dug deep", "statement win", "both players", "it is worth noting") and em dashes.
+Only cover the Professional Darts Corporation (PDC) tour and its players. Skip small talk and interview leftovers.
 If the research is a preview of a match that has already been played, set duplicateOf to "stale-preview".
 If sources disagree on a fact (e.g. a name or score), leave that detail out.
 Reply with JSON only.`;
@@ -198,7 +205,7 @@ Return JSON:
 {
  "isPdc": boolean,            // false if not about the PDC tour/players
  "duplicateOf": string|null,  // slug of a recent report covering the same development, else null
- "headline": string,          // max 90 chars, no clickbait
+ "headline": string,          // max 65 chars, lively, no clickbait or questions
  "standfirst": string,        // one-sentence summary, max 200 chars
  "body": string[],            // 4-7 paragraphs, 280-450 words total
  "tags": string[],            // 1-4, e.g. tournament name, "Rankings", "Interview"
@@ -223,7 +230,7 @@ Return JSON:
     players: (out.players || []).slice(0, 6),
     sources: c.items.map(i => ({ name: i.source, url: i.url, title: i.title })),
     originalTitles: c.items.map(i => i.title),
-    writtenBy: `The Oche newsdesk (AI-assisted, ${MODEL})`,
+    writtenBy: 'The Oche newsdesk',
   };
   await writeFile(`${DIR}${date.slice(0, 10)}-${slug}.json`, JSON.stringify(article, null, 1) + '\n');
   published.push(article);

@@ -10,14 +10,31 @@
   "The second quarter-final follows at 8:45pm and looks less even on the numbers. Gerwyn Price, the world No 4, won this event in 2018 and averages 98.67 over the last 12 months, with four titles in that time. He beat Ryan Searle 10-7 in the last 16.",
   "Niko Springer, ranked 34th, averages 91.85 and has not won a title in the past year. He has still knocked out Rob Cross 10-8 to match his last-16 finish from 2025, and has met Price once before, losing."
  ],
- "tags": ["Grand Slam of Darts"],
- "players": ["Jermaine Wattimena", "Kevin Doets", "Gerwyn Price", "Niko Springer"],
- "sources": [
-  {"name": "PDC", "url": "https://www.pdc.tv/news/2026/november/20/wattimena-and-doets-prepare-for-quarter-final-duel/", "title": "Wattimena and Doets prepare for quarter-final duel"}
+ "tags": [
+  "Grand Slam of Darts"
  ],
- "originalTitles": ["Wattimena and Doets prepare for quarter-final duel"],
- "writtenBy": "The Oche newsdesk (Claude)",
+ "players": [
+  "Jermaine Wattimena",
+  "Kevin Doets",
+  "Gerwyn Price",
+  "Niko Springer"
+ ],
+ "sources": [
+  {
+   "name": "PDC",
+   "url": "https://www.pdc.tv/news/2026/november/20/wattimena-and-doets-prepare-for-quarter-final-duel/",
+   "title": "Wattimena and Doets prepare for quarter-final duel"
+  }
+ ],
+ "originalTitles": [
+  "Wattimena and Doets prepare for quarter-final duel"
+ ],
+ "writtenBy": "The Oche newsdesk",
  "kind": "preview",
  "facts": "10871-2026-11-20-preview",
- "tournament": "10871"
+ "tournament": "10871",
+ "matches": [
+  "517023",
+  "517024"
+ ]
 }

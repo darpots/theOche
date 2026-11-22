@@ -8,13 +8,14 @@ import current from '../data/tournament.json';
 // Preloaded so the big numbers and body text don't flash or shift as fonts arrive.
 import antonFont from '@fontsource/anton/files/anton-latin-400-normal.woff2?url';
 import interFont from '@fontsource-variable/inter/files/inter-latin-wght-normal.woff2?url';
+import headlineFont from '@fontsource-variable/bricolage-grotesque/files/bricolage-grotesque-latin-wght-normal.woff2?url';
 import { SITE } from '../lib/site.mjs';
 import { shortEvent } from '../lib/pdc.mjs';
 
 interface Props {
   title: string;
   description?: string;
-  active?: 'home' | 'calendar' | 'matches' | 'news' | 'rankings' | 'stats';
+  active?: 'home' | 'calendar' | 'matches' | 'news' | 'rankings' | 'stats' | 'play';
   /** Share image path (1200×630), defaults to the site card. */
   image?: string;
   /** 'article' for news stories. */
@@ -33,6 +34,7 @@ const nav = [
   { key: 'matches', href: `/tournament/${current.tournament.id}`, label: shortEvent(current.tournament.name).desk, phone: shortEvent(current.tournament.name).phone, title: `${current.tournament.name}: schedule, live scores, draw and results` },
   { key: 'rankings', href: '/rankings', label: 'Rankings' },
   { key: 'stats', href: '/stats', label: 'Stats', desktopOnly: true },
+  { key: 'play', href: '/play', label: 'Play', desktopOnly: true },
 ];
 const t = current.tournament;
 const icons: Record<string, string> = {
@@ -52,6 +54,11 @@ const fullTitle = title === 'The Oche' ? title : `${title} · The Oche`;
     <title>{fullTitle}</title>
     <meta name="description" content={description} />
     <meta name="theme-color" content="#0b0c10" />
+    <script is:inline>
+      // Theme before first paint: dark unless the viewer picked light (footer switch).
+      var th = 'dark'; try { if (localStorage.getItem('oche-theme') === 'light') th = 'light'; } catch (e) {}
+      document.documentElement.dataset.theme = th;
+    </script>
     <link rel="icon" href="/favicon.ico" sizes="48x48" />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
@@ -60,6 +67,7 @@ const fullTitle = title === 'The Oche' ? title : `${title} · The Oche`;
     <link rel="alternate" type="application/rss+xml" title={`${SITE.name} news`} href="/rss.xml" />
     <link rel="preload" href={antonFont} as="font" type="font/woff2" crossorigin />
     <link rel="preload" href={interFont} as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href={headlineFont} as="font" type="font/woff2" crossorigin />
     <meta property="og:site_name" content={SITE.name} />
     <meta property="og:title" content={fullTitle} />
     <meta property="og:description" content={description} />
@@ -157,12 +165,14 @@ const fullTitle = title === 'The Oche' ? title : `${title} · The Oche`;
           <p>{SITE.tagline}. An independent fan site, not affiliated with the PDC, Sky Sports or ITV.</p>
         </div>
         <nav class="foot-links" aria-label="Site">
-          <div><b>Follow the darts</b><a href="/">Today</a><a href={`/tournament/${t.id}`}>{shortEvent(t.name).desk}</a><a href="/calendar">Calendar</a><a href="/stats">Stats</a><a href="/rankings">Rankings</a></div>
+          <div><b>Follow the darts</b><a href="/">Today</a><a href={`/tournament/${t.id}`}>{shortEvent(t.name).desk}</a><a href="/calendar">Calendar</a><a href="/stats">Stats</a><a href="/rankings">Rankings</a><a href="/records">Records</a><a href="/world-championship">World Championship</a></div>
+          <div><b>Play</b><a href="/play/predictor">Predictor</a><a href="/play/guess">Guess the player</a><a href="/play/checkout">Checkout trainer</a><a href="/h2h">Head to head</a><a href="/my">My Oche</a></div>
           <div><b>News</b><a href="/news">Latest news</a><a href="/rss.xml">RSS feed</a></div>
           <div><b>About</b><a href="/about">About &amp; contact</a><a href="/privacy">Privacy &amp; cookies</a><a href="/credits">Photo credits &amp; data</a></div>
         </nav>
       </div>
-      <div class="wrap foot-base"><span>© {new Date().getFullYear()} {SITE.name}</span><span>Scores and data from PDC live scoring · times are UK time</span></div>
+      <div class="wrap foot-base"><span>© {new Date().getFullYear()} {SITE.name}</span>
+        <span class="theme" role="group" aria-label="Colour theme"><button type="button" data-theme-set="dark">Dark</button><button type="button" data-theme-set="light">Light</button></span><span>Scores and data from PDC live scoring · times are UK time</span></div>
     </footer>
 
     <script>
@@ -201,6 +211,20 @@ const fullTitle = title === 'The Oche' ? title : `${title} · The Oche`;
           label();
         });
       })();
+      // ---- Theme switch (footer): dark by default, light if picked ----
+      const themeNow = () => { try { return localStorage.getItem('oche-theme') === 'light' ? 'light' : 'dark'; } catch { return 'dark'; } };
+      const markTheme = () => document.querySelectorAll<HTMLButtonElement>('[data-theme-set]').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.themeSet === themeNow())));
+      document.addEventListener('click', e => {
+        const b = (e.target as HTMLElement).closest<HTMLButtonElement>('[data-theme-set]');
+        if (!b) return;
+        const v = b.dataset.themeSet!;
+        try { localStorage.setItem('oche-theme', v); } catch { /* private mode */ }
+        document.documentElement.dataset.theme = v;
+        markTheme();
+      });
+      document.addEventListener('astro:page-load', markTheme);
+      // The router swaps <html> attributes on navigation: keep the chosen theme.
+      document.addEventListener('astro:after-swap', () => { document.documentElement.dataset.theme = themeNow(); });
       // Scroll-reveal + the sliding nav pill.
       const keyFor = (path: string) => {
         const p = path.replace(/\/$/, '') || '/';
@@ -208,6 +232,8 @@ const fullTitle = title === 'The Oche' ? title : `${title} · The Oche`;
         const [, a, b] = p.split('/');
         if (a === 'tournament') return b === document.querySelector<HTMLElement>('.top nav')?.dataset.current ? 'matches' : 'calendar';
         if (a === 'players') return 'rankings';
+        if (a === 'records') return 'stats';
+        if (['h2h', 'my', 'world-championship'].includes(a)) return 'play';
         return a;
       };
       // The header is persisted across page swaps, and re-inserting it cancels
@@ -251,7 +277,7 @@ const fullTitle = title === 'The Oche' ? title : `${title} · The Oche`;
       function init() {
         const io = new IntersectionObserver(entries => {
           for (const e of entries) if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); }
-        }, { rootMargin: '0px 0px -8% 0px' });
+        }, { rootMargin: '0px 0px 25% 0px' });
         document.querySelectorAll('[data-reveal]:not(.in)').forEach(el => io.observe(el));
         movePill(keyFor(location.pathname));
       }
@@ -308,8 +334,10 @@ const fullTitle = title === 'The Oche' ? title : `${title} · The Oche`;
             const fav = new Set(followed().map((p: any) => p.id));
             const starred = (f: any) => fav.has(String(f.participant1?.participantID)) || fav.has(String(f.participant2?.participantID));
             notifyLive(live.filter((f: any) => /live|progress/i.test(f.status)).map((f: any) => ({ id: f.fixtureID, p1: { id: f.participant1?.participantID, name: `${f.participant1?.firstName} ${f.participant1?.lastName}` }, p2: { id: f.participant2?.participantID, name: `${f.participant2?.firstName} ${f.participant2?.lastName}` }, label: `${surname(f.participant1)} v ${surname(f.participant2)} · ${name}` })));
-            // Matches under way: have PDC push every change to us (the bar redraws on each).
-            if (live.length) watchLive(id!, live.map((f: any) => String(f.fixtureID)), tick);
+            // Matches under way: on pages that show a live match (data-live-push: the homepage
+            // hero, the match centre) PDC pushes every change to us. Elsewhere the bar polls,
+            // so ordinary pages never download the 180 KB live-database client.
+            if (live.length && document.querySelector('[data-live-push]')) watchLive(id!, live.map((f: any) => String(f.fixtureID)), tick);
             // Players on a break (no darts for a while at the start of a leg): say so after the score.
             const onBrk = new Set<string>();
             await Promise.all(live.slice(0, 3).map(async (f: any) => {
@@ -319,7 +347,7 @@ const fullTitle = title === 'The Oche' ? title : `${title} · The Oche`;
             }));
             // Upcoming: "A v B" then the start time in its own pill, so a time never reads as a score.
             const chip = (f: any, kind: string) => kind === 'next'
-              ? `<a class="lb-m next" href="/match?id=${f.fixtureID}"><span>${esc(surname(f.participant1))}</span><i class="lb-v">v</i><span>${esc(surname(f.participant2))}</span>${ukTime(f.startTime, f.startDate) ? `<time class="lb-t" aria-label="starts at ${esc(ukTime(f.startTime, f.startDate))}">${esc(ukTime(f.startTime, f.startDate))}</time>` : ''}</a>`
+              ? `<a class="lb-m next" href="/match?id=${f.fixtureID}"><span>${esc(surname(f.participant1))}</span><i class="lb-v">v</i><span>${esc(surname(f.participant2))}</span>${ukTime(f.startTime, f.startDate) ? `<time class="lb-t" aria-label="starts at ${esc(ukTime(f.startTime, f.startDate))}">${esc(ukTime(f.startTime, f.startDate).replace(/ (GMT|BST)$/, ''))}</time>` : ''}</a>`
               : `<a class="lb-m ${kind}" href="/match?id=${f.fixtureID}">${starred(f) ? '<i class="lb-fav" aria-label="You follow a player in this match">★</i>' : ''}<span>${esc(surname(f.participant1))}</span><b>${kind === 'now' && !/live|progress|result/i.test(f.status) ? 'v' : scoreHtml(f.participant1Score, f.participant2Score)}</b><span>${esc(surname(f.participant2))}</span>${onBrk.has(String(f.fixtureID)) ? '<i class="lb-brk">Break</i>' : ''}</a>`;
             let html = '';
             const ln = document.getElementById('livenav') as HTMLAnchorElement | null;
@@ -442,10 +470,10 @@ const fullTitle = title === 'The Oche' ? title : `${title} · The Oche`;
 
   .tabbar { display: none; }
 
-  .search { border: 0; padding: 0; width: min(620px, 100% - 24px); margin-top: 12vh; border-radius: 20px; background: var(--card); color: var(--ink); box-shadow: var(--shadow-lg); }
+  .search { border: 0; padding: 0; width: min(620px, 100% - 24px); margin-top: 12vh; border-radius: 20px; background: var(--card); color: var(--fg); box-shadow: var(--shadow-lg); }
   .search::backdrop { background: rgba(20, 22, 31, .5); }
   .s-box { display: flex; align-items: center; gap: 10px; padding: 14px 16px; border-bottom: 1px solid var(--line); color: var(--muted); }
-  .s-box input { flex: 1; border: 0; outline: 0; font: inherit; font-size: 17px; background: none; color: var(--ink); }
+  .s-box input { flex: 1; border: 0; outline: 0; font: inherit; font-size: 17px; background: none; color: var(--fg); }
   .s-close { border: 1px solid var(--line); background: var(--paper-2); border-radius: 6px; font-size: 12px; padding: 2px 8px; cursor: pointer; }
   .s-res { list-style: none; margin: 0; padding: 6px; max-height: 56vh; overflow-y: auto; }
   .s-res :global(li a) { display: grid; grid-template-columns: 64px 1fr; align-items: center; gap: 10px; padding: 10px; border-radius: 12px; text-decoration: none; }
@@ -464,7 +492,10 @@ const fullTitle = title === 'The Oche' ? title : `${title} · The Oche`;
   .foot-links div { display: flex; flex-direction: column; gap: 8px; }
   .foot-links b { font-size: 12px; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); }
   .foot-links a { text-decoration: none; font-weight: 600; }
-  .foot-links a:hover { color: var(--red); }
+  .foot-links a:hover { color: var(--red-text); }
+  .theme { display: inline-flex; gap: 2px; padding: 3px; border-radius: 999px; background: var(--card); }
+  .theme button { border: 0; background: none; border-radius: 999px; padding: 4px 10px; font-size: 12px; font-weight: 700; color: var(--muted); cursor: pointer; }
+  .theme button[aria-pressed='true'] { background: var(--ink); color: var(--volt); }
   .foot-base { display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; margin-top: 28px; padding-top: 18px; border-top: 1px solid var(--line); color: var(--muted); font-size: 13px; }
   @media (max-width: 760px) { .foot-in { grid-template-columns: 1fr; } .foot-links { gap: 28px; } }
   @media (max-width: 640px) {
@@ -478,6 +509,9 @@ const fullTitle = title === 'The Oche' ? title : `${title} · The Oche`;
       background: rgba(11, 12, 16, .82); -webkit-backdrop-filter: blur(20px) saturate(180%); backdrop-filter: blur(20px) saturate(180%);
       border-top: .5px solid rgba(255, 255, 255, .14); border-radius: 0; gap: 0;
     }
+    /* Live bar: the scores get the room (the event name is in the tab bar) */
+    .lb-in :global(.lb-ev) { display: none; }
+    .tvs-btn { padding: 3px 8px; font-size: 10px; letter-spacing: .04em; }
     .tab { position: relative; display: flex; flex-direction: column; align-items: center; gap: 3px; padding: 4px 0 2px; border: 0; background: none; color: rgba(255, 255, 255, .58); text-decoration: none; font-size: 10.5px; font-weight: 600; letter-spacing: -.005em; cursor: pointer; -webkit-tap-highlight-color: transparent; transition: color .15s, transform .12s; }
     .tab svg { width: 24px; height: 24px; }
     .tab:active { transform: scale(.92); }

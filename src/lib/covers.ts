@@ -65,8 +65,12 @@ export function chooseCover(story: { slug: string; headline: string; tags: strin
   const lead = story.players.slice(0, 2);
   const surname = (n: string) => n.split(' ').slice(1).join(' ') || n;
   const inHeadline = (n: string) => new RegExp(`\\b${surname(n).replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}\\b`, 'i').test(story.headline);
-  const forcePlayer = story.image === 'player' || story.kind === 'recap';
-  const names = lead.filter(inHeadline);
+  // Previews and match stories always show faces: the two players the headline
+  // names (from anyone in the story), else the story's lead pair.
+  const wantFaces = ['preview', 'match-report', 'session', 'morning'].includes(story.kind || '');
+  const forcePlayer = story.image === 'player' || story.kind === 'recap' || wantFaces;
+  const names = story.players.filter(inHeadline).slice(0, 2);
+  if (!names.length && wantFaces) names.push(...lead);
   if (!names.length && forcePlayer && lead.length) names.push(lead[0]);
   if (!names.length) return [topical(story.slug, story.tags)];
   // Mix photos and colour panels so the same headshot doesn't fill the page:

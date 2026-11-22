@@ -1,64 +1,11 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import calendar from '../data/calendar.json';
-import { avatarSrc, cutout } from '../lib/images.mjs';
-import { getCollection } from 'astro:content';
-import current from '../data/tournament.json';
-import venuePhotos from '../data/venue-photos.json';
-import { tvBadge, keyName } from '../lib/pdc.mjs';
-import { dayNum, monthShort, monthLong, weekday, dateRange, initials, avatarColours } from '../lib/format.mjs';
+import CalendarMonths from '../components/CalendarMonths.astro';
+import { months, isPast } from '../lib/calendar-cards';
 
-const pic = (name: string) => avatarSrc(name);
-const av = (name: string) => { const [c1, c2] = avatarColours(name); return `--c1:${c1};--c2:${c2}`; };
-const days = (e: { start: string; end: string }) => Math.round((Date.parse(e.end) - Date.parse(e.start)) / 864e5) + 1;
-
-type Ev = (typeof calendar.events)[number];
-const events = calendar.events as Ev[];
-const months = new Map<string, Ev[]>();
-for (const e of events) {
-  const k = e.start.slice(0, 7);
-  if (!months.has(k)) months.set(k, []);
-  months.get(k)!.push(e);
-}
-const place = (e: { venue: string | null; city: string | null }) => (e.venue && e.city && e.venue.includes(e.city) ? e.venue : [e.venue, e.city].filter(Boolean).join(' · '));
-const kind = (e: Ev) => e.broadcaster;
-// Completed events start hidden in the HTML too (the site rebuilds daily), so the
-// "Include past 2 years" toggle is right even before the script below runs.
-const builtOn = new Date().toLocaleDateString('en-CA', { timeZone: 'Europe/London' });
-const isPast = (e: Ev) => e.end < builtOn;
-const isLive = (e: Ev) => e.start <= builtOn && e.end >= builtOn;
-
-// What each event's page has, shown as badges so people know it's there.
-const allNews = (await getCollection('news')).map(n => n.data);
-const shift = (d: string, n: number) => new Date(Date.parse(d) + n * 864e5).toISOString().slice(0, 10);
-const newsFor = (e: Ev) => allNews.filter(n => n.tournament ? n.tournament === e.id : n.tags.some(t => t.toLowerCase() === e.name.toLowerCase()) && n.date.slice(0, 10) >= shift(e.start, -7) && n.date.slice(0, 10) <= shift(e.end, 3)).length;
-const KNOCKOUT_FREE = /premier league/i; // league nights have a bracket but no "draw" as such
-const hasDraw = (e: Ev) => ((e as any).fixtures > 0 || e.id === current.tournament.id) && !KNOCKOUT_FREE.test(e.name);
-function badges(e: Ev) {
-  const b: { cls: string; text: string }[] = [];
-  if (isLive(e)) b.push({ cls: 'live', text: 'Live scores' });
-  else if (isPast(e)) b.push({ cls: 'res', text: 'Results' });
-  else if ((e as any).fixtures > 0) b.push({ cls: 'sched', text: 'Schedule out' });
-  if (hasDraw(e)) b.push({ cls: 'draw', text: 'Draw' });
-  const n = newsFor(e);
-  if (n) b.push({ cls: 'news', text: `News ${n}` });
-  return b;
-}
-// Majors get a wide feature card with a licensed photo that fits the event.
-const MAJOR_PHOTO: [RegExp, string][] = [[/world championship/i, 'ally-pally-crowd'], [/matchplay/i, 'winter-gardens'], [/grand slam/i, 'on-stage'], [/grand prix/i, 'board-lights'], [/uk open/i, 'crowd-180s'], [/european championship/i, 'darts-cluster'], [/players championship/i, 'referee'], [/masters/i, 'confetti'], [/world cup/i, 'crowd-signs'], [/world series/i, 'walk-on-crowd']];
-const featured = (e: Ev) => !!e.major;
-const photoFor = (e: Ev) => (MAJOR_PHOTO.find(([re]) => re.test(e.name))?.[1]) || 'arena';
-// Every card has a background: the venue's photo, else (for majors) a fitting
-// library photo, else one of eight generated backgrounds picked by the event id.
-const venueKey = (v: string | null) => String(v || '').toLowerCase().normalize('NFKD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
-const VENUES = venuePhotos as Record<string, unknown>;
-const bgFor = (e: Ev) => {
-  const k = venueKey(e.venue);
-  if (VENUES[k]) return `/venues/${k}-600.webp`;
-  if (featured(e)) return `/news-img/${photoFor(e)}-600.webp`;
-  return `/venues/bg-${(Number(e.id) % 8) + 1}-600.webp`;
-};
-const champCut = (e: Ev) => (e.winner ? cutout(e.winner.name, 'pdc') : null);
+// Months with anything still to come are in the page; past seasons (two thirds of
+// the events) load from /calendar/past only when someone ticks "Include past 2 years".
+const current = [...months.entries()].filter(([, list]) => !list.every(isPast));
 ---
 <Layout title="Calendar" description="Every PDC darts event on Sky Sports, ITV and PDCTV: dates, venues, broadcasters and winners." active="calendar">
 
@@ -83,73 +30,41 @@ const champCut = (e: Ev) => (e.winner ? cutout(e.winner.name, 'pdc') : null);
   </section>
 
   <section class="wrap months" id="months">
-    {[...months.entries()].map(([k, list]) => (
-      <div class="month" data-month={k} hidden={list.every(isPast)}>
-        <h2 class="month-title"><span>{monthLong(k + '-01')}</span><small>{list.length} event{list.length === 1 ? '' : 's'}</small></h2>
-        <div class="grid">
-          {list.map(e => (
-            <a href={`/tournament/${e.id}`} class={`ev ev-${e.broadcaster}${isPast(e) ? ' past' : ''}${featured(e) ? ' feat' : ''}`} hidden={isPast(e)}
-              data-kind={kind(e)} data-start={e.start} data-end={e.end}>
-              {(
-                <span class="ev-art" aria-hidden="true">
-                  <img src={bgFor(e)} alt="" loading="lazy" decoding="async" />
-                  {champCut(e) && <img class="champ" src={champCut(e)!.src} alt="" loading="lazy" decoding="async" />}
-                </span>
-              )}
-              <span class="ev-date" aria-hidden="true">
-                <span class="wd">{weekday(e.start)}</span>
-                <b class="poster-num">{dayNum(e.start)}</b>
-                <span class="mo">{monthShort(e.start)}</span>
-              </span>
-              <span class="ev-main">
-                <span class="ev-top"><Fragment set:html={tvBadge(e.broadcaster)} /><span class="len">{days(e) === 1 ? 'One night' : `${days(e)} days`}</span></span>
-                <h3 class="headline">{e.name}{e.tag && <small>{e.tag}</small>}</h3>
-                <span class="where">{place(e) || 'Venue to be announced'}</span>
-                {badges(e).length > 0 && <span class="badges">{badges(e).map(b => <i class={`bd ${b.cls}`}>{b.text}</i>)}</span>}
-                <span class="when sr-only">{dateRange(e.start, e.end)}</span>
-                <span class="ev-foot">
-                  {e.winner
-                    ? <span class="winner"><span class="avatar" style={`--size:26px;${av(e.winner.name)}`}>{pic(e.winner.name) ? <img src={pic(e.winner.name)} alt="" width="26" height="26" loading="lazy" /> : initials(e.winner.name)}</span><span><small>Winner</small>{e.winner.name}</span></span>
-                    : <span class="status" data-status></span>}
-                  <span class="go" aria-hidden="true">→</span>
-                </span>
-              </span>
-            </a>
-          ))}
-        </div>
-      </div>
-    ))}
+    <CalendarMonths entries={current} />
     <p class="empty" id="none" hidden>No events match this filter.</p>
   </section>
 
 
   <script>
 
+    let pastHtml: Promise<string> | null = null;
     function init() {
       const root = document.getElementById('months');
       if (!root) return;
       const p = Object.fromEntries(new Intl.DateTimeFormat('en-GB', { timeZone: 'Europe/London', year: 'numeric', month: '2-digit', day: '2-digit' }).formatToParts(new Date()).map(x => [x.type, x.value]));
       const today = `${p.year}-${p.month}-${p.day}`;
-      const cards = [...root.querySelectorAll<HTMLElement>('.ev')];
-      for (const c of cards) {
-        const { start = '', end = '' } = c.dataset;
-        const s = c.querySelector<HTMLElement>('[data-status]');
-        const set = (cls: string, txt: string) => { if (s) { s.className = cls; s.textContent = txt; } };
-        c.classList.remove('live', 'past');
-        if (start <= today && end >= today) { c.classList.add('live'); set('status live-dot', 'On now'); }
-        else if (end < today) { c.classList.add('past'); set('status done', 'Completed'); }
-        else {
-          const days = Math.round((Date.parse(start) - Date.parse(today)) / 864e5);
-          set('status soon', days === 1 ? 'Tomorrow' : days <= 60 ? `In ${days} days` : 'Coming up');
-          if (days <= 60) c.style.setProperty('--soon', String(1 - days / 60));
+      const status = (cards: HTMLElement[]) => {
+        for (const c of cards) {
+          const { start = '', end = '' } = c.dataset;
+          const s = c.querySelector<HTMLElement>('[data-status]');
+          const set = (cls: string, txt: string) => { if (s) { s.className = cls; s.textContent = txt; } };
+          c.classList.remove('live', 'past');
+          if (start <= today && end >= today) { c.classList.add('live'); set('status live-dot', 'On now'); }
+          else if (end < today) { c.classList.add('past'); set('status done', 'Completed'); }
+          else {
+            const days = Math.round((Date.parse(start) - Date.parse(today)) / 864e5);
+            set('status soon', days === 1 ? 'Tomorrow' : days <= 60 ? `In ${days} days` : 'Coming up');
+            if (days <= 60) c.style.setProperty('--soon', String(1 - days / 60));
+          }
         }
-      }
+      };
+      status([...root.querySelectorAll<HTMLElement>('.ev')]);
 
       let filter = 'all';
       const showPast = document.getElementById('showPast') as HTMLInputElement;
       const apply = () => {
         let shown = 0;
-        for (const c of cards) {
+        for (const c of root.querySelectorAll<HTMLElement>('.ev')) {
           const ok = (filter === 'all' || c.dataset.kind === filter) && (showPast.checked || !c.classList.contains('past'));
           c.hidden = !ok; if (ok) shown++;
         }
@@ -157,14 +72,24 @@ const champCut = (e: Ev) => (e.winner ? cutout(e.winner.name, 'pdc') : null);
         document.getElementById('none')!.hidden = shown > 0;
         root.querySelectorAll('[data-reveal]:not(.in)').forEach(el => el.classList.add('in'));
       };
+      // Past seasons are a separate file, fetched the first time they're asked for.
+      const loadPast = async () => {
+        if (root.querySelector('#past-months')) return;
+        pastHtml ||= fetch('/calendar/past').then(r => r.text());
+        const doc = new DOMParser().parseFromString(await pastHtml, 'text/html');
+        const block = doc.getElementById('past-months');
+        if (!block || root.querySelector('#past-months')) return;
+        root.prepend(document.importNode(block, true));
+        status([...root.querySelectorAll<HTMLElement>('#past-months .ev')]);
+      };
       document.querySelectorAll<HTMLButtonElement>('[data-filter]').forEach(b => b.addEventListener('click', () => {
         filter = b.dataset.filter!;
         document.querySelectorAll('[data-filter]').forEach(x => x.setAttribute('aria-pressed', String(x === b)));
         apply();
       }));
-      showPast.addEventListener('change', apply);
+      showPast.addEventListener('change', async () => { if (showPast.checked) { showPast.disabled = true; await loadPast().catch(() => {}); showPast.disabled = false; } apply(); });
+      if (showPast.checked) loadPast().then(apply).catch(() => {});
       apply();
-
     }
     document.addEventListener('astro:page-load', init);
   </script>
@@ -173,108 +98,18 @@ const champCut = (e: Ev) => (e.winner ? cutout(e.winner.name, 'pdc') : null);
 <style>
   .controls { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 14px; padding: 16px 0 8px; position: sticky; top: var(--hdr, 68px); z-index: 20; background: linear-gradient(var(--paper) 75%, transparent); }
   .chips { display: flex; flex-wrap: wrap; gap: 8px; }
-  .logo-chip { gap: 8px; }
+  /* Broadcaster logos are made for white: the chips stay white in the dark theme too */
+  .logo-chip { gap: 8px; background: #fff; color: #0b0c10; border-color: #e2ddd2; }
   .logo-chip img { width: auto; display: block; }
-  .logo-chip[aria-pressed='true'] { background: #fff; color: var(--ink); border-color: var(--ink); box-shadow: 0 0 0 2px var(--ink); }
+  .logo-chip[aria-pressed='true'] { background: #fff; color: #0b0c10; border-color: var(--fg); box-shadow: 0 0 0 2px var(--fg); }
   .pdc-mark { background: #14161f; border-radius: 6px; padding: 3px 6px; display: inline-flex; }
   .toggle { display: inline-flex; align-items: center; gap: 10px; font-weight: 600; font-size: 14px; cursor: pointer; user-select: none; }
   .toggle input { position: absolute; opacity: 0; }
-  .track { width: 42px; height: 24px; border-radius: 999px; background: #d9d2c4; position: relative; transition: background .25s; }
+  .track { width: 42px; height: 24px; border-radius: 999px; background: var(--track); position: relative; transition: background .25s; }
   .thumb { position: absolute; top: 3px; left: 3px; width: 18px; height: 18px; border-radius: 50%; background: #fff; box-shadow: var(--shadow-sm); transition: transform .35s var(--spring); }
   .toggle input:checked + .track { background: var(--green); }
   .toggle input:checked + .track .thumb { transform: translateX(18px); }
   .toggle input:focus-visible + .track { outline: 3px solid var(--sky); outline-offset: 2px; }
 
-  .month { margin-top: 32px; }
-  .month-title { font-size: 15px; font-family: var(--body); font-weight: 800; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); display: flex; align-items: center; gap: 14px; margin-bottom: 12px; line-height: 1; }
-  .month-title::after { content: ''; flex: 1; height: 1px; background: var(--line); order: 1; }
-  .month-title span { font-family: var(--poster); font-weight: 400; font-size: 30px; letter-spacing: .01em; color: var(--ink); }
-  .month-title small { order: 2; font-size: 12px; letter-spacing: .1em; color: var(--muted); }
-  /* Every card is the wide feature layout, two to a row on desktop */
-  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 520px), 1fr)); gap: 14px; }
-
-  /* Event tiles: the site's white cards with the dark date block used on the home page */
-  .ev { position: relative; overflow: hidden; display: grid; grid-template-columns: 76px minmax(0, 1fr); gap: 16px; padding: 14px; border-radius: 22px; background: var(--card); box-shadow: var(--shadow-sm); text-decoration: none; color: inherit; transition: transform .3s var(--ease), box-shadow .3s; }
-  /* Broadcaster stripe along the top */
-  .ev::before { content: ''; position: absolute; z-index: 3; left: 0; right: 0; top: 0; height: 4px; background: var(--bc, var(--line)); }
-  .ev-sky { --bc: var(--sky); } .ev-itv { --bc: var(--itv); } .ev-pdctv { --bc: var(--red); }
-  /* What the event page has */
-  .badges { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 6px; }
-  .bd { font-style: normal; font-size: 11px; font-weight: 800; letter-spacing: .04em; padding: 3px 8px; border-radius: 7px; background: var(--paper-2); color: var(--ink-2); }
-  .bd.live { background: var(--red); color: #fff; }
-  .bd.live::before { content: '● '; }
-  .bd.draw::before { content: '⇶ '; }
-  .bd.res { background: var(--green-soft); color: #075c3f; }
-  .bd.sched { background: var(--volt); color: var(--ink); }
-  .bd.news { background: var(--ink); color: #fff; }
-  /* Every card: dark, with its background faded in behind the text */
-  .ev { background: var(--ink); color: #fff; isolation: isolate; }
-  .ev { grid-template-columns: 76px minmax(0, 1fr) minmax(0, 40%); min-height: 170px; }
-  .ev .ev-art { position: absolute; inset: 0 0 0 auto; width: 50%; z-index: 0; overflow: hidden; }
-  .ev .ev-date, .ev .ev-main { position: relative; z-index: 1; }
-  .ev .ev-art img:not(.champ) { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: .75; transition: transform .8s var(--ease), opacity .4s; }
-  .ev .ev-art::after { content: ''; position: absolute; inset: 0; background: linear-gradient(90deg, var(--ink) 0%, rgba(11, 12, 16, .35) 55%, rgba(11, 12, 16, .1)); }
-  .ev:hover .ev-art img:not(.champ) { transform: scale(1.04); opacity: .9; }
-  .ev .ev-date { background: rgba(255, 255, 255, .1); color: #fff; backdrop-filter: blur(4px); }
-  .ev .ev-date .wd, .ev .ev-date .mo { color: var(--on-ink); }
-  .ev .where, .ev .len { color: var(--on-ink); }
-  .ev h3 small { color: #ff7a72; }
-  .ev .go { color: var(--volt); }
-  .ev .winner { color: #fff; }
-  .ev .bd:not(.live):not(.res):not(.sched) { background: rgba(255, 255, 255, .12); color: #fff; }
-  .ev .status.done { background: rgba(255, 255, 255, .12); color: var(--on-ink); }
-  .ev .status { color: var(--on-ink); }
-  .ev .status.soon { color: var(--ink); }
-  .ev:hover h3 { color: var(--volt); }
-  /* Majors: a wide feature card with a photo and the champion */
-  .ev.feat { background: var(--ink); color: #fff; }
-
-
-  /* Champion: anchored from the top so the face is always in the card; the body runs off the bottom */
-  .ev .champ { position: absolute; z-index: 1; right: 6%; top: 10%; bottom: auto; height: 135%; width: auto; filter: drop-shadow(0 10px 20px rgba(0, 0, 0, .5)); }
-  .ev.feat .ev-date { background: var(--volt); color: var(--ink); }
-  .ev.feat .ev-date .wd, .ev.feat .ev-date .mo { color: var(--ink); }
-  .ev.feat h3 { font-size: 24px; }
-  .ev.feat .where, .ev.feat .len { color: var(--on-ink); }
-  .ev.feat .bd:not(.live):not(.res):not(.sched) { background: rgba(255, 255, 255, .12); color: #fff; }
-  .ev.feat .go { color: var(--volt); }
-  .ev.feat .winner { color: #fff; }
-  .ev:hover { transform: translateY(-3px); box-shadow: var(--shadow); }
-  .ev-date { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; border-radius: 16px; background: var(--ink); color: #fff; padding: 10px 0; min-height: 96px; }
-  .ev-date b { font-size: 40px; line-height: .9; }
-  .ev-date .wd, .ev-date .mo { font-size: 11px; font-weight: 800; letter-spacing: .14em; text-transform: uppercase; color: var(--on-ink); }
-  .ev-main { display: flex; flex-direction: column; min-width: 0; gap: 4px; }
-  .ev-top { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
-  .len { font-size: 11px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
-  .ev h3 { font-size: 20px; margin-top: 6px; }
-  .ev h3 small { display: block; font-family: var(--body); font-size: 13px; font-weight: 700; letter-spacing: 0; color: var(--red); margin-top: 2px; }
-  .ev:hover h3 { color: var(--red); }
-  .where { font-size: 13px; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-  .ev-foot { margin-top: auto; padding-top: 8px; display: flex; align-items: center; justify-content: space-between; gap: 10px; }
-  .go { font-weight: 800; color: var(--muted); transition: transform .3s var(--spring), color .2s; }
-  .ev:hover .go { transform: translateX(4px); color: var(--ink); }
-  .status { font-size: 12px; font-weight: 800; color: var(--muted); letter-spacing: .02em; }
-  .status.soon { color: var(--ink); background: var(--volt); padding: 3px 10px; border-radius: 999px; }
-  .status.done { background: var(--paper-2); padding: 3px 10px; border-radius: 999px; }
-  .winner { display: inline-flex; align-items: center; gap: 8px; font-weight: 700; font-size: 14px; line-height: 1.15; min-width: 0; }
-  .winner small { display: block; font-size: 10px; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; color: var(--gold); }
-  .winner .avatar { box-shadow: 0 0 0 2px var(--gold); }
-
-  /* On now: the dark live tile */
-  .ev.live { background: var(--ink); color: #fff; box-shadow: 0 0 0 2px var(--red), 0 20px 40px -18px rgba(232, 54, 45, .5); }
-  .ev.live .ev-date { background: var(--red); }
-  .ev.live .ev-date .wd, .ev.live .ev-date .mo { color: #fff; }
-  .ev.live .where, .ev.live .len { color: var(--on-ink); }
-  .ev.live h3 small { color: var(--volt); }
-  .ev.live .go { color: var(--volt); }
-  .ev.past { opacity: .8; }
-  .ev.past .ev-date { background: rgba(255, 255, 255, .06); color: var(--on-ink-2); }
-  .ev.past .ev-date .wd, .ev.past .ev-date .mo { color: var(--on-ink-2); }
-  .ev.past .ev-art img:not(.champ) { filter: grayscale(.6); }
-  .ev.past:hover { opacity: 1; }
-
-  /* Phones: the filters scroll away instead of covering the list */
   @media (max-width: 640px) { .controls { position: static; background: none; } .chips { flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none; } .chip { white-space: nowrap; } }
-  @media (max-width: 760px) { .ev, .ev.feat { grid-template-columns: 64px minmax(0, 1fr); } .ev .ev-art { inset: 0; width: auto; } .ev .ev-art img:not(.champ) { opacity: .45; } .ev .ev-art::after { background: linear-gradient(100deg, var(--ink) 25%, rgba(11, 12, 16, .55) 75%, rgba(11, 12, 16, .3)); } .ev.feat .ev-date, .ev.feat .ev-main { position: relative; z-index: 1; } .ev .champ { top: 12%; height: 130%; right: 2%; opacity: .55; } }
-  @media (max-width: 420px) { .grid { grid-template-columns: 1fr; } .ev { grid-template-columns: 64px minmax(0, 1fr); gap: 12px; } .ev-date b { font-size: 34px; } }
 </style>

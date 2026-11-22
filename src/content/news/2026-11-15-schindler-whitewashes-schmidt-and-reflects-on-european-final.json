@@ -5,16 +5,30 @@
  "standfirst": "Martin Schindler opened his Grand Slam campaign with a 5-0 win over fellow German Jan Schmidt in Group N, needing several match darts.",
  "body": [
   "Martin Schindler won his first match at the Grand Slam of Darts in Wolverhampton on Sunday, beating compatriot Jan Schmidt 5-0 to open his Group N campaign.",
-  "The scoreline flattered the contest slightly. Schindler needed several match darts before he closed it out, and he said afterwards that Schmidt had not put enough pressure on him at the finish. He felt the scoring had been there but that the doubles could have made it easier, and was happy to accept a whitewash all the same, according to Dartsnews.",
+  "The scoreline flattered the contest slightly. Schindler needed several match darts before he closed it out, and he said afterwards that Schmidt had not put enough pressure on him at the finish. He felt the scoring had been there but that the doubles could have made it easier, and was happy to accept a whitewash all the same.",
   "Much of the post-match conversation looked back to the European Championship, where Schindler reached his first major final a few weeks ago and lost to Ross Smith. He admitted the run had felt like a fever dream, with no time to process it at the time, and that he was still coming to terms with it.",
   "He said he was glad to be at the Grand Slam on the back of that run, but was not arriving expecting to repeat it. He intends to try his best without piling pressure on himself, having already been in a final once.",
   "Schindler's group stage continues on Tuesday against Chris Dobey, who beat Schmidt 5-2 in his own opener. Only the group winner progresses in the three-player format, so that meeting looks pivotal."
  ],
- "tags": ["Grand Slam of Darts"],
- "players": ["Martin Schindler", "Jan Schmidt", "Chris Dobey"],
- "sources": [{"name": "Dartsnews", "url": "https://dartsnews.com/pdc/i-want-to-say-the-same-as-gary-anderson-does-leave-that-kid-alone-martin-schindler-stands-up-for-his-compatriot-after-a-painful-5-0-defeat-at-the-grand-slam-of-darts", "title": "\"I want to say the same as Gary Anderson does: leave that kid alone\": Martin Schindler stands up for his compatriot after a painful 5-0 defeat at the Grand Slam of Darts"}],
- "originalTitles": ["\"I want to say the same as Gary Anderson does: leave that kid alone\": Martin Schindler stands up for his compatriot after a painful 5-0 defeat at the Grand Slam of Darts"],
- "writtenBy": "The Oche newsdesk (Claude)",
+ "tags": [
+  "Grand Slam of Darts"
+ ],
+ "players": [
+  "Martin Schindler",
+  "Jan Schmidt",
+  "Chris Dobey"
+ ],
+ "sources": [
+  {
+   "name": "Dartsnews",
+   "url": "https://dartsnews.com/pdc/i-want-to-say-the-same-as-gary-anderson-does-leave-that-kid-alone-martin-schindler-stands-up-for-his-compatriot-after-a-painful-5-0-defeat-at-the-grand-slam-of-darts",
+   "title": "\"I want to say the same as Gary Anderson does: leave that kid alone\": Martin Schindler stands up for his compatriot after a painful 5-0 defeat at the Grand Slam of Darts"
+  }
+ ],
+ "originalTitles": [
+  "\"I want to say the same as Gary Anderson does: leave that kid alone\": Martin Schindler stands up for his compatriot after a painful 5-0 defeat at the Grand Slam of Darts"
+ ],
+ "writtenBy": "The Oche newsdesk",
  "tournament": "10871",
  "kind": "report"
 }

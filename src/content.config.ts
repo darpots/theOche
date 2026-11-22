@@ -11,6 +11,7 @@ const news = defineCollection({
     body: z.array(z.string()).min(1),
     tags: z.array(z.string()).default([]),
     players: z.array(z.string()).default([]),
+    // Research only: never shown on the site (it powers duplicate checks).
     sources: z.array(z.object({ name: z.string(), url: z.string().url(), title: z.string().optional() })).min(1),
     originalTitles: z.array(z.string()).optional(),
     writtenBy: z.string().optional(),
@@ -18,7 +19,11 @@ const news = defineCollection({
     // Data-led formats: 'match-report' (notable TV match), 'session' (results round-up of a
     // session), 'numbers' (numbers of the day), 'preview', 'analysis', 'movers' (weekly rankings);
     // 'talking-points' after a session; 'gear' = equipment launches (kept to a small share).
-    kind: z.enum(['report', 'recap', 'match-report', 'session', 'numbers', 'talking-points', 'movers', 'preview', 'analysis', 'gear']).default('report'),
+    kind: z.enum(['report', 'recap', 'match-report', 'session', 'numbers', 'talking-points', 'movers', 'preview', 'analysis', 'gear', 'morning', 'winners-losers', 'feature']).default('report'),
+    // Fixture ids a preview covers: it drops off the site once the first starts.
+    matches: z.array(z.string()).optional(),
+    // A preview's "Oche Verdict": our pick for the headline tie.
+    verdict: z.object({ pick: z.string(), score: z.string().optional() }).optional(),
     // Facts file the story was written from (data/news-facts/<facts>.json); the checker verifies its numbers.
     facts: z.string().optional(),
     // Set when a story is revised (a quote added, a correction): shown on the article.

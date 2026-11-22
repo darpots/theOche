@@ -157,7 +157,7 @@ const av = (name: string) => { const [c1, c2] = avatarColours(name); return `--c
         if (live) {
           const drops: string[] = found?.dropNames || [];
           const list = drops.length ? drops.map(d => `<b>${esc(d)}</b>`).join(' and ') : 'events from two years ago';
-          note.innerHTML = `<span class="live-dot">Live</span> Projected standings at the end of the <b>${esc(event.name.replace(/^\d{4}\s+/, ''))}</b>. The PDC drops prize money 104 weeks after it was won, so money from the ${list} is <span class="minus">expiring</span>, and money players have guaranteed in this event so far counts as <span class="plus">won</span>. The red or green chip shows each player's net change (hover “expiring” to see which events); the volt chip shows how far they've got in the ${esc(event.name.replace(/^\d{4}\s+/, ''))}. <b>Updated daily</b>${found?.updatedAt ? ` (last at ${new Date(found.updatedAt).toLocaleString('en-GB', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit', timeZone: 'Europe/London' })})` : ''}; positions settle when the PDC publishes the official list after the final.`;
+          note.innerHTML = `<span class="live-dot">Live</span> Projected standings after the <b>${esc(event.name.replace(/^\d{4}\s+/, ''))}</b>, updated daily${found?.updatedAt ? ` (${new Date(found.updatedAt).toLocaleString('en-GB', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit', timeZone: 'Europe/London' })})` : ''}. <details class="how"><summary>How the live race works</summary>The PDC drops prize money 104 weeks after it was won, so money from the ${list} is <span class="minus">expiring</span>, and money players have guaranteed in this event so far counts as <span class="plus">won</span>. The red or green chip shows each player's net change (hover “expiring” to see which events); the volt chip shows how far they've got in the ${esc(event.name.replace(/^\d{4}\s+/, ''))}. Positions settle when the PDC publishes the official list after the final.</details>`;
         }
         asof.textContent = live ? `Movement shown against the official list` : `${official.length} ranked players · official PDC list`;
       };
@@ -202,7 +202,7 @@ const av = (name: string) => { const [c1, c2] = avatarColours(name); return `--c
   .tools #asof { grid-column: -2 / -1; justify-self: end; text-align: right; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 100%; }
   .onlyev.off { visibility: hidden; }
   .search { display: flex; align-items: center; gap: 10px; background: var(--card); border: 1px solid var(--line); border-radius: 999px; padding: 0 16px; min-width: 0; box-shadow: var(--shadow-sm); transition: box-shadow .2s, border-color .2s; }
-  .search:focus-within { border-color: var(--ink); box-shadow: 0 0 0 4px rgba(20, 22, 31, .08); }
+  .search:focus-within { border-color: var(--fg); box-shadow: 0 0 0 4px rgba(20, 22, 31, .08); }
   .search input { border: 0; outline: 0; background: none; font: inherit; padding: 12px 0; width: 100%; }
   .small { font-size: 13px; }
   .table { overflow: hidden; }
@@ -211,12 +211,12 @@ const av = (name: string) => { const [c1, c2] = avatarColours(name); return `--c
   .tr.nomatch { display: none; }
   .th { font-size: 12px; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); background: var(--paper-2); }
   .tr.clickable { cursor: pointer; transition: background .2s, transform .25s var(--ease); }
-  .tr.clickable:hover { background: #fffaf0; }
-  .tr.clickable:hover .who b { color: var(--red); }
+  .tr.clickable:hover { background: var(--hover); }
+  .tr.clickable:hover .who b { color: var(--red-text); }
   .tr:disabled { cursor: default; opacity: .85; }
   .pos { font-family: var(--poster); font-weight: 400; font-size: 26px; display: flex; align-items: center; gap: 6px; }
   .pos :global(i) { font-style: normal; font-family: var(--body); font-size: 14px; font-weight: 800; }
-  :global(.up) { color: var(--green); } :global(.down) { color: var(--red); }
+  :global(.up) { color: var(--green); } :global(.down) { color: var(--red-text); }
   .who { display: flex; align-items: center; gap: 12px; min-width: 0; }
   .who > span:last-child { display: flex; flex-direction: column; min-width: 0; }
   .who b { transition: color .2s; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
@@ -227,10 +227,10 @@ const av = (name: string) => { const [c1, c2] = avatarColours(name); return `--c
   .money-cell :global(.delta .br) { line-height: 1.3; }
   .mode { display: inline-flex; padding: 4px; gap: 2px; background: var(--paper-2); border: 1px solid var(--line); border-radius: 999px; }
   .seg { border: 0; background: none; padding: 7px 14px; border-radius: 999px; font-weight: 700; font-size: 13px; cursor: pointer; display: inline-flex; align-items: center; gap: 7px; color: var(--muted); transition: background .25s, color .25s, box-shadow .25s; }
-  .seg[aria-pressed='true'] { background: var(--card); color: var(--ink); box-shadow: var(--shadow-sm); }
+  .seg[aria-pressed='true'] { background: var(--card); color: var(--fg); box-shadow: var(--shadow-sm); }
   .onlyev { display: inline-flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 700; cursor: pointer; }
-  .onlyev input { accent-color: var(--ink); width: 16px; height: 16px; }
-  :global(.spark) { color: var(--ink-2); vertical-align: middle; margin-right: 12px; }
+  .onlyev input { accent-color: var(--fg); width: 16px; height: 16px; }
+  :global(.spark) { color: var(--fg-2); vertical-align: middle; margin-right: 12px; }
   .avgcell { display: flex; align-items: center; justify-content: flex-end; }
   .avgcell b { font-variant-numeric: tabular-nums; min-width: 5ch; text-align: right; }
   .ldot { width: 8px; height: 8px; border-radius: 50%; background: var(--red); animation: pulse 1.6s infinite; }
@@ -242,7 +242,7 @@ const av = (name: string) => { const [c1, c2] = avatarColours(name); return `--c
   .netslot:empty { display: none; }
   /* One pill size for the net change and the progress chip */
   :global(.money-cell .net), :global(.stage-chip) { display: inline-flex; align-items: center; height: 20px; padding: 0 8px; border-radius: 999px; font-size: 11px; font-weight: 800; line-height: 1; white-space: nowrap; font-variant-numeric: tabular-nums; }
-  :global(.money-cell .net.up) { background: var(--green-soft); color: #075c3f; }
+  :global(.money-cell .net.up) { background: var(--green-soft); color: var(--green-text); }
   :global(.money-cell .net.down) { background: var(--red-soft); color: #a3221a; }
   :global(.money-cell .net.flat) { background: var(--paper-2); color: var(--muted); }
   /* Fixed tracks: chips line up on the left, won and expiring line up on the right */
@@ -291,4 +291,7 @@ const av = (name: string) => { const [c1, c2] = avatarColours(name); return `--c
     :global(.stage-chip .full) { display: none; }
     :global(.stage-chip .abbr) { display: inline !important; }
   }
+  :global(details.how) { display: inline; }
+  :global(details.how summary) { display: inline; cursor: pointer; font-weight: 700; text-decoration: underline; text-underline-offset: 3px; }
+  :global(details.how[open]) { display: block; margin-top: 8px; }
 </style>

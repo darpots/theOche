@@ -48,14 +48,14 @@ const extras = Object.entries(extraPhotos as Record<string, any[]>).flatMap(([k,
     <h2 class="h">News photographs</h2>
     <ul class="grid">
       {lib.map(([key, x]) => (
-        <li class="card"><img class="sq" src={`/news-img/${key}.jpg`} alt={x.alt} loading="lazy" /><div><strong>{x.alt}</strong><span>{x.credit}</span><a href={x.licenseUrl} target="_blank" rel="noopener">{x.license}</a> · <a href={`https://commons.wikimedia.org/wiki/${encodeURIComponent(x.file.replace(/ /g, '_'))}`} target="_blank" rel="noopener">Source</a></div></li>
+        <li class="card"><img class="sq" src={`/news-img/${key}-600.webp`} alt={x.alt} loading="lazy" /><div><strong>{x.alt}</strong><span>{x.credit}</span><a href={x.licenseUrl} target="_blank" rel="noopener">{x.license}</a> · <a href={`https://commons.wikimedia.org/wiki/${encodeURIComponent(x.file.replace(/ /g, '_'))}`} target="_blank" rel="noopener">Source</a></div></li>
       ))}
     </ul>
   </section>
 </Layout>
 <style>
   .h { font-size: 22px; margin: 28px 0 12px; }
-  .src { color: var(--ink-2); }
+  .src { color: var(--fg-2); }
   .grid { list-style: none; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 12px; }
   .grid li { display: flex; gap: 12px; align-items: center; padding: 10px; font-size: 13px; }
   .grid img { width: 56px; height: 56px; border-radius: 50%; object-fit: cover; object-position: 50% 18%; }
