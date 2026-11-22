@@ -1,0 +1,113 @@
+{
+ "event": "Grand Slam of Darts",
+ "date": "2026-11-22",
+ "kind": "preview",
+ "matches": [
+  {
+   "fixture": "517027",
+   "stage": "Semi-Final",
+   "format": "First to 16 legs",
+   "time": "1:15pm GMT",
+   "winnerGuaranteed": "£100,000",
+   "losersTake": "£60,000",
+   "players": [
+    {
+     "name": "Kevin Doets",
+     "worldRank": 23,
+     "last12Months": {
+      "average": 96.53,
+      "won": 128,
+      "played": 181,
+      "titles": 1
+     },
+     "last5": [
+      "W 16-7 v Jermaine Wattimena",
+      "W 10-5 v Cameron Menzies",
+      "W 5-1 v Tommy Morris",
+      "W 5-3 v Josh Rock",
+      "L 5-6 v Stefan Bellmont"
+     ],
+     "previousBestAtEvent": "first appearance on record"
+    },
+    {
+     "name": "Gerwyn Price",
+     "worldRank": 4,
+     "last12Months": {
+      "average": 98.66,
+      "won": 95,
+      "played": 138,
+      "titles": 4
+     },
+     "last5": [
+      "W 16-15 v Niko Springer",
+      "W 10-7 v Ryan Searle",
+      "W 5-2 v Sebastian Bialecki",
+      "W 5-3 v Joe Hunt",
+      "L 2-6 v Luke Humphries"
+     ],
+     "previousBestAtEvent": "Winner (2018)"
+    }
+   ],
+   "headToHead": {
+    "meetings": 7,
+    "wins": {
+     "Kevin Doets": 2,
+     "Gerwyn Price": 5
+    }
+   }
+  },
+  {
+   "fixture": "517028",
+   "stage": "Semi-Final",
+   "format": "First to 16 legs",
+   "time": "2:45pm GMT",
+   "winnerGuaranteed": "£100,000",
+   "losersTake": "£60,000",
+   "players": [
+    {
+     "name": "Michael van Gerwen",
+     "worldRank": 11,
+     "last12Months": {
+      "average": 96.22,
+      "won": 93,
+      "played": 148,
+      "titles": 4
+     },
+     "last5": [
+      "W 10-8 v James Wade",
+      "W 5-4 v Jeffrey De Graaf",
+      "W 5-4 v Henry Coates",
+      "L 3-6 v Luke Humphries",
+      "W 6-3 v Derek Coulson"
+     ],
+     "previousBestAtEvent": "Winner (2017)"
+    },
+    {
+     "name": "Gian van Veen",
+     "worldRank": 3,
+     "last12Months": {
+      "average": 95.28,
+      "won": 98,
+      "played": 162,
+      "titles": 0
+     },
+     "last5": [
+      "W 10-7 v Martin Schindler",
+      "W 5-2 v Bradley Brooks",
+      "W 5-2 v Carl Sneyd",
+      "L 4-6 v Jeffrey De Graaf",
+      "W 6-3 v Jim Long"
+     ],
+     "previousBestAtEvent": "Quarter-Final (2024)"
+    }
+   ],
+   "headToHead": {
+    "meetings": 14,
+    "wins": {
+     "Michael van Gerwen": 10,
+     "Gian van Veen": 4
+    }
+   }
+  }
+ ]
+}
