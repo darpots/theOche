@@ -481,8 +481,8 @@ export function legResult(leg) {
   return { left: [left(true), left(false)], winner: fin.isParticipant1 ? 0 : 1, leg: leg.legNumber };
 }
 
-/** How long without a dart counts as a break. Real gaps between legs: 9–36s; the breaks after every fifth leg: 4–6 minutes. */
-export const BREAK_AFTER = 90_000;
+/** How long without a dart counts as a break. Across all 62 matches of the 2026 Grand Slam: normal changes of leg 12-18s typically, longest 48s; the 27 breaks (after every fifth leg in the knockout rounds) ran 4-5¾ minutes. 50s catches every break and no normal change. */
+export const BREAK_AFTER = 50_000;
 /**
  * PDC's live data has no break flag, so: a leg with no darts in it yet, and the
  * last dart (end of the previous leg) more than BREAK_AFTER ago.
