@@ -153,7 +153,7 @@ const fullTitle = title === 'The Oche' ? title : `${title} · The Oche`;
 
     <script>
       import { liveScore } from '../lib/pdc.mjs';
-    import { ukTime } from '../lib/format.mjs';
+    import { ukTime, scoreHtml } from '../lib/format.mjs';
     import { followed, notifyLive } from '../lib/follow.mjs';
       import { liveFor, watchLive, isPushing, LIVE_TICK, PUSH_TICK } from '../lib/live-client.mjs';
       // Scroll-reveal + the sliding nav pill.
@@ -268,7 +268,7 @@ const fullTitle = title === 'The Oche' ? title : `${title} · The Oche`;
             // Upcoming: "A v B" then the start time in its own pill, so a time never reads as a score.
             const chip = (f: any, kind: string) => kind === 'next'
               ? `<a class="lb-m next" href="/match?id=${f.fixtureID}"><span>${esc(surname(f.participant1))}</span><i class="lb-v">v</i><span>${esc(surname(f.participant2))}</span>${ukTime(f.startTime, f.startDate) ? `<time class="lb-t" aria-label="starts at ${esc(ukTime(f.startTime, f.startDate))}">${esc(ukTime(f.startTime, f.startDate))}</time>` : ''}</a>`
-              : `<a class="lb-m ${kind}" href="/match?id=${f.fixtureID}">${starred(f) ? '<i class="lb-fav" aria-label="You follow a player in this match">★</i>' : ''}<span>${esc(surname(f.participant1))}</span><b>${kind === 'now' && !/live|progress|result/i.test(f.status) ? 'v' : `${f.participant1Score ?? 0}–${f.participant2Score ?? 0}`}</b><span>${esc(surname(f.participant2))}</span></a>`;
+              : `<a class="lb-m ${kind}" href="/match?id=${f.fixtureID}">${starred(f) ? '<i class="lb-fav" aria-label="You follow a player in this match">★</i>' : ''}<span>${esc(surname(f.participant1))}</span><b>${kind === 'now' && !/live|progress|result/i.test(f.status) ? 'v' : scoreHtml(f.participant1Score, f.participant2Score)}</b><span>${esc(surname(f.participant2))}</span></a>`;
             let html = '';
             const ln = document.getElementById('livenav') as HTMLAnchorElement | null;
             if (ln) {

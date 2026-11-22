@@ -213,3 +213,6 @@ h1, h2, h3 { text-wrap: balance; hyphens: none; }
 /* Reduced motion: no zoom or wobble, just on and off (beats the site-wide rule that shortens every animation) */
 @keyframes leg-flash-fade { 0%, 85% { opacity: 1; } 100% { opacity: 0; } }
 @media (prefers-reduced-motion: reduce) { .leg-flash { animation-name: leg-flash-fade !important; animation-duration: 3s !important; } }
+
+/* Score dash (scoreHtml): heavier and spaced, so 1–0 never reads as 10 in the condensed numerals */
+.sdash { font-style: normal; font-family: var(--body); font-weight: 800; font-size: .62em; margin: 0 .32em; opacity: .65; vertical-align: .14em; letter-spacing: 0; }

@@ -53,7 +53,7 @@ import Layout from '../layouts/Layout.astro';
     import { checkout } from '../lib/checkout.mjs';
     import { fetchH2H, h2hSummary, renderH2H } from '../lib/h2h.mjs';
     import { liveFor, watchLive, unwatch, isPushing, pushedLegFor, LIVE_TICK, PUSH_TICK } from '../lib/live-client.mjs';
-    import { ukTime } from '../lib/format.mjs';
+    import { ukTime, scoreHtml } from '../lib/format.mjs';
     import { watchWins, flashWin } from '../lib/leg-flash.mjs';
     import { cutoutImg, avatarSrc, pairPrefer } from '../lib/images.mjs';
 
@@ -145,7 +145,7 @@ import Layout from '../layouts/Layout.astro';
         <a class="back" href="/tournament/${tour?.tournamentID}">← ${esc((tour?.name || 'Tournament').replace(/^\d{4}\s+/, ''))}</a>
         <p class="stg">${esc(a.tournamentStage?.stage?.name || '')}${fmt ? ` · ${esc(fmt)}` : ''}${status === 'Live' ? ' · <span class="live-dot">Live</span>' : ` · ${status === 'Result' ? 'Result' : when}`}</p>
         <div class="duel">${side(0)}
-          <div class="score${Math.max(a.participant1Score ?? 0, a.participant2Score ?? 0) >= 10 ? ' wide' : ''}">${status === 'Upcoming' ? '<b class="vs">v</b>' : `<div class="sc-n"><b>${a.participant1Score ?? 0}</b><span>–</span><b>${a.participant2Score ?? 0}</b></div>${sets ? `<p class="sc-sub">Sets${status === 'Live' && live ? ` · Set ${live.set || 1}, legs <b>${live.legs[0]}–${live.legs[1]}</b>` : ''}</p>` : ''}`}</div>
+          <div class="score${Math.max(a.participant1Score ?? 0, a.participant2Score ?? 0) >= 10 ? ' wide' : ''}">${status === 'Upcoming' ? '<b class="vs">v</b>' : `<div class="sc-n"><b>${a.participant1Score ?? 0}</b><span>–</span><b>${a.participant2Score ?? 0}</b></div>${sets ? `<p class="sc-sub">Sets${status === 'Live' && live ? ` · Set ${live.set || 1}, legs <b>${scoreHtml(live.legs[0], live.legs[1])}</b>` : ''}</p>` : ''}`}</div>
           ${side(1)}</div>`;
     }
 
@@ -205,7 +205,7 @@ import Layout from '../layouts/Layout.astro';
         const who = w == null
           ? `<span class="ip">In play</span>`
           : `<i class="dot" style="background:${C[w]}"></i>${esc(names[w])}${w !== l.starter ? ' <span class="brk">Break</span>' : ''}`;
-        return `<tr${w == null ? ' class="open"' : ''}><td class="lg-n">${multiSet ? `${l.set}.` : ''}${l.n}</td><td class="lg-w">${who}</td><td class="n">${ws?.darts ?? '–'}</td><td class="n">${ws?.checkout ?? '–'}</td><td class="n sc">${w == null ? '' : `${tally[0]}–${tally[1]}`}</td></tr>`;
+        return `<tr${w == null ? ' class="open"' : ''}><td class="lg-n">${multiSet ? `${l.set}.` : ''}${l.n}</td><td class="lg-w">${who}</td><td class="n">${ws?.darts ?? '–'}</td><td class="n">${ws?.checkout ?? '–'}</td><td class="n sc">${w == null ? '' : scoreHtml(tally[0], tally[1])}</td></tr>`;
       }).join('')}</tbody>`;
     }
 
@@ -345,7 +345,7 @@ import Layout from '../layouts/Layout.astro';
           const kpi = (v: string, label: string, hi = false) => `<div><b class="poster-num${hi ? ' hi' : ''}">${v}</b><span class="lbl">${label}</span></div>`;
           const t80 = [meta.participant1Data.score180 ?? 0, meta.participant2Data.score180 ?? 0];
           const breaks = [0, 1].map(k => won.filter(x => x.l.winner === k && x.l.starter !== k).length);
-          mh.insertAdjacentHTML('beforeend', `<div class="kpis">${kpi(`${t80[0]}–${t80[1]}`, '180s', t80[0] + t80[1] > 0)}${kpi(`${breaks[0]}–${breaks[1]}`, 'Breaks of throw')}${best ? kpi(String(best.s.checkout), `Best checkout · ${esc(names[best.l.winner])}`) : ''}${fast ? kpi(String(fast.s.darts), `Shortest leg (darts) · ${esc(names[fast.l.winner])}`) : ''}</div>`);
+          mh.insertAdjacentHTML('beforeend', `<div class="kpis">${kpi(scoreHtml(t80[0], t80[1]), '180s', t80[0] + t80[1] > 0)}${kpi(scoreHtml(breaks[0], breaks[1]), 'Breaks of throw')}${best ? kpi(String(best.s.checkout), `Best checkout · ${esc(names[best.l.winner])}`) : ''}${fast ? kpi(String(fast.s.darts), `Shortest leg (darts) · ${esc(names[fast.l.winner])}`) : ''}</div>`);
         }
         const started = !/result|live|progress/i.test(a.attributes.status) && new Date(`${a.attributes.startDate}T${(a.attributes.startTime || '23:59').slice(0, 5)}:00`) <= new Date(new Date().toLocaleString('en-US', { timeZone: 'Europe/London' }));
         const noLegs = !(t?.data?.attributes?.legs?.length);
@@ -446,7 +446,7 @@ import Layout from '../layouts/Layout.astro';
   .mh-in :global(.score b) { font-family: var(--poster); font-weight: 400; font-size: clamp(110px, 16vw, 260px); line-height: .86; color: var(--volt); font-variant-numeric: tabular-nums; }
   .mh-in :global(.score b.vs) { color: #fff; }
   .mh-in :global(.score .vs) { font-size: 56px; color: rgba(255, 255, 255, .5); }
-  .mh-in :global(.score span) { font-family: var(--poster); font-size: clamp(60px, 8vw, 140px); color: #3a3d47; }
+  .mh-in :global(.score span) { font-family: var(--poster); font-size: clamp(60px, 8vw, 140px); color: rgba(255, 255, 255, .45); }
   .mh-in :global(.score small) { position: absolute; }
   .mh-in :global(.score small) { display: none; }
 

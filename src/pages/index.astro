@@ -9,7 +9,7 @@ import rankings from '../data/rankings.json';
 import liveRaceData from '../data/live-race.json';
 import { tvBadge, flag, surnameOf } from '../lib/pdc.mjs';
 import { cutout } from '../lib/images.mjs';
-import { newsDate, dayNum, monthShort, dateRange, money, shortDate } from '../lib/format.mjs';
+import { newsDate, dayNum, monthShort, dateRange, money, shortDate, scoreHtml } from '../lib/format.mjs';
 import { matchday, featureTile, nextTileInner } from '../lib/feature.mjs';
 import NewsArt from '../components/NewsArt.astro';
 import { loadProfile } from '../lib/players';
@@ -78,7 +78,7 @@ const spot = loadProfile(spotRank.id);
               <li><a href={`/match?id=${f.id}`}>
                 <span class="rd">{shortDate(f.date)}</span>
                 <span class:list={['rn', { w: f.winner === f.p1.id }]}>{surnameOf(f.p1)}</span>
-                <span class="poster-num rs">{f.s1}–{f.s2}</span>
+                <span class="poster-num rs" set:html={scoreHtml(f.s1, f.s2)} />
                 <span class:list={['rn', 'r', { w: f.winner === f.p2.id }]}>{surnameOf(f.p2)}</span>
               </a></li>
             ))}
@@ -170,7 +170,7 @@ const spot = loadProfile(spotRank.id);
     import { liveFor, watchLive, unwatch, isPushing, currentLeg, LIVE_TICK, PUSH_TICK } from '../lib/live-client.mjs';
     import { matchday, featureTile, nextTileInner } from '../lib/feature.mjs';
     import { watchWins } from '../lib/leg-flash.mjs';
-    import { shortDate } from '../lib/format.mjs';
+    import { shortDate, scoreHtml } from '../lib/format.mjs';
 
     let timer: number | undefined;
     function init() {
@@ -229,7 +229,7 @@ const spot = loadProfile(spotRank.id);
               const todays = md.results.filter((f: any) => f.date === today());
               const list = (todays.length ? todays : md.results).slice(0, 5);
               const e = (x: unknown) => String(x ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]!);
-              draw(ol, list.map((f: any) => `<li><a href="/match?id=${e(f.id)}"><span class="rd">${e(shortDate(f.date))}</span><span class="rn${f.winner === f.p1.id ? ' w' : ''}">${e(surnameOf(f.p1))}</span><span class="poster-num rs">${f.s1}–${f.s2}</span><span class="rn r${f.winner === f.p2.id ? ' w' : ''}">${e(surnameOf(f.p2))}</span></a></li>`).join(''));
+              draw(ol, list.map((f: any) => `<li><a href="/match?id=${e(f.id)}"><span class="rd">${e(shortDate(f.date))}</span><span class="rn${f.winner === f.p1.id ? ' w' : ''}">${e(surnameOf(f.p1))}</span><span class="poster-num rs">${scoreHtml(f.s1, f.s2)}</span><span class="rn r${f.winner === f.p2.id ? ' w' : ''}">${e(surnameOf(f.p2))}</span></a></li>`).join(''));
             }
           } catch { /* keep what we have */ }
         };
@@ -273,7 +273,7 @@ const spot = loadProfile(spotRank.id);
   .feature :global(.ft-ini span) { font-family: var(--poster); font-size: 64px; color: var(--volt); margin-top: 40%; text-shadow: 0 2px 10px rgba(0, 0, 0, .8); }
   .feature :global(.ft-mid) { position: relative; z-index: 1; text-align: center; padding-bottom: 64px; }
   .feature :global(.ft-score) { font-size: clamp(110px, 13vw, 200px); color: var(--volt); }
-  .feature :global(.ft-score span) { color: #3a3d47; padding: 0 .08em; }
+  .feature :global(.ft-score span) { color: rgba(255, 255, 255, .45); padding: 0 .12em; }
   .feature :global(.ft-vs) { color: #fff; }
   .feature :global(.ft-sub) { color: var(--on-ink-2); margin-top: 14px; }
   .feature :global(.ft-pulse) { display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: var(--red); margin-right: 7px; vertical-align: 1px; animation: pulse 1.6s infinite; }

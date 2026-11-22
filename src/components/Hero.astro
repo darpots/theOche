@@ -7,7 +7,7 @@ import data from '../data/tournament.json';
 import rankings from '../data/rankings.json';
 import cutouts from '../data/cutouts.json';
 import { keyName, flag, tvBadge } from '../lib/pdc.mjs';
-import { dateRange } from '../lib/format.mjs';
+import { dateRange, scoreHtml } from '../lib/format.mjs';
 
 const cut = cutouts as Record<string, string>;
 const today = new Date().toISOString().slice(0, 10);
@@ -54,7 +54,7 @@ const upcoming = t.stages.flatMap(s => s.fixtures).filter(f => f.status !== 'res
   .sort((a, b) => `${a.date}${a.time}`.localeCompare(`${b.date}${b.time}`)).slice(0, 10);
 const short = (n: string) => n.split(' ').slice(-1)[0];
 const ticker = mode === 'next' ? [] : results.length
-  ? results.map(f => ({ a: short(f.p1!.name), b: short(f.p2!.name), s: `${f.s1}–${f.s2}`, aw: f.winner === f.p1!.id, bw: f.winner === f.p2!.id }))
+  ? results.map(f => ({ a: short(f.p1!.name), b: short(f.p2!.name), s: scoreHtml(f.s1, f.s2), aw: f.winner === f.p1!.id, bw: f.winner === f.p2!.id }))
   : upcoming.map(f => ({ a: short(f.p1!.name), b: short(f.p2!.name), s: f.time || 'vs', aw: false, bw: false }));
 
 const big = ev.name.replace(/ of Darts$| Darts$/i, '').toUpperCase();
@@ -103,7 +103,7 @@ const label = { live: 'Live now', soon: 'Starts soon', champion: 'Champion crown
         <div class="tk-track">
           <div class="tk-run">
             {[...ticker, ...ticker].map(r => (
-              <span class="tk-item"><span class:list={{ w: r.aw }}>{r.a}</span><b>{r.s}</b><span class:list={{ w: r.bw }}>{r.b}</span></span>
+              <span class="tk-item"><span class:list={{ w: r.aw }}>{r.a}</span><b set:html={r.s} /><span class:list={{ w: r.bw }}>{r.b}</span></span>
             ))}
           </div>
         </div>

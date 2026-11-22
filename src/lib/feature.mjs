@@ -5,7 +5,7 @@
 // biggest thing, each player's score left in the leg comes second, and the
 // averages are small and labelled. Set play also shows the legs in the set.
 import { flag, formatLabel, surnameOf } from './pdc.mjs';
-import { ukTime } from './format.mjs';
+import { ukTime, scoreHtml } from './format.mjs';
 import { avatarSrc, cutoutImg, pairPrefer } from './images.mjs';
 import { checkout } from './checkout.mjs';
 
@@ -68,7 +68,7 @@ export function featureTile(f, mode, eventName, also = []) {
     : `<span class="lbl ft-res">Result · ${esc(eventName)}</span>`;
   const inPlay = mode === 'now' && f.status === 'live';
   const legs = f.liveLegs;
-  const setLine = sets && inPlay && legs ? `<div class="ft-set">Set ${f.liveSet || 1} · legs <b>${legs[0]}–${legs[1]}</b></div>` : '';
+  const setLine = sets && inPlay && legs ? `<div class="ft-set">Set ${f.liveSet || 1} · legs <b>${scoreHtml(legs[0], legs[1])}</b></div>` : '';
   const centre = done || inPlay || (f.s1 ?? 0) + (f.s2 ?? 0) > 0
     ? `<div class="ft-score poster-num">${f.s1 ?? 0}<span>–</span>${f.s2 ?? 0}</div>${setLine}<div class="lbl ft-sub">${inPlay ? `<span class="ft-pulse"></span>Live${sets ? ' · sets' : ''}` : mode === 'now' ? 'Latest score' : `Final${sets ? ' · sets' : ''}`}</div>`
     : `<div class="ft-score ft-vs poster-num">V</div>${mode === 'now' ? '<div class="lbl ft-sub">Waiting for the first dart</div>' : ''}`;
@@ -79,7 +79,7 @@ export function featureTile(f, mode, eventName, also = []) {
     </div>`;
   const fmt = formatLabel(f.fmt);
   const others = also.length
-    ? `<div class="ft-also"><span class="lbl">Also live</span>${also.map(o => `<a href="/match?id=${esc(o.id)}">${esc(surnameOf(o.p1))} <b>${o.s1 ?? 0}–${o.s2 ?? 0}</b> ${esc(surnameOf(o.p2))}</a>`).join('')}</div>`
+    ? `<div class="ft-also"><span class="lbl">Also live</span>${also.map(o => `<a href="/match?id=${esc(o.id)}">${esc(surnameOf(o.p1))} <b>${scoreHtml(o.s1, o.s2)}</b> ${esc(surnameOf(o.p2))}</a>`).join('')}</div>`
     : '';
   return `<a class="ft-link" href="/match?id=${esc(f.id)}" aria-label="${esc(`${f.p1.name} v ${f.p2.name}`)}"></a>
     <div class="ft-top">${tag}<span class="lbl ft-stage">${esc(f.stage || '')}${fmt ? ` · ${esc(fmt)}` : ''}${inPlay && f.legNow ? ` · Leg ${f.legNow.leg}` : ''}</span></div>

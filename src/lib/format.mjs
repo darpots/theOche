@@ -16,6 +16,9 @@ export function dateRange(start, end) {
   return `${fmt(start, { day: 'numeric', month: 'short', ...(sameYear ? {} : { year: 'numeric' }) })} – ${fmt(end, { day: 'numeric', month: 'short', year: 'numeric' })}`;
 }
 
+/** A score as HTML ("1–0"): the dash in the body font, spaced, so a condensed 1-0 never reads as 10. */
+export const scoreHtml = (a, b) => `${a ?? 0}<i class="sdash">–</i>${b ?? 0}`;
+
 export const money = n => '£' + Math.round(n).toLocaleString('en-GB');
 
 export function relativeDays(iso, now = new Date()) {
