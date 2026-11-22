@@ -1,0 +1,60 @@
+{
+ "event": "Grand Slam of Darts",
+ "date": "2026-11-22",
+ "kind": "preview",
+ "matches": [
+  {
+   "fixture": "517029",
+   "stage": "Final",
+   "format": "First to 16 legs",
+   "time": "7:45pm GMT",
+   "winnerGuaranteed": null,
+   "losersTake": "£100,000",
+   "players": [
+    {
+     "name": "Gerwyn Price",
+     "worldRank": 4,
+     "last12Months": {
+      "average": 98.66,
+      "won": 95,
+      "played": 138,
+      "titles": 4
+     },
+     "last5": [
+      "W 16-15 v Niko Springer",
+      "W 10-7 v Ryan Searle",
+      "W 5-2 v Sebastian Bialecki",
+      "W 5-3 v Joe Hunt",
+      "L 2-6 v Luke Humphries"
+     ],
+     "previousBestAtEvent": "Winner (2018)"
+    },
+    {
+     "name": "Gian van Veen",
+     "worldRank": 3,
+     "last12Months": {
+      "average": 95.27,
+      "won": 99,
+      "played": 163,
+      "titles": 0
+     },
+     "last5": [
+      "W 16-14 v Nathan Aspinall",
+      "W 10-7 v Martin Schindler",
+      "W 5-2 v Bradley Brooks",
+      "W 5-2 v Carl Sneyd",
+      "L 4-6 v Jeffrey De Graaf"
+     ],
+     "previousBestAtEvent": "Quarter-Final (2024)"
+    }
+   ],
+   "headToHead": {
+    "meetings": 17,
+    "wins": {
+     "Gerwyn Price": 14,
+     "Gian van Veen": 3
+    }
+   }
+  }
+ ]
+}

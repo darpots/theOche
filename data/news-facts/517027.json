@@ -1,0 +1,155 @@
+{
+ "fixture": "517027",
+ "event": "Grand Slam of Darts",
+ "stage": "Semi-Final",
+ "format": "First to 16 legs",
+ "date": "2026-11-22",
+ "venue": "Aldersley Leisure Village, Wolverhampton, Wolverhampton",
+ "winner": "Gerwyn Price",
+ "loser": "Kevin Doets",
+ "score": "16-13",
+ "angles": [
+  {
+   "angle": "run",
+   "score": 27,
+   "evidence": "Price won 6 legs in a row"
+  },
+  {
+   "angle": "result",
+   "score": 10,
+   "evidence": "Gerwyn Price beat Kevin Doets 16-13"
+  }
+ ],
+ "notable": false,
+ "players": [
+  {
+   "name": "Kevin Doets",
+   "worldRank": 23,
+   "average": 94.06,
+   "t80s": 13,
+   "checkoutPct": 30.2,
+   "highestCheckout": 83,
+   "breaks": 5,
+   "biggestLead": 2,
+   "longestRun": 3,
+   "previousBestAtEvent": "first appearance on record",
+   "form": {
+    "period": "last 12 months",
+    "played": 181,
+    "won": 128,
+    "average": 96.53,
+    "titles": 1,
+    "last5": [
+     "W 16-7 v Jermaine Wattimena",
+     "W 10-5 v Cameron Menzies",
+     "W 5-1 v Tommy Morris",
+     "W 5-3 v Josh Rock",
+     "L 5-6 v Stefan Bellmont"
+    ]
+   }
+  },
+  {
+   "name": "Gerwyn Price",
+   "worldRank": 4,
+   "average": 95.03,
+   "t80s": 5,
+   "checkoutPct": 43.2,
+   "highestCheckout": 137,
+   "breaks": 6,
+   "biggestLead": 6,
+   "longestRun": 6,
+   "previousBestAtEvent": "Winner (2018)",
+   "form": {
+    "period": "last 12 months",
+    "played": 138,
+    "won": 95,
+    "average": 98.66,
+    "titles": 4,
+    "last5": [
+     "W 16-15 v Niko Springer",
+     "W 10-7 v Ryan Searle",
+     "W 5-2 v Sebastian Bialecki",
+     "W 5-3 v Joe Hunt",
+     "L 2-6 v Luke Humphries"
+    ]
+   }
+  }
+ ],
+ "swings": {
+  "fightback": null,
+  "turningPoint": "leg 9: Price held for 5-4, finishing on 137"
+ },
+ "decidingLeg": null,
+ "bestFinish": {
+  "player": "Gerwyn Price",
+  "score": 137,
+  "leg": 9
+ },
+ "quickestLeg": {
+  "player": "Gerwyn Price",
+  "darts": 11,
+  "leg": 24
+ },
+ "nineDarters": [],
+ "finishes170": [],
+ "stakes": {
+  "loserTakes": "£60,000",
+  "winnerGuaranteed": "£100,000",
+  "next": {
+   "stage": "Final",
+   "opponent": "Gian van Veen",
+   "when": "Sunday 22 November, 7:45pm GMT"
+  }
+ },
+ "headToHead": {
+  "meetingsBefore": 7,
+  "wins": {
+   "Kevin Doets": 2,
+   "Gerwyn Price": 5
+  },
+  "lastMeeting": "2026-02-25: Players Championship 6, 4-6 (Kevin Doets first)"
+ },
+ "milestone": null,
+ "records": {
+  "highestAverageOfEvent": null,
+  "highestLosingAverage": null,
+  "bestCheckoutOfEvent": null,
+  "most180sInAMatchAtEvent": null
+ },
+ "legs": [
+  "L1: Doets (break) 13 darts, out 20 -> 1-0",
+  "L2: Doets 17 darts, out 83 -> 2-0",
+  "L3: Price 14 darts, out 100 -> 2-1",
+  "L4: Price (break) 15 darts, out 40 -> 2-2",
+  "L5: Price 14 darts, out 53 -> 2-3",
+  "L6: Price (break) 15 darts, out 78 -> 2-4",
+  "L7: Doets (break) 15 darts, out 25 -> 3-4",
+  "L8: Doets 13 darts, out 12 -> 4-4",
+  "L9: Price 12 darts, out 137 -> 4-5",
+  "L10: Price (break) 17 darts, out 40 -> 4-6",
+  "L11: Price 17 darts, out 60 -> 4-7",
+  "L12: Price (break) 15 darts, out 60 -> 4-8",
+  "L13: Price 15 darts, out 52 -> 4-9",
+  "L14: Price (break) 15 darts, out 60 -> 4-10",
+  "L15: Doets (break) 14 darts, out 50 -> 5-10",
+  "L16: Doets 17 darts, out 16 -> 6-10",
+  "L17: Price 16 darts, out 24 -> 6-11",
+  "L18: Doets 15 darts, out 82 -> 7-11",
+  "L19: Doets (break) 17 darts, out 20 -> 8-11",
+  "L20: Doets 14 darts, out 16 -> 9-11",
+  "L21: Price 18 darts, out 5 -> 9-12",
+  "L22: Doets 16 darts, out 32 -> 10-12",
+  "L23: Price 13 darts, out 40 -> 10-13",
+  "L24: Price (break) 11 darts, out 60 -> 10-14",
+  "L25: Doets (break) 14 darts, out 72 -> 11-14",
+  "L26: Doets 16 darts, out 12 -> 12-14",
+  "L27: Price 19 darts, out 20 -> 12-15",
+  "L28: Doets 23 darts, out 4 -> 13-15",
+  "L29: Price 12 darts, out 94 -> 13-16"
+ ],
+ "source": {
+  "name": "PDC",
+  "url": "https://www.pdc.tv/matches/517027",
+  "title": "Kevin Doets v Gerwyn Price"
+ }
+}

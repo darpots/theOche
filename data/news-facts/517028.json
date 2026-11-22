@@ -1,0 +1,153 @@
+{
+ "fixture": "517028",
+ "event": "Grand Slam of Darts",
+ "stage": "Semi-Final",
+ "format": "First to 16 legs",
+ "date": "2026-11-22",
+ "venue": "Aldersley Leisure Village, Wolverhampton, Wolverhampton",
+ "winner": "Gian van Veen",
+ "loser": "Michael van Gerwen",
+ "score": "16-11",
+ "angles": [
+  {
+   "angle": "run",
+   "score": 23,
+   "evidence": "van Veen won 4 legs in a row"
+  },
+  {
+   "angle": "result",
+   "score": 10,
+   "evidence": "Gian van Veen beat Michael van Gerwen 16-11"
+  }
+ ],
+ "notable": false,
+ "players": [
+  {
+   "name": "Michael van Gerwen",
+   "worldRank": 11,
+   "average": 95.47,
+   "t80s": 6,
+   "checkoutPct": 26.8,
+   "highestCheckout": 92,
+   "breaks": 4,
+   "biggestLead": 1,
+   "longestRun": 2,
+   "previousBestAtEvent": "Winner (2017)",
+   "form": {
+    "period": "last 12 months",
+    "played": 149,
+    "won": 94,
+    "average": 96.38,
+    "titles": 4,
+    "last5": [
+     "W 16-11 v Tom Sykes",
+     "W 10-8 v James Wade",
+     "W 5-4 v Jeffrey De Graaf",
+     "W 5-4 v Henry Coates",
+     "L 3-6 v Luke Humphries"
+    ]
+   }
+  },
+  {
+   "name": "Gian van Veen",
+   "worldRank": 3,
+   "average": 98.66,
+   "t80s": 6,
+   "checkoutPct": 39,
+   "highestCheckout": 124,
+   "breaks": 6,
+   "biggestLead": 5,
+   "longestRun": 4,
+   "previousBestAtEvent": "Quarter-Final (2024)",
+   "form": {
+    "period": "last 12 months",
+    "played": 163,
+    "won": 99,
+    "average": 95.27,
+    "titles": 0,
+    "last5": [
+     "W 16-14 v Nathan Aspinall",
+     "W 10-7 v Martin Schindler",
+     "W 5-2 v Bradley Brooks",
+     "W 5-2 v Carl Sneyd",
+     "L 4-6 v Jeffrey De Graaf"
+    ]
+   }
+  }
+ ],
+ "swings": {
+  "fightback": null,
+  "turningPoint": "leg 15: van Veen held for 8-7, finishing on 81"
+ },
+ "decidingLeg": null,
+ "bestFinish": {
+  "player": "Gian van Veen",
+  "score": 124,
+  "leg": 25
+ },
+ "quickestLeg": {
+  "player": "Gian van Veen",
+  "darts": 11,
+  "leg": 4
+ },
+ "nineDarters": [],
+ "finishes170": [],
+ "stakes": {
+  "loserTakes": "£60,000",
+  "winnerGuaranteed": "£100,000",
+  "next": {
+   "stage": "Final",
+   "opponent": "Gerwyn Price",
+   "when": "Sunday 22 November, 7:45pm GMT"
+  }
+ },
+ "headToHead": {
+  "meetingsBefore": 14,
+  "wins": {
+   "Michael van Gerwen": 10,
+   "Gian van Veen": 4
+  },
+  "lastMeeting": "2026-05-12: Players Championship 15, 6-4 (Michael van Gerwen first)"
+ },
+ "milestone": null,
+ "records": {
+  "highestAverageOfEvent": null,
+  "highestLosingAverage": null,
+  "bestCheckoutOfEvent": null,
+  "most180sInAMatchAtEvent": null
+ },
+ "legs": [
+  "L1: van Veen 13 darts, out 32 -> 0-1",
+  "L2: van Gerwen 14 darts, out 92 -> 1-1",
+  "L3: van Veen 16 darts, out 32 -> 1-2",
+  "L4: van Veen (break) 11 darts, out 100 -> 1-3",
+  "L5: van Gerwen (break) 14 darts, out 65 -> 2-3",
+  "L6: van Veen (break) 15 darts, out 25 -> 2-4",
+  "L7: van Gerwen (break) 14 darts, out 46 -> 3-4",
+  "L8: van Gerwen 17 darts, out 12 -> 4-4",
+  "L9: van Veen 14 darts, out 64 -> 4-5",
+  "L10: van Gerwen 13 darts, out 40 -> 5-5",
+  "L11: van Veen 19 darts, out 8 -> 5-6",
+  "L12: van Gerwen 18 darts, out 24 -> 6-6",
+  "L13: van Gerwen (break) 18 darts, out 88 -> 7-6",
+  "L14: van Veen (break) 17 darts, out 24 -> 7-7",
+  "L15: van Veen 11 darts, out 81 -> 7-8",
+  "L16: van Veen (break) 16 darts, out 14 -> 7-9",
+  "L17: van Veen 16 darts, out 40 -> 7-10",
+  "L18: van Gerwen 19 darts, out 20 -> 8-10",
+  "L19: van Veen 15 darts, out 97 -> 8-11",
+  "L20: van Gerwen 14 darts, out 87 -> 9-11",
+  "L21: van Gerwen (break) 13 darts, out 32 -> 10-11",
+  "L22: van Veen (break) 11 darts, out 47 -> 10-12",
+  "L23: van Veen 19 darts, out 20 -> 10-13",
+  "L24: van Veen (break) 15 darts, out 100 -> 10-14",
+  "L25: van Veen 12 darts, out 124 -> 10-15",
+  "L26: van Gerwen 16 darts, out 18 -> 11-15",
+  "L27: van Veen 15 darts, out 107 -> 11-16"
+ ],
+ "source": {
+  "name": "PDC",
+  "url": "https://www.pdc.tv/matches/517028",
+  "title": "Michael van Gerwen v Gian van Veen"
+ }
+}

@@ -1,0 +1,64 @@
+{
+ "event": "Grand Slam of Darts",
+ "date": "2026-11-22",
+ "kind": "results",
+ "matches": [
+  {
+   "fixture": "517027",
+   "stage": "Semi-Final",
+   "time": "1:21pm GMT",
+   "winner": "Gerwyn Price",
+   "loser": "Kevin Doets",
+   "score": "16-13",
+   "averages": {
+    "Gerwyn Price": null,
+    "Kevin Doets": null
+   },
+   "t80s": {
+    "Gerwyn Price": null,
+    "Kevin Doets": null
+   },
+   "bestCheckout": null,
+   "worldRanks": {
+    "Gerwyn Price": 4,
+    "Kevin Doets": 23
+   },
+   "flags": []
+  },
+  {
+   "fixture": "517028",
+   "stage": "Semi-Final",
+   "time": "2:56pm GMT",
+   "winner": "Gian van Veen",
+   "loser": "Michael van Gerwen",
+   "score": "16-11",
+   "averages": {
+    "Gian van Veen": null,
+    "Michael van Gerwen": null
+   },
+   "t80s": {
+    "Gian van Veen": null,
+    "Michael van Gerwen": null
+   },
+   "bestCheckout": null,
+   "worldRanks": {
+    "Gian van Veen": 3,
+    "Michael van Gerwen": 11
+   },
+   "flags": []
+  }
+ ],
+ "leaders": {
+  "highestAverage": {
+   "n": "Gerwyn Price",
+   "v": 0
+  },
+  "most180s": {
+   "n": "Gerwyn Price",
+   "v": 0
+  },
+  "total180s": 0,
+  "bestCheckout": null,
+  "hundredPlusAverages": 0
+ }
+}
