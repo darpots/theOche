@@ -1,5 +1,5 @@
 {
- "updatedAt": "2026-11-21T12:53:03.818Z",
+ "updatedAt": "2026-11-22T12:45:05.462Z",
  "event": {
   "id": "10871",
   "name": "2026 Grand Slam of Darts",
@@ -953,8 +953,8 @@
    "pos": 3,
    "live": 2,
    "move": 1,
-   "money": 1065750,
-   "plus": 35000,
+   "money": 1090750,
+   "plus": 60000,
    "minus": 28000,
    "expiring": [
     {
@@ -968,7 +968,7 @@
      "round": "Last 64"
     }
    ],
-   "round": "Quarter-Final",
+   "round": "Semi-Final",
    "alive": true,
    "estimated": false
   },
@@ -1093,35 +1093,14 @@
    "estimated": false
   },
   {
-   "id": "11821",
-   "name": "Nathan Aspinall",
-   "slug": "nathan-aspinall",
-   "pos": 12,
-   "live": 8,
-   "move": 4,
-   "money": 624000,
-   "plus": 35000,
-   "minus": 6500,
-   "expiring": [
-    {
-     "name": "2024 Players Championship Finals",
-     "amount": 6500,
-     "round": "Last 32"
-    }
-   ],
-   "round": "Quarter-Final",
-   "alive": true,
-   "estimated": false
-  },
-  {
    "id": "19",
    "name": "Michael van Gerwen",
    "slug": "michael-van-gerwen",
    "pos": 11,
-   "live": 9,
-   "move": 2,
-   "money": 622500,
-   "plus": 35000,
+   "live": 8,
+   "move": 3,
+   "money": 647500,
+   "plus": 60000,
    "minus": 8000,
    "expiring": [
     {
@@ -1135,8 +1114,29 @@
      "round": "Last 64"
     }
    ],
-   "round": "Quarter-Final",
+   "round": "Semi-Final",
    "alive": true,
+   "estimated": false
+  },
+  {
+   "id": "11821",
+   "name": "Nathan Aspinall",
+   "slug": "nathan-aspinall",
+   "pos": 12,
+   "live": 9,
+   "move": 3,
+   "money": 624000,
+   "plus": 35000,
+   "minus": 6500,
+   "expiring": [
+    {
+     "name": "2024 Players Championship Finals",
+     "amount": 6500,
+     "round": "Last 32"
+    }
+   ],
+   "round": "Quarter-Final",
+   "alive": false,
    "estimated": false
   },
   {
@@ -2461,7 +2461,7 @@
    "minus": 0,
    "expiring": [],
    "round": "Quarter-Final",
-   "alive": true,
+   "alive": false,
    "estimated": false
   },
   {
