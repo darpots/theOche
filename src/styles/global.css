@@ -199,7 +199,7 @@ h1, h2, h3 { text-wrap: balance; hyphens: none; }
 /* Leg won: "LEG · Aspinall" zooms in over the score, wobbles, then shrinks away (src/lib/leg-flash.mjs) */
 .leg-flash { position: fixed; z-index: 200; left: 50%; top: 45%; transform: translate(-50%, -50%) rotate(-4deg); display: flex; flex-direction: column; align-items: center; gap: 0; padding: 14px 36px 18px; background: var(--volt); color: var(--ink); border-radius: 22px; box-shadow: 0 24px 70px rgba(0, 0, 0, .55), 0 0 0 5px rgba(11, 12, 16, .9); pointer-events: none; max-width: calc(100vw - 24px); animation: leg-flash 3s both; }
 .leg-flash span { font-weight: 800; font-size: clamp(16px, 2.2vw, 24px); letter-spacing: .24em; text-transform: uppercase; }
-.leg-flash b { font-family: var(--poster); font-weight: 400; font-size: clamp(76px, 13vw, 170px); line-height: .92; text-transform: uppercase; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 100%; }
+.leg-flash b { font-family: var(--poster); font-weight: 400; font-size: clamp(76px, 13vw, 170px); line-height: .92; text-transform: uppercase; white-space: nowrap; overflow: hidden; max-width: 100%; } /* sized to fit in leg-flash.mjs */
 /* 180: the original small sticker size ('180!' only), with the same zoom and wobble, on top */
 .leg-flash.t180 { padding: 0 10px; border-radius: 10px; box-shadow: 0 8px 24px rgba(0, 0, 0, .45), 0 0 0 3px rgba(11, 12, 16, .9); }
 .leg-flash.t180 span { display: none; }

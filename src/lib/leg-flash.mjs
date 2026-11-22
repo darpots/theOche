@@ -29,6 +29,16 @@ function show(small, big, anchor, variant = '', at = 'centre') {
   el.style.visibility = 'hidden';
   document.body.append(el);
   requestAnimationFrame(() => requestAnimationFrame(() => {
+    // The name always fits: step the big text down until the whole word shows
+    // (long surnames such as 'van Gerwen' or 'Wattimena' on a phone).
+    const b = el.querySelector('b');
+    let fs = parseFloat(getComputedStyle(b).fontSize);
+    if (b.scrollWidth > b.clientWidth) {
+      // Scale straight to fit, with a little room so no '…' appears, then check.
+      fs = Math.floor(fs * (b.clientWidth / b.scrollWidth) * 0.94);
+      b.style.fontSize = `${fs}px`;
+      while (b.scrollWidth > b.clientWidth && fs > 20) { fs -= 2; b.style.fontSize = `${fs}px`; }
+    }
     const a = anchor && document.querySelector(anchor);
     const r = a?.getBoundingClientRect();
     if (r && r.bottom > 0 && r.top < innerHeight) {
