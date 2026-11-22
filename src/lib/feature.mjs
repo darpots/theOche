@@ -72,7 +72,7 @@ export function featureTile(f, mode, eventName, also = []) {
     ? `<div class="ft-score poster-num${Math.max(f.s1 ?? 0, f.s2 ?? 0) >= 10 ? ' wide' : ''}">${f.s1 ?? 0}<span>–</span>${f.s2 ?? 0}</div>${setLine}${inPlay ? (sets ? '<div class="lbl ft-sub">Sets</div>' : '') : `<div class="lbl ft-sub">${mode === 'now' ? 'Latest score' : `Final${sets ? ' · sets' : ''}`}</div>`}`
     : `<div class="ft-score ft-vs poster-num">V</div>${mode === 'now' ? '<div class="lbl ft-sub">Waiting for the first dart</div>' : ''}`;
   const side = (p, won, s, k) => `<div class="ft-who ${k ? 'r' : 'l'}${won ? ' won' : ''}">
-      <div class="ft-id"><b>${esc(p.name)}</b><small>${flag(p.country)} ${p.ranking ? `<span class="ft-wr">World </span>#${p.ranking}` : ''}${won ? ' · Winner' : ''}</small></div>
+      <div class="ft-id"><b>${esc(p.name)}</b><small>${flag(p.country)} ${p.ranking ? `<span class="ft-wr">World </span>#${p.ranking}` : ''}</small></div>
       ${playing ? '' : s?.avg != null ? `<div class="ft-avg" title="Three-dart average"><span class="poster-num">${Number(s.avg).toFixed(2)}</span><small>avg</small></div>` : ''}
     </div>`;
   const fmt = formatLabel(f.fmt);

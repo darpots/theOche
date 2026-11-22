@@ -21,7 +21,7 @@ function side(p, score, won, decided, portraits, align, st, best) {
   const avg = st ? `<span class="avg${best ? ' best' : ''}" title="Three-dart average"><i>avg</i>${fmt(st.avg)}</span>` : '';
   return `<div class="pl ${align}${won ? ' won' : decided ? ' lost' : ''}">
     ${avatar(p, portraits)}
-    <span class="nm"><b>${esc(p.name)}</b><small>${flag(p.country)}${p.ranking ? ` #${p.ranking}` : ''}${won ? ' <em class="wbadge">Winner</em>' : ''}</small></span>
+    <span class="nm"><b>${esc(p.name)}</b><small>${flag(p.country)}${p.ranking ? ` #${p.ranking}` : ''}</small></span>
     ${avg}
   </div>`;
 }

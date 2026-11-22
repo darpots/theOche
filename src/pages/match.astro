@@ -102,7 +102,7 @@ import Layout from '../layouts/Layout.astro';
         return `<div class="side s${i}${won ? ' won' : ''}">
           <div class="pic">${pic(p)}</div>
           <div class="who">${href ? `<a href="${href}">${esc(name(p))}</a>` : `<span>${esc(name(p))}</span>`}
-            <small>${flag(p?.countryCode)} ${p?.ranking ? `World #${p.ranking}` : ''}${won ? ' · <b>Winner</b>' : ''}</small>
+            <small>${flag(p?.countryCode)} ${p?.ranking ? `World #${p.ranking}` : ''}</small>
             ${avg[i] != null ? `<div class="av"><i>Average</i>${Number(avg[i]).toFixed(2)}</div>` : ''}
           </div></div>`;
       };
@@ -125,7 +125,7 @@ import Layout from '../layouts/Layout.astro';
             <span class="lb-av" title="Three-dart average">${avg[k] != null ? `${Number(avg[k]).toFixed(2)} <i>avg</i>` : ''}</span></div>`;
         const who = (k: number) => { const p = ps[k]; const href = p?.participantSlug ? `/players/${p.participantSlug}` : null;
           return `<div class="who w${k}">${href ? `<a href="${href}">${esc(name(p))}</a>` : `<span>${esc(name(p))}</span>`}<small>${flag(p?.countryCode)} ${p?.ranking ? `World #${p.ranking}` : ''}</small></div>`; };
-        const mid = `<div class="lb-mid"><span class="lbl">${sets ? 'Sets' : 'Legs'}</span><b class="poster-num">${scoreHtml(a.participant1Score, a.participant2Score)}</b>${sets && live ? `<span class="lbl">Legs <b>${scoreHtml(live.legs[0], live.legs[1])}</b></span>` : ''}${won != null ? `<span class="lb-won">${esc(last(ps[won]))} wins leg ${leg.legNumber}</span>` : ''}</div>`;
+        const mid = `<div class="lb-mid"><span class="lbl">${sets ? 'Sets' : 'Legs'}</span><b class="poster-num">${scoreHtml(a.participant1Score, a.participant2Score)}</b>${sets && live ? `<span class="lbl">Legs <b>${scoreHtml(live.legs[0], live.legs[1])}</b></span>` : ''}</div>`;
         return `
         <a class="back" href="/tournament/${tour?.tournamentID}">← ${esc((tour?.name || 'Tournament').replace(/^\d{4}\s+/, ''))}</a>
         <p class="stg">${esc(a.tournamentStage?.stage?.name || '')}${fmt ? ` · ${esc(fmt)}` : ''} · Leg ${leg.legNumber} · <span class="live-dot">Live</span></p>
@@ -463,7 +463,6 @@ import Layout from '../layouts/Layout.astro';
   .mh-in :global(.lb-mid .lbl) { color: var(--on-ink-2); white-space: nowrap; }
   .mh-in :global(.lb-mid .lbl b) { font-family: var(--poster); font-weight: 400; font-size: 18px; color: #fff; letter-spacing: 0; margin-left: 4px; }
   .mh-in :global(.lb-mid > b) { font-size: clamp(56px, 5.5vw, 84px); line-height: .9; color: #fff; white-space: nowrap; }
-  .mh-in :global(.lb-won) { font-size: 12px; font-weight: 800; color: var(--ink); background: var(--volt); border-radius: 8px; padding: 3px 8px; white-space: nowrap; margin-top: 4px; }
   .mh-in :global(.board .who) { padding: 18px 0 0; }
   .mh-in :global(.board .w0) { grid-area: w0; }
   .mh-in :global(.board .w1) { grid-area: w1; align-items: flex-end; text-align: right; }
@@ -480,7 +479,6 @@ import Layout from '../layouts/Layout.astro';
     .mh-in :global(.lb-mid) { padding: 14px 6px 0; }
     .mh-in :global(.lb-mid > b) { font-size: 36px; }
     .mh-in :global(.lb-mid .lbl) { font-size: 9px; }
-    .mh-in :global(.lb-won) { font-size: 10px; padding: 2px 6px; }
     .mh-in :global(.board .who) { padding-top: 14px; }
     .mh-in :global(.board .who a), .mh-in :global(.board .who > span) { font-size: 22px; }
   }

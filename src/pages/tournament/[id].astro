@@ -406,7 +406,6 @@ const news = (await getCollection('news')).map(n => n.data)
   .board :global(.avg.best i) { color: var(--ink); }
   .board :global(.fx.stats-in .avg) { animation: statsin .6s var(--ease); }
   @keyframes statsin { from { opacity: 0; transform: translateY(4px); } }
-  .board :global(.wbadge) { font-style: normal; color: var(--green); font-weight: 800; margin-left: 4px; }
   .board :global(.mid) { text-align: center; min-width: 96px; }
   .board :global(.sc) { font-family: var(--poster); font-size: 40px; font-weight: 400; color: var(--muted); font-variant-numeric: tabular-nums; }
   .board :global(.sc.w) { color: var(--ink); }
