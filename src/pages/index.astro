@@ -306,8 +306,30 @@ const spot = loadProfile(spotRank.id);
   .feature :global(.ft-stage-row:not(:has(.ft-vs)) .ft-p.r) { -webkit-mask-image: linear-gradient(to left, #000 62%, transparent 98%); mask-image: linear-gradient(to left, #000 62%, transparent 98%); }
   /* Before a match: just the V, so the centre column is narrow and the pictures have room */
   .feature :global(.ft-score.ft-vs) { min-width: 0; padding: 0 .25em; }
-  /* Room for the leg in play only while there is one; before a match the names sit snug */
-  .feature :global(.ft-bottom.live .ft-who) { min-height: 136px; }
+  /* ---- In play: the score left is the hero, over the inner edge of each picture ---- */
+  .feature :global(.ft-stage-row.play) { grid-template-areas: 'l m r'; position: relative; }
+  .feature :global(.ft-stage-row.play .ft-p.l) { grid-area: l; }
+  .feature :global(.ft-stage-row.play .ft-p.r) { grid-area: r; }
+  .feature :global(.ft-stage-row.play .ft-mid) { grid-area: m; z-index: 2; align-self: end; padding: 0 12px 34px; display: flex; flex-direction: column; align-items: center; gap: 2px; }
+  /* A dark wash over the lower pictures so the big numbers always read */
+  .feature :global(.ft-stage-row.play::after) { content: ''; grid-area: 1 / 1 / 2 / 4; align-self: end; height: 58%; z-index: 1; pointer-events: none; background: linear-gradient(rgba(11, 12, 16, 0), rgba(11, 12, 16, .88) 70%); }
+  .feature :global(.ft-big) { grid-row: 1; z-index: 2; align-self: end; position: relative; display: flex; flex-direction: column; gap: 8px; padding-bottom: 24px; pointer-events: none; }
+  .feature :global(.ft-big.l) { grid-column: 1; justify-self: end; align-items: flex-end; }
+  .feature :global(.ft-big.r) { grid-column: 3; justify-self: start; align-items: flex-start; }
+  .feature :global(.ft-big .ft-rem) { display: inline-flex; align-items: center; gap: 12px; font-size: clamp(110px, 11vw, 160px); line-height: .82; color: var(--on-ink); text-shadow: 0 6px 30px rgba(0, 0, 0, .6); font-variant-numeric: tabular-nums; }
+  .feature :global(.ft-big.r .ft-rem) { flex-direction: row-reverse; }
+  .feature :global(.ft-big.on .ft-rem) { color: var(--volt); }
+  .feature :global(.ft-big .ft-num) { min-width: 0; }
+  .feature :global(.ft-corow) { display: flex; gap: 6px; height: 26px; align-items: center; }
+  .feature :global(.ft-big.r .ft-corow) { flex-direction: row-reverse; }
+  .feature :global(.ft-big .ft-co) { background: rgba(11, 12, 16, .75); font-size: 13px; }
+  .feature :global(.ft-big .ft-180) { top: -40px; }
+  .feature :global(.ft-big.l .ft-180) { right: 0; left: auto; transform: rotate(-6deg); }
+  .feature :global(.ft-big.r .ft-180) { left: 0; right: auto; transform: rotate(6deg); }
+  /* The match score: small and labelled while a leg is on */
+  .feature :global(.ft-legs) { font-size: clamp(54px, 5vw, 76px); line-height: .9; color: #fff; white-space: nowrap; }
+  .feature :global(.ft-legs-l) { color: var(--on-ink-2); white-space: nowrap; }
+  .feature :global(.ft-legs-l b) { font-family: var(--poster); font-weight: 400; font-size: 18px; color: #fff; margin-left: 4px; letter-spacing: 0; }
   .feature :global(.ft-now.on .ft-rem) { color: var(--volt); }
   .feature :global(.ft-dot) { width: 10px; height: 10px; border-radius: 50%; background: var(--volt); box-shadow: 0 0 0 4px rgba(200, 255, 46, .2); }
   .feature :global(.ft-who.r .ft-rem) { flex-direction: row-reverse; }
@@ -446,6 +468,23 @@ const spot = loadProfile(spotRank.id);
     .feature :global(.ft-who.r .ft-num) { text-align: right; }
     .feature :global(.ft-180) { top: -26px; font-size: 26px; }
     .feature :global(.ft-round) { width: 96px; height: 96px; margin-bottom: 30px; box-shadow: 0 0 0 4px var(--ink-2); }
+    /* Phones: pictures on top, then a scoreboard row: score left · legs · score left */
+    .feature :global(.ft-stage-row.play) { grid-template-rows: auto auto; row-gap: 0; }
+    .feature :global(.ft-stage-row.play .ft-p) { height: 132px; }
+    .feature :global(.ft-stage-row.play::after) { display: none; }
+    .feature :global(.ft-stage-row.play .ft-mid) { grid-row: 2; grid-column: 2; align-self: start; padding: 10px 4px 0; }
+    .feature :global(.ft-big) { grid-row: 2; align-self: start; padding: 8px 0 12px; gap: 4px; }
+    .feature :global(.ft-big.l) { justify-self: center; align-items: center; }
+    .feature :global(.ft-big.r) { justify-self: center; align-items: center; }
+    .feature :global(.ft-big .ft-rem) { font-size: 66px; gap: 6px; }
+    .feature :global(.ft-big .ft-dot) { width: 8px; height: 8px; box-shadow: 0 0 0 3px rgba(200, 255, 46, .2); }
+    .feature :global(.ft-corow) { height: 22px; }
+    .feature :global(.ft-big .ft-co) { font-size: 11px; padding: 2px 6px; }
+    .feature :global(.ft-big .ft-180) { top: -30px; }
+    .feature :global(.ft-legs) { font-size: 36px; }
+    .feature :global(.ft-legs-l) { font-size: 9px; }
+    .feature :global(.ft-legs-l b) { font-size: 14px; }
+
     .feature :global(.ft-also) { padding: 10px 16px 14px; }
     .feature :global(.ft-avg .poster-num) { font-size: 26px; }
     .feature :global(.ft-top) { padding: 18px 18px 0; }

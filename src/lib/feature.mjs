@@ -35,8 +35,8 @@ function pic(p, side, prefer) {
   return `<span class="ft-ini ${side}" role="img" aria-label="${esc(p?.name || 'To be decided')}"><span>${esc(initials(p?.name || '?'))}</span></span>`;
 }
 
-/** What one player has going on in the leg: score left, last visit, finish. */
-function legSide(l, k) {
+/** One player's leg in play: score left (the hero number), who's throwing, checkout, last visit. */
+function legParts(l, k) {
   const v = (l.visits || []).slice().sort((a, b) => a.order - b.order);
   const mine = v.filter(x => x.isParticipant1 === (k === 0));
   const lastMine = mine[mine.length - 1];
@@ -44,17 +44,16 @@ function legSide(l, k) {
   const left = l.left[k];
   const route = checkout(left);
   const throwing = l.throwing === k;
-  // The visit that just happened gets a moment: a 180 is shouted about.
   const justThrew = latest && latest === lastMine;
-  const big = lastMine && !lastMine.isBust && lastMine.score >= 140;
-  const last = lastMine ? `<i class="ft-last${big ? ' big' : ''}${lastMine.isBust ? ' bust' : ''}">${lastMine.isBust ? 'Bust' : lastMine.score}</i>` : '';
-  // Fixed layout: the number keeps its width and both chip rows are always there
-  // (empty when there's nothing to show), so the tile never changes size mid-match.
-  return `<div class="ft-now${throwing ? ' on' : ''}">
+  const hot = lastMine && !lastMine.isBust && lastMine.score >= 140;
+  // Big number over the inner edge of the player's picture; checkout route right under it.
+  const last = lastMine ? `<i class="ft-last${hot ? ' big' : ''}${lastMine.isBust ? ' bust' : ''}" title="Last visit">${lastMine.isBust ? 'Bust' : lastMine.score}</i>` : '';
+  const big = `<div class="ft-big ${k ? 'r' : 'l'}${throwing ? ' on' : ''}">
       ${justThrew && lastMine.score === 180 && !lastMine.isBust ? '<span class="ft-180" aria-label="One hundred and eighty">180!</span>' : ''}
-      <b class="ft-rem poster-num" title="Score left in this leg${throwing ? ' (throwing)' : ''}"><span class="ft-mark">${throwing ? '<span class="ft-dot" aria-label="throwing"></span>' : ''}</span><span class="ft-num">${left}</span></b>
-      <span class="ft-meta">${last}${route && left <= 170 ? `<i class="ft-co" title="Checkout">${route.join(' ')}</i>` : ''}</span>
+      <b class="ft-rem poster-num" title="Score left in this leg${throwing ? ' (throwing)' : ''}">${throwing ? '<span class="ft-dot" aria-label="throwing"></span>' : ''}<span class="ft-num">${left}</span></b>
+      <span class="ft-corow">${last}${route && left <= 170 ? `<i class="ft-co" title="Checkout">${route.join(' ')}</i>` : ''}</span>
     </div>`;
+  return { big };
 }
 
 /** HTML for the feature tile. mode: 'now' | 'next' | 'result'. also: other matches live now. */
@@ -69,13 +68,17 @@ export function featureTile(f, mode, eventName, also = []) {
   const inPlay = mode === 'now' && f.status === 'live';
   const legs = f.liveLegs;
   const setLine = sets && inPlay && legs ? `<div class="ft-set">Set ${f.liveSet || 1} · legs <b>${scoreHtml(legs[0], legs[1])}</b></div>` : '';
-  const centre = done || inPlay || (f.s1 ?? 0) + (f.s2 ?? 0) > 0
+  const playing = inPlay && f.legNow;
+  const parts = playing ? [legParts(f.legNow, 0), legParts(f.legNow, 1)] : null;
+  // In play the score left is the hero; the match score sits small in the middle, labelled.
+  const playCentre = playing ? `<span class="lbl ft-legs-l">${sets ? 'Sets' : 'Legs'}</span><div class="ft-legs poster-num">${scoreHtml(f.s1, f.s2)}</div>${sets && legs ? `<span class="lbl ft-legs-l">Legs <b>${scoreHtml(legs[0], legs[1])}</b></span>` : ''}` : '';
+  const centre = playing ? playCentre : done || inPlay || (f.s1 ?? 0) + (f.s2 ?? 0) > 0
     ? `<div class="ft-score poster-num${Math.max(f.s1 ?? 0, f.s2 ?? 0) >= 10 ? ' wide' : ''}">${f.s1 ?? 0}<span>–</span>${f.s2 ?? 0}</div>${setLine}${inPlay ? (sets ? '<div class="lbl ft-sub">Sets</div>' : '') : `<div class="lbl ft-sub">${mode === 'now' ? 'Latest score' : `Final${sets ? ' · sets' : ''}`}</div>`}`
     : `<div class="ft-score ft-vs poster-num">V</div>${mode === 'now' ? '<div class="lbl ft-sub">Waiting for the first dart</div>' : ''}`;
   const avg = s => (s?.avg != null ? `<span class="ft-av" title="Three-dart average"> · ${Number(s.avg).toFixed(2)} <i>avg</i></span>` : '');
   const side = (p, won, s, k) => `<div class="ft-who ${k ? 'r' : 'l'}${won ? ' won' : ''}">
       <div class="ft-id"><b>${esc(p.name)}</b><small>${flag(p.country)} ${p.ranking ? `<span class="ft-wr">World </span>#${p.ranking}` : ''}${won ? ' · Winner' : ''}${inPlay && f.legNow ? avg(s) : ''}</small></div>
-      ${inPlay && f.legNow ? legSide(f.legNow, k) : s?.avg != null ? `<div class="ft-avg" title="Three-dart average"><span class="poster-num">${Number(s.avg).toFixed(2)}</span><small>avg</small></div>` : ''}
+      ${playing ? '' : s?.avg != null ? `<div class="ft-avg" title="Three-dart average"><span class="poster-num">${Number(s.avg).toFixed(2)}</span><small>avg</small></div>` : ''}
     </div>`;
   const fmt = formatLabel(f.fmt);
   const others = also.length
@@ -83,12 +86,13 @@ export function featureTile(f, mode, eventName, also = []) {
     : '';
   return `<a class="ft-link" href="/match?id=${esc(f.id)}" aria-label="${esc(`${f.p1.name} v ${f.p2.name}`)}"></a>
     <div class="ft-top">${tag}<span class="lbl ft-stage">${esc(f.stage || '')}${fmt ? ` · ${esc(fmt)}` : ''}${inPlay && f.legNow ? ` · Leg ${f.legNow.leg}` : ''}</span></div>
-    <div class="ft-stage-row">
+    <div class="ft-stage-row${playing ? ' play' : ''}">
       <div class="ft-p l">${pic(f.p1, 'l', pairPrefer(f.p1?.name, f.p2?.name))}</div>
       <div class="ft-mid">${centre}</div>
       <div class="ft-p r">${pic(f.p2, 'r', pairPrefer(f.p1?.name, f.p2?.name))}</div>
+      ${playing ? parts[0].big + parts[1].big : ''}
     </div>
-    <div class="ft-bottom${inPlay && f.legNow ? ' live' : ''}">${side(f.p1, w1, st?.[0], 0)}${side(f.p2, w2, st?.[1], 1)}</div>${others}`;
+    <div class="ft-bottom${playing ? ' live' : ''}">${side(f.p1, w1, st?.[0], 0)}${side(f.p2, w2, st?.[1], 1)}</div>${others}`;
 }
 
 /** HTML for the volt "Next up" tile (inside its <a>). */
