@@ -422,7 +422,8 @@ const news = (await getCollection('news')).map(n => n.data)
   .board :global(.mdash) { color: var(--line); font-weight: 800; }
   /* Live: a clear way into the match centre */
   /* Live: 'Match centre' in the same type as LIVE, so the two read as one line */
-  .board :global(.mc-link) { position: relative; z-index: 2; display: inline-flex; align-items: center; margin-left: 10px; padding-left: 10px; border-left: 1px solid var(--line); color: var(--red); text-decoration: none; font-weight: 800; font-size: 12px; letter-spacing: .1em; text-transform: uppercase; white-space: nowrap; }
+  .board :global(.fx.live .st) { display: flex; flex-direction: column; align-items: center; gap: 4px; }
+  .board :global(.mc-link) { position: relative; z-index: 2; display: inline-flex; align-items: center; color: var(--red); text-decoration: none; font-weight: 800; font-size: 12px; letter-spacing: .1em; text-transform: uppercase; white-space: nowrap; }
   .board :global(.mc-link:hover) { text-decoration: underline; text-underline-offset: 3px; }
   .board :global(.sc) { font-family: var(--poster); font-size: 40px; font-weight: 400; color: var(--muted); font-variant-numeric: tabular-nums; }
   .board :global(.sc.w) { color: var(--ink); }
@@ -463,7 +464,8 @@ const news = (await getCollection('news')).map(n => n.data)
     .board :global(.pl.r .lgs) { margin-left: auto; margin-right: 0; }
     .board :global(.mid) { flex-direction: row; flex-wrap: wrap; justify-content: flex-start; min-width: 0; gap: 4px 10px; padding: 2px 10px; }
     /* In play: LIVE · Match centre sits on the right, between the two legs boxes */
-    .board :global(.fx.live .mid) { justify-content: flex-end; padding-right: 10px; }
+    .board :global(.fx.live .mid) { justify-content: flex-end; padding-right: 12px; }
+    .board :global(.fx.live .st) { align-items: flex-end; }
     .board :global(.lgs) { font-size: 30px; min-width: 46px; }
     }
 </style>
