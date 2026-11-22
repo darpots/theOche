@@ -324,8 +324,8 @@ import Layout from '../layouts/Layout.astro';
           const first = prevLeg?.visits?.slice().sort((x: any, y: any) => x.order - y.order)[0];
           if (first) playing.throwing = first.isParticipant1 ? 1 : 0;
         }
-        // Just after a checkout, keep the leg that was won on the board until the next leg's first dart.
-        const boardLeg = prevLeg?.visits?.some((x: any) => x.remaining === 0) ? prevLeg : playing;
+        // As soon as a leg is won the board shows the new one (501 each); the leg flash marks the win.
+        const boardLeg = playing;
         if (playing) watch180(id, playing.setNumber ?? 1, playing.legNumber, playing.visits, names, ['#mh .lb-s.s0', '#mh .lb-s.s1']);
         // No darts for a while since the last leg ended: a break (PDC's data has no flag for it).
         const brk = !!playing && onBreak(playing, prevLeg?.lastAt);

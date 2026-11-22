@@ -355,6 +355,7 @@ export const LIVE_KEY = 'AIzaSyCjME19V2rot9OJqrt96Yigqcx3B0nYMgI';
 const LIVE_FIELDS = ['status', 'legScore', 'setScore', 'stats', 'currentLeg', 'currentSet'];
 
 const fsVal = v => v == null ? null
+  : 'timestampValue' in v ? v.timestampValue
   : 'integerValue' in v ? Number(v.integerValue)
   : 'doubleValue' in v ? Number(v.doubleValue)
   : 'stringValue' in v ? v.stringValue
@@ -469,7 +470,10 @@ export function legFromTurns(turns, set, leg) {
   const inVisit = last && last.isComplete === false;
   const throwing = !last ? null : inVisit ? (last.scoringParticipant === 0 ? 0 : 1) : (last.activeParticipant === 0 ? 0 : 1);
   // When the last dart of this leg went in (ms), for spotting breaks.
-  const lastAt = sorted.reduce((t, x) => Math.max(t, Date.parse(x.timestamp) || 0), 0) || null;
+  // PDC's turn time comes as an ISO string from the REST API and as a Firestore
+  // Timestamp object from the push client: read either.
+  const ms = x => (x == null ? 0 : typeof x === 'string' ? Date.parse(x) : typeof x.toMillis === 'function' ? x.toMillis() : x.seconds ? x.seconds * 1000 : Number(x)) || 0;
+  const lastAt = sorted.reduce((t, x) => Math.max(t, ms(x.timestamp)), 0) || null;
   return { setNumber: set, legNumber: leg, visits, throwing, dartsIn: inVisit ? Math.min(3, last.dartsThrown || 0) : 0, lastAt };
 }
 

@@ -36,12 +36,11 @@ function pic(p, side, prefer) {
 
 /** One player's leg in play: score left (the hero number), who's throwing, their match average under it. */
 function legParts(l, k, s) {
-  // Just after a checkout: the leg that was won stays up (winner's 0 in volt) until the next leg's first dart.
-  const held = l.held;
-  const left = held ? held.left[k] : l.left[k];
-  const throwing = !held && l.throwing === k;
+  // As soon as a leg is won the new one shows (501 each); the leg flash marks the win.
+  const left = l.left[k];
+  const throwing = l.throwing === k;
   // Big number, and their average under it. (A 180 flashes over it: see leg-flash.mjs.)
-  const big = `<div class="ft-big ${k ? 'r' : 'l'}${throwing ? ' on' : ''}${held?.winner === k ? ' won' : ''}">
+  const big = `<div class="ft-big ${k ? 'r' : 'l'}${throwing ? ' on' : ''}">
       <b class="ft-rem poster-num" title="Score left in this leg${throwing ? ' (throwing)' : ''}">${throwing ? '<span class="ft-dot" aria-label="throwing"></span>' : ''}<span class="ft-num">${left}</span></b>
       <span class="ft-bigav" title="Three-dart average">${s?.avg != null ? `${Number(s.avg).toFixed(2)} <i>avg</i>` : ''}</span>
     </div>`;
