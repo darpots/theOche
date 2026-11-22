@@ -40,7 +40,7 @@ export function fixtureRow(f, portraits) {
   const mid = scored ? '' : `<span class="vs">${f.time ? esc(ukClock(f.time)) : 'vs'}</span>`;
   const group = /^group/i.test(f.stage || '') ? `${esc(f.stage)} · ` : '';
   const setLegs = live && sets && f.liveLegs ? ` · Set ${f.liveSet || 1}, legs ${f.liveLegs[0]}–${f.liveLegs[1]}` : '';
-  const state = live ? `<span class="live-dot">Live</span>${esc(setLegs)}${onBreak(f.legNow) ? ' · Break' : ''}<a class="mc-link" href="/match?id=${esc(f.id)}">Match centre →</a>` : `<span class="ft">${group}${f.status === 'result' ? 'Result' : f.time ? ukZone(f.date) : 'Time TBC'}</span>`;
+  const state = live ? `<span class="live-dot">Live</span>${esc(setLegs)}${onBreak(f.legNow) ? ' · Break' : ''}` : `<span class="ft">${group}${f.status === 'result' ? 'Result' : f.time ? ukZone(f.date) : 'Time TBC'}</span>`;
   const lbl = sets ? 'Sets' : 'Legs';
   return `<li class="fx ${f.status}${live ? ' big' : ''}${st ? ' has-stats' : ''}" data-players="${esc([f.p1?.id, f.p2?.id].filter(Boolean).join(' '))}" data-id="${esc(f.id)}" data-sig="${esc(`${f.s1}-${f.s2}-${f.status}-${st ? st[0]?.avg + '/' + st[1]?.avg : ''}`)}">
     ${side(f.p1, f.s1, w1, decided, portraits, 'l', scored, live, lbl, st?.[0], best === 1)}
