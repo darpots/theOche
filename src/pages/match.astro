@@ -53,7 +53,7 @@ import Layout from '../layouts/Layout.astro';
     import { fetchH2H, h2hSummary, renderH2H } from '../lib/h2h.mjs';
     import { liveFor, watchLive, unwatch, isPushing, pushedLegFor, LIVE_TICK, PUSH_TICK } from '../lib/live-client.mjs';
     import { ukTime, scoreHtml } from '../lib/format.mjs';
-    import { watchWins, flashWin } from '../lib/leg-flash.mjs';
+    import { watchWins, watch180, flashWin } from '../lib/leg-flash.mjs';
     import { cutoutImg, avatarSrc, pairPrefer } from '../lib/images.mjs';
 
     const FX = 'https://fixtures.darts.web.gc.pdcservices.co.uk/v2/';
@@ -119,8 +119,7 @@ import Layout from '../layouts/Layout.astro';
         const won = fin ? (fin.isParticipant1 ? 0 : 1) : null;
         const lastV = v.at(-1);
         const thr = won != null ? null : leg.throwing ?? (lastV ? (lastV.isParticipant1 ? 1 : 0) : null);
-        const shout = (k: number) => won == null && lastV && lastV.isParticipant1 === (k === 0) && !lastV.isBust && lastV.score === 180 ? '<span class="cl-180">180!</span>' : '';
-        const big = (k: number) => `<div class="lb-s s${k}${thr === k ? ' on' : ''}${won === k ? ' won' : ''}">${shout(k)}
+        const big = (k: number) => `<div class="lb-s s${k}${thr === k ? ' on' : ''}${won === k ? ' won' : ''}">
             <b class="poster-num">${thr === k ? '<span class="lb-dot" aria-label="throwing"></span>' : ''}${left(k)}</b>
             <span class="lb-av" title="Three-dart average">${avg[k] != null ? `${Number(avg[k]).toFixed(2)} <i>avg</i>` : ''}</span></div>`;
         const who = (k: number) => { const p = ps[k]; const href = p?.participantSlug ? `/players/${p.participantSlug}` : null;
@@ -314,7 +313,7 @@ import Layout from '../layouts/Layout.astro';
         // "Leg · name" flash when a leg or set is won.
         if (m?.status === 'live') {
           const setPlay = (t?.data?.attributes?.stage?.numberOfSets || a.attributes.tournamentStage?.numberOfSets || 0) > 1;
-          watchWins(id, setPlay ? m.legs : [a.attributes.participant1Score ?? 0, a.attributes.participant2Score ?? 0], setPlay ? m.sets : null, names, '#mh .lb-mid, #mh .score');
+          watchWins(id, setPlay ? m.legs : [a.attributes.participant1Score ?? 0, a.attributes.participant2Score ?? 0], setPlay ? m.sets : null, names, '#mh .lb-mid > b, #mh .score');
         }
         document.title = `${name(a.attributes.participant1)} v ${name(a.attributes.participant2)} · The Oche`;
         const playing = m?.status === 'live' ? t?.data?.attributes?.legs?.find((l: any) => (l.setNumber ?? 1) === (m.set || 1) && l.legNumber === m.leg) : null;
@@ -326,6 +325,7 @@ import Layout from '../layouts/Layout.astro';
         }
         // Just after a checkout, keep the leg that was won on the board until the next leg's first dart.
         const boardLeg = prevLeg?.visits?.some((x: any) => x.remaining === 0) ? prevLeg : playing;
+        if (playing) watch180(id, playing.setNumber ?? 1, playing.legNumber, playing.visits, names, ['#mh .lb-s.s0', '#mh .lb-s.s1']);
         // No darts for a while since the last leg ended: a break (PDC's data has no flag for it).
         const brk = !!playing && onBreak(playing, prevLeg?.lastAt);
         mh.innerHTML = header(a, t?.data, data, m?.status === 'live' ? m : null, boardLeg, brk);
@@ -393,7 +393,7 @@ import Layout from '../layouts/Layout.astro';
       let n = 0;
       const tick = () => {
         const who = [...document.querySelectorAll('#mh .who a, #mh .who > span')].map(e => (e.textContent || '').trim().split(' ').slice(1).join(' '));
-        if (who.length === 2) flashWin(who[n % 2], n === 3 ? 'Set' : 'Leg', '#mh .lb-mid, #mh .score');
+        if (who.length === 2) flashWin(who[n % 2], n === 3 ? 'Set' : 'Leg', '#mh .lb-mid > b, #mh .score');
         if (++n < 4 && document.getElementById('mh')) setTimeout(tick, 4000);
       };
       setTimeout(tick, 1500);
