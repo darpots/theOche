@@ -472,6 +472,15 @@ export function legFromTurns(turns, set, leg) {
   return { setNumber: set, legNumber: leg, visits, throwing, dartsIn: inVisit ? Math.min(3, last.dartsThrown || 0) : 0, lastAt };
 }
 
+/** A finished leg's final position: score left each side and who checked out, or null if not won yet. */
+export function legResult(leg) {
+  const v = (leg?.visits || []).slice().sort((a, b) => a.order - b.order);
+  const fin = v.find(x => x.remaining === 0);
+  if (!fin) return null;
+  const left = p1 => { const m = v.filter(x => x.isParticipant1 === p1); return m.length ? m[m.length - 1].remaining : 501; };
+  return { left: [left(true), left(false)], winner: fin.isParticipant1 ? 0 : 1, leg: leg.legNumber };
+}
+
 /** How long without a dart counts as a break. Real gaps between legs: 9–36s; the breaks after every fifth leg: 4–6 minutes. */
 export const BREAK_AFTER = 90_000;
 /**
@@ -490,12 +499,14 @@ async function liveLeg(tid, mid, set, leg) {
 }
 
 /** What the tiles need from a leg: score left each side, who's throwing and how many darts are in. `prevFirst` = 0/1 who threw first last leg. */
-export function legSummary(leg, m, prevFirst = null, prevLastAt = null) {
+export function legSummary(leg, m, prevFirst = null, prevLastAt = null, prevResult = null) {
   const left = p1 => { const v = leg.visits.filter(x => x.isParticipant1 === p1); return v.length ? v[v.length - 1].remaining : 501; };
   // No darts in this leg yet: the throw alternates, so whoever didn't start the last leg starts this one.
   let throwing = leg.throwing;
   if (throwing == null && prevFirst != null) throwing = prevFirst ? 0 : 1;
-  return { set: m.set || 1, leg: m.leg, left: [left(true), left(false)], throwing, dartsIn: leg.dartsIn || 0, visits: leg.visits, lastAt: leg.lastAt || prevLastAt || null };
+  return { set: m.set || 1, leg: m.leg, left: [left(true), left(false)], throwing, dartsIn: leg.dartsIn || 0, visits: leg.visits, lastAt: leg.lastAt || prevLastAt || null,
+    // Until the new leg's first dart, the leg just won (so a checkout isn't instantly replaced by 501-501).
+    held: !leg.visits.length && !leg.dartsIn ? prevResult : null };
 }
 
 /**
@@ -530,14 +541,15 @@ export async function liveLegs(tid, mid, m, cache = new Map()) {
 export async function liveCurrentLeg(tid, m) {
   if (!m || m.status !== 'live' || !m.leg) return null;
   const leg = await liveLeg(tid, m.id, m.set || 1, m.leg);
-  let prevFirst = null, prevLastAt = null;
+  let prevFirst = null, prevLastAt = null, prevResult = null;
   // No darts yet in this leg: the previous leg says who starts and when the last dart went in.
   if ((leg.throwing == null || !leg.visits.length) && m.leg > 1) {
     const prev = await liveLeg(tid, m.id, m.set || 1, m.leg - 1).catch(() => null);
     if (prev?.visits[0]) prevFirst = prev.visits[0].isParticipant1 ? 0 : 1;
     prevLastAt = prev?.lastAt ?? null;
+    prevResult = legResult(prev);
   }
-  return legSummary(leg, m, prevFirst, prevLastAt);
+  return legSummary(leg, m, prevFirst, prevLastAt, prevResult);
 }
 
 /** "First to 10 legs" / "First to 4 sets" for a stage ({ sets, bestOf, twoClear }). */

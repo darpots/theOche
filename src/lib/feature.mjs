@@ -40,11 +40,13 @@ function legParts(l, k, s) {
   const mine = v.filter(x => x.isParticipant1 === (k === 0));
   const lastMine = mine[mine.length - 1];
   const latest = v[v.length - 1];
-  const left = l.left[k];
-  const throwing = l.throwing === k;
-  const justThrew = latest && latest === lastMine;
+  // Just after a checkout: the leg that was won stays up (winner's 0 in volt) until the next leg's first dart.
+  const held = l.held;
+  const left = held ? held.left[k] : l.left[k];
+  const throwing = !held && l.throwing === k;
+  const justThrew = !held && latest && latest === lastMine;
   // Big number (with a 180 shout), and their average under it.
-  const big = `<div class="ft-big ${k ? 'r' : 'l'}${throwing ? ' on' : ''}">
+  const big = `<div class="ft-big ${k ? 'r' : 'l'}${throwing ? ' on' : ''}${held?.winner === k ? ' won' : ''}">
       ${justThrew && lastMine.score === 180 && !lastMine.isBust ? '<span class="ft-180" aria-label="One hundred and eighty">180!</span>' : ''}
       <b class="ft-rem poster-num" title="Score left in this leg${throwing ? ' (throwing)' : ''}">${throwing ? '<span class="ft-dot" aria-label="throwing"></span>' : ''}<span class="ft-num">${left}</span></b>
       <span class="ft-bigav" title="Three-dart average">${s?.avg != null ? `${Number(s.avg).toFixed(2)} <i>avg</i>` : ''}</span>

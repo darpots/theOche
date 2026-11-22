@@ -8,7 +8,7 @@
 //    fallback if it ever drops (blocked network, old browser).
 // Pages keep their own timers; while push is running they only need a slow
 // safety check, and watchLive() calls them back the moment a score changes.
-import { liveMatches, slimLiveData, legFromTurns, legSummary, liveCurrentLeg, LIVE_KEY, LIVE_PROJECT } from './pdc.mjs';
+import { liveMatches, slimLiveData, legFromTurns, legSummary, legResult, liveCurrentLeg, LIVE_KEY, LIVE_PROJECT } from './pdc.mjs';
 
 /** How often the live score is polled when push isn't running (ms). */
 export const LIVE_TICK = 8_000;
@@ -82,10 +82,11 @@ export async function watchLive(tournamentId, ids, onChange) {
           const before = pushedLeg.get(id);
           const prevFirst = before?.data.visits[0] ? (before.data.visits[0].isParticipant1 ? 0 : 1) : before?.prevFirst ?? null;
           const prevLastAt = before?.data.lastAt ?? before?.prevLastAt ?? null;
+          const prevResult = before ? legResult(before.data) : null;
           if (lk) {
             const set = m.set || 1, leg = m.leg;
             const follows = before && before.leg === leg - 1;
-            pushedLeg.set(id, { set, leg, data: legFromTurns([], set, leg), prevFirst: follows ? prevFirst : null, prevLastAt: follows ? prevLastAt : null, ready: false });
+            pushedLeg.set(id, { set, leg, data: legFromTurns([], set, leg), prevFirst: follows ? prevFirst : null, prevLastAt: follows ? prevLastAt : null, prevResult: follows ? prevResult : null, ready: false });
             legOff = fs.onSnapshot(fs.collection(store, `tournaments/${tournamentId}/matches/${id}/sets/${set}/legs/${leg}/turns`), q => {
               const cur = pushedLeg.get(id);
               pushedLeg.set(id, { ...cur, data: legFromTurns(q.docs.map(d => d.data()), set, leg), ready: true });
@@ -111,7 +112,7 @@ export async function currentLeg(tournamentId, m) {
   if (isPushing() && p?.ready && p.leg === m.leg && p.set === (m.set || 1)) {
     // A new leg with no darts yet and no memory of the last one: ask once.
     if (!p.data.visits.length && (p.prevFirst == null || p.prevLastAt == null) && m.leg > 1) return liveCurrentLeg(tournamentId, m);
-    return legSummary(p.data, m, p.prevFirst, p.prevLastAt);
+    return legSummary(p.data, m, p.prevFirst, p.prevLastAt, p.prevResult);
   }
   return liveCurrentLeg(tournamentId, m);
 }
