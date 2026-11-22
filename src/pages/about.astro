@@ -18,13 +18,80 @@ import { SITE } from '../lib/site.mjs';
     </ul>
     <h2>Where the data comes from</h2>
     <p>Scores, fixtures, statistics and rankings come from the PDC's public live-scoring and results feeds. Live scores update every few seconds while a match is on. Everything is shown in UK time.</p>
-    <p>News reports are written by our newsdesk with help from AI, from reporting by the outlets credited at the foot of each story. Match reports and stats are drawn from the PDC's own data.</p>
     <p>Photo credits and licences are listed on the <a href="/credits">credits page</a>.</p>
     <h2>Not official</h2>
     <p>{SITE.name} is an independent fan site. It isn't affiliated with or endorsed by the Professional Darts Corporation, Sky Sports, ITV or any player.</p>
-    <h2>Contact</h2>
-    {SITE.contactEmail
-      ? <p>Corrections, ideas or problems: email <a href={`mailto:${SITE.contactEmail}`}>{SITE.contactEmail}</a>.</p>
-      : <p>A contact address is on its way. Until then, corrections and ideas are welcome via the site's owner.</p>}
+    <h2 id="contact">Contact</h2>
+    <p>Spotted a mistake, got an idea, or something not working? Send a message and it comes straight to us. Add your email if you'd like a reply.</p>
+    {SITE.contactKey ? (
+      <form class="contact" id="contact-form" novalidate>
+        <input type="hidden" name="access_key" value={SITE.contactKey} />
+        <input type="hidden" name="from_name" value={`${SITE.name} website`} />
+        <!-- Spam trap: hidden from people, bots fill it in and the message is dropped -->
+        <input type="checkbox" name="botcheck" class="trap" tabindex="-1" autocomplete="off" aria-hidden="true" />
+        <div class="row">
+          <label><span>Your name <span class="opt">(optional)</span></span><input name="name" autocomplete="name" maxlength="80" /></label>
+          <label><span>Your email <span class="opt">(optional, for a reply)</span></span><input name="email" type="email" autocomplete="email" maxlength="120" /></label>
+        </div>
+        <label>What's it about?
+          <select name="topic">
+            <option>A correction</option><option>An idea</option><option>Something's not working</option><option>Something else</option>
+          </select>
+        </label>
+        <label>Message<textarea name="message" rows="6" required minlength="10" maxlength="4000"></textarea></label>
+        <div class="send"><button type="submit">Send message</button><p class="status" id="contact-status" role="status" aria-live="polite"></p></div>
+      </form>
+    ) : (
+      <p class="muted">The contact form is being set up. Please check back soon.</p>
+    )}
   </section>
+
+  <script>
+    function init() {
+      const form = document.getElementById('contact-form') as HTMLFormElement | null;
+      if (!form) return;
+      const status = document.getElementById('contact-status')!;
+      const btn = form.querySelector('button')!;
+      const opened = Date.now();
+      form.onsubmit = async e => {
+        e.preventDefault();
+        const data = new FormData(form);
+        const msg = String(data.get('message') || '').trim();
+        if (msg.length < 10) { status.textContent = 'Please write a little more (at least 10 characters).'; return; }
+        const email = String(data.get('email') || '').trim();
+        if (email && !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) { status.textContent = 'That email address doesn’t look right.'; return; }
+        // Bots submit instantly: anything under three seconds is quietly ignored.
+        if (Date.now() - opened < 3000 || data.get('botcheck')) { form.reset(); status.textContent = 'Thanks, your message has been sent.'; return; }
+        data.set('subject', `The Oche: ${data.get('topic')}`);
+        if (!email) data.delete('email');
+        btn.disabled = true; status.textContent = 'Sending…';
+        try {
+          const res = await fetch('https://api.web3forms.com/submit', { method: 'POST', headers: { accept: 'application/json' }, body: data });
+          const out = await res.json().catch(() => ({}));
+          if (!res.ok || out.success === false) throw new Error(out.message || 'failed');
+          form.reset();
+          status.textContent = 'Thanks, your message has been sent.';
+        } catch {
+          status.textContent = 'Sorry, that didn’t send. Please try again in a minute.';
+        } finally { btn.disabled = false; }
+      };
+    }
+    document.addEventListener('astro:page-load', init);
+  </script>
 </Layout>
+
+<style>
+  .contact { display: grid; gap: 14px; margin-top: 16px; padding: 22px; border-radius: var(--radius); background: var(--card); }
+  .contact .row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  .contact label { display: grid; gap: 6px; font-weight: 700; font-size: 14px; }
+  .contact .opt { font-weight: 500; color: var(--muted); }
+  .contact input, .contact select, .contact textarea { font: inherit; font-size: 16px; font-weight: 400; padding: 11px 14px; border-radius: 12px; border: 1.5px solid var(--line); background: var(--paper); color: var(--fg); }
+  .contact textarea { resize: vertical; min-height: 140px; }
+  .contact input:focus, .contact select:focus, .contact textarea:focus { outline: none; border-color: var(--fg); }
+  .contact .trap { position: absolute; left: -9999px; width: 1px; height: 1px; opacity: 0; }
+  .send { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; }
+  .send button { border: 0; border-radius: 999px; padding: 12px 22px; background: var(--volt); color: #0b0c10; font-weight: 800; font-size: 15px; cursor: pointer; }
+  .send button:disabled { opacity: .6; cursor: default; }
+  .status { margin: 0; font-weight: 600; font-size: 14px; }
+  @media (max-width: 640px) { .contact .row { grid-template-columns: 1fr; } .contact { padding: 16px; } }
+</style>
