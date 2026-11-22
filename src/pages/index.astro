@@ -320,8 +320,8 @@ const spot = loadProfile(spotRank.id);
   .feature :global(.ft-big.r .ft-rem) { flex-direction: row-reverse; }
   .feature :global(.ft-big.on .ft-rem) { color: var(--volt); }
   .feature :global(.ft-big .ft-num) { min-width: 0; }
-  .feature :global(.ft-corow) { display: flex; gap: 6px; height: 26px; align-items: center; }
-  .feature :global(.ft-big.r .ft-corow) { flex-direction: row-reverse; }
+  .feature :global(.ft-bigav) { height: 22px; font-size: 15px; font-weight: 800; color: #fff; font-variant-numeric: tabular-nums; white-space: nowrap; }
+  .feature :global(.ft-bigav i) { font-style: normal; font-size: 11px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--on-ink-2); }
   .feature :global(.ft-big .ft-co) { background: rgba(11, 12, 16, .75); font-size: 13px; }
   .feature :global(.ft-big .ft-180) { top: -40px; }
   .feature :global(.ft-big.l .ft-180) { right: 0; left: auto; transform: rotate(-6deg); }
@@ -461,8 +461,6 @@ const spot = loadProfile(spotRank.id);
     .feature :global(.ft-now), .feature :global(.ft-who.r .ft-now) { margin-top: 4px; gap: 4px; }
     .feature :global(.ft-who small) { font-size: 12px; }
     .feature :global(.ft-av) { font-size: 12px; }
-    /* Live on a phone: '#23 · 98.52 AVG' on one line ('World' only when there's room) */
-    .feature :global(.ft-bottom.live .ft-wr) { display: none; }
     .feature :global(.ft-who small) { white-space: nowrap; }
     .feature :global(.ft-who.l .ft-num) { text-align: left; }
     .feature :global(.ft-who.r .ft-num) { text-align: right; }
@@ -472,14 +470,14 @@ const spot = loadProfile(spotRank.id);
     .feature :global(.ft-stage-row.play) { grid-template-rows: auto auto; row-gap: 0; }
     .feature :global(.ft-stage-row.play .ft-p) { height: 132px; }
     .feature :global(.ft-stage-row.play::after) { display: none; }
-    .feature :global(.ft-stage-row.play .ft-mid) { grid-row: 2; grid-column: 2; align-self: start; padding: 10px 4px 0; }
-    .feature :global(.ft-big) { grid-row: 2; align-self: start; padding: 8px 0 12px; gap: 4px; }
+    .feature :global(.ft-stage-row.play .ft-mid) { grid-row: 2; grid-column: 2; align-self: start; padding: 22px 4px 0; }
+    .feature :global(.ft-big) { grid-row: 2; align-self: start; padding: 14px 0 14px; gap: 6px; }
     .feature :global(.ft-big.l) { justify-self: center; align-items: center; }
     .feature :global(.ft-big.r) { justify-self: center; align-items: center; }
     .feature :global(.ft-big .ft-rem) { font-size: 66px; gap: 6px; }
     .feature :global(.ft-big .ft-dot) { width: 8px; height: 8px; box-shadow: 0 0 0 3px rgba(200, 255, 46, .2); }
-    .feature :global(.ft-corow) { height: 22px; }
-    .feature :global(.ft-big .ft-co) { font-size: 11px; padding: 2px 6px; }
+    .feature :global(.ft-bigav) { height: 18px; font-size: 13px; }
+    .feature :global(.ft-bigav i) { font-size: 10px; }
     .feature :global(.ft-big .ft-180) { top: -30px; }
     .feature :global(.ft-legs) { font-size: 36px; }
     .feature :global(.ft-legs-l) { font-size: 9px; }

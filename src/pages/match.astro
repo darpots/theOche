@@ -50,7 +50,6 @@ import Layout from '../layouts/Layout.astro';
 
   <script>
     import { API, flag, keyName, liveScore, liveLegs, cleanName, formatLabel } from '../lib/pdc.mjs';
-    import { checkout } from '../lib/checkout.mjs';
     import { fetchH2H, h2hSummary, renderH2H } from '../lib/h2h.mjs';
     import { liveFor, watchLive, unwatch, isPushing, pushedLegFor, LIVE_TICK, PUSH_TICK } from '../lib/live-client.mjs';
     import { ukTime, scoreHtml } from '../lib/format.mjs';
@@ -67,37 +66,6 @@ import Layout from '../layouts/Layout.astro';
     const legCache = new Map<string, Map<string, any>>();
     let ftCache: { id: string | null; at: number; f: any; t: any } = { id: null, at: 0, f: null, t: null };
 
-    /** The leg being played: what each player needs, who's throwing and their last visits. */
-    function currentLeg(leg: any, names: string[]) {
-      const v = (leg.visits || []).slice().sort((a: any, b: any) => a.order - b.order);
-      const mine = (p1: boolean) => v.filter((x: any) => x.isParticipant1 === p1);
-      const left = (p1: boolean) => mine(p1).at(-1)?.remaining ?? 501;
-      const last = v.at(-1);
-      const thrower = leg.throwing ?? (last ? (last.isParticipant1 ? 1 : 0) : null);
-      const darts = (p1: boolean) => mine(p1).reduce((n: number, x: any) => n + (x.numberOfDartsThrown || 0), 0);
-      // Once someone checks out, the leg shows who won it until the next leg's first dart.
-      const winner = v.find((x: any) => x.remaining === 0);
-      const won = winner ? (winner.isParticipant1 ? 0 : 1) : null;
-      const chips = (p1: boolean) => mine(p1).slice(-4).reverse().map((x: any, i: number) => `<i class="${x.isBust ? 'bust' : x.score >= 100 ? 'big' : ''}${i === 0 ? ' last' : ''}">${x.isBust ? 'Bust' : x.score}</i>`).join('');
-      // A 180 with the latest visit gets shouted about; a finish on the board gets its route.
-      const shout = (k: number) => last && last.isParticipant1 === (k === 0) && !last.isBust && last.score === 180 ? '<span class="cl-180">180!</span>' : '';
-      const route = (k: number) => {
-        if (won === k) return `<span class="cl-co won" title="Leg won">Won the leg · ${winner.score} out</span>`;
-        if (won != null) return '';
-        const r = checkout(left(k === 0)); return r ? `<span class="cl-co" title="Checkout">${r.join(' ')}</span>` : '';
-      };
-      const on = (k: number) => won == null && thrower === k;
-      const side = (k: number) => `<div class="cl-side c${k}${on(k) ? ' on' : ''}${won === k ? ' won' : ''}">
-          ${won == null ? shout(k) : ''}
-          <span class="cl-name">${on(k) ? `<span class="cl-oche" title="Throwing">●</span>` : ''}${esc(names[k])} <small>${darts(k === 0)} darts</small></span>
-          <b class="poster-num">${left(k === 0)}</b>${route(k)}
-          <span class="cl-v">${chips(k === 0) || '<em>No visits yet</em>'}</span>
-        </div>`;
-      const set = leg.setNumber > 1 || (leg.sets ?? 0) > 1 ? `Set ${leg.setNumber} · ` : '';
-      const head = won != null ? `${set}Leg ${leg.legNumber} · <b class="cl-won">${esc(names[won])} wins it</b>` : `${set}Leg ${leg.legNumber} · in play`;
-      return `<div class="curleg${won != null ? ' done' : ''}"><span class="lbl cl-h">${head}</span><div class="cl-row">${side(0)}${side(1)}</div></div>`;
-    }
-
     function legData(t: any) {
       return (t.legs || []).slice().sort((a: any, b: any) => (a.setNumber ?? 1) - (b.setNumber ?? 1) || a.legNumber - b.legNumber).map((leg: any) => {
         const v = (leg.visits || []).slice().sort((a: any, b: any) => a.order - b.order);
@@ -113,7 +81,7 @@ import Layout from '../layouts/Layout.astro';
       });
     }
 
-    function header(f: any, t: any, data: any, live: any = null) {
+    function header(f: any, t: any, data: any, live: any = null, leg: any = null) {
       const a = f.attributes, ps = [a.participant1, a.participant2];
       const ts = a.tournamentStage || {};
       const sets = (ts.numberOfSets || 0) > 1;
@@ -141,6 +109,32 @@ import Layout from '../layouts/Layout.astro';
       const tour = a.tournament;
       // Start: "Thu 19 Nov · 9:15pm GMT" (the feed's times are UK local time).
       const when = `${new Date(`${a.startDate}T12:00:00Z`).toLocaleDateString('en-GB', { weekday: 'short', day: 'numeric', month: 'short', timeZone: 'UTC' })}${ukTime(a.startTime, a.startDate) ? ` · ${ukTime(a.startTime, a.startDate)}` : ''}`;
+      // In play: a scoreboard. Pictures, then each player's score left (the hero
+      // number) with their average under it and the match score small between them,
+      // then names. The same order as the homepage tile.
+      if (status === 'Live' && leg) {
+        const v = (leg.visits || []).slice().sort((x: any, y: any) => x.order - y.order);
+        const left = (k: number) => v.filter((x: any) => x.isParticipant1 === (k === 0)).at(-1)?.remaining ?? 501;
+        const fin = v.find((x: any) => x.remaining === 0);
+        const won = fin ? (fin.isParticipant1 ? 0 : 1) : null;
+        const lastV = v.at(-1);
+        const thr = won != null ? null : leg.throwing ?? (lastV ? (lastV.isParticipant1 ? 1 : 0) : null);
+        const shout = (k: number) => won == null && lastV && lastV.isParticipant1 === (k === 0) && !lastV.isBust && lastV.score === 180 ? '<span class="cl-180">180!</span>' : '';
+        const big = (k: number) => `<div class="lb-s s${k}${thr === k ? ' on' : ''}${won === k ? ' won' : ''}">${shout(k)}
+            <b class="poster-num">${thr === k ? '<span class="lb-dot" aria-label="throwing"></span>' : ''}${left(k)}</b>
+            <span class="lb-av" title="Three-dart average">${avg[k] != null ? `${Number(avg[k]).toFixed(2)} <i>avg</i>` : ''}</span></div>`;
+        const who = (k: number) => { const p = ps[k]; const href = p?.participantSlug ? `/players/${p.participantSlug}` : null;
+          return `<div class="who w${k}">${href ? `<a href="${href}">${esc(name(p))}</a>` : `<span>${esc(name(p))}</span>`}<small>${flag(p?.countryCode)} ${p?.ranking ? `World #${p.ranking}` : ''}</small></div>`; };
+        const mid = `<div class="lb-mid"><span class="lbl">${sets ? 'Sets' : 'Legs'}</span><b class="poster-num">${scoreHtml(a.participant1Score, a.participant2Score)}</b>${sets && live ? `<span class="lbl">Legs <b>${scoreHtml(live.legs[0], live.legs[1])}</b></span>` : ''}${won != null ? `<span class="lb-won">${esc(last(ps[won]))} wins leg ${leg.legNumber}</span>` : ''}</div>`;
+        return `
+        <a class="back" href="/tournament/${tour?.tournamentID}">← ${esc((tour?.name || 'Tournament').replace(/^\d{4}\s+/, ''))}</a>
+        <p class="stg">${esc(a.tournamentStage?.stage?.name || '')}${fmt ? ` · ${esc(fmt)}` : ''} · Leg ${leg.legNumber} · <span class="live-dot">Live</span></p>
+        <div class="board">
+          <div class="pic p0">${pic(ps[0])}</div><div class="pic p1">${pic(ps[1])}</div>
+          ${big(0)}${mid}${big(1)}
+          ${who(0)}${who(1)}
+        </div>`;
+      }
       return `
         <a class="back" href="/tournament/${tour?.tournamentID}">← ${esc((tour?.name || 'Tournament').replace(/^\d{4}\s+/, ''))}</a>
         <p class="stg">${esc(a.tournamentStage?.stage?.name || '')}${fmt ? ` · ${esc(fmt)}` : ''}${status === 'Live' ? ' · <span class="live-dot">Live</span>' : ` · ${status === 'Result' ? 'Result' : when}`}</p>
@@ -320,22 +314,19 @@ import Layout from '../layouts/Layout.astro';
         // "Leg · name" flash when a leg or set is won.
         if (m?.status === 'live') {
           const setPlay = (t?.data?.attributes?.stage?.numberOfSets || a.attributes.tournamentStage?.numberOfSets || 0) > 1;
-          watchWins(id, setPlay ? m.legs : [a.attributes.participant1Score ?? 0, a.attributes.participant2Score ?? 0], setPlay ? m.sets : null, names, '#mh .score');
+          watchWins(id, setPlay ? m.legs : [a.attributes.participant1Score ?? 0, a.attributes.participant2Score ?? 0], setPlay ? m.sets : null, names, '#mh .lb-mid, #mh .score');
         }
         document.title = `${name(a.attributes.participant1)} v ${name(a.attributes.participant2)} · The Oche`;
-        mh.innerHTML = header(a, t?.data, data, m?.status === 'live' ? m : null);
         const playing = m?.status === 'live' ? t?.data?.attributes?.legs?.find((l: any) => (l.setNumber ?? 1) === (m.set || 1) && l.legNumber === m.leg) : null;
         const prevLeg = playing && !playing.visits?.length ? t.data.attributes.legs.find((l: any) => (l.setNumber ?? 1) === (playing.setNumber ?? 1) && l.legNumber === playing.legNumber - 1) : null;
-        if (prevLeg?.visits?.some((x: any) => x.remaining === 0)) mh.insertAdjacentHTML('beforeend', currentLeg(prevLeg, names));
-        else if (playing) {
-          // Nobody has thrown yet: players alternate who starts each leg.
-          if (playing.throwing == null && !playing.visits.length) {
-            const prev = t.data.attributes.legs.find((l: any) => (l.setNumber ?? 1) === (playing.setNumber ?? 1) && l.legNumber === playing.legNumber - 1);
-            const first = prev?.visits?.slice().sort((x: any, y: any) => x.order - y.order)[0];
-            if (first) playing.throwing = first.isParticipant1 ? 1 : 0;
-          }
-          mh.insertAdjacentHTML('beforeend', currentLeg(playing, names));
+        // Nobody has thrown yet in the new leg: players alternate who starts each leg.
+        if (playing && playing.throwing == null && !playing.visits.length) {
+          const first = prevLeg?.visits?.slice().sort((x: any, y: any) => x.order - y.order)[0];
+          if (first) playing.throwing = first.isParticipant1 ? 1 : 0;
         }
+        // Just after a checkout, keep the leg that was won on the board until the next leg's first dart.
+        const boardLeg = prevLeg?.visits?.some((x: any) => x.remaining === 0) ? prevLeg : playing;
+        mh.innerHTML = header(a, t?.data, data, m?.status === 'live' ? m : null, boardLeg);
         // Key numbers under the score (the averages are already by each name): 180s, breaks of throw, best checkout, shortest leg.
         const meta = t?.data?.attributes?.fixtureMeta;
         if (meta?.participant1Data && legs.length) {
@@ -400,7 +391,7 @@ import Layout from '../layouts/Layout.astro';
       let n = 0;
       const tick = () => {
         const who = [...document.querySelectorAll('#mh .who a, #mh .who > span')].map(e => (e.textContent || '').trim().split(' ').slice(1).join(' '));
-        if (who.length === 2) flashWin(who[n % 2], n === 3 ? 'Set' : 'Leg', '#mh .score');
+        if (who.length === 2) flashWin(who[n % 2], n === 3 ? 'Set' : 'Leg', '#mh .lb-mid, #mh .score');
         if (++n < 4 && document.getElementById('mh')) setTimeout(tick, 4000);
       };
       setTimeout(tick, 1500);
@@ -453,6 +444,46 @@ import Layout from '../layouts/Layout.astro';
   .mh-in :global(.score small) { position: absolute; }
   .mh-in :global(.score small) { display: none; }
 
+  /* ---- In play: the scoreboard (pictures, score left with average, legs between, names) ---- */
+  .mh-in :global(.board) { display: grid; grid-template-columns: 1fr auto auto 1fr; grid-template-areas: 'p0 p0 p1 p1' 'b0 m m b1' 'w0 w0 w1 w1'; align-items: end; margin-top: 10px; padding-bottom: 24px; }
+  .mh-in :global(.board .pic) { width: 200px; height: 230px; }
+  .mh-in :global(.board .p0) { grid-area: p0; justify-self: center; }
+  .mh-in :global(.board .p1) { grid-area: p1; justify-self: center; }
+  .mh-in :global(.lb-s) { position: relative; display: flex; flex-direction: column; align-items: center; gap: 6px; padding-top: 16px; }
+  .mh-in :global(.lb-s.s0) { grid-area: b0; }
+  .mh-in :global(.lb-s.s1) { grid-area: b1; }
+  .mh-in :global(.lb-s b) { position: relative; font-family: var(--poster); font-weight: 400; font-size: clamp(120px, 13vw, 200px); line-height: .82; color: var(--on-ink); font-variant-numeric: tabular-nums; }
+  .mh-in :global(.lb-s.on b), .mh-in :global(.lb-s.won b) { color: var(--volt); }
+  .mh-in :global(.lb-dot) { position: absolute; top: 50%; left: -26px; width: 12px; height: 12px; margin-top: -6px; border-radius: 50%; background: var(--volt); box-shadow: 0 0 0 4px rgba(200, 255, 46, .2); }
+  .mh-in :global(.lb-s.s1 .lb-dot) { left: auto; right: -26px; }
+  .mh-in :global(.lb-av) { height: 22px; font-size: 16px; font-weight: 800; color: #fff; font-variant-numeric: tabular-nums; white-space: nowrap; }
+  .mh-in :global(.lb-av i) { font-style: normal; font-size: 11px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--on-ink-2); }
+  .mh-in :global(.lb-s .cl-180) { top: -18px; right: -10px; }
+  .mh-in :global(.lb-mid) { grid-area: m; align-self: center; display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 16px 18px 0; }
+  .mh-in :global(.lb-mid .lbl) { color: var(--on-ink-2); white-space: nowrap; }
+  .mh-in :global(.lb-mid .lbl b) { font-family: var(--poster); font-weight: 400; font-size: 18px; color: #fff; letter-spacing: 0; margin-left: 4px; }
+  .mh-in :global(.lb-mid > b) { font-size: clamp(56px, 5.5vw, 84px); line-height: .9; color: #fff; white-space: nowrap; }
+  .mh-in :global(.lb-won) { font-size: 12px; font-weight: 800; color: var(--ink); background: var(--volt); border-radius: 8px; padding: 3px 8px; white-space: nowrap; margin-top: 4px; }
+  .mh-in :global(.board .who) { padding: 18px 0 0; }
+  .mh-in :global(.board .w0) { grid-area: w0; }
+  .mh-in :global(.board .w1) { grid-area: w1; align-items: flex-end; text-align: right; }
+  .mh-in :global(.board .who a), .mh-in :global(.board .who > span) { font-size: clamp(26px, 3vw, 44px); }
+  @media (max-width: 760px) {
+    .mh-in :global(.board) { padding-bottom: 16px; }
+    .mh-in :global(.board .pic) { width: 120px; height: 132px; }
+    .mh-in :global(.lb-s) { padding-top: 14px; gap: 4px; }
+    .mh-in :global(.lb-s b) { font-size: 66px; }
+    .mh-in :global(.lb-dot) { width: 8px; height: 8px; margin-top: -4px; left: -16px; box-shadow: 0 0 0 3px rgba(200, 255, 46, .2); }
+    .mh-in :global(.lb-s.s1 .lb-dot) { right: -16px; }
+    .mh-in :global(.lb-av) { height: 18px; font-size: 13px; }
+    .mh-in :global(.lb-av i) { font-size: 10px; }
+    .mh-in :global(.lb-mid) { padding: 14px 6px 0; }
+    .mh-in :global(.lb-mid > b) { font-size: 36px; }
+    .mh-in :global(.lb-mid .lbl) { font-size: 9px; }
+    .mh-in :global(.lb-won) { font-size: 10px; padding: 2px 6px; }
+    .mh-in :global(.board .who) { padding-top: 14px; }
+    .mh-in :global(.board .who a), .mh-in :global(.board .who > span) { font-size: 22px; }
+  }
   /* The leg in play */
   .mh-in :global(.curleg) { margin: 0 0 22px; background: rgba(255, 255, 255, .06); border: 1px solid var(--ink-2); border-radius: 18px; padding: 14px 18px 16px; }
   .mh-in :global(.cl-h) { color: var(--on-ink-2); display: block; margin-bottom: 10px; }
