@@ -71,7 +71,7 @@ export function featureTile(f, mode, eventName, also = []) {
   const setLine = sets && inPlay && legs ? `<div class="ft-set">Set ${f.liveSet || 1} · legs <b>${legs[0]}–${legs[1]}</b></div>` : '';
   const centre = done || inPlay || (f.s1 ?? 0) + (f.s2 ?? 0) > 0
     ? `<div class="ft-score poster-num">${f.s1 ?? 0}<span>–</span>${f.s2 ?? 0}</div>${setLine}<div class="lbl ft-sub">${inPlay ? `<span class="ft-pulse"></span>Live${sets ? ' · sets' : ''}` : mode === 'now' ? 'Latest score' : `Final${sets ? ' · sets' : ''}`}</div>`
-    : `<div class="ft-score ft-vs poster-num">V</div><div class="lbl ft-sub">${mode === 'now' ? 'Waiting for the first dart' : esc(ukTime(f.time, f.date) || 'Time TBC')}</div>`;
+    : `<div class="ft-score ft-vs poster-num">V</div>${mode === 'now' ? '<div class="lbl ft-sub">Waiting for the first dart</div>' : ''}`;
   const avg = s => (s?.avg != null ? `<span class="ft-av" title="Three-dart average">${Number(s.avg).toFixed(2)} <i>avg</i></span>` : '');
   const side = (p, won, s, k) => `<div class="ft-who ${k ? 'r' : 'l'}${won ? ' won' : ''}">
       <div class="ft-id"><b>${esc(p.name)}</b><small>${flag(p.country)} ${p.ranking ? `World #${p.ranking}` : ''}${won ? ' · Winner' : ''}</small>${inPlay && f.legNow ? avg(s) : ''}</div>

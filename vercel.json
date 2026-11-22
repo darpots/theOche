@@ -21,5 +21,8 @@
       "source": "/data/:path*",
       "headers": [{ "key": "Cache-Control", "value": "public, max-age=600, stale-while-revalidate=3600" }]
     }
+  ],
+  "redirects": [
+    { "source": "/news/humphries-confirms-injury-after-sykes-defeat-at-grand-slam", "destination": "/news/sykes-survives-humphries-fightback-to-win-10-9/", "permanent": true }
   ]
 }
