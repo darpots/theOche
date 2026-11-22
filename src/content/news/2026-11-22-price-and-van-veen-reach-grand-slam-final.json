@@ -9,14 +9,32 @@
   "Van Veen's win ends a run that had made Van Gerwen the story of the quarter-finals. The 11th-ranked Dutchman won this event in 2017 and had beaten Tom Sykes 16-11 in a match containing two nine-darters, but he could not hold off a player who had lost to him in 10 of their previous 14 meetings. Van Veen's best at this tournament before this year was a quarter-final in 2024.",
   "The semi-finals also made some history for the Netherlands. With Doets, Van Gerwen and Van Veen all in the last four, it was only the second time three Dutch players had reached the semi-finals of the same PDC premier event, after the 2025 European Championship. Half of the quarter-final field was Dutch, and one of them is still standing."
  ],
- "tags": ["Grand Slam of Darts"],
- "players": ["Gerwyn Price", "Gian van Veen", "Kevin Doets", "Michael van Gerwen"],
- "sources": [
-  {"name": "PDC", "url": "https://www.pdc.tv/matches/517027", "title": "Gerwyn Price v Kevin Doets"},
-  {"name": "PDC", "url": "https://www.pdc.tv/matches/517028", "title": "Gian van Veen v Michael van Gerwen"}
+ "tags": [
+  "Grand Slam of Darts"
  ],
- "originalTitles": ["Gerwyn Price v Kevin Doets", "Gian van Veen v Michael van Gerwen"],
- "writtenBy": "The Oche newsdesk (Claude)",
+ "players": [
+  "Gerwyn Price",
+  "Gian van Veen",
+  "Kevin Doets",
+  "Michael van Gerwen"
+ ],
+ "sources": [
+  {
+   "name": "PDC",
+   "url": "https://www.pdc.tv/matches/517027",
+   "title": "Gerwyn Price v Kevin Doets"
+  },
+  {
+   "name": "PDC",
+   "url": "https://www.pdc.tv/matches/517028",
+   "title": "Gian van Veen v Michael van Gerwen"
+  }
+ ],
+ "originalTitles": [
+  "Gerwyn Price v Kevin Doets",
+  "Gian van Veen v Michael van Gerwen"
+ ],
+ "writtenBy": "The Oche newsdesk",
  "kind": "session",
  "facts": "10871-2026-11-22",
  "tournament": "10871"

@@ -10,14 +10,28 @@
   "Both come in on a run of wins. Price edged Niko Springer 16-15 in an earlier round and then beat Ryan Searle 10-7 before the quarter-finals. Van Veen beat Nathan Aspinall 16-14 and Martin Schindler 10-7 on the way.",
   "Price is the clear favourite on history, but Van Veen is ranked a place higher and a first major title would be a breakthrough for a player who has reached finals day without one in the last 12 months."
  ],
- "tags": ["Grand Slam of Darts"],
- "players": ["Gerwyn Price", "Gian van Veen"],
- "sources": [
-  {"name": "PDC", "url": "https://www.pdc.tv/matches/517029", "title": "Gerwyn Price v Gian van Veen"}
+ "tags": [
+  "Grand Slam of Darts"
  ],
- "originalTitles": ["Gerwyn Price v Gian van Veen"],
- "writtenBy": "The Oche newsdesk (Claude)",
+ "players": [
+  "Gerwyn Price",
+  "Gian van Veen"
+ ],
+ "sources": [
+  {
+   "name": "PDC",
+   "url": "https://www.pdc.tv/matches/517029",
+   "title": "Gerwyn Price v Gian van Veen"
+  }
+ ],
+ "originalTitles": [
+  "Gerwyn Price v Gian van Veen"
+ ],
+ "writtenBy": "The Oche newsdesk",
  "kind": "preview",
  "facts": "10871-2026-11-22-final-preview",
- "tournament": "10871"
+ "tournament": "10871",
+ "matches": [
+  "517029"
+ ]
 }
