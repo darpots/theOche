@@ -1,3 +1,4 @@
+import { shownNow } from './tv-delay.mjs';
 // Shared PDC helpers. Plain JS so both the Node refresh scripts and the
 // browser (live updates) can use the same normalisers.
 
@@ -488,7 +489,7 @@ export const BREAK_AFTER = 60_000;
  * last dart (end of the previous leg) more than BREAK_AFTER ago.
  * Takes a leg summary (legSummary) or a leg plus the previous leg's lastAt.
  */
-export function onBreak(l, prevLastAt = null, now = Date.now()) {
+export function onBreak(l, prevLastAt = null, now = shownNow()) {
   if (!l || (l.visits || []).length || l.dartsIn) return false;
   const last = l.lastAt || prevLastAt;
   return !!last && now - last > BREAK_AFTER;

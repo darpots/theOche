@@ -8,6 +8,7 @@
 //    fallback if it ever drops (blocked network, old browser).
 // Pages keep their own timers; while push is running they only need a slow
 // safety check, and watchLive() calls them back the moment a score changes.
+import { record, at as delayed, onDelayTick } from './tv-delay.mjs';
 import { liveMatches, slimLiveData, legFromTurns, legSummary, legResult, liveCurrentLeg, LIVE_KEY, LIVE_PROJECT } from './pdc.mjs';
 
 /** How often the live score is polled when push isn't running (ms). */
@@ -27,6 +28,17 @@ export const isPushing = () => pushOk && watching.size > 0;
 
 /** Live documents for these fixtures; served from push data when every one is watched, else one shared request per tick. */
 export function liveFor(tournamentId, ids) {
+  // Every live document goes through the TV delay (tv-delay.mjs): pages see each
+  // match as it was `delay` ago; the latest raw one is kept for the leg lookups.
+  return liveForRaw(tournamentId, ids).then(m => {
+    const out = new Map();
+    for (const [id, x] of m) { rawLive.set(String(id), x); out.set(id, record(`m:${id}`, x)); }
+    return out;
+  });
+}
+const rawLive = new Map(); // fixture id -> latest live document (undelayed)
+
+function liveForRaw(tournamentId, ids) {
   const list = [...new Set(ids.map(String))];
   const isWatched = id => watching.has(`${tournamentId}:${id}`) && pushed.has(id);
   // While push is running, watched matches come from it; the rest (finished or not
@@ -89,7 +101,9 @@ export async function watchLive(tournamentId, ids, onChange) {
             pushedLeg.set(id, { set, leg, data: legFromTurns([], set, leg), prevFirst: follows ? prevFirst : null, prevLastAt: follows ? prevLastAt : null, prevResult: follows ? prevResult : null, ready: false });
             legOff = fs.onSnapshot(fs.collection(store, `tournaments/${tournamentId}/matches/${id}/sets/${set}/legs/${leg}/turns`), q => {
               const cur = pushedLeg.get(id);
-              pushedLeg.set(id, { ...cur, data: legFromTurns(q.docs.map(d => d.data()), set, leg), ready: true });
+              const data = legFromTurns(q.docs.map(d => d.data()), set, leg);
+              pushedLeg.set(id, { ...cur, data, ready: true });
+              record(`pl:${id}`, { set, leg, data });
               notify();
             }, () => {});
           }
@@ -106,7 +120,17 @@ export async function watchLive(tournamentId, ids, onChange) {
  * The leg in play for a live match: from pushed data when it's flowing (no
  * extra request, and every dart shows), else one fetch.
  */
-export async function currentLeg(tournamentId, m) {
+export async function currentLeg(tournamentId, shown) {
+  if (!shown) return null;
+  // Work out the leg from the latest data, then hand back what the TV delay says is due.
+  const raw = rawLive.get(String(shown.id)) || shown;
+  const now = await currentLegRaw(tournamentId, raw).catch(() => null);
+  const v = record(`leg:${shown.id}`, now ?? null);
+  return shown.status === 'live' ? v : null;
+}
+const legMemo = new Map(); // fixture id -> { at, key, p } (one fetch every few seconds when push isn't running)
+
+async function currentLegRaw(tournamentId, m) {
   if (!m || m.status !== 'live' || !m.leg) return null;
   const p = pushedLeg.get(String(m.id));
   if (isPushing() && p?.ready && p.leg === m.leg && p.set === (m.set || 1)) {
@@ -114,14 +138,21 @@ export async function currentLeg(tournamentId, m) {
     if (!p.data.visits.length && (p.prevFirst == null || p.prevLastAt == null) && m.leg > 1) return liveCurrentLeg(tournamentId, m);
     return legSummary(p.data, m, p.prevFirst, p.prevLastAt, p.prevResult);
   }
-  return liveCurrentLeg(tournamentId, m);
+  const key = `${m.set}/${m.leg}`, c = legMemo.get(String(m.id));
+  if (c && c.key === key && Date.now() - c.at < 3_000) return c.p;
+  const p2 = liveCurrentLeg(tournamentId, m);
+  legMemo.set(String(m.id), { at: Date.now(), key, p: p2 });
+  return p2;
 }
 
 /** The pushed leg in play (as legFromTurns returns it), if push has it for this set and leg. */
 export function pushedLegFor(id, set, leg) {
-  const p = pushedLeg.get(String(id));
-  return isPushing() && p?.ready && p.set === set && p.leg === leg ? p.data : null;
+  const p = delayed(`pl:${id}`); // as it was `delay` ago (tv-delay.mjs)
+  return isPushing() && p && p.set === set && p.leg === leg ? p.data : null;
 }
+
+// While a TV delay is on, delayed values come due without any new data: redraw every second.
+onDelayTick(() => notify());
 
 /** Remove a page's callback (on navigation). */
 export function unwatch(onChange) { callbacks.delete(onChange); }

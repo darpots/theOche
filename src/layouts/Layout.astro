@@ -97,7 +97,21 @@ const fullTitle = title === 'The Oche' ? title : `${title} · The Oche`;
       </div>
       <!-- Live bar: shown site-wide while the current event has matches on today -->
       <div class="livebar" id="livebar" hidden data-id={t.id} data-start={t.start} data-end={t.end} data-name={t.name}>
-        <div class="wrap lb-in" aria-live="polite"><a class="lb-ev" href={`/tournament/${t.id}`}>{t.name}</a></div>
+        <div class="wrap lb-row">
+          <div class="lb-in" aria-live="polite"><a class="lb-ev" href={`/tournament/${t.id}`}>{t.name}</a></div>
+          <!-- TV sync: hold live scores back to match this viewer's TV (src/lib/tv-delay.mjs) -->
+          <button class="tvs-btn" type="button" id="tvs-btn" aria-expanded="false" aria-controls="tvs-pop" title="Match the live scores to your TV">TV sync</button>
+          <div class="tvs-pop" id="tvs-pop" hidden>
+            <b class="tvs-h">Match the scores to your TV</b>
+            <p class="tvs-p">Live scores usually arrive before you see the darts on TV. Hold them back so they land as they happen on your screen. Saved on this device only.</p>
+            <button class="tvs-sync" type="button" id="tvs-sync">Sync to my TV</button>
+            <p class="tvs-p tvs-tip" id="tvs-tip">Tap it the moment you see a leg won on TV.</p>
+            <div class="tvs-opts" role="group" aria-label="Delay">
+              <button type="button" data-tvs="0">Off</button><button type="button" data-tvs="5">5s</button><button type="button" data-tvs="10">10s</button><button type="button" data-tvs="20">20s</button><button type="button" data-tvs="30">30s</button><button type="button" data-tvs="45">45s</button><button type="button" data-tvs="60">60s</button>
+            </div>
+            <div class="tvs-fine"><button type="button" data-tvs-step="-1" aria-label="One second less">−1s</button><span id="tvs-now">Off</span><button type="button" data-tvs-step="1" aria-label="One second more">+1s</button></div>
+          </div>
+        </div>
       </div>
       <script is:inline>
         // Show the bar before the first paint on event days, so the page doesn't jump when scores arrive.
@@ -156,6 +170,37 @@ const fullTitle = title === 'The Oche' ? title : `${title} · The Oche`;
     import { ukTime, scoreHtml } from '../lib/format.mjs';
     import { followed, notifyLive } from '../lib/follow.mjs';
       import { liveFor, watchLive, isPushing, currentLeg, LIVE_TICK, PUSH_TICK } from '../lib/live-client.mjs';
+      import { getDelay, setDelay, syncToTv, canSync, onDelayTick } from '../lib/tv-delay.mjs';
+      // ---- TV sync control (in the live bar) ----------------------------------
+      (() => {
+        const btn = document.getElementById('tvs-btn'), pop = document.getElementById('tvs-pop');
+        if (!btn || !pop) return;
+        const tip = document.getElementById('tvs-tip')!, now = document.getElementById('tvs-now')!;
+        const label = () => {
+          const s = Math.round(getDelay() / 1000);
+          btn.textContent = s ? `TV +${s}s` : 'TV sync';
+          btn.classList.toggle('on', !!s);
+          now.textContent = s ? `${s}s behind live` : 'Off';
+          pop.querySelectorAll<HTMLButtonElement>('[data-tvs]').forEach(b => b.setAttribute('aria-pressed', String(Number(b.dataset.tvs) === s)));
+        };
+        label();
+        let last = getDelay();
+        onDelayTick(d => { if (d !== last) { last = d; label(); } });
+        const open = (v: boolean) => { pop.hidden = !v; btn.setAttribute('aria-expanded', String(v)); if (v) tip.textContent = canSync() ? 'Tap it the moment you see the last leg won on TV.' : 'Tap it the moment you see a leg won on TV (after the next one finishes here).'; };
+        btn.addEventListener('click', e => { e.stopPropagation(); open(pop.hidden); });
+        document.addEventListener('click', e => { if (!pop.hidden && !pop.contains(e.target as Node) && e.target !== btn) open(false); });
+        pop.addEventListener('click', e => {
+          const t = e.target as HTMLElement;
+          const v = t.closest<HTMLElement>('[data-tvs]'), st = t.closest<HTMLElement>('[data-tvs-step]');
+          if (v) setDelay(Number(v.dataset.tvs) * 1000);
+          else if (st) setDelay(Math.max(0, getDelay() + Number(st.dataset.tvsStep) * 1000));
+          else if (t.closest('#tvs-sync')) {
+            const ms = syncToTv();
+            tip.textContent = ms == null ? 'No leg has finished since you opened the page. Wait for the next one, then tap as it is won on TV.' : `Done: scores now run ${Math.round(ms / 1000)}s behind live. Fine-tune below if needed.`;
+          }
+          label();
+        });
+      })();
       // Scroll-reveal + the sliding nav pill.
       const keyFor = (path: string) => {
         const p = path.replace(/\/$/, '') || '/';
@@ -361,7 +406,21 @@ const fullTitle = title === 'The Oche' ? title : `${title} · The Oche`;
   .searchbtn kbd { font: inherit; font-size: 11px; background: var(--ink); border: 1px solid var(--ink-2); border-radius: 6px; padding: 1px 6px; }
 
   .livebar { background: var(--ink); color: #fff; border-top: 1px solid var(--ink-2); }
-  .lb-in { display: flex; align-items: center; gap: 10px; height: 40px; overflow-x: auto; scrollbar-width: none; font-size: 13px; white-space: nowrap; }
+  /* TV sync */
+  .tvs-btn { flex: none; border: 1px solid rgba(255, 255, 255, .25); background: none; color: rgba(255, 255, 255, .85); border-radius: 999px; padding: 3px 10px; font-size: 11px; font-weight: 800; letter-spacing: .06em; text-transform: uppercase; cursor: pointer; white-space: nowrap; }
+  .tvs-btn.on { background: var(--volt); border-color: var(--volt); color: var(--ink); }
+  .tvs-pop { position: absolute; z-index: 80; right: 0; top: 46px; width: min(340px, calc(100vw - 24px)); background: var(--ink-2); color: #fff; border: 1px solid rgba(255, 255, 255, .12); border-radius: 16px; padding: 16px; box-shadow: 0 20px 50px rgba(0, 0, 0, .5); }
+  .tvs-h { display: block; font-size: 15px; margin-bottom: 6px; }
+  .tvs-p { margin: 0 0 12px; font-size: 13px; line-height: 1.45; color: rgba(255, 255, 255, .75); }
+  .tvs-tip { margin: 6px 0 14px; font-size: 12px; }
+  .tvs-sync { width: 100%; border: 0; border-radius: 12px; padding: 11px; background: var(--volt); color: var(--ink); font-weight: 800; font-size: 14px; cursor: pointer; }
+  .tvs-opts { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 10px; }
+  .tvs-opts button, .tvs-fine button { border: 1px solid rgba(255, 255, 255, .2); background: none; color: #fff; border-radius: 999px; padding: 5px 11px; font-size: 13px; font-weight: 700; cursor: pointer; }
+  .tvs-opts button[aria-pressed='true'] { background: #fff; color: var(--ink); border-color: #fff; }
+  .tvs-fine { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+  .tvs-fine span { font-family: var(--poster); font-size: 24px; font-variant-numeric: tabular-nums; }
+  .lb-row { position: relative; display: flex; align-items: center; gap: 10px; }
+  .lb-in { flex: 1; min-width: 0; display: flex; align-items: center; gap: 10px; height: 40px; overflow-x: auto; scrollbar-width: none; font-size: 13px; white-space: nowrap; }
   .lb-in :global(.lb-ev) { color: #fff; font-weight: 800; text-decoration: none; margin-right: 4px; }
   .lb-in :global(.lb-tag) { font-size: 11px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; background: rgba(255, 255, 255, .14); border-radius: 999px; padding: 2px 8px; }
   .lb-in :global(.lb-tag.live) { background: var(--red); }

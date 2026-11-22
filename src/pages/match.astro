@@ -54,6 +54,7 @@ import Layout from '../layouts/Layout.astro';
     import { liveFor, watchLive, unwatch, isPushing, pushedLegFor, LIVE_TICK, PUSH_TICK } from '../lib/live-client.mjs';
     import { ukTime, scoreHtml } from '../lib/format.mjs';
     import { watchWins, watch180, flashWin } from '../lib/leg-flash.mjs';
+    import { getDelay } from '../lib/tv-delay.mjs';
     import { cutoutImg, avatarSrc, pairPrefer } from '../lib/images.mjs';
 
     const FX = 'https://fixtures.darts.web.gc.pdcservices.co.uk/v2/';
@@ -264,7 +265,7 @@ import Layout from '../layouts/Layout.astro';
       const data = {};
       try {
         // While PDC is pushing this match, the fixture and timeline barely change: reuse them for 30s.
-        const reuse = isPushing() && ftCache.id === id && Date.now() - ftCache.at < PUSH_TICK;
+        const reuse = (isPushing() || getDelay() > 0) && ftCache.id === id && Date.now() - ftCache.at < (isPushing() ? PUSH_TICK : LIVE_TICK);
         let [f, t] = reuse ? [structuredClone(ftCache.f), structuredClone(ftCache.t)] : await Promise.all([fetch(FX + id, { cache: 'no-store' }).then(r => r.json()), fetch(`${FX}${id}/timeline`, { cache: 'no-store' }).then(r => (r.ok ? r.json() : null))]);
         if (!reuse) ftCache = { id, at: Date.now(), f: structuredClone(f), t: structuredClone(t) };
         const a = f.data;
