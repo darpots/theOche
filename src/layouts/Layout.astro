@@ -1,5 +1,7 @@
 ---
 import { ClientRouter } from 'astro:transitions';
+import Analytics from '@vercel/analytics/astro';
+import SpeedInsights from '@vercel/speed-insights/astro';
 import '../styles/global.css';
 import Logo from '../components/Logo.astro';
 import current from '../data/tournament.json';
@@ -72,6 +74,9 @@ const fullTitle = title === 'The Oche' ? title : `${title} · The Oche`;
     <meta name="twitter:image" content={shareImage} />
     {jsonld && <script type="application/ld+json" set:html={JSON.stringify(jsonld)} />}
     <ClientRouter />
+    <!-- Vercel Web Analytics (cookie-free visitor counts) and Speed Insights (real-visitor load times); both only report on the Vercel deployment -->
+    <Analytics />
+    <SpeedInsights />
   </head>
   <body>
     <header class="top" transition:persist transition:name="site-header" transition:animate="none">
