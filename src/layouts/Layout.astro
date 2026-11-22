@@ -251,7 +251,8 @@ const fullTitle = title === 'The Oche' ? title : `${title} · The Oche`;
             // "on now" once its start time has passed and it has no result yet.
             const nowLdn = new Date().toLocaleTimeString('en-GB', { timeZone: 'Europe/London', hour: '2-digit', minute: '2-digit', hour12: false });
             const pending = fx.filter((f: any) => f.startDate === d && !/result/i.test(f.status)).sort((x: any, y: any) => (x.startTime || '').localeCompare(y.startTime || ''));
-            const live = fx.filter((f: any) => /live|progress/i.test(f.status)).concat(pending.filter((f: any) => !/live|progress/i.test(f.status) && (f.startTime || '99').slice(0, 5) <= nowLdn).slice(-1));
+            // Only today's matches: the public feed can leave yesterday's match marked live.
+            const live = fx.filter((f: any) => /live|progress/i.test(f.status) && (f.startDate === d || lv.get(String(f.fixtureID))?.status === 'live')).concat(pending.filter((f: any) => !/live|progress/i.test(f.status) && (f.startTime || '99').slice(0, 5) <= nowLdn).slice(-1));
             const upcoming = pending.filter((f: any) => !live.includes(f));
             // Followed players: a star in the bar, and a notification when their match starts.
             const fav = new Set(followed().map((p: any) => p.id));
@@ -259,7 +260,6 @@ const fullTitle = title === 'The Oche' ? title : `${title} · The Oche`;
             notifyLive(live.filter((f: any) => /live|progress/i.test(f.status)).map((f: any) => ({ id: f.fixtureID, p1: { id: f.participant1?.participantID, name: `${f.participant1?.firstName} ${f.participant1?.lastName}` }, p2: { id: f.participant2?.participantID, name: `${f.participant2?.firstName} ${f.participant2?.lastName}` }, label: `${surname(f.participant1)} v ${surname(f.participant2)} · ${name}` })));
             // Matches under way: have PDC push every change to us (the bar redraws on each).
             if (live.length) watchLive(id!, live.map((f: any) => String(f.fixtureID)), tick);
-            const done = fx.filter((f: any) => /result/i.test(f.status)).sort((x: any, y: any) => `${y.startDate}${y.startTime}`.localeCompare(`${x.startDate}${x.startTime}`));
             // Upcoming: "A v B" then the start time in its own pill, so a time never reads as a score.
             const chip = (f: any, kind: string) => kind === 'next'
               ? `<a class="lb-m next" href="/match?id=${f.fixtureID}"><span>${esc(surname(f.participant1))}</span><i class="lb-v">v</i><span>${esc(surname(f.participant2))}</span>${ukTime(f.startTime, f.startDate) ? `<time class="lb-t" aria-label="starts at ${esc(ukTime(f.startTime, f.startDate))}">${esc(ukTime(f.startTime, f.startDate))}</time>` : ''}</a>`
@@ -271,8 +271,8 @@ const fullTitle = title === 'The Oche' ? title : `${title} · The Oche`;
               if (live.length) { ln.href = `/match?id=${live[0].fixtureID}`; ln.setAttribute('aria-label', `Live: ${surname(live[0].participant1)} v ${surname(live[0].participant2)}`); }
             }
             if (live.length) html = `<span class="lb-tag live">On now</span>${live.slice(0, 3).map((f: any) => chip(f, 'now')).join('')}${upcoming[0] ? `<span class="lb-sep">Next</span>${chip(upcoming[0], 'next')}` : ''}`;
-            else if (upcoming.length) html = `<span class="lb-tag">Next</span>${chip(upcoming[0], 'next')}${done[0] ? `<span class="lb-sep">Latest</span>${chip(done[0], 'done')}` : ''}`;
-            else if (done[0] && done[0].startDate === d) html = `<span class="lb-tag">Latest</span>${chip(done[0], 'done')}`;
+            // Nothing live: just what's next today. Finished scores don't linger here.
+            else if (upcoming.length) html = `<span class="lb-tag">Next</span>${chip(upcoming[0], 'next')}`;
             if (!html) { bar.hidden = true; if (ln) ln.hidden = true; return; }
             inner.innerHTML = `<a class="lb-ev" href="/tournament/${id}">${esc(name)}</a>${html}`;
             bar.hidden = false;

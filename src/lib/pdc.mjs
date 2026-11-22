@@ -459,7 +459,9 @@ export function legFromTurns(turns, set, leg) {
   const sorted = turns.slice().sort((a, b) => a.globalTurnIndex - b.globalTurnIndex);
   const visits = sorted.filter(x => x.isComplete !== false).map(x => ({
     order: x.globalTurnIndex, visitNumber: x.globalTurnIndex, isParticipant1: x.scoringParticipant === 0,
-    score: x.isBust ? 0 : x.turnScore ?? 0, remaining: x.score, numberOfDartsThrown: x.dartsThrown ?? 3,
+    // Only a finishing visit can use fewer than three darts. PDC's scorer sometimes
+    // saves a 2 on an ordinary visit (a 180 'in two darts'), which threw the counts out.
+    score: x.isBust ? 0 : x.turnScore ?? 0, remaining: x.score, numberOfDartsThrown: x.score === 0 || x.isCheckout ? (x.dartsThrown || 3) : 3,
     isBust: !!x.isBust, isCheckout: !!x.isCheckout,
   }));
   const last = sorted[sorted.length - 1];
@@ -486,7 +488,7 @@ export function legSummary(leg, m, prevFirst = null) {
  * in `cache` (a Map) so each poll only re-reads the leg being played.
  */
 export async function liveLegs(tid, mid, m, cache = new Map()) {
-  if (!m || m.status === 'upcoming' || !m.leg) return [];
+  if (!m || m.status === 'upcoming' || m.leg == null) return [];
   const sets = Math.max(1, m.set || 1);
   const want = [];
   for (let s = 1; s <= sets; s++) {
@@ -502,7 +504,9 @@ export async function liveLegs(tid, mid, m, cache = new Map()) {
     const isCurrent = m.status === 'live' && s === current[0] && l === current[1];
     if (!isCurrent && cache.has(key)) return cache.get(key);
     const leg = await liveLeg(tid, mid, s, l);
-    if (!isCurrent) cache.set(key, leg);
+    // Keep only legs that have been won: a leg read just before its checkout was
+    // saved would otherwise stay "in play" for the rest of the match.
+    if (!isCurrent && leg.visits.some(v => v.remaining === 0)) cache.set(key, leg);
     return leg;
   }));
 }
