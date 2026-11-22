@@ -53,7 +53,7 @@ function legSide(l, k) {
   return `<div class="ft-now${throwing ? ' on' : ''}">
       ${justThrew && lastMine.score === 180 && !lastMine.isBust ? '<span class="ft-180" aria-label="One hundred and eighty">180!</span>' : ''}
       <b class="ft-rem poster-num" title="Score left in this leg${throwing ? ' (throwing)' : ''}"><span class="ft-mark">${throwing ? '<span class="ft-dot" aria-label="throwing"></span>' : ''}</span><span class="ft-num">${left}</span></b>
-      <span class="ft-meta"><span class="ft-row">${last}</span><span class="ft-row">${route && left <= 170 ? `<i class="ft-co" title="Checkout">${route.join(' ')}</i>` : ''}</span></span>
+      <span class="ft-meta">${last}${route && left <= 170 ? `<i class="ft-co" title="Checkout">${route.join(' ')}</i>` : ''}</span>
     </div>`;
 }
 
@@ -70,11 +70,11 @@ export function featureTile(f, mode, eventName, also = []) {
   const legs = f.liveLegs;
   const setLine = sets && inPlay && legs ? `<div class="ft-set">Set ${f.liveSet || 1} · legs <b>${scoreHtml(legs[0], legs[1])}</b></div>` : '';
   const centre = done || inPlay || (f.s1 ?? 0) + (f.s2 ?? 0) > 0
-    ? `<div class="ft-score poster-num${Math.max(f.s1 ?? 0, f.s2 ?? 0) >= 10 ? ' wide' : ''}">${f.s1 ?? 0}<span>–</span>${f.s2 ?? 0}</div>${setLine}<div class="lbl ft-sub">${inPlay ? `<span class="ft-pulse"></span>Live${sets ? ' · sets' : ''}` : mode === 'now' ? 'Latest score' : `Final${sets ? ' · sets' : ''}`}</div>`
+    ? `<div class="ft-score poster-num${Math.max(f.s1 ?? 0, f.s2 ?? 0) >= 10 ? ' wide' : ''}">${f.s1 ?? 0}<span>–</span>${f.s2 ?? 0}</div>${setLine}${inPlay ? (sets ? '<div class="lbl ft-sub">Sets</div>' : '') : `<div class="lbl ft-sub">${mode === 'now' ? 'Latest score' : `Final${sets ? ' · sets' : ''}`}</div>`}`
     : `<div class="ft-score ft-vs poster-num">V</div>${mode === 'now' ? '<div class="lbl ft-sub">Waiting for the first dart</div>' : ''}`;
-  const avg = s => (s?.avg != null ? `<span class="ft-av" title="Three-dart average">${Number(s.avg).toFixed(2)} <i>avg</i></span>` : '');
+  const avg = s => (s?.avg != null ? `<span class="ft-av" title="Three-dart average"> · ${Number(s.avg).toFixed(2)} <i>avg</i></span>` : '');
   const side = (p, won, s, k) => `<div class="ft-who ${k ? 'r' : 'l'}${won ? ' won' : ''}">
-      <div class="ft-id"><b>${esc(p.name)}</b><small>${flag(p.country)} ${p.ranking ? `World #${p.ranking}` : ''}${won ? ' · Winner' : ''}</small>${inPlay && f.legNow ? avg(s) : ''}</div>
+      <div class="ft-id"><b>${esc(p.name)}</b><small>${flag(p.country)} ${p.ranking ? `<span class="ft-wr">World </span>#${p.ranking}` : ''}${won ? ' · Winner' : ''}${inPlay && f.legNow ? avg(s) : ''}</small></div>
       ${inPlay && f.legNow ? legSide(f.legNow, k) : s?.avg != null ? `<div class="ft-avg" title="Three-dart average"><span class="poster-num">${Number(s.avg).toFixed(2)}</span><small>avg</small></div>` : ''}
     </div>`;
   const fmt = formatLabel(f.fmt);

@@ -285,7 +285,7 @@ const spot = loadProfile(spotRank.id);
   .feature :global(.ft-id b) { display: block; font-size: 19px; }
   .feature :global(.ft-who small) { color: var(--on-ink-2); font-size: 13px; }
   .feature :global(.ft-who.won .ft-id b) { color: var(--volt); }
-  .feature :global(.ft-av) { font-size: 13px; font-weight: 700; color: #fff; font-variant-numeric: tabular-nums; margin-top: 4px; }
+  .feature :global(.ft-av) { font-size: 13px; font-weight: 700; color: #fff; font-variant-numeric: tabular-nums; white-space: nowrap; }
   .feature :global(.ft-av i), .feature :global(.ft-avg small) { font-style: normal; font-size: 11px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--on-ink-2); }
   /* Set play: legs in the current set under the sets score */
   .feature :global(.ft-set) { margin-top: 6px; font-size: 14px; font-weight: 700; color: var(--on-ink); }
@@ -293,7 +293,7 @@ const spot = loadProfile(spotRank.id);
   /* Score left in the leg: the second-biggest number on the tile */
   .feature :global(.ft-now) { position: relative; display: flex; flex-direction: column; align-items: flex-end; gap: 6px; }
   .feature :global(.ft-who.r .ft-now) { align-items: flex-start; }
-  .feature :global(.ft-rem) { position: relative; display: inline-flex; align-items: center; gap: 10px; font-size: 72px; line-height: .9; color: var(--on-ink); font-weight: 400; }
+  .feature :global(.ft-rem) { position: relative; display: inline-flex; align-items: center; gap: 10px; font-size: 88px; line-height: .9; color: var(--on-ink); font-weight: 400; }
   /* Fixed widths and rows so nothing shifts as scores and chips change */
   .feature :global(.ft-num) { display: inline-block; min-width: 3ch; text-align: right; font-variant-numeric: tabular-nums; }
   .feature :global(.ft-who.r .ft-num) { text-align: left; }
@@ -302,16 +302,18 @@ const spot = loadProfile(spotRank.id);
   /* Two-digit scores (10-10 and up) a size down, so they stay clear of the pictures */
   .feature :global(.ft-score.wide) { font-size: clamp(84px, 9.5vw, 150px); }
   /* Pictures only tuck in under the centre before a match (behind the V); once there's a score they stop at its edge */
-  .feature :global(.ft-stage-row:not(:has(.ft-vs)) .ft-p) { overflow-x: clip; }
+  .feature :global(.ft-stage-row:not(:has(.ft-vs)) .ft-p.l) { -webkit-mask-image: linear-gradient(to right, #000 62%, transparent 98%); mask-image: linear-gradient(to right, #000 62%, transparent 98%); }
+  .feature :global(.ft-stage-row:not(:has(.ft-vs)) .ft-p.r) { -webkit-mask-image: linear-gradient(to left, #000 62%, transparent 98%); mask-image: linear-gradient(to left, #000 62%, transparent 98%); }
   /* Before a match: just the V, so the centre column is narrow and the pictures have room */
   .feature :global(.ft-score.ft-vs) { min-width: 0; padding: 0 .25em; }
   /* Room for the leg in play only while there is one; before a match the names sit snug */
-  .feature :global(.ft-bottom.live .ft-who) { min-height: 150px; }
+  .feature :global(.ft-bottom.live .ft-who) { min-height: 136px; }
   .feature :global(.ft-now.on .ft-rem) { color: var(--volt); }
   .feature :global(.ft-dot) { width: 10px; height: 10px; border-radius: 50%; background: var(--volt); box-shadow: 0 0 0 4px rgba(200, 255, 46, .2); }
   .feature :global(.ft-who.r .ft-rem) { flex-direction: row-reverse; }
-  .feature :global(.ft-meta) { display: grid; grid-template-rows: 24px 24px; gap: 5px; justify-items: end; }
-  .feature :global(.ft-who.r .ft-meta) { justify-items: start; }
+  /* Last visit and checkout side by side, always one row high */
+  .feature :global(.ft-meta) { display: flex; gap: 6px; height: 24px; align-items: center; justify-content: flex-end; }
+  .feature :global(.ft-who.r .ft-meta) { justify-content: flex-start; flex-direction: row-reverse; }
   .feature :global(.ft-row) { display: flex; align-items: center; }
   .feature :global(.ft-last), .feature :global(.ft-co) { font-style: normal; font-size: 12px; font-weight: 800; padding: 3px 8px; border-radius: 8px; white-space: nowrap; font-variant-numeric: tabular-nums; }
   .feature :global(.ft-last) { background: rgba(255, 255, 255, .08); color: var(--on-ink); }
@@ -425,15 +427,21 @@ const spot = loadProfile(spotRank.id);
     .feature :global(.ft-score) { font-size: 64px; white-space: nowrap; }
     .feature :global(.ft-score.wide) { font-size: 50px; }
     .feature :global(.ft-who) { min-height: 0; }
-    .feature :global(.ft-id) { min-height: 76px; }
+    .feature :global(.ft-id) { min-height: 0; }
         .feature :global(.ft-who) { padding: 12px 16px; flex-direction: column; align-items: flex-start; }
     .feature :global(.ft-who.r) { flex-direction: column; align-items: flex-end; }
     .feature :global(.ft-id b) { font-size: 15px; }
-    .feature :global(.ft-rem) { font-size: 46px; gap: 7px; }
+    .feature :global(.ft-rem) { font-size: 58px; gap: 7px; }
     .feature :global(.ft-now), .feature :global(.ft-who.r .ft-now) { align-items: inherit; margin-top: 8px; }
     .feature :global(.ft-who.l .ft-rem) { flex-direction: row-reverse; }
-    .feature :global(.ft-who.l .ft-meta) { justify-items: start; }
-    .feature :global(.ft-who.r .ft-meta) { justify-items: end; }
+    .feature :global(.ft-who.l .ft-meta) { justify-content: flex-start; }
+    .feature :global(.ft-who.r .ft-meta) { justify-content: flex-start; }
+    .feature :global(.ft-now), .feature :global(.ft-who.r .ft-now) { margin-top: 4px; gap: 4px; }
+    .feature :global(.ft-who small) { font-size: 12px; }
+    .feature :global(.ft-av) { font-size: 12px; }
+    /* Live on a phone: '#23 · 98.52 AVG' on one line ('World' only when there's room) */
+    .feature :global(.ft-bottom.live .ft-wr) { display: none; }
+    .feature :global(.ft-who small) { white-space: nowrap; }
     .feature :global(.ft-who.l .ft-num) { text-align: left; }
     .feature :global(.ft-who.r .ft-num) { text-align: right; }
     .feature :global(.ft-180) { top: -26px; font-size: 26px; }
