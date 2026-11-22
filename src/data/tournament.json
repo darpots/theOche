@@ -1,7 +1,10 @@
 {
- "updatedAt": "2026-11-22T20:09:02.431Z",
+ "updatedAt": "2026-11-22T21:07:39.599Z",
  "tournament": {
-  "winner": null,
+  "winner": {
+   "id": "11788",
+   "name": "Gerwyn Price"
+  },
   "id": "10871",
   "name": "Grand Slam of Darts",
   "tag": null,
@@ -2803,8 +2806,8 @@
      {
       "id": "517029",
       "date": "2026-11-22",
-      "time": "19:47",
-      "status": "upcoming",
+      "time": "19:48",
+      "status": "result",
       "p1": {
        "id": "11788",
        "name": "Gerwyn Price",
@@ -2821,9 +2824,30 @@
        "country": "NL",
        "ranking": 3
       },
-      "s1": 0,
-      "s2": 0,
-      "winner": null
+      "s1": 16,
+      "s2": 11,
+      "winner": "11788",
+      "stats": [
+       {
+        "avg": 97.34,
+        "f9": null,
+        "t80": 11,
+        "t140": 17,
+        "t100": 23,
+        "co": 53.33,
+        "hi": 150
+       },
+       {
+        "avg": 94.76,
+        "f9": null,
+        "t80": 9,
+        "t140": 20,
+        "t100": 33,
+        "co": 34.38,
+        "hi": 80
+       }
+      ],
+      "statsLive": true
      }
     ]
    }
