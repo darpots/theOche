@@ -432,11 +432,12 @@ import Layout from '../layouts/Layout.astro';
   .mh-in :global(.side:not(.won) .who a) { color: var(--on-ink); }
   .mh-in :global(.who a:hover) { text-decoration: underline; }
   .mh-in :global(.who small) { color: rgba(255, 255, 255, .75); font-size: 13px; }
-  .mh-in :global(.av) { display: inline-flex; flex-direction: column; align-self: flex-start; margin-top: 6px; background: #fff; color: var(--ink); border-radius: 12px; padding: 6px 12px; font-family: var(--display); font-size: 22px; font-weight: 800; font-variant-numeric: tabular-nums; }
-  .mh-in :global(.s1 .av) { align-self: flex-end; }
-  .mh-in :global(.av i) { font-style: normal; font-family: var(--body); font-size: 10px; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); }
-  .mh-in :global(.s0 .av) { box-shadow: inset 4px 0 0 #1d3fd6; }
-  .mh-in :global(.s1 .av) { box-shadow: inset -4px 0 0 #d7263d; }
+  /* Averages: in the header's own style (dark panel like the leg in play, poster numerals, small caps label), player colour as the edge */
+  .mh-in :global(.av) { display: inline-flex; flex-direction: column; gap: 2px; align-self: flex-start; margin-top: 8px; background: rgba(255, 255, 255, .06); border: 1px solid var(--ink-2); color: #fff; border-radius: 12px; padding: 7px 14px 8px; font-family: var(--poster); font-size: 34px; font-weight: 400; line-height: .95; font-variant-numeric: tabular-nums; }
+  .mh-in :global(.s1 .av) { align-self: flex-end; align-items: flex-end; }
+  .mh-in :global(.av i) { font-style: normal; font-family: var(--body); font-size: 10px; font-weight: 800; letter-spacing: .14em; text-transform: uppercase; color: var(--on-ink-2); line-height: 1.2; }
+  .mh-in :global(.s0 .av) { box-shadow: inset 3px 0 0 #2b4bff; }
+  .mh-in :global(.s1 .av) { box-shadow: inset -3px 0 0 #e8362d; }
   .mh-in :global(.score) { display: flex; flex-direction: column; align-items: center; padding-bottom: 40px; font-family: var(--display); }
   .mh-in :global(.sc-n) { display: flex; align-items: baseline; gap: 10px; }
   /* Set play: "Sets · Set 3, legs 2–1" under the sets score */
@@ -590,7 +591,7 @@ import Layout from '../layouts/Layout.astro';
     .mh-in :global(.score.wide b) { font-size: clamp(54px, 15vw, 90px); }
     .mh-in :global(.score span) { font-size: 36px; }
     .mh-in :global(.sc-n) { gap: 6px; }
-    .mh-in :global(.av) { font-size: 18px; padding: 4px 10px; }
+    .mh-in :global(.av) { font-size: 28px; padding: 5px 11px 6px; }
     .mh-in :global(.kpis) { grid-template-columns: repeat(2, minmax(0, 1fr)); }
     .mh-in :global(.kpis > div:nth-child(3)) { border-left: 0; padding-left: 0; }
     .mh-in :global(.pic) { width: 96px; height: 120px; }
