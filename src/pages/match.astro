@@ -445,7 +445,7 @@ import Layout from '../layouts/Layout.astro';
   .mh-in :global(.score small) { display: none; }
 
   /* ---- In play: the scoreboard (pictures, score left with average, legs between, names) ---- */
-  .mh-in :global(.board) { display: grid; grid-template-columns: 1fr auto auto 1fr; grid-template-areas: 'p0 p0 p1 p1' 'b0 m m b1' 'w0 w0 w1 w1'; align-items: end; margin-top: 10px; padding-bottom: 24px; }
+  .mh-in :global(.board) { display: grid; grid-template-columns: 1fr auto auto 1fr; grid-template-areas: 'p0 . . p1' 'b0 m m b1' 'w0 w0 w1 w1'; align-items: end; margin-top: 10px; padding-bottom: 24px; }
   .mh-in :global(.board .pic) { width: 200px; height: 230px; }
   .mh-in :global(.board .p0) { grid-area: p0; justify-self: center; }
   .mh-in :global(.board .p1) { grid-area: p1; justify-self: center; }

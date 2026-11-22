@@ -314,8 +314,13 @@ const spot = loadProfile(spotRank.id);
   /* A dark wash over the lower pictures so the big numbers always read */
   .feature :global(.ft-stage-row.play::after) { content: ''; grid-area: 1 / 1 / 2 / 4; align-self: end; height: 58%; z-index: 1; pointer-events: none; background: linear-gradient(rgba(11, 12, 16, 0), rgba(11, 12, 16, .88) 70%); }
   .feature :global(.ft-big) { grid-row: 1; z-index: 2; align-self: end; position: relative; display: flex; flex-direction: column; gap: 8px; padding-bottom: 24px; pointer-events: none; }
-  .feature :global(.ft-big.l) { grid-column: 1; justify-self: end; align-items: flex-end; }
-  .feature :global(.ft-big.r) { grid-column: 3; justify-self: start; align-items: flex-start; }
+  /* Each score centred under its own player */
+  .feature :global(.ft-stage-row.play .ft-p) { justify-content: center; }
+  .feature :global(.ft-stage-row.play .ft-cut) { object-position: center bottom; }
+  /* Centred pictures: fade both sides a touch rather than one hard inner edge */
+  .feature :global(.ft-stage-row.play .ft-p.l), .feature :global(.ft-stage-row.play .ft-p.r) { -webkit-mask-image: linear-gradient(to right, transparent, #000 14%, #000 86%, transparent); mask-image: linear-gradient(to right, transparent, #000 14%, #000 86%, transparent); }
+  .feature :global(.ft-big.l) { grid-column: 1; justify-self: center; align-items: center; }
+  .feature :global(.ft-big.r) { grid-column: 3; justify-self: center; align-items: center; }
   .feature :global(.ft-big .ft-rem) { display: inline-flex; align-items: center; gap: 12px; font-size: clamp(110px, 11vw, 160px); line-height: .82; color: var(--on-ink); text-shadow: 0 6px 30px rgba(0, 0, 0, .6); font-variant-numeric: tabular-nums; }
   .feature :global(.ft-big.r .ft-rem) { flex-direction: row-reverse; }
   .feature :global(.ft-big.on .ft-rem) { color: var(--volt); }
@@ -474,7 +479,7 @@ const spot = loadProfile(spotRank.id);
     .feature :global(.ft-big) { grid-row: 2; align-self: start; padding: 14px 0 14px; gap: 6px; }
     .feature :global(.ft-big.l) { justify-self: center; align-items: center; }
     .feature :global(.ft-big.r) { justify-self: center; align-items: center; }
-    .feature :global(.ft-big .ft-rem) { font-size: 66px; gap: 6px; }
+    .feature :global(.ft-big .ft-rem) { font-size: 66px; gap: 6px; text-shadow: none; }
     .feature :global(.ft-big .ft-dot) { width: 8px; height: 8px; box-shadow: 0 0 0 3px rgba(200, 255, 46, .2); }
     .feature :global(.ft-bigav) { height: 18px; font-size: 13px; }
     .feature :global(.ft-bigav i) { font-size: 10px; }
