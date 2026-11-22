@@ -31,16 +31,39 @@ export const BROADCASTERS = {
   14: 'pdctv', // European Tour
 };
 
+/**
+ * The UK channel for a tournament: the map above, or, for a televised event of a
+ * type not in it yet, a guess from its name (the refresh job also opens an issue
+ * so the guess can be confirmed). Works on feed attributes or list rows.
+ */
+export function broadcasterFor(a) {
+  const type = a?.type?.tournamentTypeID ?? a?.tournamentTypeID;
+  if (BROADCASTERS[type]) return BROADCASTERS[type];
+  const cat = a?.category?.tournamentCategoryID ?? a?.tournamentCategoryID;
+  if (!a?.isTelevised || !['2', '3'].includes(String(cat))) return null;
+  return guessBroadcaster(a.name || '', String(cat));
+}
+/** Name-based guess for a televised event type the map doesn't know; 'tv' (channel to be confirmed) when the name doesn't say. */
+export function guessBroadcaster(name, cat) {
+  if (/world championship|premier league|matchplay|world grand prix|grand slam|world cup/i.test(name)) return 'sky';
+  if (/uk open|european championship|\bmasters\b|players championship finals|world series/i.test(name)) return 'itv';
+  if (/\bET\d+\b|european tour/i.test(name)) return 'pdctv';
+  return 'tv';
+}
+
 export const BROADCASTER_INFO = {
   sky: { label: 'Sky Sports', short: 'Sky', logo: '/brand/sky-sports.svg' },
   itv: { label: 'ITV', short: 'ITV', logo: '/brand/itv.svg' },
   pdctv: { label: 'PDCTV', short: 'PDCTV', logo: '/brand/pdctv.png' },
+  // A new televised event whose UK channel isn't confirmed yet.
+  tv: { label: 'TV (channel to be confirmed)', short: 'TV', logo: null },
 };
 
 /** Broadcaster logo badge (HTML string), shared by build-time pages and browser scripts. */
 export function tvBadge(b) {
   const info = BROADCASTER_INFO[b];
   if (!info) return '';
+  if (!info.logo) return `<span class="tv tv-${b}" title="${info.label}">On TV</span>`;
   return `<span class="tv tv-${b}" title="Live on ${info.label}"><img src="${info.logo}" alt="${info.label}" height="16" decoding="async"></span>`;
 }
 
@@ -118,7 +141,7 @@ export function normaliseTournament(payload) {
     venue: a.venue || null,
     city: a.city || null,
     typeId: a.type?.tournamentTypeID ?? a.tournamentTypeID ?? null,
-    broadcaster: BROADCASTERS[a.type?.tournamentTypeID ?? a.tournamentTypeID] || null,
+    broadcaster: broadcasterFor(a),
     logo: a.tournamentLogo || null,
     image: a.tournamentPromoImage || a.tournamentListingImage || null,
     winner: a.winner && !isPlaceholder(a.winner) ? { id: String(a.winner.participantID), name: playerName(a.winner) } : null,
@@ -177,8 +200,8 @@ export const keyName = s => s.normalize('NFKD').replace(/[̀-ͯ]/g, '').toLowerC
 export const RANKED_TYPES = ['1', '4', '6', '7', '9', '14', '15', '29', '30'];
 
 // The feed gives each stage's prize for losing there, but not the winner's
-// prize. Known winner prizes are listed; anything else is estimated from the
-// runner-up prize with the usual ratio for that kind of event.
+// prize. Past winner prizes are listed (exact); any other edition is worked out
+// from the runner-up prize with the ratio for that kind of event (below).
 const WINNER_PRIZE = {
   '2024 Grand Slam of Darts': 150000,
   '2025 Grand Slam of Darts': 150000,
@@ -192,7 +215,21 @@ const WINNER_PRIZE = {
   '2024 Players Championship Finals': 120000,
   '2024 UK Open': 110000,
 };
-const WINNER_RATIO = { '29': 1.5, '14': 2.5 };
+// Winner's prize ÷ runner-up's prize for each ranking event type, from the PDC's
+// prize structures (they keep the same shape when the fund grows), so new
+// editions need no entry above: the winner's figure is runner-up × ratio, marked
+// as estimated until the PDC republishes the official rankings after the event.
+const WINNER_RATIO = {
+  '1': 2.5, // World Championship (£1m / £400k)
+  '9': 1.5, // Grand Slam (£150k / £100k)
+  '15': 2, // World Matchplay (£800k / £400k)
+  '6': 2, // World Grand Prix
+  '7': 2, // European Championship
+  '30': 2, // Players Championship Finals
+  '4': 2.2, // UK Open (£110k / £50k)
+  '29': 1.5, // Players Championship (floor)
+  '14': 2.5, // European Tour
+};
 
 const stageOrder = s => (Number(s.cupRound) > 0 ? Number(s.cupRound) : 99); // lower = later round; groups first
 

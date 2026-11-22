@@ -1,6 +1,6 @@
 // Builds src/data/tournament.json: the PDC tournament in progress (or the most
 // recent / next one). The Matches page also refreshes this live in the browser.
-import { API, BROADCASTERS, normaliseTournament, fixtureStatsUrl, slimStats, liveMatches } from '../src/lib/pdc.mjs';
+import { API, BROADCASTERS, broadcasterFor, normaliseTournament, fixtureStatsUrl, slimStats, liveMatches } from '../src/lib/pdc.mjs';
 import { get, getAll, readJson, writeJsonIfChanged, pool, today, log } from './lib.mjs';
 
 const OUT = new URL('../src/data/tournament.json', import.meta.url).pathname;
@@ -13,7 +13,7 @@ const list = rows
   .map(r => ({ id: r.id, ...r.attributes }))
   .filter(a => ['2', '3', '4'].includes(a.tournamentCategoryID) && !/qualifier|test/i.test(a.name));
 
-const inScope = a => !!BROADCASTERS[a.tournamentTypeID];
+const inScope = a => !!broadcasterFor(a);
 const live = a => a.startDate <= t && a.endDate >= t;
 const pick =
   list.find(a => live(a) && inScope(a)) ||
@@ -49,6 +49,6 @@ const next = list.filter(a => inScope(a) && a.startDate > tournament.end)
 const changed = await writeJsonIfChanged(OUT, {
   updatedAt: new Date().toISOString(),
   tournament,
-  next: next ? { id: next.id, name: next.name.replace(/^\d{4}(\/\d{2,4})?\s+/, ''), start: next.startDate, end: next.endDate, broadcaster: BROADCASTERS[next.tournamentTypeID] } : null,
+  next: next ? { id: next.id, name: next.name.replace(/^\d{4}(\/\d{2,4})?\s+/, ''), start: next.startDate, end: next.endDate, broadcaster: broadcasterFor(next) } : null,
 }, { stamp: 'updatedAt' });
 log(`tournament: ${tournament.fullName} (${changed ? 'updated' : 'unchanged'})`);

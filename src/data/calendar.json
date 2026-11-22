@@ -1,5 +1,5 @@
 {
- "updatedAt": "2026-11-19T23:52:15.545Z",
+ "updatedAt": "2026-11-22T17:43:12.302Z",
  "events": [
   {
    "id": "10266",
@@ -1817,7 +1817,10 @@
    "broadcaster": "sky",
    "ranked": true,
    "major": true,
-   "winner": null,
+   "winner": {
+    "id": "33091",
+    "name": "Gian van Veen"
+   },
    "fixtures": 63,
    "image": "e6c7d150-be88-11f0-b683-1df3aa50a425.jpg",
    "logo": "32ae9b40-6686-11f0-b0e1-2f7ff63d9a66.png"
@@ -2332,6 +2335,22 @@
    "winner": null,
    "fixtures": 0,
    "image": "22268430-c71b-11f1-be0e-c91f42e68604.jpg",
+   "logo": null
+  },
+  {
+   "id": "10899",
+   "name": "European Open",
+   "tag": null,
+   "start": "2027-06-18",
+   "end": "2027-06-20",
+   "venue": "Salzburg Arena, Austria",
+   "city": "Salzburg",
+   "broadcaster": "tv",
+   "ranked": false,
+   "major": true,
+   "winner": null,
+   "fixtures": 0,
+   "image": "1a6e24b0-c7b5-11f1-9ca6-9b9e2020db8c.jpg",
    "logo": null
   },
   {

@@ -25,6 +25,16 @@ jobs:
           cache: npm
       - run: npm ci
       - run: npm run data:fast
+      # A televised event type with no channel mapping is shown with a guessed
+      # channel; open one issue (once) so someone can confirm it.
+      - name: Flag new TV event types
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          [ -s .unmapped-broadcasters.txt ] || exit 0
+          title="New TV event type: confirm the broadcaster"
+          existing=$(gh issue list --state open --search "in:title \"$title\"" --json number --jq '.[0].number')
+          [ -n "$existing" ] || gh issue create --title "$title" --body "$(cat .unmapped-broadcasters.txt)"
       - uses: ./.github/actions/commit
         with:
           message: 'data: refresh calendar, rankings and current tournament'

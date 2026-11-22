@@ -1,5 +1,5 @@
 {
- "updatedAt": "2026-11-22T03:01:56.163Z",
+ "updatedAt": "2026-11-22T17:42:44.592Z",
  "tournament": {
   "id": "10871",
   "name": "Grand Slam of Darts",
@@ -13,7 +13,10 @@
   "broadcaster": "sky",
   "logo": "32ae9b40-6686-11f0-b0e1-2f7ff63d9a66.png",
   "image": "e6b70870-be88-11f0-8ac7-3dbf71b97733.jpg",
-  "winner": null,
+  "winner": {
+   "id": "33091",
+   "name": "Gian van Veen"
+  },
   "stages": [
    {
     "name": "Group P",
@@ -1790,7 +1793,7 @@
        "id": "38552",
        "name": "Josh Rock",
        "last": "Rock",
-       "nick": null,
+       "nick": "Rocky",
        "country": "GB-NIR",
        "ranking": 8
       },
@@ -1831,7 +1834,7 @@
        "id": "38552",
        "name": "Josh Rock",
        "last": "Rock",
-       "nick": null,
+       "nick": "Rocky",
        "country": "GB-NIR",
        "ranking": 8
       },
@@ -2700,8 +2703,8 @@
      {
       "id": "517027",
       "date": "2026-11-22",
-      "time": "13:15",
-      "status": "upcoming",
+      "time": "13:21",
+      "status": "result",
       "p1": {
        "id": "32895",
        "name": "Kevin Doets",
@@ -2718,15 +2721,36 @@
        "country": "GB-WLS",
        "ranking": 4
       },
-      "s1": 0,
-      "s2": 0,
-      "winner": null
+      "s1": 13,
+      "s2": 16,
+      "winner": "11788",
+      "stats": [
+       {
+        "avg": 94.06,
+        "f9": null,
+        "t80": 13,
+        "t140": 12,
+        "t100": 29,
+        "co": 30.23,
+        "hi": 83
+       },
+       {
+        "avg": 95.03,
+        "f9": null,
+        "t80": 5,
+        "t140": 13,
+        "t100": 42,
+        "co": 43.24,
+        "hi": 137
+       }
+      ],
+      "statsLive": true
      },
      {
       "id": "517028",
       "date": "2026-11-22",
-      "time": "14:45",
-      "status": "upcoming",
+      "time": "14:56",
+      "status": "result",
       "p1": {
        "id": "19",
        "name": "Michael van Gerwen",
@@ -2743,9 +2767,30 @@
        "country": "NL",
        "ranking": 3
       },
-      "s1": 0,
-      "s2": 0,
-      "winner": null
+      "s1": 11,
+      "s2": 16,
+      "winner": "33091",
+      "stats": [
+       {
+        "avg": 95.47,
+        "f9": null,
+        "t80": 6,
+        "t140": 20,
+        "t100": 36,
+        "co": 26.83,
+        "hi": 92
+       },
+       {
+        "avg": 98.66,
+        "f9": null,
+        "t80": 6,
+        "t140": 24,
+        "t100": 33,
+        "co": 39.02,
+        "hi": 124
+       }
+      ],
+      "statsLive": true
      }
     ]
    },
@@ -2763,8 +2808,22 @@
       "date": "2026-11-22",
       "time": "19:45",
       "status": "upcoming",
-      "p1": null,
-      "p2": null,
+      "p1": {
+       "id": "11788",
+       "name": "Gerwyn Price",
+       "last": "Price",
+       "nick": "The Iceman",
+       "country": "GB-WLS",
+       "ranking": 4
+      },
+      "p2": {
+       "id": "33091",
+       "name": "Gian van Veen",
+       "last": "van Veen",
+       "nick": "The Giant",
+       "country": "NL",
+       "ranking": 3
+      },
       "s1": 0,
       "s2": 0,
       "winner": null

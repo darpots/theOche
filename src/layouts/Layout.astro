@@ -38,12 +38,12 @@ const nav: { key: string; href: string; label: string; phone?: string; title?: s
     { href: '/rankings', label: 'World rankings', text: 'The Order of Merit and the live race' },
     { href: '/stats', label: 'Stats leaders', text: 'Averages, 180s and checkouts, last 12 months' },
     { href: '/records', label: 'Records', text: 'The best single-match numbers of the season' },
+    { href: '/h2h', label: 'Head to head', text: 'Any two players, side by side' },
   ] },
   { key: 'play', href: '/play', label: 'Play', menu: [
     { href: '/play/predictor', label: 'Predictor', text: 'Pick the winners before they throw' },
     { href: '/play/guess', label: 'Guess the player', text: 'A mystery player every day, six clues' },
     { href: '/play/checkout', label: 'Checkout trainer', text: '60 seconds: how many can you take out?' },
-    { href: '/h2h', label: 'Head to head', text: 'Any two players, side by side' },
     { href: '/my', label: 'My Oche', text: 'Your followed players in one place' },
     { href: '/world-championship', label: 'World Championship', text: 'Countdown, seeds and the road to Ally Pally' },
   ] },
@@ -53,9 +53,9 @@ const act = active === 'stats' ? 'rankings' : active;
 // Phone tab bar: the four daily destinations, everything else in More.
 const tabs = [nav[0], nav[2], nav[1], nav[5]];
 const moreGroups: { title: string; links: { href: string; label: string }[] }[] = [
-  { title: 'Rankings & numbers', links: [{ href: '/rankings', label: 'World rankings' }, { href: '/stats', label: 'Stats leaders' }, { href: '/records', label: 'Records' }] },
+  { title: 'Rankings & numbers', links: [{ href: '/rankings', label: 'World rankings' }, { href: '/stats', label: 'Stats leaders' }, { href: '/records', label: 'Records' }, { href: '/h2h', label: 'Head to head' }] },
   { title: 'Events', links: [{ href: '/calendar', label: 'Calendar' }, { href: '/world-championship', label: 'World Championship' }] },
-  { title: 'Yours', links: [{ href: '/my', label: 'My Oche' }, { href: '/h2h', label: 'Head to head' }] },
+  { title: 'Yours', links: [{ href: '/my', label: 'My Oche' }] },
   { title: 'The Oche', links: [{ href: '/about', label: 'About & contact' }, { href: '/privacy', label: 'Privacy' }, { href: '/rss.xml', label: 'RSS feed' }] },
 ];
 const inMore = ['rankings', 'stats', 'calendar'].includes(active || '') ;
@@ -209,8 +209,8 @@ const fullTitle = title === 'The Oche' ? title : `${title} · The Oche`;
           <p>{SITE.tagline}. An independent fan site, not affiliated with the PDC, Sky Sports or ITV.</p>
         </div>
         <nav class="foot-links" aria-label="Site">
-          <div><b>Follow the darts</b><a href="/">Today</a><a href={`/tournament/${t.id}`}>{shortEvent(t.name).desk}</a><a href="/calendar">Calendar</a><a href="/stats">Stats</a><a href="/rankings">Rankings</a><a href="/records">Records</a><a href="/world-championship">World Championship</a></div>
-          <div><b>Play</b><a href="/play/predictor">Predictor</a><a href="/play/guess">Guess the player</a><a href="/play/checkout">Checkout trainer</a><a href="/h2h">Head to head</a><a href="/my">My Oche</a></div>
+          <div><b>Follow the darts</b><a href="/">Today</a><a href={`/tournament/${t.id}`}>{shortEvent(t.name).desk}</a><a href="/calendar">Calendar</a><a href="/stats">Stats</a><a href="/rankings">Rankings</a><a href="/records">Records</a><a href="/h2h">Head to head</a><a href="/world-championship">World Championship</a></div>
+          <div><b>Play</b><a href="/play/predictor">Predictor</a><a href="/play/guess">Guess the player</a><a href="/play/checkout">Checkout trainer</a><a href="/my">My Oche</a></div>
           <div><b>News</b><a href="/news">Latest news</a><a href="/rss.xml">RSS feed</a></div>
           <div><b>About</b><a href="/about">About &amp; contact</a><a href="/privacy">Privacy &amp; cookies</a><a href="/credits">Photo credits &amp; data</a></div>
         </nav>
@@ -276,8 +276,8 @@ const fullTitle = title === 'The Oche' ? title : `${title} · The Oche`;
         const [, a, b] = p.split('/');
         if (a === 'tournament') return b === document.querySelector<HTMLElement>('.top nav')?.dataset.current ? 'matches' : 'calendar';
         // Stats and Records sit under Rankings; the extra tools under Play.
-        if (['players', 'stats', 'records'].includes(a)) return 'rankings';
-        if (['h2h', 'my', 'world-championship'].includes(a)) return 'play';
+        if (['players', 'stats', 'records', 'h2h'].includes(a)) return 'rankings';
+        if (['my', 'world-championship'].includes(a)) return 'play';
         return a;
       };
       // The header is persisted across page swaps, and re-inserting it cancels

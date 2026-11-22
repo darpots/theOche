@@ -1,0 +1,61 @@
+name: Refresh player and venue photos
+
+# The photo scripts use macOS Vision (subject cut-outs, face positions), so this
+# runs on a GitHub-hosted Mac. Weekly: finds freely licensed photos for players
+# who don't have one, makes their cut-outs and cover photos, adds extra photos
+# for the most-covered players and photos for new venues, then commits.
+on:
+  schedule:
+    - cron: '15 3 * * 1' # Mondays, 03:15 UTC
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  issues: write
+
+concurrency:
+  group: data-commit
+  cancel-in-progress: false
+
+jobs:
+  photos:
+    runs-on: macos-14
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: Find photos for players without one
+        run: |
+          node -e "console.log(Object.keys(require('./src/data/portraits.json')).join(' '))" > /tmp/before.txt
+          node scripts/find-portraits.mjs
+          node -e "
+            const before = new Set(require('fs').readFileSync('/tmp/before.txt', 'utf8').trim().split(' '));
+            console.log(Object.keys(require('./src/data/portraits.json')).filter(k => !before.has(k)).join(' '));
+          " > /tmp/new.txt
+          echo "New portraits: $(cat /tmp/new.txt)"
+      - name: Cut-outs and cover photos for the new players
+        run: |
+          NEW=$(cat /tmp/new.txt)
+          [ -z "$NEW" ] && exit 0
+          node scripts/make-cutouts.mjs $NEW
+          node scripts/make-photos.mjs $NEW
+      - name: Extra photos for the most-covered players
+        run: node scripts/find-more-photos.mjs
+      - name: Photos for new venues
+        run: node scripts/find-venue-photos.mjs
+      - name: Image sizes and player images
+        run: |
+          node scripts/make-image-sizes.mjs
+          node scripts/make-player-images.mjs
+      - uses: ./.github/actions/commit
+        with:
+          message: 'photos: weekly refresh'
+          paths: src/data public/portraits public/cutouts public/photos public/news-img public/venues public/avatars
+      - if: failure()
+        uses: ./.github/actions/report-failure
+        with:
+          job: photos

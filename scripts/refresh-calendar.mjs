@@ -1,10 +1,11 @@
 // Builds src/data/calendar.json: PDC events shown on Sky Sports, ITV or
 // (European Tour) PDCTV, from two years ago (shown under "Show completed") to 15 months ahead.
-import { appendFile } from 'node:fs/promises';
-import { API, BROADCASTERS, cleanName, playerName, isPlaceholder } from '../src/lib/pdc.mjs';
+import { appendFile, writeFile } from 'node:fs/promises';
+import { API, BROADCASTERS, broadcasterFor, cleanName, playerName, isPlaceholder } from '../src/lib/pdc.mjs';
 import { getAll, writeJsonIfChanged, log } from './lib.mjs';
 
 const OUT = new URL('../src/data/calendar.json', import.meta.url).pathname;
+const ROOT = new URL('../', import.meta.url).pathname;
 
 const now = new Date();
 const year = now.getUTCFullYear();
@@ -26,11 +27,10 @@ for (const r of rows) {
   if (seen.has(r.id) || /test|qualifier/i.test(a.name)) continue;
   seen.add(r.id);
   if (a.endDate < iso(from) || a.startDate > iso(to)) continue;
-  const broadcaster = BROADCASTERS[a.tournamentTypeID];
-  if (!broadcaster) {
-    if (a.isTelevised && ['2', '3'].includes(a.tournamentCategoryID)) unmapped.push(`${a.name} (type ${a.tournamentTypeID})`);
-    continue;
-  }
+  const broadcaster = broadcasterFor(a);
+  if (!broadcaster) continue;
+  // A televised type the map doesn't know yet: shown with a guessed channel, and flagged.
+  if (!BROADCASTERS[a.tournamentTypeID]) unmapped.push(`${a.name} (type ${a.tournamentTypeID}, shown as ${broadcaster})`);
   const { name, tag } = cleanName(a.name);
   events.push({
     id: r.id,
@@ -52,7 +52,9 @@ for (const r of rows) {
 events.sort((x, y) => x.start.localeCompare(y.start) || x.name.localeCompare(y.name));
 
 if (unmapped.length) {
-  const msg = `Televised PDC events with no broadcaster mapping (add to BROADCASTERS in src/lib/pdc.mjs):\n- ${unmapped.join('\n- ')}`;
+  const msg = `Televised PDC events with no broadcaster mapping, shown with a guessed channel (confirm in BROADCASTERS in src/lib/pdc.mjs):\n- ${[...new Set(unmapped)].join('\n- ')}`;
+  // For the workflow: it opens (or updates) a GitHub issue with this list.
+  await writeFile(`${ROOT}.unmapped-broadcasters.txt`, msg + '\n');
   console.warn(msg);
   if (process.env.GITHUB_STEP_SUMMARY) await appendFile(process.env.GITHUB_STEP_SUMMARY, `### Calendar\n${msg}\n`);
 }

@@ -173,6 +173,7 @@ h1, h2, h3 { text-wrap: balance; hyphens: none; }
 .tv img { height: 15px; width: auto; display: block; }
 .tv-itv img { height: 18px; }
 .tv-pdctv { background: #14161f; border-color: #14161f; }
+.tv-tv { font-size: 11px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; color: #0b0c10; }
 .tv-pdctv img { height: 13px; }
 
 .live-dot { display: inline-flex; align-items: center; gap: 7px; color: var(--red-text); font-weight: 800; font-size: 12px; letter-spacing: .1em; text-transform: uppercase; }

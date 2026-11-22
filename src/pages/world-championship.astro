@@ -6,6 +6,7 @@ import { getCollection } from 'astro:content';
 import calendar from '../data/calendar.json';
 import { playPlayers } from '../lib/play-data';
 import { tvBadge } from '../lib/pdc.mjs';
+import { worldsRoll } from '../lib/wc-roll';
 import { dateRange } from '../lib/format.mjs';
 import NewsArt from '../components/NewsArt.astro';
 
@@ -15,22 +16,24 @@ const wc = wcs.find(e => e.end >= today) || wcs[wcs.length - 1];
 const players = playPlayers(128);
 const seeds = players.slice(0, 32);
 const form = [...players].filter(p => p.avg).sort((a, b) => b.avg! - a.avg!).slice(0, 8);
-// Roll of honour (PDC era, recent first): year the final was played, and the champion.
-const ROLL: [number, string][] = [[2026, 'Luke Littler'], [2025, 'Luke Littler'], [2024, 'Luke Humphries'], [2023, 'Michael Smith'], [2022, 'Peter Wright'], [2021, 'Gerwyn Price'], [2020, 'Peter Wright'], [2019, 'Michael van Gerwen'], [2018, 'Rob Cross'], [2017, 'Michael van Gerwen'], [2016, 'Gary Anderson'], [2015, 'Gary Anderson'], [2014, 'Michael van Gerwen'], [2013, 'Phil Taylor'], [2012, 'Adrian Lewis'], [2011, 'Adrian Lewis'], [2010, 'Phil Taylor']];
-const slugOf = new Map(players.map(p => [p.name, p.slug]));
+// Roll of honour from PDC results (src/lib/wc-roll.ts): updates itself after each final.
+const roll = worldsRoll();
 const news = (await getCollection('news')).map(n => n.data)
   .filter(s => s.tournament === wc?.id || s.tags.some(t => /world championship/i.test(t)) || /world championship|ally pally/i.test(s.headline))
   .sort((a, b) => b.date.localeCompare(a.date)).slice(0, 6);
-const champ = ROLL[0][1];
+// The latest champion: "defending" until this edition's final has a winner.
+const latest = roll[0];
+const decided = !!(wc && latest && latest.year === Number(wc.end.slice(0, 4)) && today >= wc.start);
+const champLine = latest ? (decided ? `${latest.name} is the new world champion.` : `${latest.name} is the defending champion.`) : '';
 ---
 <Layout title="World Championship" description="The PDC World Championship at Alexandra Palace: dates, countdown, seeds, favourites, roll of honour and the latest news." active="play">
   <section class="wc-hero">
     <div class="wrap">
       <span class="eyebrow">Alexandra Palace · {wc && dateRange(wc.start, wc.end)}</span>
       <h1>World <span class="accent">Championship</span></h1>
-      <p class="lede">Three weeks, the best players on the planet and one Sid Waddell Trophy. {champ} is the defending champion.</p>
+      <p class="lede">Three weeks, the best players on the planet and one Sid Waddell Trophy. {champLine}</p>
       {wc && (
-        <div class="count" data-count={wc.start}>
+        <div class="count" data-count={wc.start} data-id={wc.id}>
           {['d', 'h', 'm', 's'].map(u => <div><b class="poster-num" data-u={u}>–</b><span class="lbl">{{ d: 'Days', h: 'Hours', m: 'Mins', s: 'Secs' }[u]}</span></div>)}
         </div>
       )}
@@ -59,7 +62,7 @@ const champ = ROLL[0][1];
     <article class="tile tile-volt">
       <h2 class="lbl">Roll of honour</h2>
       <ol class="roll">
-        {ROLL.map(([y, n]) => <li><span class="poster-num">{y}</span>{slugOf.get(n) ? <a href={`/players/${slugOf.get(n)}`}>{n}</a> : <span>{n}</span>}</li>)}
+        {roll.map(c => <li><span class="poster-num">{c.year}</span>{c.slug ? <a href={`/players/${c.slug}`}>{c.name}</a> : <span>{c.name}</span>}</li>)}
       </ol>
     </article>
   </section>
@@ -77,7 +80,19 @@ const champ = ROLL[0][1];
     function init() {
       const box = document.querySelector<HTMLElement>('.wc-hero .count');
       if (!box) return;
-      const start = Date.parse(`${box.dataset.count}T19:00:00Z`);
+      // UK wall-clock time to a timestamp (London is UTC or UTC+1).
+      const ukMs = (d: string, t: string) => {
+        const guess = Date.parse(`${d}T${t}:00Z`);
+        const h = Number(new Intl.DateTimeFormat('en-GB', { timeZone: 'Europe/London', hour: '2-digit', hour12: false }).format(new Date(guess))) % 24;
+        return guess - ((h - new Date(guess).getUTCHours() + 24) % 24) * 36e5;
+      };
+      // Opening night until the schedule is out (usually 7pm), then the first match's real start.
+      let start = ukMs(box.dataset.count!, '19:00');
+      fetch(`https://tournaments.darts.web.gc.pdcservices.co.uk/v2/${box.dataset.id}`).then(r => r.json()).then(j => {
+        const times = (j.data?.attributes?.stages || []).flatMap((s: any) => s.fixtures || [])
+          .filter((f: any) => f.startDate && f.startTime).map((f: any) => ukMs(f.startDate, f.startTime.slice(0, 5)));
+        if (times.length) { start = Math.min(...times); tick(); }
+      }).catch(() => {});
       const tick = () => {
         let s = Math.max(0, Math.floor((start - Date.now()) / 1000));
         const v = { d: Math.floor(s / 86400), h: Math.floor((s % 86400) / 3600), m: Math.floor((s % 3600) / 60), s: s % 60 };

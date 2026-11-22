@@ -6,7 +6,7 @@ import { playPlayers, jsonForHtml } from '../lib/play-data';
 
 const players = playPlayers(128).map(p => ({ id: p.id, name: p.name, slug: p.slug, pos: p.pos, cut: p.cut, avatar: p.avatar, country: p.countryName, avg: p.avg, f9: p.f9, t80: p.t80, co: p.co, hi: p.hi, titles: p.titles, won: p.won, lost: p.lost, nine: p.nine }));
 ---
-<Layout title="Head to head" description="Compare any two PDC players: every meeting and their numbers side by side." active="play">
+<Layout title="Head to head" description="Compare any two PDC players: every meeting and their numbers side by side." active="rankings">
   <section class="hero wrap">
     <span class="eyebrow">Head to head</span>
     <h1>Settle the <span class="accent">argument.</span></h1>
