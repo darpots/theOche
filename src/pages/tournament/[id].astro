@@ -416,7 +416,7 @@ const news = (await getCollection('news')).map(n => n.data)
   .board :global(.lgs.live i) { color: var(--on-ink-2); }
   /* Averages in the middle, as on the scoreboards: the number, then a small-caps AVG */
   .board :global(.mav) { display: inline-flex; align-items: baseline; gap: 8px; white-space: nowrap; }
-  .board :global(.ma) { font-size: 15px; font-weight: 800; color: var(--muted); font-variant-numeric: tabular-nums; }
+  .board :global(.ma) { font-size: 13px; font-weight: 800; color: var(--ink-2); font-variant-numeric: tabular-nums; white-space: nowrap; }
   .board :global(.ma.hi) { color: var(--ink); }
   .board :global(.ma i) { font-style: normal; font-size: 10px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
   .board :global(.mdash) { color: var(--line); font-weight: 800; }

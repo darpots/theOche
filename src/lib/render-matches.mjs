@@ -16,12 +16,12 @@ export function avatar(p, _unused, size = 44) {
 const fmt = (n, d = 2) => (n == null || Number.isNaN(n) ? '–' : Number(n).toFixed(d));
 
 // One player: picture, name, and their score (legs, or sets in set play) in the box on the end.
-function side(p, score, won, decided, portraits, align, scored, live, lbl) {
+function side(p, score, won, decided, portraits, align, scored, live, lbl, st, best) {
   if (!p) return `<div class="pl ${align} tbc"><span class="avatar" style="--size:44px">?</span><span class="nm"><b>To be decided</b></span></div>`;
   const box = scored ? `<span class="lgs${won ? ' w' : ''}${live ? ' live' : ''}" title="${lbl}"><i>${lbl}</i>${score ?? 0}</span>` : '';
   return `<div class="pl ${align}${won ? ' won' : decided ? ' lost' : ''}">
     ${avatar(p, portraits)}
-    <span class="nm"><b>${esc(p.name)}</b><small>${flag(p.country)}${p.ranking ? ` #${p.ranking}` : ''}</small></span>
+    <span class="nm"><b>${esc(p.name)}</b><small>${flag(p.country)}${p.ranking ? ` #${p.ranking}` : ''}${st?.avg != null ? ` · <span class="ma${best ? ' hi' : ''}" title="Three-dart average">${fmt(st.avg)} <i>avg</i></span>` : ''}</small></span>
     ${box}
   </div>`;
 }
@@ -36,19 +36,16 @@ export function fixtureRow(f, portraits) {
   const best = st && st[0] && st[1] ? (st[0].avg > st[1].avg ? 1 : st[1].avg > st[0].avg ? 2 : 0) : 0;
   const live = f.status === 'live';
   const sets = !!(f.fmt?.sets || f.sets);
-  // The middle: both averages (styled as on the scoreboards); before a match, its start time.
-  const av = (x, hi) => `<span class="ma${hi ? ' hi' : ''}" title="Three-dart average">${fmt(x?.avg)} <i>avg</i></span>`;
-  const mid = scored
-    ? (st && (st[0]?.avg != null || st[1]?.avg != null) ? `<span class="mav">${av(st[0], best === 1)}<span class="mdash">–</span>${av(st[1], best === 2)}</span>` : '')
-    : `<span class="vs">${f.time ? esc(ukClock(f.time)) : 'vs'}</span>`;
+  // The middle: the state (Result / Live); before a match, its start time.
+  const mid = scored ? '' : `<span class="vs">${f.time ? esc(ukClock(f.time)) : 'vs'}</span>`;
   const group = /^group/i.test(f.stage || '') ? `${esc(f.stage)} · ` : '';
   const setLegs = live && sets && f.liveLegs ? ` · Set ${f.liveSet || 1}, legs ${f.liveLegs[0]}–${f.liveLegs[1]}` : '';
   const state = live ? `<span class="live-dot">Live</span>${esc(setLegs)}${onBreak(f.legNow) ? ' · Break' : ''}<a class="mc-link" href="/match?id=${esc(f.id)}">Match centre →</a>` : `<span class="ft">${group}${f.status === 'result' ? 'Result' : f.time ? ukZone(f.date) : 'Time TBC'}</span>`;
   const lbl = sets ? 'Sets' : 'Legs';
   return `<li class="fx ${f.status}${live ? ' big' : ''}${st ? ' has-stats' : ''}" data-players="${esc([f.p1?.id, f.p2?.id].filter(Boolean).join(' '))}" data-id="${esc(f.id)}" data-sig="${esc(`${f.s1}-${f.s2}-${f.status}-${st ? st[0]?.avg + '/' + st[1]?.avg : ''}`)}">
-    ${side(f.p1, f.s1, w1, decided, portraits, 'l', scored, live, lbl)}
+    ${side(f.p1, f.s1, w1, decided, portraits, 'l', scored, live, lbl, st?.[0], best === 1)}
     <div class="mid">${mid}<div class="st">${state}</div></div>
-    ${side(f.p2, f.s2, w2, decided, portraits, 'r', scored, live, lbl)}
+    ${side(f.p2, f.s2, w2, decided, portraits, 'r', scored, live, lbl, st?.[1], best === 2)}
     ${f.p1 && f.p2 ? `<a class="fx-link" href="/match?id=${esc(f.id)}" aria-label="${esc(`${f.p1.name} v ${f.p2.name}: match centre`)}"></a>` : ''}
   </li>`;
 }
