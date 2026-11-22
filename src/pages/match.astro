@@ -320,7 +320,7 @@ import Layout from '../layouts/Layout.astro';
         // "Leg · name" flash when a leg or set is won.
         if (m?.status === 'live') {
           const setPlay = (t?.data?.attributes?.stage?.numberOfSets || a.attributes.tournamentStage?.numberOfSets || 0) > 1;
-          watchWins(id, setPlay ? m.legs : [a.attributes.participant1Score ?? 0, a.attributes.participant2Score ?? 0], setPlay ? m.sets : null, names);
+          watchWins(id, setPlay ? m.legs : [a.attributes.participant1Score ?? 0, a.attributes.participant2Score ?? 0], setPlay ? m.sets : null, names, '#mh .score');
         }
         document.title = `${name(a.attributes.participant1)} v ${name(a.attributes.participant2)} · The Oche`;
         mh.innerHTML = header(a, t?.data, data, m?.status === 'live' ? m : null);
@@ -400,8 +400,8 @@ import Layout from '../layouts/Layout.astro';
       let n = 0;
       const tick = () => {
         const who = [...document.querySelectorAll('#mh .who a, #mh .who > span')].map(e => (e.textContent || '').trim().split(' ').slice(1).join(' '));
-        if (who.length === 2) flashWin(who[n % 2], n === 3 ? 'Set' : 'Leg');
-        if (++n < 4 && document.getElementById('mh')) setTimeout(tick, 3500);
+        if (who.length === 2) flashWin(who[n % 2], n === 3 ? 'Set' : 'Leg', '#mh .score');
+        if (++n < 4 && document.getElementById('mh')) setTimeout(tick, 4000);
       };
       setTimeout(tick, 1500);
     });
@@ -422,6 +422,9 @@ import Layout from '../layouts/Layout.astro';
   .mh-in :global(.s1) { flex-direction: row-reverse; text-align: right; }
   .mh-in :global(.pic) { width: 170px; height: 210px; flex: none; display: flex; align-items: flex-end; justify-content: center; overflow: hidden; }
   .mh-in :global(.pic .cut) { height: 100%; width: auto; max-width: none; }
+  /* Full-length studio shots: head to waist, filling the frame */
+  .mh-in :global(.pic:has(.studio)) { align-items: flex-start; }
+  .mh-in :global(.pic .cut.studio) { height: 165%; }
   .mh-in :global(.pic .por) { width: 120px; height: 120px; border-radius: 50%; object-fit: cover; margin-bottom: 30px; }
   .mh-in :global(.pic .ini) { width: 110px; height: 110px; border-radius: 50%; display: grid; place-items: center; background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='40' r='17' fill='%232a2e3a'/%3E%3Cpath d='M12 104C12 75 29 62 50 62S88 75 88 104Z' fill='%232a2e3a'/%3E%3C/svg%3E") center / 100% 100% no-repeat, radial-gradient(circle at 50% 30%, #1d2029, #0b0c10 75%); color: var(--volt); font-family: var(--poster); font-size: 36px; margin-bottom: 30px; box-shadow: inset 0 0 0 2px rgba(200, 255, 46, .35); }
   .mh-in :global(.who) { display: flex; flex-direction: column; gap: 4px; padding-bottom: 26px; min-width: 0; }
