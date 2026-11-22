@@ -1,5 +1,5 @@
 {
- "updatedAt": "2026-11-21T22:09:43.705Z",
+ "updatedAt": "2026-11-22T03:01:56.163Z",
  "tournament": {
   "id": "10871",
   "name": "Grand Slam of Darts",
@@ -2631,24 +2631,19 @@
       "stats": [
        {
         "avg": 101.5,
-        "f9": null,
+        "f9": 108.38,
         "t80": 12,
-        "t140": 15,
-        "t100": 22,
         "co": 36.67,
         "hi": 170
        },
        {
         "avg": 105.84,
-        "f9": null,
+        "f9": 115.33,
         "t80": 14,
-        "t140": 17,
-        "t100": 27,
         "co": 50,
         "hi": 141
        }
-      ],
-      "statsLive": true
+      ]
      },
      {
       "id": "517026",
@@ -2677,24 +2672,19 @@
       "stats": [
        {
         "avg": 95.17,
-        "f9": null,
+        "f9": 98.19,
         "t80": 9,
-        "t140": 21,
-        "t100": 34,
         "co": 44.44,
         "hi": 121
        },
        {
         "avg": 95.54,
-        "f9": null,
+        "f9": 104.61,
         "t80": 11,
-        "t140": 16,
-        "t100": 34,
         "co": 42.42,
         "hi": 116
        }
-      ],
-      "statsLive": true
+      ]
      }
     ]
    },
@@ -2745,7 +2735,14 @@
        "country": "NL",
        "ranking": 11
       },
-      "p2": null,
+      "p2": {
+       "id": "33091",
+       "name": "Gian van Veen",
+       "last": "van Veen",
+       "nick": "The Giant",
+       "country": "NL",
+       "ranking": 3
+      },
       "s1": 0,
       "s2": 0,
       "winner": null
