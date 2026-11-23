@@ -1,0 +1,149 @@
+{
+ "fixture": "517029",
+ "event": "Grand Slam of Darts",
+ "stage": "Final",
+ "format": "First to 16 legs",
+ "date": "2026-11-22",
+ "venue": "Aldersley Leisure Village, Wolverhampton, Wolverhampton",
+ "winner": "Gerwyn Price",
+ "loser": "Gian van Veen",
+ "score": "16-11",
+ "angles": [
+  {
+   "angle": "run",
+   "score": 27,
+   "evidence": "Price won 6 legs in a row"
+  },
+  {
+   "angle": "result",
+   "score": 10,
+   "evidence": "Gerwyn Price beat Gian van Veen 16-11"
+  }
+ ],
+ "notable": false,
+ "players": [
+  {
+   "name": "Gerwyn Price",
+   "worldRank": 3,
+   "average": 97.34,
+   "t80s": 11,
+   "checkoutPct": 53.3,
+   "highestCheckout": 150,
+   "breaks": 6,
+   "biggestLead": 6,
+   "longestRun": 6,
+   "previousBestAtEvent": "Winner (2018)",
+   "form": {
+    "period": "last 12 months",
+    "played": 140,
+    "won": 97,
+    "average": 98.66,
+    "titles": 5,
+    "last5": [
+     "W 16-13 v Kevin Doets",
+     "W 16-15 v Niko Springer",
+     "W 10-7 v Ryan Searle",
+     "W 5-2 v Sebastian Bialecki",
+     "W 5-3 v Joe Hunt"
+    ]
+   }
+  },
+  {
+   "name": "Gian van Veen",
+   "worldRank": 2,
+   "average": 94.76,
+   "t80s": 9,
+   "checkoutPct": 34.4,
+   "highestCheckout": 80,
+   "breaks": 4,
+   "biggestLead": 1,
+   "longestRun": 2,
+   "previousBestAtEvent": "Quarter-Final (2024)",
+   "form": {
+    "period": "last 12 months",
+    "played": 165,
+    "won": 100,
+    "average": 95.27,
+    "titles": 0,
+    "last5": [
+     "W 16-11 v Michael van Gerwen",
+     "W 16-14 v Nathan Aspinall",
+     "W 10-7 v Martin Schindler",
+     "W 5-2 v Bradley Brooks",
+     "W 5-2 v Carl Sneyd"
+    ]
+   }
+  }
+ ],
+ "swings": {
+  "fightback": null,
+  "turningPoint": "leg 15: Price held for 8-7, finishing on 4"
+ },
+ "decidingLeg": null,
+ "bestFinish": {
+  "player": "Gerwyn Price",
+  "score": 150,
+  "leg": 4
+ },
+ "quickestLeg": {
+  "player": "Gerwyn Price",
+  "darts": 11,
+  "leg": 25
+ },
+ "nineDarters": [],
+ "finishes170": [],
+ "stakes": {
+  "loserTakes": "£100,000",
+  "winnerGuaranteed": null,
+  "next": null
+ },
+ "headToHead": {
+  "meetingsBefore": 17,
+  "wins": {
+   "Gerwyn Price": 14,
+   "Gian van Veen": 3
+  },
+  "lastMeeting": "2026-07-25: World Matchplay, 17-10 (Gerwyn Price first)"
+ },
+ "milestone": null,
+ "records": {
+  "highestAverageOfEvent": null,
+  "highestLosingAverage": null,
+  "bestCheckoutOfEvent": null,
+  "most180sInAMatchAtEvent": null
+ },
+ "legs": [
+  "L1: van Veen (break) 16 darts, out 40 -> 0-1",
+  "L2: Price (break) 14 darts, out 40 -> 1-1",
+  "L3: Price 16 darts, out 24 -> 2-1",
+  "L4: Price (break) 15 darts, out 150 -> 3-1",
+  "L5: van Veen (break) 15 darts, out 64 -> 3-2",
+  "L6: van Veen 17 darts, out 16 -> 3-3",
+  "L7: Price 13 darts, out 40 -> 4-3",
+  "L8: van Veen 12 darts, out 50 -> 4-4",
+  "L9: van Veen (break) 18 darts, out 25 -> 4-5",
+  "L10: Price (break) 15 darts, out 145 -> 5-5",
+  "L11: Price 14 darts, out 70 -> 6-5",
+  "L12: van Veen 13 darts, out 32 -> 6-6",
+  "L13: Price 15 darts, out 62 -> 7-6",
+  "L14: van Veen 15 darts, out 80 -> 7-7",
+  "L15: Price 21 darts, out 4 -> 8-7",
+  "L16: Price (break) 17 darts, out 56 -> 9-7",
+  "L17: Price 17 darts, out 20 -> 10-7",
+  "L18: Price (break) 12 darts, out 100 -> 11-7",
+  "L19: Price 13 darts, out 40 -> 12-7",
+  "L20: Price (break) 14 darts, out 60 -> 13-7",
+  "L21: van Veen (break) 15 darts, out 24 -> 13-8",
+  "L22: van Veen 16 darts, out 16 -> 13-9",
+  "L23: Price 12 darts, out 132 -> 14-9",
+  "L24: van Veen 16 darts, out 20 -> 14-10",
+  "L25: Price 11 darts, out 56 -> 15-10",
+  "L26: van Veen 16 darts, out 12 -> 15-11",
+  "L27: Price 15 darts, out 118 -> 16-11"
+ ],
+ "source": {
+  "name": "PDC",
+  "url": "https://www.pdc.tv/matches/517029",
+  "title": "Gerwyn Price v Gian van Veen"
+ }
+}
