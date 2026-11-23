@@ -1,5 +1,5 @@
 {
- "changedAt": "2026-11-15T11:06:41.741Z",
+ "changedAt": "2026-11-23T04:07:40.621Z",
  "players": [
   {
    "pos": 1,
@@ -9,37 +9,37 @@
    "slug": "luke-littler",
    "country": "GB-ENG",
    "dob": "2007-01-21",
-   "money": 3141000
+   "money": 2947500
   },
   {
    "pos": 2,
-   "id": "32102",
-   "name": "Luke Humphries",
-   "nick": "Cool Hand",
-   "slug": "luke-humphries",
-   "country": "GB-ENG",
-   "dob": "1995-02-11",
-   "money": 1062500
-  },
-  {
-   "pos": 3,
    "id": "33091",
    "name": "Gian van Veen",
    "nick": "The Giant",
    "slug": "gian-van-veen",
    "country": "NL",
    "dob": "2002-04-23",
-   "money": 1058750
+   "money": 1127250
   },
   {
-   "pos": 4,
+   "pos": 3,
    "id": "11788",
    "name": "Gerwyn Price",
    "nick": "The Iceman",
    "slug": "gerwyn-price",
    "country": "GB-WLS",
    "dob": "1985-03-07",
-   "money": 833500
+   "money": 1030500
+  },
+  {
+   "pos": 4,
+   "id": "32102",
+   "name": "Luke Humphries",
+   "nick": "Cool Hand",
+   "slug": "luke-humphries",
+   "country": "GB-ENG",
+   "dob": "1995-02-11",
+   "money": 954500
   },
   {
    "pos": 5,
@@ -49,7 +49,7 @@
    "slug": "jonny-clayton",
    "country": "GB-WLS",
    "dob": "1974-10-04",
-   "money": 717250
+   "money": 719250
   },
   {
    "pos": 6,
@@ -59,7 +59,7 @@
    "slug": "ross-smith",
    "country": "GB-ENG",
    "dob": "1989-01-12",
-   "money": 715250
+   "money": 678000
   },
   {
    "pos": 7,
@@ -69,97 +69,97 @@
    "slug": "james-wade",
    "country": "GB-ENG",
    "dob": "1983-04-06",
-   "money": 672750
+   "money": 674000
   },
   {
    "pos": 8,
-   "id": "38552",
-   "name": "Josh Rock",
-   "nick": "Rocky",
-   "slug": "josh-rock",
-   "country": "GB-NIR",
-   "dob": "2001-04-13",
-   "money": 603750
-  },
-  {
-   "pos": 9,
-   "id": "876",
-   "name": "Stephen Bunting",
-   "nick": "The Bullet",
-   "slug": "stephen-bunting",
-   "country": "GB-ENG",
-   "dob": "1985-04-09",
-   "money": 598000
-  },
-  {
-   "pos": 10,
-   "id": "31356",
-   "name": "Danny Noppert",
-   "nick": "The Freeze",
-   "slug": "danny-noppert",
-   "country": "NL",
-   "dob": "1990-12-31",
-   "money": 595750
-  },
-  {
-   "pos": 11,
    "id": "19",
    "name": "Michael van Gerwen",
    "nick": "Mighty Mike",
    "slug": "michael-van-gerwen",
    "country": "NL",
    "dob": "1989-04-25",
-   "money": 595500
+   "money": 644500
   },
   {
-   "pos": 12,
+   "pos": 9,
    "id": "11821",
    "name": "Nathan Aspinall",
    "nick": "The Asp",
    "slug": "nathan-aspinall",
    "country": "GB-ENG",
    "dob": "1991-07-15",
-   "money": 595500
+   "money": 624000
   },
   {
-   "pos": 13,
+   "pos": 10,
    "id": "32956",
    "name": "Wessel Nijman",
    "nick": null,
    "slug": "wessel-nijman",
    "country": "NL",
    "dob": "2000-06-26",
-   "money": 590750
+   "money": 595250
   },
   {
-   "pos": 14,
-   "id": "4",
-   "name": "Gary Anderson",
-   "nick": "Flying Scotsman",
-   "slug": "gary-anderson",
-   "country": "GB-SCT",
-   "dob": "1970-12-22",
-   "money": 572000
+   "pos": 11,
+   "id": "876",
+   "name": "Stephen Bunting",
+   "nick": "The Bullet",
+   "slug": "stephen-bunting",
+   "country": "GB-ENG",
+   "dob": "1985-04-09",
+   "money": 595250
   },
   {
-   "pos": 15,
+   "pos": 12,
+   "id": "38552",
+   "name": "Josh Rock",
+   "nick": "Rocky",
+   "slug": "josh-rock",
+   "country": "GB-NIR",
+   "dob": "2001-04-13",
+   "money": 594250
+  },
+  {
+   "pos": 13,
    "id": "32037",
    "name": "Ryan Searle",
    "nick": "Heavy Metal",
    "slug": "ryan-searle",
    "country": "GB-ENG",
    "dob": "1987-10-21",
-   "money": 559000
+   "money": 576000
   },
   {
-   "pos": 16,
+   "pos": 14,
+   "id": "31356",
+   "name": "Danny Noppert",
+   "nick": "The Freeze",
+   "slug": "danny-noppert",
+   "country": "NL",
+   "dob": "1990-12-31",
+   "money": 570000
+  },
+  {
+   "pos": 15,
    "id": "11843",
    "name": "Chris Dobey",
    "nick": "Hollywood",
    "slug": "chris-dobey",
    "country": "GB-ENG",
    "dob": "1990-05-31",
-   "money": 550500
+   "money": 560000
+  },
+  {
+   "pos": 16,
+   "id": "4",
+   "name": "Gary Anderson",
+   "nick": "Flying Scotsman",
+   "slug": "gary-anderson",
+   "country": "GB-SCT",
+   "dob": "1970-12-22",
+   "money": 515500
   },
   {
    "pos": 17,
@@ -169,7 +169,7 @@
    "slug": "luke-woodhouse",
    "country": "GB-ENG",
    "dob": "1988-10-13",
-   "money": 509000
+   "money": 511000
   },
   {
    "pos": 18,
@@ -179,7 +179,7 @@
    "slug": "jermaine-wattimena",
    "country": "NL",
    "dob": "1988-03-09",
-   "money": 507500
+   "money": 504000
   },
   {
    "pos": 19,
@@ -189,7 +189,7 @@
    "slug": "krzysztof-ratajski",
    "country": "PL",
    "dob": "1977-01-01",
-   "money": 492750
+   "money": 498750
   },
   {
    "pos": 20,
@@ -199,17 +199,17 @@
    "slug": "martin-schindler",
    "country": "DE",
    "dob": "1996-08-16",
-   "money": 466000
+   "money": 468000
   },
   {
    "pos": 21,
-   "id": "246",
-   "name": "Dirk van Duijvenbode",
-   "nick": "Aubergenius",
-   "slug": "dirk-van-duijvenbode",
+   "id": "32895",
+   "name": "Kevin Doets",
+   "nick": "Hawk Eye",
+   "slug": "kevin-doets",
    "country": "NL",
-   "dob": "1992-06-30",
-   "money": 426750
+   "dob": "1998-05-05",
+   "money": 456750
   },
   {
    "pos": 22,
@@ -219,17 +219,17 @@
    "slug": "damon-heta",
    "country": "AU",
    "dob": "1987-08-10",
-   "money": 426750
+   "money": 416750
   },
   {
    "pos": 23,
-   "id": "32895",
-   "name": "Kevin Doets",
-   "nick": "Hawk Eye",
-   "slug": "kevin-doets",
+   "id": "246",
+   "name": "Dirk van Duijvenbode",
+   "nick": "Aubergenius",
+   "slug": "dirk-van-duijvenbode",
    "country": "NL",
-   "dob": "1998-05-05",
-   "money": 399750
+   "dob": "1992-06-30",
+   "money": 396750
   },
   {
    "pos": 24,
@@ -239,27 +239,27 @@
    "slug": "rob-cross",
    "country": "GB-ENG",
    "dob": "1990-09-21",
-   "money": 398250
+   "money": 390250
   },
   {
    "pos": 25,
-   "id": "31501",
-   "name": "Ryan Joyce",
-   "nick": "Relentless",
-   "slug": "ryan-joyce",
-   "country": "GB-ENG",
-   "dob": "1985-09-20",
-   "money": 397500
-  },
-  {
-   "pos": 26,
    "id": "2040",
    "name": "Cameron Menzies",
    "nick": "Cammy",
    "slug": "cameron-menzies",
    "country": "GB-SCT",
    "dob": "1989-06-27",
-   "money": 387000
+   "money": 375500
+  },
+  {
+   "pos": 26,
+   "id": "31501",
+   "name": "Ryan Joyce",
+   "nick": "Relentless",
+   "slug": "ryan-joyce",
+   "country": "GB-ENG",
+   "dob": "1985-09-20",
+   "money": 365250
   },
   {
    "pos": 27,
@@ -269,7 +269,7 @@
    "slug": "andrew-gilding",
    "country": "GB-ENG",
    "dob": "1970-12-07",
-   "money": 353000
+   "money": 355500
   },
   {
    "pos": 28,
@@ -279,7 +279,7 @@
    "slug": "niels-zonneveld",
    "country": "NL",
    "dob": "1998-07-22",
-   "money": 336250
+   "money": 338750
   },
   {
    "pos": 29,
@@ -289,70 +289,50 @@
    "slug": "william-o-connor",
    "country": "IE",
    "dob": "1986-07-15",
-   "money": 290500
+   "money": 287500
   },
   {
    "pos": 30,
-   "id": "2554",
-   "name": "Daryl Gurney",
-   "nick": "Superchin",
-   "slug": "daryl-gurney",
-   "country": "GB-NIR",
-   "dob": "1986-03-22",
-   "money": 290500
-  },
-  {
-   "pos": 31,
-   "id": "142",
-   "name": "Dave Chisnall",
-   "nick": "Chizzy",
-   "slug": "dave-chisnall",
-   "country": "GB-ENG",
-   "dob": "1980-09-12",
-   "money": 287750
-  },
-  {
-   "pos": 32,
-   "id": "81",
-   "name": "Joe Cullen",
-   "nick": "The Rockstar",
-   "slug": "joe-cullen",
-   "country": "GB-ENG",
-   "dob": "1989-07-13",
-   "money": 273500
-  },
-  {
-   "pos": 33,
-   "id": "30829",
-   "name": "Mike De Decker",
-   "nick": "Real Deal",
-   "slug": "mike-de-decker",
-   "country": "BE",
-   "dob": "1995-12-15",
-   "money": 252500
-  },
-  {
-   "pos": 34,
    "id": "34874",
    "name": "Niko Springer",
    "nick": "Meenzer Bub",
    "slug": "niko-springer",
    "country": "DE",
    "dob": "2000-07-11",
-   "money": 251750
+   "money": 286750
   },
   {
-   "pos": 35,
-   "id": "139",
-   "name": "Peter Wright",
-   "nick": "Snakebite",
-   "slug": "peter-wright",
-   "country": "GB-SCT",
-   "dob": "1970-03-10",
-   "money": 228000
+   "pos": 31,
+   "id": "2554",
+   "name": "Daryl Gurney",
+   "nick": "Superchin",
+   "slug": "daryl-gurney",
+   "country": "GB-NIR",
+   "dob": "1986-03-22",
+   "money": 280500
   },
   {
-   "pos": 36,
+   "pos": 32,
+   "id": "142",
+   "name": "Dave Chisnall",
+   "nick": "Chizzy",
+   "slug": "dave-chisnall",
+   "country": "GB-ENG",
+   "dob": "1980-09-12",
+   "money": 276250
+  },
+  {
+   "pos": 33,
+   "id": "81",
+   "name": "Joe Cullen",
+   "nick": "The Rockstar",
+   "slug": "joe-cullen",
+   "country": "GB-ENG",
+   "dob": "1989-07-13",
+   "money": 275500
+  },
+  {
+   "pos": 34,
    "id": "33672",
    "name": "Ricardo Pietreczko",
    "nick": "Pikachu",
@@ -362,6 +342,26 @@
    "money": 227250
   },
   {
+   "pos": 35,
+   "id": "30829",
+   "name": "Mike De Decker",
+   "nick": "Real Deal",
+   "slug": "mike-de-decker",
+   "country": "BE",
+   "dob": "1995-12-15",
+   "money": 220250
+  },
+  {
+   "pos": 36,
+   "id": "139",
+   "name": "Peter Wright",
+   "nick": "Snakebite",
+   "slug": "peter-wright",
+   "country": "GB-SCT",
+   "dob": "1970-03-10",
+   "money": 220000
+  },
+  {
    "pos": 37,
    "id": "104",
    "name": "Michael Smith",
@@ -369,10 +369,20 @@
    "slug": "michael-smith",
    "country": "GB-ENG",
    "dob": "1990-09-18",
-   "money": 222750
+   "money": 208250
   },
   {
    "pos": 38,
+   "id": "2771",
+   "name": "Karel Sedlacek",
+   "nick": "Evil Charlie",
+   "slug": "karel-sedlacek",
+   "country": "CZ",
+   "dob": "1979-02-17",
+   "money": 198500
+  },
+  {
+   "pos": 39,
    "id": "36303",
    "name": "Justin Hood",
    "nick": "The Pocket Rocket",
@@ -382,16 +392,6 @@
    "money": 198500
   },
   {
-   "pos": 39,
-   "id": "31031",
-   "name": "Jeffrey De Graaf",
-   "nick": null,
-   "slug": "jeffrey-de-graaf",
-   "country": "SE",
-   "dob": "1990-11-21",
-   "money": 195000
-  },
-  {
    "pos": 40,
    "id": "32079",
    "name": "Callan Rydz",
@@ -399,220 +399,200 @@
    "slug": "callan-rydz",
    "country": "GB-ENG",
    "dob": "1998-07-03",
-   "money": 194250
+   "money": 191250
   },
   {
    "pos": 41,
-   "id": "162",
-   "name": "Mickey Mansell",
-   "nick": "Clonoe Cyclone",
-   "slug": "mickey-mansell",
-   "country": "IE",
-   "dob": "1973-08-31",
-   "money": 193750
+   "id": "31031",
+   "name": "Jeffrey De Graaf",
+   "nick": null,
+   "slug": "jeffrey-de-graaf",
+   "country": "SE",
+   "dob": "1990-11-21",
+   "money": 190000
   },
   {
    "pos": 42,
-   "id": "2771",
-   "name": "Karel Sedlacek",
-   "nick": "Evil Charlie",
-   "slug": "karel-sedlacek",
-   "country": "CZ",
-   "dob": "1979-02-17",
-   "money": 193500
-  },
-  {
-   "pos": 43,
-   "id": "32068",
-   "name": "Martin Lukeman",
-   "nick": "Smash",
-   "slug": "martin-lukeman",
-   "country": "GB-ENG",
-   "dob": "1985-03-26",
-   "money": 186500
-  },
-  {
-   "pos": 44,
-   "id": "156",
-   "name": "Kim Huybrechts",
-   "nick": "The Hurricane",
-   "slug": "kim-huybrechts",
-   "country": "BE",
-   "dob": "1985-11-16",
-   "money": 180500
-  },
-  {
-   "pos": 45,
-   "id": "36712",
-   "name": "Scott Williams",
-   "nick": "Shaggy",
-   "slug": "scott-williams",
-   "country": "GB-ENG",
-   "dob": "1990-01-18",
-   "money": 177750
-  },
-  {
-   "pos": 46,
-   "id": "36373",
-   "name": "James Hurrell",
-   "nick": "Hillbilly",
-   "slug": "james-hurrell",
-   "country": "GB-ENG",
-   "dob": "1984-07-07",
-   "money": 177500
-  },
-  {
-   "pos": 47,
-   "id": "317",
-   "name": "Raymond van Barneveld",
-   "nick": "Barney",
-   "slug": "raymond-van-barneveld",
-   "country": "NL",
-   "dob": "1967-04-20",
-   "money": 173000
-  },
-  {
-   "pos": 48,
-   "id": "136",
-   "name": "Brendan Dolan",
-   "nick": "The History Maker",
-   "slug": "brendan-dolan",
-   "country": "IE",
-   "dob": "1973-08-02",
-   "money": 172250
-  },
-  {
-   "pos": 49,
-   "id": "32094",
-   "name": "Madars Razma",
-   "nick": "Latvian Razmatazz",
-   "slug": "madars-razma",
-   "country": "LV",
-   "dob": "1988-09-26",
-   "money": 171750
-  },
-  {
-   "pos": 50,
-   "id": "32081",
-   "name": "Connor Scutt",
-   "nick": "The Sniper",
-   "slug": "connor-scutt",
-   "country": "GB-ENG",
-   "dob": "1996-04-15",
-   "money": 169750
-  },
-  {
-   "pos": 51,
    "id": "36287",
    "name": "Sebastian Bialecki",
    "nick": "The Bolt",
    "slug": "sebastian-bialecki",
    "country": "PL",
    "dob": "2003-12-06",
-   "money": 168750
+   "money": 181250
   },
   {
-   "pos": 52,
-   "id": "271",
-   "name": "Ricky Evans",
-   "nick": "Rapid",
-   "slug": "ricky-evans",
-   "country": "GB-ENG",
-   "dob": "1990-07-29",
-   "money": 167500
-  },
-  {
-   "pos": 53,
+   "pos": 43,
    "id": "11156",
    "name": "Gabriel Clemens",
    "nick": "German Giant",
    "slug": "gabriel-clemens",
    "country": "DE",
    "dob": "1983-08-16",
-   "money": 160000
+   "money": 177000
   },
   {
-   "pos": 54,
-   "id": "31028",
-   "name": "Ritchie Edhouse",
-   "nick": "Madhouse",
-   "slug": "ritchie-edhouse",
+   "pos": 44,
+   "id": "271",
+   "name": "Ricky Evans",
+   "nick": "Rapid",
+   "slug": "ricky-evans",
    "country": "GB-ENG",
-   "dob": "1983-04-19",
-   "money": 156250
+   "dob": "1990-07-29",
+   "money": 177000
   },
   {
-   "pos": 55,
-   "id": "146",
-   "name": "Mensur Suljovic",
-   "nick": "The Gentle",
-   "slug": "mensur-suljovic",
-   "country": "AT",
-   "dob": "1972-03-05",
-   "money": 155750
+   "pos": 45,
+   "id": "36373",
+   "name": "James Hurrell",
+   "nick": "Hillbilly",
+   "slug": "james-hurrell",
+   "country": "GB-ENG",
+   "dob": "1984-07-07",
+   "money": 174500
   },
   {
-   "pos": 56,
-   "id": "33144",
-   "name": "Keane Barry",
-   "nick": "Dynamite",
-   "slug": "keane-barry",
+   "pos": 46,
+   "id": "156",
+   "name": "Kim Huybrechts",
+   "nick": "The Hurricane",
+   "slug": "kim-huybrechts",
+   "country": "BE",
+   "dob": "1985-11-16",
+   "money": 174000
+  },
+  {
+   "pos": 47,
+   "id": "136",
+   "name": "Brendan Dolan",
+   "nick": "The History Maker",
+   "slug": "brendan-dolan",
    "country": "IE",
-   "dob": "2002-06-25",
-   "money": 151000
+   "dob": "1973-08-02",
+   "money": 169250
   },
   {
-   "pos": 57,
-   "id": "76",
-   "name": "Ian White",
-   "nick": "Diamond",
-   "slug": "ian-white",
-   "country": "GB-ENG",
-   "dob": "1970-08-17",
-   "money": 143750
+   "pos": 48,
+   "id": "32094",
+   "name": "Madars Razma",
+   "nick": "Latvian Razmatazz",
+   "slug": "madars-razma",
+   "country": "LV",
+   "dob": "1988-09-26",
+   "money": 168750
   },
   {
-   "pos": 58,
-   "id": "31027",
-   "name": "Richard Veenstra",
-   "nick": "Flyers",
-   "slug": "richard-veenstra",
+   "pos": 49,
+   "id": "317",
+   "name": "Raymond van Barneveld",
+   "nick": "Barney",
+   "slug": "raymond-van-barneveld",
    "country": "NL",
-   "dob": "1981-07-10",
-   "money": 140250
+   "dob": "1967-04-20",
+   "money": 166500
   },
   {
-   "pos": 59,
+   "pos": 50,
+   "id": "36712",
+   "name": "Scott Williams",
+   "nick": "Shaggy",
+   "slug": "scott-williams",
+   "country": "GB-ENG",
+   "dob": "1990-01-18",
+   "money": 157750
+  },
+  {
+   "pos": 51,
    "id": "32078",
    "name": "Bradley Brooks",
    "nick": "Bam Bam",
    "slug": "bradley-brooks",
    "country": "GB-ENG",
    "dob": "2000-02-20",
-   "money": 135750
+   "money": 148250
   },
   {
-   "pos": 60,
-   "id": "34245",
-   "name": "Dimitri Van den Bergh",
-   "nick": "The Dream Maker",
-   "slug": "dimitri-van-den-bergh",
-   "country": "BE",
-   "dob": "1994-07-08",
-   "money": 135500
+   "pos": 52,
+   "id": "146",
+   "name": "Mensur Suljovic",
+   "nick": "The Gentle",
+   "slug": "mensur-suljovic",
+   "country": "AT",
+   "dob": "1972-03-05",
+   "money": 147750
   },
   {
-   "pos": 61,
+   "pos": 53,
+   "id": "162",
+   "name": "Mickey Mansell",
+   "nick": "Clonoe Cyclone",
+   "slug": "mickey-mansell",
+   "country": "IE",
+   "dob": "1973-08-31",
+   "money": 143750
+  },
+  {
+   "pos": 54,
+   "id": "33144",
+   "name": "Keane Barry",
+   "nick": "Dynamite",
+   "slug": "keane-barry",
+   "country": "IE",
+   "dob": "2002-06-25",
+   "money": 143000
+  },
+  {
+   "pos": 55,
+   "id": "32081",
+   "name": "Connor Scutt",
+   "nick": "The Sniper",
+   "slug": "connor-scutt",
+   "country": "GB-ENG",
+   "dob": "1996-04-15",
+   "money": 141750
+  },
+  {
+   "pos": 56,
    "id": "37349",
    "name": "Alan Soutar",
    "nick": "Soots",
    "slug": "alan-soutar",
    "country": "GB-SCT",
    "dob": "1978-01-10",
-   "money": 130500
+   "money": 140000
   },
   {
-   "pos": 62,
+   "pos": 57,
+   "id": "31027",
+   "name": "Richard Veenstra",
+   "nick": "Flyers",
+   "slug": "richard-veenstra",
+   "country": "NL",
+   "dob": "1981-07-10",
+   "money": 137250
+  },
+  {
+   "pos": 58,
+   "id": "76",
+   "name": "Ian White",
+   "nick": "Diamond",
+   "slug": "ian-white",
+   "country": "GB-ENG",
+   "dob": "1970-08-17",
+   "money": 137250
+  },
+  {
+   "pos": 59,
+   "id": "31028",
+   "name": "Ritchie Edhouse",
+   "nick": "Madhouse",
+   "slug": "ritchie-edhouse",
+   "country": "GB-ENG",
+   "dob": "1983-04-19",
+   "money": 134000
+  },
+  {
+   "pos": 60,
    "id": "11795",
    "name": "Rob Owen",
    "nick": "Stack Attack",
@@ -622,7 +602,17 @@
    "money": 128250
   },
   {
-   "pos": 63,
+   "pos": 61,
+   "id": "34245",
+   "name": "Dimitri Van den Bergh",
+   "nick": "The Dream Maker",
+   "slug": "dimitri-van-den-bergh",
+   "country": "BE",
+   "dob": "1994-07-08",
+   "money": 120250
+  },
+  {
+   "pos": 62,
    "id": "33009",
    "name": "Lukas Wenig",
    "nick": "Luu",
@@ -632,17 +622,7 @@
    "money": 119500
   },
   {
-   "pos": 64,
-   "id": "570",
-   "name": "Nick Kenny",
-   "nick": null,
-   "slug": "nick-kenny",
-   "country": "GB-WLS",
-   "dob": "1993-03-13",
-   "money": 119000
-  },
-  {
-   "pos": 65,
+   "pos": 63,
    "id": "30843",
    "name": "Cristo Reyes",
    "nick": "The Spartan",
@@ -652,7 +632,7 @@
    "money": 117250
   },
   {
-   "pos": 66,
+   "pos": 64,
    "id": "585",
    "name": "Max Hopp",
    "nick": "Maximiser",
@@ -662,37 +642,67 @@
    "money": 116250
   },
   {
-   "pos": 67,
-   "id": "31034",
-   "name": "Ryan Meikle",
-   "nick": "The Barber",
-   "slug": "ryan-meikle",
-   "country": "GB-ENG",
-   "dob": "1996-08-13",
-   "money": 115750
+   "pos": 65,
+   "id": "570",
+   "name": "Nick Kenny",
+   "nick": null,
+   "slug": "nick-kenny",
+   "country": "GB-WLS",
+   "dob": "1993-03-13",
+   "money": 116000
   },
   {
-   "pos": 68,
-   "id": "31213",
-   "name": "Mario Vandenbogaerde",
-   "nick": "Super Mario",
-   "slug": "mario-vandenbogaerde",
-   "country": "BE",
-   "dob": "1973-06-01",
-   "money": 114000
-  },
-  {
-   "pos": 69,
+   "pos": 66,
    "id": "38159",
    "name": "Cam Crabtree",
    "nick": "Shazam",
    "slug": "cam-crabtree",
    "country": "GB-ENG",
    "dob": "2003-09-21",
-   "money": 107750
+   "money": 112750
+  },
+  {
+   "pos": 67,
+   "id": "33630",
+   "name": "Maik Kuivenhoven",
+   "nick": null,
+   "slug": "maik-kuivenhoven",
+   "country": "NL",
+   "dob": "1988-09-25",
+   "money": 111250
+  },
+  {
+   "pos": 68,
+   "id": "32068",
+   "name": "Martin Lukeman",
+   "nick": "Smash",
+   "slug": "martin-lukeman",
+   "country": "GB-ENG",
+   "dob": "1985-03-26",
+   "money": 110000
+  },
+  {
+   "pos": 69,
+   "id": "31034",
+   "name": "Ryan Meikle",
+   "nick": "The Barber",
+   "slug": "ryan-meikle",
+   "country": "GB-ENG",
+   "dob": "1996-08-13",
+   "money": 109250
   },
   {
    "pos": 70,
+   "id": "31213",
+   "name": "Mario Vandenbogaerde",
+   "nick": "Super Mario",
+   "slug": "mario-vandenbogaerde",
+   "country": "BE",
+   "dob": "1973-06-01",
+   "money": 107500
+  },
+  {
+   "pos": 71,
    "id": "33876",
    "name": "Wesley Plaisier",
    "nick": null,
@@ -702,34 +712,24 @@
    "money": 103500
   },
   {
-   "pos": 71,
-   "id": "33630",
-   "name": "Maik Kuivenhoven",
-   "nick": null,
-   "slug": "maik-kuivenhoven",
-   "country": "NL",
-   "dob": "1988-09-25",
-   "money": 98750
+   "pos": 72,
+   "id": "32627",
+   "name": "Tom Sykes",
+   "nick": "The Castleford Tiger",
+   "slug": "tom-sykes-32627",
+   "country": "GB-ENG",
+   "dob": "1992-11-04",
+   "money": 97250
   },
   {
-   "pos": 72,
+   "pos": 73,
    "id": "33793",
    "name": "Thibault Tricole",
    "nick": "The French Touch",
    "slug": "thibault-tricole",
    "country": "FR",
    "dob": "1989-10-11",
-   "money": 98500
-  },
-  {
-   "pos": 73,
-   "id": "43829",
-   "name": "Tom Bissell",
-   "nick": "Bizzness",
-   "slug": "tom-bissell",
-   "country": "GB-ENG",
-   "dob": "1987-07-03",
-   "money": 84250
+   "money": 92000
   },
   {
    "pos": 74,
@@ -739,10 +739,20 @@
    "slug": "beau-greaves-36640",
    "country": "GB-ENG",
    "dob": "2004-01-09",
-   "money": 81750
+   "money": 86750
   },
   {
    "pos": 75,
+   "id": "43829",
+   "name": "Tom Bissell",
+   "nick": "Bizzness",
+   "slug": "tom-bissell",
+   "country": "GB-ENG",
+   "dob": "1987-07-03",
+   "money": 84250
+  },
+  {
+   "pos": 76,
    "id": "32704",
    "name": "Adam Lipscombe",
    "nick": "Baby boy",
@@ -752,7 +762,17 @@
    "money": 81250
   },
   {
-   "pos": 76,
+   "pos": 77,
+   "id": "38279",
+   "name": "Charlie Manby",
+   "nick": "Champagne",
+   "slug": "charlie-manby-38279",
+   "country": "GB-ENG",
+   "dob": "2005-08-04",
+   "money": 74250
+  },
+  {
+   "pos": 78,
    "id": "33598",
    "name": "Darryl Pilgrim",
    "nick": "Mr P",
@@ -762,17 +782,17 @@
    "money": 72000
   },
   {
-   "pos": 77,
-   "id": "38279",
-   "name": "Charlie Manby",
-   "nick": "Champagne",
-   "slug": "charlie-manby-38279",
+   "pos": 79,
+   "id": "38498",
+   "name": "Tommy Morris",
+   "nick": "The Gun",
+   "slug": "tommy-morris",
    "country": "GB-ENG",
-   "dob": "2005-08-04",
-   "money": 69250
+   "dob": "1992-08-19",
+   "money": 69750
   },
   {
-   "pos": 78,
+   "pos": 80,
    "id": "31054",
    "name": "Cor Dekker",
    "nick": "Sheriff",
@@ -782,7 +802,7 @@
    "money": 68750
   },
   {
-   "pos": 79,
+   "pos": 81,
    "id": "33043",
    "name": "Dominik Gruellich",
    "nick": null,
@@ -792,7 +812,7 @@
    "money": 65250
   },
   {
-   "pos": 80,
+   "pos": 82,
    "id": "11109",
    "name": "Christian Kist",
    "nick": "The Lipstick",
@@ -800,26 +820,6 @@
    "country": "NL",
    "dob": "1986-04-22",
    "money": 63000
-  },
-  {
-   "pos": 81,
-   "id": "32627",
-   "name": "Tom Sykes",
-   "nick": "The Castleford Tiger",
-   "slug": "tom-sykes-32627",
-   "country": "GB-ENG",
-   "dob": "1992-11-04",
-   "money": 62250
-  },
-  {
-   "pos": 82,
-   "id": "38498",
-   "name": "Tommy Morris",
-   "nick": "The Gun",
-   "slug": "tommy-morris",
-   "country": "GB-ENG",
-   "dob": "1992-08-19",
-   "money": 57250
   },
   {
    "pos": 83,
@@ -843,6 +843,26 @@
   },
   {
    "pos": 85,
+   "id": "33558",
+   "name": "Joe Hunt",
+   "nick": "Joe Boy",
+   "slug": "joe-hunt",
+   "country": "GB-ENG",
+   "dob": "1992-12-10",
+   "money": 53000
+  },
+  {
+   "pos": 86,
+   "id": "39687",
+   "name": "Henry Coates",
+   "nick": null,
+   "slug": "henry-coates",
+   "country": "GB-ENG",
+   "dob": "2006-07-03",
+   "money": 49750
+  },
+  {
+   "pos": 87,
    "id": "35887",
    "name": "Oskar Lukasiak",
    "nick": null,
@@ -852,17 +872,7 @@
    "money": 49750
   },
   {
-   "pos": 86,
-   "id": "33558",
-   "name": "Joe Hunt",
-   "nick": "Joe Boy",
-   "slug": "joe-hunt",
-   "country": "GB-ENG",
-   "dob": "1992-12-10",
-   "money": 48000
-  },
-  {
-   "pos": 87,
+   "pos": 88,
    "id": "31502",
    "name": "Darius Labanauskas",
    "nick": "Lucky D",
@@ -872,7 +882,7 @@
    "money": 46250
   },
   {
-   "pos": 88,
+   "pos": 89,
    "id": "2713",
    "name": "Jimmy van Schie",
    "nick": "The Dutch Sequoia",
@@ -882,7 +892,7 @@
    "money": 46250
   },
   {
-   "pos": 89,
+   "pos": 90,
    "id": "32497",
    "name": "Thomas Lovely",
    "nick": "Simply",
@@ -892,7 +902,7 @@
    "money": 44250
   },
   {
-   "pos": 90,
+   "pos": 91,
    "id": "41742",
    "name": "Leon Weber",
    "nick": null,
@@ -902,7 +912,7 @@
    "money": 41250
   },
   {
-   "pos": 91,
+   "pos": 92,
    "id": "34609",
    "name": "Viktor Tingstrom",
    "nick": null,
@@ -912,7 +922,7 @@
    "money": 41000
   },
   {
-   "pos": 92,
+   "pos": 93,
    "id": "32951",
    "name": "Shane McGuirk",
    "nick": "The Arrow",
@@ -922,7 +932,7 @@
    "money": 39250
   },
   {
-   "pos": 93,
+   "pos": 94,
    "id": "33070",
    "name": "Marvin van Velzen",
    "nick": "Terminator",
@@ -932,7 +942,7 @@
    "money": 39000
   },
   {
-   "pos": 94,
+   "pos": 95,
    "id": "33768",
    "name": "Alexander Merkx",
    "nick": "The Great ",
@@ -942,7 +952,7 @@
    "money": 38000
   },
   {
-   "pos": 95,
+   "pos": 96,
    "id": "38149",
    "name": "Owen Bates",
    "nick": "N/A",
@@ -950,16 +960,6 @@
    "country": "GB-ENG",
    "dob": "2002-12-12",
    "money": 37500
-  },
-  {
-   "pos": 96,
-   "id": "39687",
-   "name": "Henry Coates",
-   "nick": null,
-   "slug": "henry-coates",
-   "country": "GB-ENG",
-   "dob": "2006-07-03",
-   "money": 37250
   },
   {
    "pos": 97,
@@ -1173,12 +1173,12 @@
   },
   {
    "pos": 118,
-   "id": "47162",
-   "name": "Adam Leek",
-   "nick": null,
-   "slug": "adam-leek-47162",
-   "country": "AU",
-   "dob": "1999-01-06",
+   "id": "32107",
+   "name": "Rusty-Jake Rodriguez",
+   "nick": "RJR #3",
+   "slug": "rusty-jake-rodriguez",
+   "country": "AT",
+   "dob": "2000-12-24",
    "money": 22500
   },
   {
@@ -1193,6 +1193,16 @@
   },
   {
    "pos": 120,
+   "id": "47162",
+   "name": "Adam Leek",
+   "nick": null,
+   "slug": "adam-leek-47162",
+   "country": "AU",
+   "dob": "1999-01-06",
+   "money": 22500
+  },
+  {
+   "pos": 121,
    "id": "135",
    "name": "Scott Waites",
    "nick": "Scotty 2 Hotty",
@@ -1202,7 +1212,7 @@
    "money": 22500
   },
   {
-   "pos": 121,
+   "pos": 122,
    "id": "1282",
    "name": "Steve Lennon",
    "nick": "Scuba Steve",
@@ -1212,7 +1222,17 @@
    "money": 22000
   },
   {
-   "pos": 122,
+   "pos": 123,
+   "id": "40143",
+   "name": "Carl Sneyd",
+   "nick": "Bomber",
+   "slug": "carl-sneyd-40143",
+   "country": "GB-ENG",
+   "dob": "1987-04-11",
+   "money": 21750
+  },
+  {
+   "pos": 124,
    "id": "581",
    "name": "Jack Tweddell",
    "nick": null,
@@ -1222,7 +1242,7 @@
    "money": 21750
   },
   {
-   "pos": 123,
+   "pos": 125,
    "id": "917",
    "name": "Arno Merk",
    "nick": null,
@@ -1232,7 +1252,7 @@
    "money": 21500
   },
   {
-   "pos": 124,
+   "pos": 126,
    "id": "39541",
    "name": "Maximilian Czerwinski",
    "nick": "Gurke",
@@ -1242,7 +1262,7 @@
    "money": 20000
   },
   {
-   "pos": 125,
+   "pos": 127,
    "id": "32976",
    "name": "Stephen Rosney",
    "nick": "Chuckles",
@@ -1252,7 +1272,7 @@
    "money": 19500
   },
   {
-   "pos": 126,
+   "pos": 128,
    "id": "11829",
    "name": "Rhys Griffin",
    "nick": null,
@@ -1262,7 +1282,7 @@
    "money": 19250
   },
   {
-   "pos": 127,
+   "pos": 129,
    "id": "33950",
    "name": "Stefaan Henderyck",
    "nick": "Friete",
@@ -1272,7 +1292,7 @@
    "money": 18000
   },
   {
-   "pos": 128,
+   "pos": 130,
    "id": "37085",
    "name": "Nathan Potter",
    "nick": "The Wizard",
@@ -1282,17 +1302,17 @@
    "money": 17000
   },
   {
-   "pos": 129,
-   "id": "40143",
-   "name": "Carl Sneyd",
-   "nick": "Bomber",
-   "slug": "carl-sneyd-40143",
-   "country": "GB-ENG",
-   "dob": "1987-04-11",
-   "money": 16750
+   "pos": 131,
+   "id": "35046",
+   "name": "Anton Ostlund",
+   "nick": "One-Ton",
+   "slug": "anton-ostlund",
+   "country": "SE",
+   "dob": "2000-06-10",
+   "money": 16500
   },
   {
-   "pos": 130,
+   "pos": 132,
    "id": "31014",
    "name": "Harry Ward",
    "nick": "Big H",
@@ -1302,7 +1322,7 @@
    "money": 16250
   },
   {
-   "pos": 131,
+   "pos": 133,
    "id": "30992",
    "name": "Tytus Kanik",
    "nick": "Tito",
@@ -1312,7 +1332,7 @@
    "money": 15000
   },
   {
-   "pos": 132,
+   "pos": 134,
    "id": "44151",
    "name": "Samuel Price",
    "nick": "Pricey",
@@ -1322,7 +1342,7 @@
    "money": 14000
   },
   {
-   "pos": 133,
+   "pos": 135,
    "id": "34958",
    "name": "Daniel Klose",
    "nick": "Dan the man",
@@ -1332,7 +1352,7 @@
    "money": 13250
   },
   {
-   "pos": 134,
+   "pos": 136,
    "id": "47533",
    "name": "Jack Aldridge",
    "nick": null,
@@ -1342,7 +1362,7 @@
    "money": 13000
   },
   {
-   "pos": 135,
+   "pos": 137,
    "id": "32461",
    "name": "Daniel Ayres",
    "nick": null,
@@ -1352,7 +1372,17 @@
    "money": 12750
   },
   {
-   "pos": 136,
+   "pos": 138,
+   "id": "32736",
+   "name": "Paolo Nebrida",
+   "nick": "Pow",
+   "slug": "paolo-nebrida",
+   "country": "PH",
+   "dob": "1994-12-31",
+   "money": 12500
+  },
+  {
+   "pos": 139,
    "id": "42904",
    "name": "Yorick Hofkens",
    "nick": null,
@@ -1362,7 +1392,7 @@
    "money": 12500
   },
   {
-   "pos": 137,
+   "pos": 140,
    "id": "32508",
    "name": "Lewis Pride",
    "nick": "Grizzly",
@@ -1372,7 +1402,7 @@
    "money": 12250
   },
   {
-   "pos": 138,
+   "pos": 141,
    "id": "39727",
    "name": "Pascal Rupprecht",
    "nick": null,
@@ -1382,7 +1412,17 @@
    "money": 12250
   },
   {
-   "pos": 139,
+   "pos": 142,
+   "id": "40703",
+   "name": "Jan Schmidt",
+   "nick": "Lightning",
+   "slug": "jan-schmidt",
+   "country": "DE",
+   "dob": "2004-09-10",
+   "money": 12000
+  },
+  {
+   "pos": 143,
    "id": "34743",
    "name": "Marvin Kraft",
    "nick": null,
@@ -1392,7 +1432,7 @@
    "money": 11500
   },
   {
-   "pos": 140,
+   "pos": 144,
    "id": "33694",
    "name": "Andy Baetens",
    "nick": "The Beast from the East",
@@ -1402,17 +1442,7 @@
    "money": 11500
   },
   {
-   "pos": 141,
-   "id": "32107",
-   "name": "Rusty-Jake Rodriguez",
-   "nick": "RJR #3",
-   "slug": "rusty-jake-rodriguez",
-   "country": "AT",
-   "dob": "2000-12-24",
-   "money": 10000
-  },
-  {
-   "pos": 142,
+   "pos": 145,
    "id": "41158",
    "name": "Paul Krohne",
    "nick": null,
@@ -1422,7 +1452,7 @@
    "money": 9500
   },
   {
-   "pos": 143,
+   "pos": 146,
    "id": "192",
    "name": "Boris Krcmar",
    "nick": "The Biggest",
@@ -1432,7 +1462,7 @@
    "money": 8500
   },
   {
-   "pos": 144,
+   "pos": 147,
    "id": "39974",
    "name": "Jonas Masalin",
    "nick": null,
@@ -1442,7 +1472,7 @@
    "money": 7500
   },
   {
-   "pos": 145,
+   "pos": 148,
    "id": "33673",
    "name": "Michael Unterbuchner",
    "nick": null,
@@ -1452,17 +1482,7 @@
    "money": 7500
   },
   {
-   "pos": 146,
-   "id": "40703",
-   "name": "Jan Schmidt",
-   "nick": "Lightning",
-   "slug": "jan-schmidt",
-   "country": "DE",
-   "dob": "2004-09-10",
-   "money": 7000
-  },
-  {
-   "pos": 147,
+   "pos": 149,
    "id": "31100",
    "name": "Patrik Kovacs",
    "nick": "The Planer",
@@ -1472,7 +1492,7 @@
    "money": 7000
   },
   {
-   "pos": 148,
+   "pos": 150,
    "id": "409",
    "name": "Pero Ljubic",
    "nick": "The Croatian Knight",
@@ -1482,7 +1502,7 @@
    "money": 6500
   },
   {
-   "pos": 149,
+   "pos": 151,
    "id": "47320",
    "name": "Archie Self",
    "nick": "The Archer",
@@ -1492,7 +1512,7 @@
    "money": 6250
   },
   {
-   "pos": 150,
+   "pos": 152,
    "id": "11411",
    "name": "Christopher Wickenden",
    "nick": "Pugs",
@@ -1502,7 +1522,7 @@
    "money": 6250
   },
   {
-   "pos": 151,
+   "pos": 153,
    "id": "33639",
    "name": "Johan Engstrom",
    "nick": "The Sweet Ferret",
@@ -1512,7 +1532,7 @@
    "money": 6000
   },
   {
-   "pos": 152,
+   "pos": 154,
    "id": "38346",
    "name": "Patrik Williams",
    "nick": null,
@@ -1522,7 +1542,7 @@
    "money": 5500
   },
   {
-   "pos": 153,
+   "pos": 155,
    "id": "36675",
    "name": "Nandor Major",
    "nick": null,
@@ -1532,7 +1552,7 @@
    "money": 5500
   },
   {
-   "pos": 154,
+   "pos": 156,
    "id": "11168",
    "name": "Dragutin Horvat",
    "nick": "Herkules",
@@ -1542,7 +1562,7 @@
    "money": 5500
   },
   {
-   "pos": 155,
+   "pos": 157,
    "id": "1544",
    "name": "Marcel Hausotter",
    "nick": "Hausi",
@@ -1552,7 +1572,37 @@
    "money": 5500
   },
   {
-   "pos": 156,
+   "pos": 158,
+   "id": "31491",
+   "name": "Lisa Ashton",
+   "nick": "The Lancashire Rose",
+   "slug": "lisa-ashton",
+   "country": "GB-ENG",
+   "dob": "1970-08-27",
+   "money": 5000
+  },
+  {
+   "pos": 158,
+   "id": "31498",
+   "name": "Raymond Smith",
+   "nick": "Guru",
+   "slug": "raymond-smith",
+   "country": "AU",
+   "dob": "1979-12-06",
+   "money": 5000
+  },
+  {
+   "pos": 158,
+   "id": "43097",
+   "name": "Adam Sevada",
+   "nick": "The Reaper",
+   "slug": "adam-sevada",
+   "country": "US",
+   "dob": "1985-08-08",
+   "money": 5000
+  },
+  {
+   "pos": 161,
    "id": "43490",
    "name": "Oliver Mitchell",
    "nick": null,
@@ -1562,7 +1612,7 @@
    "money": 4250
   },
   {
-   "pos": 157,
+   "pos": 162,
    "id": "195",
    "name": "Krzysztof Kciuk",
    "nick": "The Thumb",
@@ -1572,7 +1622,7 @@
    "money": 4000
   },
   {
-   "pos": 158,
+   "pos": 163,
    "id": "39534",
    "name": "Gyorgy Jehirszki",
    "nick": "Gyurka",
@@ -1582,7 +1632,7 @@
    "money": 4000
   },
   {
-   "pos": 159,
+   "pos": 164,
    "id": "11120",
    "name": "Jani Haavisto",
    "nick": "The Finnisher",
@@ -1592,7 +1642,7 @@
    "money": 4000
   },
   {
-   "pos": 160,
+   "pos": 165,
    "id": "42772",
    "name": "Finn Behrens",
    "nick": null,
@@ -1602,7 +1652,7 @@
    "money": 4000
   },
   {
-   "pos": 161,
+   "pos": 166,
    "id": "32485",
    "name": "Callum Goffin",
    "nick": null,
@@ -1612,17 +1662,7 @@
    "money": 4000
   },
   {
-   "pos": 162,
-   "id": "35046",
-   "name": "Anton Ostlund",
-   "nick": "One-Ton",
-   "slug": "anton-ostlund",
-   "country": "SE",
-   "dob": "2000-06-10",
-   "money": 4000
-  },
-  {
-   "pos": 163,
+   "pos": 167,
    "id": "31030",
    "name": "Ted Evetts",
    "nick": "SuperTed",
@@ -1632,7 +1672,7 @@
    "money": 3750
   },
   {
-   "pos": 164,
+   "pos": 168,
    "id": "302",
    "name": "Aden Kirk",
    "nick": "Captain",
@@ -1642,7 +1682,7 @@
    "money": 3750
   },
   {
-   "pos": 165,
+   "pos": 169,
    "id": "44403",
    "name": "Filip Bereza",
    "nick": "The Breeze",
@@ -1652,7 +1692,7 @@
    "money": 3750
   },
   {
-   "pos": 166,
+   "pos": 170,
    "id": "32756",
    "name": "Scott Campbell",
    "nick": "N/A",
@@ -1662,7 +1702,7 @@
    "money": 3750
   },
   {
-   "pos": 167,
+   "pos": 171,
    "id": "49465",
    "name": "Heine Uuldriks",
    "nick": null,
@@ -1672,7 +1712,7 @@
    "money": 3500
   },
   {
-   "pos": 168,
+   "pos": 172,
    "id": "41364",
    "name": "Laszlo Kadar",
    "nick": "The Teacher",
@@ -1682,7 +1722,7 @@
    "money": 3500
   },
   {
-   "pos": 169,
+   "pos": 173,
    "id": "43220",
    "name": "Valters Melderis",
    "nick": "The Hipster",
@@ -1692,7 +1732,7 @@
    "money": 3500
   },
   {
-   "pos": 170,
+   "pos": 174,
    "id": "391",
    "name": "Gilbert van der Meijden",
    "nick": null,
@@ -1702,7 +1742,7 @@
    "money": 2500
   },
   {
-   "pos": 171,
+   "pos": 175,
    "id": "30931",
    "name": "Graham Hall",
    "nick": "G.man",
@@ -1712,7 +1752,7 @@
    "money": 2500
   },
   {
-   "pos": 172,
+   "pos": 176,
    "id": "31613",
    "name": "Maikel Verberk",
    "nick": "The Spirit",
@@ -1722,7 +1762,7 @@
    "money": 2000
   },
   {
-   "pos": 173,
+   "pos": 177,
    "id": "33640",
    "name": "Alex Fehlmann",
    "nick": null,
@@ -1732,7 +1772,7 @@
    "money": 2000
   },
   {
-   "pos": 173,
+   "pos": 177,
    "id": "43225",
    "name": "Bruno Stoeckli",
    "nick": "The Beast",
@@ -1742,7 +1782,7 @@
    "money": 2000
   },
   {
-   "pos": 173,
+   "pos": 177,
    "id": "43461",
    "name": "Roman Wellinger",
    "nick": null,
@@ -1752,7 +1792,7 @@
    "money": 2000
   },
   {
-   "pos": 176,
+   "pos": 180,
    "id": "36607",
    "name": "Jeroen Caron",
    "nick": null,
@@ -1762,7 +1802,7 @@
    "money": 2000
   },
   {
-   "pos": 176,
+   "pos": 180,
    "id": "40859",
    "name": "Kevin Lankhuizen",
    "nick": "The outsider",
@@ -1772,7 +1812,7 @@
    "money": 2000
   },
   {
-   "pos": 176,
+   "pos": 180,
    "id": "43373",
    "name": "Jaimy Jacobs",
    "nick": null,
@@ -1782,7 +1822,7 @@
    "money": 2000
   },
   {
-   "pos": 176,
+   "pos": 180,
    "id": "46270",
    "name": "Petr Tous",
    "nick": "Mr.Pencil",
@@ -1792,7 +1832,7 @@
    "money": 2000
   },
   {
-   "pos": 176,
+   "pos": 180,
    "id": "49280",
    "name": "Michael Hansen",
    "nick": null,
@@ -1802,7 +1842,7 @@
    "money": 2000
   },
   {
-   "pos": 181,
+   "pos": 185,
    "id": "33957",
    "name": "David Rosi",
    "nick": "Rosí",
@@ -1812,7 +1852,7 @@
    "money": 2000
   },
   {
-   "pos": 181,
+   "pos": 185,
    "id": "35181",
    "name": "Jiri Brejcha",
    "nick": "Scorpion",
@@ -1822,7 +1862,7 @@
    "money": 2000
   },
   {
-   "pos": 181,
+   "pos": 185,
    "id": "42897",
    "name": "Martin Homola",
    "nick": null,
@@ -1832,7 +1872,7 @@
    "money": 2000
   },
   {
-   "pos": 184,
+   "pos": 188,
    "id": "35208",
    "name": "David Pisek",
    "nick": null,
@@ -1842,7 +1882,7 @@
    "money": 2000
   },
   {
-   "pos": 184,
+   "pos": 188,
    "id": "39583",
    "name": "Andras Borbely",
    "nick": null,
@@ -1852,7 +1892,7 @@
    "money": 2000
   },
   {
-   "pos": 184,
+   "pos": 188,
    "id": "46420",
    "name": "Milan Biro",
    "nick": "Milu",
@@ -1862,7 +1902,7 @@
    "money": 2000
   },
   {
-   "pos": 187,
+   "pos": 191,
    "id": "33873",
    "name": "Michal Smejda",
    "nick": null,
@@ -1872,7 +1912,7 @@
    "money": 2000
   },
   {
-   "pos": 187,
+   "pos": 191,
    "id": "37382",
    "name": "Jaimy Van de Weerd",
    "nick": null,
@@ -1882,7 +1922,7 @@
    "money": 2000
   },
   {
-   "pos": 187,
+   "pos": 191,
    "id": "48814",
    "name": "Mio Varila",
    "nick": null,
@@ -1892,7 +1932,7 @@
    "money": 2000
   },
   {
-   "pos": 190,
+   "pos": 194,
    "id": "41903",
    "name": "Adrian Dudek",
    "nick": null,
@@ -1902,7 +1942,7 @@
    "money": 2000
   },
   {
-   "pos": 190,
+   "pos": 194,
    "id": "43610",
    "name": "Juraj Holub",
    "nick": null,
@@ -1912,7 +1952,7 @@
    "money": 2000
   },
   {
-   "pos": 190,
+   "pos": 194,
    "id": "45489",
    "name": "Peter Kelemen",
    "nick": "KeloPeti",
@@ -1922,7 +1962,7 @@
    "money": 2000
   },
   {
-   "pos": 190,
+   "pos": 194,
    "id": "48887",
    "name": "Jan Sliacky",
    "nick": "Johny",
@@ -1932,7 +1972,7 @@
    "money": 2000
   },
   {
-   "pos": 190,
+   "pos": 194,
    "id": "48975",
    "name": "Gabriel Varaljay",
    "nick": null,
@@ -1942,7 +1982,7 @@
    "money": 2000
   },
   {
-   "pos": 195,
+   "pos": 199,
    "id": "35808",
    "name": "Teemu Harju",
    "nick": null,
@@ -1952,7 +1992,7 @@
    "money": 2000
   },
   {
-   "pos": 195,
+   "pos": 199,
    "id": "47551",
    "name": "Jason Riedtke",
    "nick": null,
@@ -1962,7 +2002,7 @@
    "money": 2000
   },
   {
-   "pos": 197,
+   "pos": 201,
    "id": "38084",
    "name": "Liam Maendl-Lawrance",
    "nick": null,
@@ -1972,7 +2012,7 @@
    "money": 2000
   },
   {
-   "pos": 198,
+   "pos": 202,
    "id": "1868",
    "name": "Aaron Hardy",
    "nick": null,
@@ -1982,7 +2022,7 @@
    "money": 2000
   },
   {
-   "pos": 198,
+   "pos": 202,
    "id": "46613",
    "name": "Nick Zwittnigg",
    "nick": null,
@@ -1992,7 +2032,7 @@
    "money": 2000
   },
   {
-   "pos": 198,
+   "pos": 202,
    "id": "821",
    "name": "Zoran Lerchbacher",
    "nick": "Hypercane",
@@ -2002,7 +2042,7 @@
    "money": 2000
   },
   {
-   "pos": 201,
+   "pos": 205,
    "id": "1324",
    "name": "Michael Hurtz",
    "nick": null,
@@ -2012,7 +2052,7 @@
    "money": 2000
   },
   {
-   "pos": 201,
+   "pos": 205,
    "id": "43412",
    "name": "Petr Krivka",
    "nick": "Krivi",
@@ -2022,7 +2062,7 @@
    "money": 2000
   },
   {
-   "pos": 201,
+   "pos": 205,
    "id": "47879",
    "name": "Robin Masino",
    "nick": null,
@@ -2032,7 +2072,7 @@
    "money": 2000
   },
   {
-   "pos": 204,
+   "pos": 208,
    "id": "32997",
    "name": "Kevin Troppmann",
    "nick": null,
@@ -2042,7 +2082,7 @@
    "money": 2000
   },
   {
-   "pos": 205,
+   "pos": 209,
    "id": "1096",
    "name": "Francois Schweyen",
    "nick": "\"The Clock\"",
@@ -2052,7 +2092,7 @@
    "money": 2000
   },
   {
-   "pos": 205,
+   "pos": 209,
    "id": "36159",
    "name": "Pascal Devroey",
    "nick": "El Rojo",
@@ -2062,7 +2102,7 @@
    "money": 2000
   },
   {
-   "pos": 207,
+   "pos": 211,
    "id": "34006",
    "name": "Florian Hempel",
    "nick": null,
@@ -2072,7 +2112,7 @@
    "money": 2000
   },
   {
-   "pos": 207,
+   "pos": 211,
    "id": "35148",
    "name": "Wojciech Brulinski",
    "nick": "Brulion",
@@ -2082,7 +2122,7 @@
    "money": 2000
   },
   {
-   "pos": 207,
+   "pos": 211,
    "id": "41784",
    "name": "Florian Preis",
    "nick": null,
@@ -2092,7 +2132,7 @@
    "money": 2000
   },
   {
-   "pos": 210,
+   "pos": 214,
    "id": "42133",
    "name": "Sam Spivey",
    "nick": "Seaside",
@@ -2102,7 +2142,7 @@
    "money": 2000
   },
   {
-   "pos": 211,
+   "pos": 215,
    "id": "33948",
    "name": "Andreas Harrysson",
    "nick": "Dirty Harrysson",
@@ -2112,7 +2152,7 @@
    "money": 2000
   },
   {
-   "pos": 211,
+   "pos": 215,
    "id": "40206",
    "name": "Miroslaw Grudziecki",
    "nick": null,
@@ -2122,7 +2162,7 @@
    "money": 2000
   },
   {
-   "pos": 211,
+   "pos": 215,
    "id": "48172",
    "name": "Dawid Robak",
    "nick": null,
@@ -2132,7 +2172,7 @@
    "money": 2000
   },
   {
-   "pos": 211,
+   "pos": 215,
    "id": "48184",
    "name": "Piotr Maciejczak",
    "nick": "THE NIGHTMARE",
@@ -2142,7 +2182,7 @@
    "money": 2000
   },
   {
-   "pos": 215,
+   "pos": 219,
    "id": "33039",
    "name": "Levy Frauenfelder",
    "nick": null,
@@ -2152,7 +2192,7 @@
    "money": 1250
   },
   {
-   "pos": 216,
+   "pos": 220,
    "id": "11300",
    "name": "Kevin Burness",
    "nick": "Ironman",
@@ -2162,7 +2202,7 @@
    "money": 1250
   },
   {
-   "pos": 217,
+   "pos": 221,
    "id": "40077",
    "name": "Danny Trueman",
    "nick": "The Show",
@@ -2172,7 +2212,7 @@
    "money": 1250
   },
   {
-   "pos": 218,
+   "pos": 222,
    "id": "41808",
    "name": "Matthias Ehlers",
    "nick": null,
@@ -2182,7 +2222,7 @@
    "money": 1250
   },
   {
-   "pos": 219,
+   "pos": 223,
    "id": "1627",
    "name": "Ron Meulenkamp",
    "nick": "The Bomb",
@@ -2192,7 +2232,7 @@
    "money": 1250
   },
   {
-   "pos": 219,
+   "pos": 223,
    "id": "32047",
    "name": "Jack Todd",
    "nick": "Hot Toddy",
@@ -2202,7 +2242,7 @@
    "money": 1250
   },
   {
-   "pos": 219,
+   "pos": 223,
    "id": "35030",
    "name": "Oliver King",
    "nick": "Onslow",
@@ -2212,7 +2252,7 @@
    "money": 1250
   },
   {
-   "pos": 219,
+   "pos": 223,
    "id": "35892",
    "name": "Jamai van den Herik",
    "nick": "Jamai",
@@ -2222,7 +2262,7 @@
    "money": 1250
   },
   {
-   "pos": 219,
+   "pos": 223,
    "id": "47645",
    "name": "Samuel Whittaker",
    "nick": "The Menace",
@@ -2232,7 +2272,7 @@
    "money": 1250
   },
   {
-   "pos": 224,
+   "pos": 228,
    "id": "33002",
    "name": "Danny van Trijp",
    "nick": "None",
@@ -2242,7 +2282,7 @@
    "money": 750
   },
   {
-   "pos": 224,
+   "pos": 228,
    "id": "46095",
    "name": "Jesus Salate",
    "nick": "Salate",
@@ -2252,7 +2292,7 @@
    "money": 750
   },
   {
-   "pos": 226,
+   "pos": 230,
    "id": "1951",
    "name": "Radek Szaganski",
    "nick": null,
@@ -2262,7 +2302,7 @@
    "money": 0
   },
   {
-   "pos": 226,
+   "pos": 230,
    "id": "33270",
    "name": "Dan Hands",
    "nick": "TheTatMan",
@@ -2272,7 +2312,7 @@
    "money": 0
   },
   {
-   "pos": 226,
+   "pos": 230,
    "id": "34837",
    "name": "James Beeton",
    "nick": "Comeback Kid",
@@ -2282,7 +2322,7 @@
    "money": 0
   },
   {
-   "pos": 226,
+   "pos": 230,
    "id": "40322",
    "name": "Jenson Walker",
    "nick": "Interceptor",
@@ -2292,7 +2332,7 @@
    "money": 0
   },
   {
-   "pos": 226,
+   "pos": 230,
    "id": "41728",
    "name": "Patrick Geeraets",
    "nick": null,
@@ -2302,7 +2342,7 @@
    "money": 0
   },
   {
-   "pos": 226,
+   "pos": 230,
    "id": "44684",
    "name": "Stef Kosters",
    "nick": null,
@@ -2312,7 +2352,7 @@
    "money": 0
   },
   {
-   "pos": 226,
+   "pos": 230,
    "id": "45427",
    "name": "Ben Townley",
    "nick": null,
@@ -2322,7 +2362,240 @@
    "money": 0
   }
  ],
- "previous": null,
+ "previous": {
+  "4": 14,
+  "19": 11,
+  "22": 7,
+  "34": 107,
+  "76": 57,
+  "81": 32,
+  "104": 37,
+  "135": 120,
+  "136": 48,
+  "139": 35,
+  "142": 31,
+  "146": 55,
+  "153": 29,
+  "156": 44,
+  "162": 41,
+  "192": 143,
+  "195": 157,
+  "199": 83,
+  "224": 19,
+  "231": 27,
+  "246": 21,
+  "271": 52,
+  "302": 164,
+  "317": 47,
+  "358": 84,
+  "391": 170,
+  "409": 148,
+  "570": 64,
+  "581": 122,
+  "585": 66,
+  "668": 101,
+  "754": 6,
+  "821": 198,
+  "876": 9,
+  "917": 123,
+  "1096": 205,
+  "1282": 121,
+  "1324": 201,
+  "1544": 155,
+  "1627": 219,
+  "1868": 198,
+  "1951": 226,
+  "2040": 26,
+  "2554": 30,
+  "2713": 88,
+  "2771": 42,
+  "11109": 80,
+  "11120": 159,
+  "11156": 53,
+  "11168": 154,
+  "11300": 216,
+  "11411": 150,
+  "11788": 4,
+  "11795": 62,
+  "11804": 17,
+  "11821": 12,
+  "11829": 126,
+  "11843": 16,
+  "11902": 20,
+  "30829": 33,
+  "30843": 65,
+  "30844": 18,
+  "30859": 5,
+  "30931": 171,
+  "30992": 131,
+  "31014": 130,
+  "31027": 58,
+  "31028": 54,
+  "31030": 163,
+  "31031": 39,
+  "31034": 67,
+  "31041": 24,
+  "31054": 78,
+  "31100": 147,
+  "31213": 68,
+  "31356": 10,
+  "31501": 25,
+  "31502": 87,
+  "31613": 172,
+  "32037": 15,
+  "32040": 105,
+  "32047": 219,
+  "32068": 43,
+  "32078": 59,
+  "32079": 40,
+  "32081": 50,
+  "32087": 100,
+  "32094": 49,
+  "32102": 2,
+  "32107": 141,
+  "32461": 135,
+  "32485": 161,
+  "32497": 89,
+  "32508": 137,
+  "32526": 117,
+  "32602": 102,
+  "32612": 114,
+  "32627": 81,
+  "32704": 75,
+  "32756": 166,
+  "32846": 104,
+  "32895": 23,
+  "32951": 92,
+  "32956": 13,
+  "32962": 103,
+  "32976": 125,
+  "32997": 204,
+  "33002": 224,
+  "33009": 63,
+  "33014": 28,
+  "33039": 215,
+  "33043": 79,
+  "33070": 93,
+  "33091": 3,
+  "33144": 56,
+  "33270": 226,
+  "33558": 86,
+  "33598": 76,
+  "33630": 71,
+  "33639": 151,
+  "33640": 173,
+  "33672": 36,
+  "33673": 145,
+  "33694": 140,
+  "33768": 94,
+  "33793": 72,
+  "33796": 119,
+  "33873": 187,
+  "33876": 70,
+  "33908": 116,
+  "33948": 211,
+  "33950": 127,
+  "33957": 181,
+  "33998": 113,
+  "34006": 207,
+  "34245": 60,
+  "34609": 91,
+  "34625": 99,
+  "34743": 139,
+  "34837": 226,
+  "34874": 34,
+  "34958": 133,
+  "35012": 109,
+  "35030": 219,
+  "35046": 162,
+  "35148": 207,
+  "35168": 98,
+  "35181": 181,
+  "35208": 184,
+  "35622": 108,
+  "35808": 195,
+  "35887": 85,
+  "35892": 219,
+  "36159": 205,
+  "36287": 51,
+  "36303": 38,
+  "36314": 22,
+  "36368": 110,
+  "36373": 46,
+  "36408": 106,
+  "36607": 176,
+  "36640": 74,
+  "36675": 153,
+  "36712": 45,
+  "36998": 97,
+  "37085": 128,
+  "37349": 61,
+  "37382": 187,
+  "38084": 197,
+  "38149": 95,
+  "38159": 69,
+  "38279": 77,
+  "38346": 152,
+  "38498": 82,
+  "38552": 8,
+  "39109": 111,
+  "39534": 158,
+  "39541": 124,
+  "39583": 184,
+  "39687": 96,
+  "39727": 138,
+  "39974": 144,
+  "40077": 217,
+  "40143": 129,
+  "40206": 211,
+  "40322": 226,
+  "40676": 1,
+  "40691": 112,
+  "40703": 146,
+  "40859": 176,
+  "41158": 142,
+  "41364": 168,
+  "41728": 226,
+  "41742": 90,
+  "41784": 207,
+  "41808": 218,
+  "41903": 190,
+  "42133": 210,
+  "42772": 160,
+  "42897": 181,
+  "42904": 136,
+  "43220": 169,
+  "43225": 173,
+  "43373": 176,
+  "43412": 201,
+  "43461": 173,
+  "43490": 156,
+  "43610": 190,
+  "43829": 73,
+  "44151": 132,
+  "44403": 165,
+  "44506": 115,
+  "44684": 226,
+  "45427": 226,
+  "45489": 190,
+  "46095": 224,
+  "46270": 176,
+  "46420": 184,
+  "46613": 198,
+  "47162": 118,
+  "47320": 149,
+  "47533": 134,
+  "47551": 195,
+  "47645": 219,
+  "47879": 201,
+  "48172": 211,
+  "48184": 211,
+  "48814": 187,
+  "48887": 190,
+  "48975": 190,
+  "49280": 176,
+  "49465": 167
+ },
  "history": [
   {
    "d": "2026-11-15",
@@ -2477,6 +2750,161 @@
     "47162": 118,
     "47320": 149,
     "47533": 134
+   }
+  },
+  {
+   "d": "2026-11-23",
+   "pos": {
+    "4": 16,
+    "19": 8,
+    "22": 7,
+    "34": 107,
+    "76": 58,
+    "81": 33,
+    "104": 37,
+    "135": 121,
+    "136": 47,
+    "139": 36,
+    "142": 32,
+    "146": 52,
+    "153": 29,
+    "156": 46,
+    "162": 53,
+    "192": 146,
+    "199": 83,
+    "224": 19,
+    "231": 27,
+    "246": 23,
+    "271": 44,
+    "317": 49,
+    "358": 84,
+    "409": 150,
+    "570": 65,
+    "581": 124,
+    "585": 64,
+    "668": 101,
+    "754": 6,
+    "876": 11,
+    "917": 125,
+    "1282": 122,
+    "2040": 25,
+    "2554": 31,
+    "2713": 89,
+    "2771": 38,
+    "11109": 82,
+    "11156": 43,
+    "11788": 3,
+    "11795": 60,
+    "11804": 17,
+    "11821": 9,
+    "11829": 128,
+    "11843": 15,
+    "11902": 20,
+    "30829": 35,
+    "30843": 63,
+    "30844": 18,
+    "30859": 5,
+    "30992": 133,
+    "31014": 132,
+    "31027": 57,
+    "31028": 59,
+    "31031": 41,
+    "31034": 69,
+    "31041": 24,
+    "31054": 80,
+    "31100": 149,
+    "31213": 70,
+    "31356": 14,
+    "31501": 26,
+    "31502": 88,
+    "32037": 13,
+    "32040": 105,
+    "32068": 68,
+    "32078": 51,
+    "32079": 40,
+    "32081": 55,
+    "32087": 100,
+    "32094": 48,
+    "32102": 4,
+    "32107": 118,
+    "32461": 137,
+    "32497": 90,
+    "32508": 140,
+    "32526": 117,
+    "32602": 102,
+    "32612": 114,
+    "32627": 72,
+    "32704": 76,
+    "32736": 138,
+    "32846": 104,
+    "32895": 21,
+    "32951": 93,
+    "32956": 10,
+    "32962": 103,
+    "32976": 127,
+    "33009": 62,
+    "33014": 28,
+    "33043": 81,
+    "33070": 94,
+    "33091": 2,
+    "33144": 54,
+    "33558": 85,
+    "33598": 78,
+    "33630": 67,
+    "33672": 34,
+    "33673": 148,
+    "33694": 144,
+    "33768": 95,
+    "33793": 73,
+    "33796": 119,
+    "33876": 71,
+    "33908": 116,
+    "33950": 129,
+    "33998": 113,
+    "34245": 61,
+    "34609": 92,
+    "34625": 99,
+    "34743": 143,
+    "34874": 30,
+    "34958": 135,
+    "35012": 109,
+    "35046": 131,
+    "35168": 98,
+    "35622": 108,
+    "35887": 87,
+    "36287": 42,
+    "36303": 39,
+    "36314": 22,
+    "36368": 110,
+    "36373": 45,
+    "36408": 106,
+    "36640": 74,
+    "36712": 50,
+    "36998": 97,
+    "37085": 130,
+    "37349": 56,
+    "38149": 96,
+    "38159": 66,
+    "38279": 77,
+    "38498": 79,
+    "38552": 12,
+    "39109": 111,
+    "39541": 126,
+    "39687": 86,
+    "39727": 141,
+    "39974": 147,
+    "40143": 123,
+    "40676": 1,
+    "40691": 112,
+    "40703": 142,
+    "41158": 145,
+    "41742": 91,
+    "42904": 139,
+    "43829": 75,
+    "44151": 134,
+    "44506": 115,
+    "47162": 120,
+    "47533": 136
    }
   }
  ]

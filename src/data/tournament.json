@@ -1,5 +1,5 @@
 {
- "updatedAt": "2026-11-22T21:07:39.599Z",
+ "updatedAt": "2026-11-23T04:07:45.593Z",
  "tournament": {
   "winner": {
    "id": "11788",
@@ -38,7 +38,7 @@
        "last": "Aspinall",
        "nick": "The Asp",
        "country": "GB-ENG",
-       "ranking": 12
+       "ranking": 9
       },
       "p2": {
        "id": "33630",
@@ -46,7 +46,7 @@
        "last": "Kuivenhoven",
        "nick": null,
        "country": "NL",
-       "ranking": 71
+       "ranking": 67
       },
       "s1": 5,
       "s2": 1,
@@ -79,7 +79,7 @@
        "last": "Sedlacek",
        "nick": "Evil Charlie",
        "country": "CZ",
-       "ranking": 42
+       "ranking": 38
       },
       "p2": {
        "id": "33630",
@@ -87,7 +87,7 @@
        "last": "Kuivenhoven",
        "nick": null,
        "country": "NL",
-       "ranking": 71
+       "ranking": 67
       },
       "s1": 4,
       "s2": 5,
@@ -120,7 +120,7 @@
        "last": "Aspinall",
        "nick": "The Asp",
        "country": "GB-ENG",
-       "ranking": 12
+       "ranking": 9
       },
       "p2": {
        "id": "2771",
@@ -128,7 +128,7 @@
        "last": "Sedlacek",
        "nick": "Evil Charlie",
        "country": "CZ",
-       "ranking": 42
+       "ranking": 38
       },
       "s1": 5,
       "s2": 0,
@@ -185,7 +185,7 @@
        "last": "Rodriguez",
        "nick": "RJR #3",
        "country": "AT",
-       "ranking": 141
+       "ranking": 118
       },
       "s1": 3,
       "s2": 5,
@@ -226,7 +226,7 @@
        "last": "Clemens",
        "nick": "German Giant",
        "country": "DE",
-       "ranking": 53
+       "ranking": 43
       },
       "s1": 5,
       "s2": 4,
@@ -259,7 +259,7 @@
        "last": "Clemens",
        "nick": "German Giant",
        "country": "DE",
-       "ranking": 53
+       "ranking": 43
       },
       "p2": {
        "id": "32107",
@@ -267,7 +267,7 @@
        "last": "Rodriguez",
        "nick": "RJR #3",
        "country": "AT",
-       "ranking": 141
+       "ranking": 118
       },
       "s1": 5,
       "s2": 3,
@@ -311,7 +311,7 @@
        "last": "Dobey",
        "nick": "Hollywood",
        "country": "GB-ENG",
-       "ranking": 16
+       "ranking": 15
       },
       "p2": {
        "id": "40703",
@@ -319,7 +319,7 @@
        "last": "Schmidt",
        "nick": "Lightning",
        "country": "DE",
-       "ranking": 146
+       "ranking": 142
       },
       "s1": 5,
       "s2": 2,
@@ -360,7 +360,7 @@
        "last": "Schmidt",
        "nick": "Lightning",
        "country": "DE",
-       "ranking": 146
+       "ranking": 142
       },
       "s1": 5,
       "s2": 0,
@@ -398,7 +398,7 @@
        "last": "Dobey",
        "nick": "Hollywood",
        "country": "GB-ENG",
-       "ranking": 16
+       "ranking": 15
       },
       "p2": {
        "id": "11902",
@@ -450,7 +450,7 @@
        "last": "van Veen",
        "nick": "The Giant",
        "country": "NL",
-       "ranking": 3
+       "ranking": 2
       },
       "p2": {
        "id": "40143",
@@ -458,7 +458,7 @@
        "last": "Sneyd",
        "nick": "Bomber",
        "country": "GB-ENG",
-       "ranking": 129
+       "ranking": 123
       },
       "s1": 5,
       "s2": 2,
@@ -491,7 +491,7 @@
        "last": "Brooks",
        "nick": "Bam Bam",
        "country": "GB-ENG",
-       "ranking": 59
+       "ranking": 51
       },
       "p2": {
        "id": "40143",
@@ -499,7 +499,7 @@
        "last": "Sneyd",
        "nick": "Bomber",
        "country": "GB-ENG",
-       "ranking": 129
+       "ranking": 123
       },
       "s1": 5,
       "s2": 3,
@@ -532,7 +532,7 @@
        "last": "van Veen",
        "nick": "The Giant",
        "country": "NL",
-       "ranking": 3
+       "ranking": 2
       },
       "p2": {
        "id": "32078",
@@ -540,7 +540,7 @@
        "last": "Brooks",
        "nick": "Bam Bam",
        "country": "GB-ENG",
-       "ranking": 59
+       "ranking": 51
       },
       "s1": 5,
       "s2": 2,
@@ -584,7 +584,7 @@
        "last": "van Gerwen",
        "nick": "Mighty Mike",
        "country": "NL",
-       "ranking": 11
+       "ranking": 8
       },
       "p2": {
        "id": "39687",
@@ -592,7 +592,7 @@
        "last": "Coates",
        "nick": null,
        "country": "GB-ENG",
-       "ranking": 96
+       "ranking": 86
       },
       "s1": 5,
       "s2": 4,
@@ -625,7 +625,7 @@
        "last": "De Graaf",
        "nick": null,
        "country": "SE",
-       "ranking": 39
+       "ranking": 41
       },
       "p2": {
        "id": "39687",
@@ -633,7 +633,7 @@
        "last": "Coates",
        "nick": null,
        "country": "GB-ENG",
-       "ranking": 96
+       "ranking": 86
       },
       "s1": 4,
       "s2": 5,
@@ -666,7 +666,7 @@
        "last": "van Gerwen",
        "nick": "Mighty Mike",
        "country": "NL",
-       "ranking": 11
+       "ranking": 8
       },
       "p2": {
        "id": "31031",
@@ -674,7 +674,7 @@
        "last": "De Graaf",
        "nick": null,
        "country": "SE",
-       "ranking": 39
+       "ranking": 41
       },
       "s1": 5,
       "s2": 4,
@@ -726,7 +726,7 @@
        "last": "Crabtree",
        "nick": "Shazam",
        "country": "GB-ENG",
-       "ranking": 69
+       "ranking": 66
       },
       "s1": 5,
       "s2": 1,
@@ -759,7 +759,7 @@
        "last": "Evans",
        "nick": "Rapid",
        "country": "GB-ENG",
-       "ranking": 52
+       "ranking": 44
       },
       "p2": {
        "id": "38159",
@@ -767,7 +767,7 @@
        "last": "Crabtree",
        "nick": "Shazam",
        "country": "GB-ENG",
-       "ranking": 69
+       "ranking": 66
       },
       "s1": 5,
       "s2": 4,
@@ -808,7 +808,7 @@
        "last": "Evans",
        "nick": "Rapid",
        "country": "GB-ENG",
-       "ranking": 52
+       "ranking": 44
       },
       "s1": 5,
       "s2": 0,
@@ -865,7 +865,7 @@
        "last": "Sykes",
        "nick": "The Castleford Tiger",
        "country": "GB-ENG",
-       "ranking": 81
+       "ranking": 72
       },
       "s1": 3,
       "s2": 5,
@@ -947,7 +947,7 @@
        "last": "Sykes",
        "nick": "The Castleford Tiger",
        "country": "GB-ENG",
-       "ranking": 81
+       "ranking": 72
       },
       "s1": 1,
       "s2": 5,
@@ -991,7 +991,7 @@
        "last": "Humphries",
        "nick": "Cool Hand",
        "country": "GB-ENG",
-       "ranking": 2
+       "ranking": 4
       },
       "p2": {
        "id": "32736",
@@ -999,7 +999,7 @@
        "last": "Nebrida",
        "nick": "Pow",
        "country": "PH",
-       "ranking": null
+       "ranking": 138
       },
       "s1": 5,
       "s2": 3,
@@ -1032,7 +1032,7 @@
        "last": "Cullen",
        "nick": "The Rockstar",
        "country": "GB-ENG",
-       "ranking": 32
+       "ranking": 33
       },
       "p2": {
        "id": "32736",
@@ -1040,7 +1040,7 @@
        "last": "Nebrida",
        "nick": "Pow",
        "country": "PH",
-       "ranking": null
+       "ranking": 138
       },
       "s1": 2,
       "s2": 5,
@@ -1073,7 +1073,7 @@
        "last": "Humphries",
        "nick": "Cool Hand",
        "country": "GB-ENG",
-       "ranking": 2
+       "ranking": 4
       },
       "p2": {
        "id": "81",
@@ -1081,7 +1081,7 @@
        "last": "Cullen",
        "nick": "The Rockstar",
        "country": "GB-ENG",
-       "ranking": 32
+       "ranking": 33
       },
       "s1": 5,
       "s2": 2,
@@ -1125,7 +1125,7 @@
        "last": "Nijman",
        "nick": null,
        "country": "NL",
-       "ranking": 13
+       "ranking": 10
       },
       "p2": {
        "id": "43097",
@@ -1133,7 +1133,7 @@
        "last": "Sevada",
        "nick": "The Reaper",
        "country": "US",
-       "ranking": null
+       "ranking": 158
       },
       "s1": 5,
       "s2": 1,
@@ -1166,7 +1166,7 @@
        "last": "Springer",
        "nick": "Meenzer Bub",
        "country": "DE",
-       "ranking": 34
+       "ranking": 30
       },
       "p2": {
        "id": "43097",
@@ -1174,7 +1174,7 @@
        "last": "Sevada",
        "nick": "The Reaper",
        "country": "US",
-       "ranking": null
+       "ranking": 158
       },
       "s1": 5,
       "s2": 1,
@@ -1207,7 +1207,7 @@
        "last": "Nijman",
        "nick": null,
        "country": "NL",
-       "ranking": 13
+       "ranking": 10
       },
       "p2": {
        "id": "34874",
@@ -1215,7 +1215,7 @@
        "last": "Springer",
        "nick": "Meenzer Bub",
        "country": "DE",
-       "ranking": 34
+       "ranking": 30
       },
       "s1": 3,
       "s2": 5,
@@ -1267,7 +1267,7 @@
        "last": "Ostlund",
        "nick": "One-Ton",
        "country": "SE",
-       "ranking": 162
+       "ranking": 131
       },
       "s1": 4,
       "s2": 5,
@@ -1349,7 +1349,7 @@
        "last": "Ostlund",
        "nick": "One-Ton",
        "country": "SE",
-       "ranking": 162
+       "ranking": 131
       },
       "s1": 5,
       "s2": 1,
@@ -1393,7 +1393,7 @@
        "last": "Searle",
        "nick": "Heavy Metal",
        "country": "GB-ENG",
-       "ranking": 15
+       "ranking": 13
       },
       "p2": {
        "id": "38279",
@@ -1475,7 +1475,7 @@
        "last": "Searle",
        "nick": "Heavy Metal",
        "country": "GB-ENG",
-       "ranking": 15
+       "ranking": 13
       },
       "p2": {
        "id": "231",
@@ -1527,7 +1527,7 @@
        "last": "Price",
        "nick": "The Iceman",
        "country": "GB-WLS",
-       "ranking": 4
+       "ranking": 3
       },
       "p2": {
        "id": "33558",
@@ -1535,7 +1535,7 @@
        "last": "Hunt",
        "nick": "Joe Boy",
        "country": "GB-ENG",
-       "ranking": 86
+       "ranking": 85
       },
       "s1": 5,
       "s2": 3,
@@ -1568,7 +1568,7 @@
        "last": "Bialecki",
        "nick": "The Bolt",
        "country": "PL",
-       "ranking": 51
+       "ranking": 42
       },
       "p2": {
        "id": "33558",
@@ -1576,7 +1576,7 @@
        "last": "Hunt",
        "nick": "Joe Boy",
        "country": "GB-ENG",
-       "ranking": 86
+       "ranking": 85
       },
       "s1": 5,
       "s2": 4,
@@ -1609,7 +1609,7 @@
        "last": "Price",
        "nick": "The Iceman",
        "country": "GB-WLS",
-       "ranking": 4
+       "ranking": 3
       },
       "p2": {
        "id": "36287",
@@ -1617,7 +1617,7 @@
        "last": "Bialecki",
        "nick": "The Bolt",
        "country": "PL",
-       "ranking": 51
+       "ranking": 42
       },
       "s1": 5,
       "s2": 2,
@@ -1661,7 +1661,7 @@
        "last": "Bunting",
        "nick": "The Bullet",
        "country": "GB-ENG",
-       "ranking": 9
+       "ranking": 11
       },
       "p2": {
        "id": "31498",
@@ -1669,7 +1669,7 @@
        "last": "Smith",
        "nick": "Guru",
        "country": "AU",
-       "ranking": null
+       "ranking": 158
       },
       "s1": 5,
       "s2": 4,
@@ -1702,7 +1702,7 @@
        "last": "Menzies",
        "nick": "Cammy",
        "country": "GB-SCT",
-       "ranking": 26
+       "ranking": 25
       },
       "p2": {
        "id": "31498",
@@ -1710,7 +1710,7 @@
        "last": "Smith",
        "nick": "Guru",
        "country": "AU",
-       "ranking": null
+       "ranking": 158
       },
       "s1": 5,
       "s2": 4,
@@ -1743,7 +1743,7 @@
        "last": "Bunting",
        "nick": "The Bullet",
        "country": "GB-ENG",
-       "ranking": 9
+       "ranking": 11
       },
       "p2": {
        "id": "2040",
@@ -1751,7 +1751,7 @@
        "last": "Menzies",
        "nick": "Cammy",
        "country": "GB-SCT",
-       "ranking": 26
+       "ranking": 25
       },
       "s1": 2,
       "s2": 5,
@@ -1795,7 +1795,7 @@
        "last": "Rock",
        "nick": "Rocky",
        "country": "GB-NIR",
-       "ranking": 8
+       "ranking": 12
       },
       "p2": {
        "id": "38498",
@@ -1803,7 +1803,7 @@
        "last": "Morris",
        "nick": "The Gun",
        "country": "GB-ENG",
-       "ranking": 82
+       "ranking": 79
       },
       "s1": 2,
       "s2": 5,
@@ -1836,7 +1836,7 @@
        "last": "Rock",
        "nick": "Rocky",
        "country": "GB-NIR",
-       "ranking": 8
+       "ranking": 12
       },
       "p2": {
        "id": "32895",
@@ -1844,7 +1844,7 @@
        "last": "Doets",
        "nick": "Hawk Eye",
        "country": "NL",
-       "ranking": 23
+       "ranking": 21
       },
       "s1": 3,
       "s2": 5,
@@ -1877,7 +1877,7 @@
        "last": "Doets",
        "nick": "Hawk Eye",
        "country": "NL",
-       "ranking": 23
+       "ranking": 21
       },
       "p2": {
        "id": "38498",
@@ -1885,7 +1885,7 @@
        "last": "Morris",
        "nick": "The Gun",
        "country": "GB-ENG",
-       "ranking": 82
+       "ranking": 79
       },
       "s1": 5,
       "s2": 1,
@@ -1937,7 +1937,7 @@
        "last": "Ashton",
        "nick": "The Lancashire Rose",
        "country": "GB-ENG",
-       "ranking": null
+       "ranking": 158
       },
       "s1": 5,
       "s2": 2,
@@ -1970,7 +1970,7 @@
        "last": "Soutar",
        "nick": "Soots",
        "country": "GB-SCT",
-       "ranking": 61
+       "ranking": 56
       },
       "p2": {
        "id": "31491",
@@ -1978,7 +1978,7 @@
        "last": "Ashton",
        "nick": "The Lancashire Rose",
        "country": "GB-ENG",
-       "ranking": null
+       "ranking": 158
       },
       "s1": 5,
       "s2": 2,
@@ -2019,7 +2019,7 @@
        "last": "Soutar",
        "nick": "Soots",
        "country": "GB-SCT",
-       "ranking": 61
+       "ranking": 56
       },
       "s1": 5,
       "s2": 4,
@@ -2238,7 +2238,7 @@
        "last": "Doets",
        "nick": "Hawk Eye",
        "country": "NL",
-       "ranking": 23
+       "ranking": 21
       },
       "p2": {
        "id": "2040",
@@ -2246,7 +2246,7 @@
        "last": "Menzies",
        "nick": "Cammy",
        "country": "GB-SCT",
-       "ranking": 26
+       "ranking": 25
       },
       "s1": 10,
       "s2": 5,
@@ -2279,7 +2279,7 @@
        "last": "Price",
        "nick": "The Iceman",
        "country": "GB-WLS",
-       "ranking": 4
+       "ranking": 3
       },
       "p2": {
        "id": "32037",
@@ -2287,7 +2287,7 @@
        "last": "Searle",
        "nick": "Heavy Metal",
        "country": "GB-ENG",
-       "ranking": 15
+       "ranking": 13
       },
       "s1": 10,
       "s2": 7,
@@ -2328,7 +2328,7 @@
        "last": "Springer",
        "nick": "Meenzer Bub",
        "country": "DE",
-       "ranking": 34
+       "ranking": 30
       },
       "s1": 8,
       "s2": 10,
@@ -2361,7 +2361,7 @@
        "last": "Humphries",
        "nick": "Cool Hand",
        "country": "GB-ENG",
-       "ranking": 2
+       "ranking": 4
       },
       "p2": {
        "id": "32627",
@@ -2369,7 +2369,7 @@
        "last": "Sykes",
        "nick": "The Castleford Tiger",
        "country": "GB-ENG",
-       "ranking": 81
+       "ranking": 72
       },
       "s1": 9,
       "s2": 10,
@@ -2410,7 +2410,7 @@
        "last": "van Gerwen",
        "nick": "Mighty Mike",
        "country": "NL",
-       "ranking": 11
+       "ranking": 8
       },
       "s1": 8,
       "s2": 10,
@@ -2443,7 +2443,7 @@
        "last": "van Veen",
        "nick": "The Giant",
        "country": "NL",
-       "ranking": 3
+       "ranking": 2
       },
       "p2": {
        "id": "11902",
@@ -2484,7 +2484,7 @@
        "last": "Clemens",
        "nick": "German Giant",
        "country": "DE",
-       "ranking": 53
+       "ranking": 43
       },
       "p2": {
        "id": "11821",
@@ -2492,7 +2492,7 @@
        "last": "Aspinall",
        "nick": "The Asp",
        "country": "GB-ENG",
-       "ranking": 12
+       "ranking": 9
       },
       "s1": 7,
       "s2": 10,
@@ -2544,7 +2544,7 @@
        "last": "Doets",
        "nick": "Hawk Eye",
        "country": "NL",
-       "ranking": 23
+       "ranking": 21
       },
       "s1": 7,
       "s2": 16,
@@ -2577,7 +2577,7 @@
        "last": "Price",
        "nick": "The Iceman",
        "country": "GB-WLS",
-       "ranking": 4
+       "ranking": 3
       },
       "p2": {
        "id": "34874",
@@ -2585,7 +2585,7 @@
        "last": "Springer",
        "nick": "Meenzer Bub",
        "country": "DE",
-       "ranking": 34
+       "ranking": 30
       },
       "s1": 16,
       "s2": 15,
@@ -2618,7 +2618,7 @@
        "last": "Sykes",
        "nick": "The Castleford Tiger",
        "country": "GB-ENG",
-       "ranking": 81
+       "ranking": 72
       },
       "p2": {
        "id": "19",
@@ -2626,7 +2626,7 @@
        "last": "van Gerwen",
        "nick": "Mighty Mike",
        "country": "NL",
-       "ranking": 11
+       "ranking": 8
       },
       "s1": 11,
       "s2": 16,
@@ -2659,7 +2659,7 @@
        "last": "van Veen",
        "nick": "The Giant",
        "country": "NL",
-       "ranking": 3
+       "ranking": 2
       },
       "p2": {
        "id": "11821",
@@ -2667,7 +2667,7 @@
        "last": "Aspinall",
        "nick": "The Asp",
        "country": "GB-ENG",
-       "ranking": 12
+       "ranking": 9
       },
       "s1": 16,
       "s2": 14,
@@ -2711,7 +2711,7 @@
        "last": "Doets",
        "nick": "Hawk Eye",
        "country": "NL",
-       "ranking": 23
+       "ranking": 21
       },
       "p2": {
        "id": "11788",
@@ -2719,7 +2719,7 @@
        "last": "Price",
        "nick": "The Iceman",
        "country": "GB-WLS",
-       "ranking": 4
+       "ranking": 3
       },
       "s1": 13,
       "s2": 16,
@@ -2757,7 +2757,7 @@
        "last": "van Gerwen",
        "nick": "Mighty Mike",
        "country": "NL",
-       "ranking": 11
+       "ranking": 8
       },
       "p2": {
        "id": "33091",
@@ -2765,7 +2765,7 @@
        "last": "van Veen",
        "nick": "The Giant",
        "country": "NL",
-       "ranking": 3
+       "ranking": 2
       },
       "s1": 11,
       "s2": 16,
@@ -2814,7 +2814,7 @@
        "last": "Price",
        "nick": "The Iceman",
        "country": "GB-WLS",
-       "ranking": 4
+       "ranking": 3
       },
       "p2": {
        "id": "33091",
@@ -2822,7 +2822,7 @@
        "last": "van Veen",
        "nick": "The Giant",
        "country": "NL",
-       "ranking": 3
+       "ranking": 2
       },
       "s1": 16,
       "s2": 11,
