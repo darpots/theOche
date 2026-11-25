@@ -25,6 +25,8 @@ jobs:
           cache: npm
       - run: npm ci
       - run: npm run data:fast
+      # Unit tests: a failure stops the commit below and opens an issue.
+      - run: npm test
       # A televised event type with no channel mapping is shown with a guessed
       # channel; open one issue (once) so someone can confirm it.
       - name: Flag new TV event types
