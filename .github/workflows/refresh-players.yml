@@ -28,6 +28,8 @@ jobs:
       - run: npm run data:players
       - run: npm run data:live-race
       - run: npm run data:images
+      # Unit tests: a failure stops the commit below and opens an issue.
+      - run: npm test
       - uses: ./.github/actions/commit
         with:
           message: 'data: refresh player profiles and tournament history'
