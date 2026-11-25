@@ -1,25 +1,6 @@
 {
- "updatedAt": "2026-11-23T00:07:33.260Z",
+ "updatedAt": "2026-11-25T00:07:33.055Z",
  "events": [
-  {
-   "id": "10266",
-   "name": "Players Championship Finals",
-   "tag": null,
-   "start": "2024-11-22",
-   "end": "2024-11-24",
-   "venue": "Butlins, Minehead",
-   "city": "Minehead",
-   "broadcaster": "itv",
-   "ranked": true,
-   "major": true,
-   "winner": {
-    "id": "32102",
-    "name": "Luke Humphries"
-   },
-   "fixtures": 63,
-   "image": null,
-   "logo": null
-  },
   {
    "id": "10268",
    "name": "World Championship",
