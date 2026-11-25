@@ -50,6 +50,9 @@ jobs:
           NEWS_API_URL: ${{ vars.NEWS_API_URL }}
           NEWS_MODEL: ${{ vars.NEWS_MODEL }}
           NEWS_LOOKBACK_HOURS: ${{ inputs.lookback_hours || '48' }}
+      # Unit tests: a failure stops the commit below and opens an issue.
+      - if: steps.gate.outputs.go == 'true'
+        run: npm test
       - if: steps.gate.outputs.go == 'true'
         uses: ./.github/actions/commit
         with:
