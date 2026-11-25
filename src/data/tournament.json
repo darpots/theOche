@@ -1,5 +1,5 @@
 {
- "updatedAt": "2026-11-24T00:07:38.129Z",
+ "updatedAt": "2026-11-25T18:07:42.746Z",
  "tournament": {
   "winner": null,
   "id": "10872",
@@ -22,7 +22,7 @@
     "bestOf": 11,
     "legsPerSet": 11,
     "twoClear": false,
-    "prize": 3000,
+    "prize": 4000,
     "fixtures": []
    },
    {
@@ -32,7 +32,7 @@
     "bestOf": 11,
     "legsPerSet": 11,
     "twoClear": false,
-    "prize": 6500,
+    "prize": 7000,
     "fixtures": []
    },
    {
@@ -42,7 +42,7 @@
     "bestOf": 19,
     "legsPerSet": 19,
     "twoClear": false,
-    "prize": 10000,
+    "prize": 15000,
     "fixtures": []
    },
    {
@@ -52,7 +52,7 @@
     "bestOf": 19,
     "legsPerSet": 19,
     "twoClear": false,
-    "prize": 20000,
+    "prize": 27500,
     "fixtures": []
    },
    {
@@ -62,7 +62,7 @@
     "bestOf": 21,
     "legsPerSet": 21,
     "twoClear": false,
-    "prize": 30000,
+    "prize": 40000,
     "fixtures": []
    },
    {
@@ -72,7 +72,7 @@
     "bestOf": 21,
     "legsPerSet": 21,
     "twoClear": false,
-    "prize": 60000,
+    "prize": 70000,
     "fixtures": []
    }
   ]
