@@ -24,8 +24,12 @@ const nextUp = isOn ? (md.now ? md.next : md.next && feature?.f !== md.next ? md
 // Newest first, topped up from earlier days so the tile is never one lonely row.
 const resultsList = md.results.slice(0, 6);
 
-const upcoming = calendar.events.filter(e => e.start > today && e.id !== t.id);
+// Everything still to start, including the current tournament before its first day
+// (excluding it always skipped straight past an event starting in a few days).
+const upcoming = calendar.events.filter(e => e.start > today);
 const nextEvent = upcoming[0];
+// The side tile: when the big tile is already counting down to nextEvent, the one after it.
+const sideEvent = feature ? nextEvent : upcoming[1] || null;
 
 // Previews leave the homepage once their matches are within 90 minutes (builds run hourly).
 const news = (await getCollection('news')).map(n => n.data).filter(s => !isStale(s, Date.now() + 90 * 6e4)).sort((a, b) => b.date.localeCompare(a.date)).slice(0, 4);
@@ -86,11 +90,11 @@ const playCards = [
       <div class="side">
         {nextUp ? (
           <a class="tile tile-volt nu" href={`/match?id=${nextUp.id}`} id="nextup" set:html={nextTileInner(nextUp, t.name)} />
-        ) : nextEvent && (
-          <a class:list={['tile', 'tile-volt', 'nu', { compact: isOn }]} href={`/tournament/${nextEvent.id}`}>
-            <span class="lbl">Next event · {dayNum(nextEvent.start)} {monthShort(nextEvent.start)}</span>
-            <span class="poster nu-names">{nextEvent.name}</span>
-            <span class="nu-sub">{nextEvent.venue || nextEvent.city}</span>
+        ) : sideEvent && (
+          <a class:list={['tile', 'tile-volt', 'nu', { compact: isOn }]} href={`/tournament/${sideEvent.id}`}>
+            <span class="lbl">{feature ? 'Next event' : 'After that'} · {dayNum(sideEvent.start)} {monthShort(sideEvent.start)}</span>
+            <span class="poster nu-names">{sideEvent.name}</span>
+            <span class="nu-sub">{sideEvent.venue || sideEvent.city}</span>
           </a>
         )}
         <section class="tile tile-card res">

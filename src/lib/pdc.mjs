@@ -151,6 +151,21 @@ export function normaliseTournament(payload) {
   };
 }
 
+/**
+ * A draw published before the PDC feed has fixtures (src/data/draws/<id>.json):
+ * { stage, matches: [[seed, name, seed, name], ...] } in bracket order. Players
+ * are matched to the rankings by name for their id and country.
+ */
+export function publishedDraw(published, ranked = []) {
+  const key = s => String(s || '').normalize('NFKD').replace(/[\u0300-\u036f]/g, '').toLowerCase().trim();
+  const byName = new Map(ranked.map(p => [key(p.name), p]));
+  const player = (seed, name) => {
+    const r = byName.get(key(name));
+    return { id: r ? String(r.id) : null, name, last: name.split(' ').slice(1).join(' ') || name, country: r?.country || null, seed: seed ?? null };
+  };
+  return { stage: published.stage || 'First round', matches: (published.matches || []).map(([s1, n1, s2, n2]) => [player(s1, n1), player(s2, n2)]) };
+}
+
 /** Today in London, as YYYY-MM-DD. */
 const ukToday = () => new Date().toLocaleDateString('en-CA', { timeZone: 'Europe/London' });
 

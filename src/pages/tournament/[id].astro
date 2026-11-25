@@ -162,7 +162,9 @@ const news = (await getCollection('news')).map(n => n.data)
       let current = def;
       const live = t.start <= today && t.end >= today;
       document.getElementById('phase')!.textContent = live ? 'Tournament in progress' : t.end < today ? 'Completed' : 'Coming up';
-      const empty = () => t.start > today
+      const empty = () => t.draw?.matches?.length
+        ? `<div class="empty"><h3>The draw is out</h3><p>The order of play appears here as soon as the PDC publishes it. <a href="#draw" data-show-draw>See the full draw</a>.</p></div>`
+        : t.start > today
         ? `<div class="empty"><h3>The draw isn't out yet</h3><p>The full schedule appears here as soon as the PDC publishes the draw and order of play.</p></div>`
         : `<div class="empty"><h3>No matches published</h3><p>The PDC hasn't published fixtures for this event.</p></div>`;
 
@@ -203,7 +205,10 @@ const news = (await getCollection('news')).map(n => n.data)
         try {
           const res = await fetch(`${API.tournaments}${t.id}`, { cache: 'no-store' });
           if (!res.ok) return;
-          t = normaliseTournament(await res.json());
+          const fresh = normaliseTournament(await res.json());
+          // Keep the published draw until the feed has fixtures of its own.
+          if (!fresh.stages.some((s: any) => s.fixtures.length) && t.draw) fresh.draw = t.draw;
+          t = fresh;
           merge();
           liveSig = '';
           await liveTick().catch(() => {});
@@ -246,6 +251,7 @@ const news = (await getCollection('news')).map(n => n.data)
       };
       tabs.forEach(b => b.addEventListener('click', () => { show(b.dataset.view!); history.replaceState(null, '', b.dataset.view === 'schedule' ? location.pathname : `#${b.dataset.view}`); }));
       if (['#news', '#draw', '#prize'].includes(location.hash)) show(location.hash.slice(1));
+      board.addEventListener('click', e => { if ((e.target as HTMLElement).closest('[data-show-draw]')) { e.preventDefault(); show('draw'); history.replaceState(null, '', '#draw'); } });
       document.querySelector('[data-open-news]')?.addEventListener('click', e => { e.preventDefault(); show('news'); history.replaceState(null, '', '#news'); document.querySelector('.viewtabs')!.scrollIntoView({ behavior: 'smooth', block: 'start' }); });
 
       clearInterval(poll);
@@ -332,6 +338,8 @@ const news = (await getCollection('news')).map(n => n.data)
   .tdraw :global(.dr-p + .dr-p) { border-top: 1px solid var(--line); }
   .tdraw :global(.dr-p.w) { font-weight: 800; background: var(--green-soft); }
   .tdraw :global(.dr-p.l) { color: var(--muted); }
+  .tdraw :global(.dr-p small) { color: var(--muted); font-weight: 600; }
+  .tdraw :global(.dr-note) { margin-bottom: 14px; font-size: 14px; }
   /* Bracket lines: each match feeds the next round */
   .tdraw :global(.dr-m) { position: relative; overflow: visible; }
   .tdraw :global(.dr-p:first-child) { border-radius: 14px 14px 0 0; }

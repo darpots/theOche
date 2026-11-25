@@ -1,5 +1,5 @@
 {
- "updatedAt": "2026-11-25T18:07:42.746Z",
+ "updatedAt": "2026-11-25T20:53:43.173Z",
  "tournament": {
   "winner": null,
   "id": "10872",
@@ -75,7 +75,524 @@
     "prize": 70000,
     "fixtures": []
    }
-  ]
+  ],
+  "draw": {
+   "stage": "Last 64",
+   "matches": [
+    [
+     {
+      "id": "32956",
+      "name": "Wessel Nijman",
+      "last": "Nijman",
+      "country": "NL",
+      "seed": 1
+     },
+     {
+      "id": "39687",
+      "name": "Henry Coates",
+      "last": "Coates",
+      "country": "GB-ENG",
+      "seed": 64
+     }
+    ],
+    [
+     {
+      "id": "11156",
+      "name": "Gabriel Clemens",
+      "last": "Clemens",
+      "country": "DE",
+      "seed": 32
+     },
+     {
+      "id": "142",
+      "name": "Dave Chisnall",
+      "last": "Chisnall",
+      "country": "GB-ENG",
+      "seed": 33
+     }
+    ],
+    [
+     {
+      "id": "38279",
+      "name": "Charlie Manby",
+      "last": "Manby",
+      "country": "GB-ENG",
+      "seed": 16
+     },
+     {
+      "id": "11902",
+      "name": "Martin Schindler",
+      "last": "Schindler",
+      "country": "DE",
+      "seed": 49
+     }
+    ],
+    [
+     {
+      "id": "2040",
+      "name": "Cameron Menzies",
+      "last": "Menzies",
+      "country": "GB-SCT",
+      "seed": 17
+     },
+     {
+      "id": "146",
+      "name": "Mensur Suljovic",
+      "last": "Suljovic",
+      "country": "AT",
+      "seed": 48
+     }
+    ],
+    [
+     {
+      "id": "36640",
+      "name": "Beau Greaves",
+      "last": "Greaves",
+      "country": "GB-ENG",
+      "seed": 8
+     },
+     {
+      "id": "11109",
+      "name": "Christian Kist",
+      "last": "Kist",
+      "country": "NL",
+      "seed": 57
+     }
+    ],
+    [
+     {
+      "id": "43829",
+      "name": "Tom Bissell",
+      "last": "Bissell",
+      "country": "GB-ENG",
+      "seed": 25
+     },
+     {
+      "id": "11795",
+      "name": "Rob Owen",
+      "last": "Owen",
+      "country": "GB-WLS",
+      "seed": 40
+     }
+    ],
+    [
+     {
+      "id": "754",
+      "name": "Ross Smith",
+      "last": "Smith",
+      "country": "GB-ENG",
+      "seed": 9
+     },
+     {
+      "id": "104",
+      "name": "Michael Smith",
+      "last": "Smith",
+      "country": "GB-ENG",
+      "seed": 56
+     }
+    ],
+    [
+     {
+      "id": "33014",
+      "name": "Niels Zonneveld",
+      "last": "Zonneveld",
+      "country": "NL",
+      "seed": 24
+     },
+     {
+      "id": "34874",
+      "name": "Niko Springer",
+      "last": "Springer",
+      "country": "DE",
+      "seed": 41
+     }
+    ],
+    [
+     {
+      "id": "11804",
+      "name": "Luke Woodhouse",
+      "last": "Woodhouse",
+      "country": "GB-ENG",
+      "seed": 4
+     },
+     {
+      "id": "33768",
+      "name": "Alexander Merkx",
+      "last": "Merkx",
+      "country": "NL",
+      "seed": 61
+     }
+    ],
+    [
+     {
+      "id": "876",
+      "name": "Stephen Bunting",
+      "last": "Bunting",
+      "country": "GB-ENG",
+      "seed": 29
+     },
+     {
+      "id": "585",
+      "name": "Max Hopp",
+      "last": "Hopp",
+      "country": "DE",
+      "seed": 36
+     }
+    ],
+    [
+     {
+      "id": "36287",
+      "name": "Sebastian Bialecki",
+      "last": "Bialecki",
+      "country": "PL",
+      "seed": 13
+     },
+     {
+      "id": "11788",
+      "name": "Gerwyn Price",
+      "last": "Price",
+      "country": "GB-WLS",
+      "seed": 52
+     }
+    ],
+    [
+     {
+      "id": "31031",
+      "name": "Jeffrey de Graaf",
+      "last": "de Graaf",
+      "country": "SE",
+      "seed": 20
+     },
+     {
+      "id": "33091",
+      "name": "Gian van Veen",
+      "last": "van Veen",
+      "country": "NL",
+      "seed": 45
+     }
+    ],
+    [
+     {
+      "id": "30844",
+      "name": "Jermaine Wattimena",
+      "last": "Wattimena",
+      "country": "NL",
+      "seed": 5
+     },
+     {
+      "id": "33144",
+      "name": "Keane Barry",
+      "last": "Barry",
+      "country": "IE",
+      "seed": 60
+     }
+    ],
+    [
+     {
+      "id": "32037",
+      "name": "Ryan Searle",
+      "last": "Searle",
+      "country": "GB-ENG",
+      "seed": 28
+     },
+     {
+      "id": "136",
+      "name": "Brendan Dolan",
+      "last": "Dolan",
+      "country": "IE",
+      "seed": 37
+     }
+    ],
+    [
+     {
+      "id": "153",
+      "name": "William O'Connor",
+      "last": "O'Connor",
+      "country": "IE",
+      "seed": 12
+     },
+     {
+      "id": "36373",
+      "name": "James Hurrell",
+      "last": "Hurrell",
+      "country": "GB-ENG",
+      "seed": 53
+     }
+    ],
+    [
+     {
+      "id": "38498",
+      "name": "Tommy Morris",
+      "last": "Morris",
+      "country": "GB-ENG",
+      "seed": 21
+     },
+     {
+      "id": "32079",
+      "name": "Callan Rydz",
+      "last": "Rydz",
+      "country": "GB-ENG",
+      "seed": 44
+     }
+    ],
+    [
+     {
+      "id": "11843",
+      "name": "Chris Dobey",
+      "last": "Dobey",
+      "country": "GB-ENG",
+      "seed": 2
+     },
+     {
+      "id": "30829",
+      "name": "Mike De Decker",
+      "last": "De Decker",
+      "country": "BE",
+      "seed": 63
+     }
+    ],
+    [
+     {
+      "id": "31027",
+      "name": "Richard Veenstra",
+      "last": "Veenstra",
+      "country": "NL",
+      "seed": 31
+     },
+     {
+      "id": "81",
+      "name": "Joe Cullen",
+      "last": "Cullen",
+      "country": "GB-ENG",
+      "seed": 34
+     }
+    ],
+    [
+     {
+      "id": "30843",
+      "name": "Cristo Reyes",
+      "last": "Reyes",
+      "country": "ES",
+      "seed": 15
+     },
+     {
+      "id": "31502",
+      "name": "Darius Labanauskas",
+      "last": "Labanauskas",
+      "country": "LT",
+      "seed": 50
+     }
+    ],
+    [
+     {
+      "id": "19",
+      "name": "Michael van Gerwen",
+      "last": "van Gerwen",
+      "country": "NL",
+      "seed": 18
+     },
+     {
+      "id": "32081",
+      "name": "Connor Scutt",
+      "last": "Scutt",
+      "country": "GB-ENG",
+      "seed": 47
+     }
+    ],
+    [
+     {
+      "id": "32102",
+      "name": "Luke Humphries",
+      "last": "Humphries",
+      "country": "GB-ENG",
+      "seed": 7
+     },
+     {
+      "id": "33598",
+      "name": "Darryl Pilgrim",
+      "last": "Pilgrim",
+      "country": "GB-ENG",
+      "seed": 58
+     }
+    ],
+    [
+     {
+      "id": "224",
+      "name": "Krzysztof Ratajski",
+      "last": "Ratajski",
+      "country": "PL",
+      "seed": 26
+     },
+     {
+      "id": "36314",
+      "name": "Damon Heta",
+      "last": "Heta",
+      "country": "AU",
+      "seed": 39
+     }
+    ],
+    [
+     {
+      "id": "31356",
+      "name": "Danny Noppert",
+      "last": "Noppert",
+      "country": "NL",
+      "seed": 10
+     },
+     {
+      "id": "36712",
+      "name": "Scott Williams",
+      "last": "Williams",
+      "country": "GB-ENG",
+      "seed": 55
+     }
+    ],
+    [
+     {
+      "id": "30859",
+      "name": "Jonny Clayton",
+      "last": "Clayton",
+      "country": "GB-WLS",
+      "seed": 23
+     },
+     {
+      "id": "32627",
+      "name": "Tom Sykes",
+      "last": "Sykes",
+      "country": "GB-ENG",
+      "seed": 42
+     }
+    ],
+    [
+     {
+      "id": "32895",
+      "name": "Kevin Doets",
+      "last": "Doets",
+      "country": "NL",
+      "seed": 3
+     },
+     {
+      "id": "31028",
+      "name": "Ritchie Edhouse",
+      "last": "Edhouse",
+      "country": "GB-ENG",
+      "seed": 62
+     }
+    ],
+    [
+     {
+      "id": "22",
+      "name": "James Wade",
+      "last": "Wade",
+      "country": "GB-ENG",
+      "seed": 30
+     },
+     {
+      "id": "36303",
+      "name": "Justin Hood",
+      "last": "Hood",
+      "country": "GB-ENG",
+      "seed": 35
+     }
+    ],
+    [
+     {
+      "id": "246",
+      "name": "Dirk van Duijvenbode",
+      "last": "van Duijvenbode",
+      "country": "NL",
+      "seed": 14
+     },
+     {
+      "id": "37349",
+      "name": "Alan Soutar",
+      "last": "Soutar",
+      "country": "GB-SCT",
+      "seed": 51
+     }
+    ],
+    [
+     {
+      "id": "33630",
+      "name": "Maik Kuivenhoven",
+      "last": "Kuivenhoven",
+      "country": "NL",
+      "seed": 19
+     },
+     {
+      "id": "2554",
+      "name": "Daryl Gurney",
+      "last": "Gurney",
+      "country": "GB-NIR",
+      "seed": 46
+     }
+    ],
+    [
+     {
+      "id": "231",
+      "name": "Andrew Gilding",
+      "last": "Gilding",
+      "country": "GB-ENG",
+      "seed": 6
+     },
+     {
+      "id": "32078",
+      "name": "Bradley Brooks",
+      "last": "Brooks",
+      "country": "GB-ENG",
+      "seed": 59
+     }
+    ],
+    [
+     {
+      "id": "156",
+      "name": "Kim Huybrechts",
+      "last": "Huybrechts",
+      "country": "BE",
+      "seed": 27
+     },
+     {
+      "id": "33558",
+      "name": "Joe Hunt",
+      "last": "Hunt",
+      "country": "GB-ENG",
+      "seed": 38
+     }
+    ],
+    [
+     {
+      "id": "2771",
+      "name": "Karel Sedlacek",
+      "last": "Sedlacek",
+      "country": "CZ",
+      "seed": 11
+     },
+     {
+      "id": "4",
+      "name": "Gary Anderson",
+      "last": "Anderson",
+      "country": "GB-SCT",
+      "seed": 54
+     }
+    ],
+    [
+     {
+      "id": "31041",
+      "name": "Rob Cross",
+      "last": "Cross",
+      "country": "GB-ENG",
+      "seed": 22
+     },
+     {
+      "id": "162",
+      "name": "Mickey Mansell",
+      "last": "Mansell",
+      "country": "IE",
+      "seed": 43
+     }
+    ]
+   ]
+  }
  },
  "next": {
   "id": "10873",

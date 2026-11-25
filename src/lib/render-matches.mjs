@@ -96,6 +96,7 @@ export function renderDay(t, day, portraits) {
 /** Knockout draw: one column per round, each round ordered so a match sits beside the two it came from. */
 export function renderDraw(t) {
   const ko = t.stages.filter(s => !/^group/i.test(s.name) && s.fixtures.length).sort((a, b) => b.fixtures.length - a.fixtures.length || (b.round ?? 0) - (a.round ?? 0));
+  if (!ko.length && t.draw?.matches?.length) return renderPublishedDraw(t);
   if (ko.length < 2) return '';
   const cols = [ko[0].fixtures.slice()];
   for (let i = 1; i < ko.length; i++) {
@@ -111,6 +112,18 @@ export function renderDraw(t) {
     return `<a class="dr-m ${f.status}" ${f.p1 && f.p2 ? `href="/match?id=${esc(f.id)}"` : ''}>${side(f.p1, f.status === 'upcoming' && !(f.s1 + f.s2) ? '' : f.s1, w && w === f.p1?.id, done)}${side(f.p2, f.status === 'upcoming' && !(f.s1 + f.s2) ? '' : f.s2, w && w === f.p2?.id, done)}</a>`;
   };
   return `<div class="draw" style="--cols:${cols.length}">${cols.map((c, i) => `<div class="dr-col"><h3>${esc(ko[i].name)}</h3><div class="dr-list">${c.map(cell).join('')}</div></div>`).join('')}</div>`;
+}
+
+/** The published draw (no fixtures in the feed yet): the first round, then TBC slots for each later round. */
+function renderPublishedDraw(t) {
+  const first = t.draw.matches;
+  const later = t.stages.filter(s => !/^group/i.test(s.name)).sort((a, b) => (b.round ?? 0) - (a.round ?? 0)).slice(1);
+  const side = p => `<div class="dr-p"><span>${p ? `${flag(p.country)} ${p.seed ? `<small>(${p.seed})</small> ` : ''}${esc(surnameOf(p))}` : '<em>TBC</em>'}</span><b></b></div>`;
+  const cell = m => `<div class="dr-m upcoming">${side(m[0])}${side(m[1])}</div>`;
+  const cols = [{ name: t.draw.stage, cells: first.map(cell) }];
+  let n = first.length;
+  for (const s of later) { n = Math.max(1, Math.floor(n / 2)); cols.push({ name: s.name, cells: Array.from({ length: n }, () => cell([null, null])) }); }
+  return `<p class="muted dr-note">The published draw. Scores and match links appear once the PDC's fixtures are live.</p><div class="draw" style="--cols:${cols.length}">${cols.map(c => `<div class="dr-col"><h3>${esc(c.name)}</h3><div class="dr-list">${c.cells.join('')}</div></div>`).join('')}</div>`;
 }
 
 /** Prize money for losing in each round (the PDC feed doesn't give the winner's prize). */

@@ -1,6 +1,6 @@
 // Builds src/data/tournament.json: the PDC tournament in progress (or the most
 // recent / next one). The Matches page also refreshes this live in the browser.
-import { API, BROADCASTERS, broadcasterFor, normaliseTournament, fixtureStatsUrl, slimStats, liveMatches } from '../src/lib/pdc.mjs';
+import { API, BROADCASTERS, broadcasterFor, normaliseTournament, publishedDraw, fixtureStatsUrl, slimStats, liveMatches } from '../src/lib/pdc.mjs';
 import { get, getAll, readJson, writeJsonIfChanged, pool, today, log } from './lib.mjs';
 
 const OUT = new URL('../src/data/tournament.json', import.meta.url).pathname;
@@ -24,6 +24,17 @@ const pick =
 
 if (!pick) throw new Error('No tournament found');
 const tournament = normaliseTournament(await get(`${API.tournaments}${pick.id}`));
+
+// The PDC can announce a draw days or weeks before its feed carries the fixtures.
+// Until it does, show the published draw from src/data/draws/<id>.json.
+if (!tournament.stages.some(s => s.fixtures.length)) {
+  const published = await readJson(new URL(`../src/data/draws/${tournament.id}.json`, import.meta.url).pathname, null);
+  if (published) {
+    const ranked = (await readJson(new URL('../src/data/rankings.json', import.meta.url).pathname, { players: [] })).players;
+    tournament.draw = publishedDraw(published, ranked);
+    log(`draw: ${tournament.draw.matches.length} matches from src/data/draws/${tournament.id}.json (feed has no fixtures yet)`);
+  }
+}
 
 // Averages and 180s for finished matches (kept from the last run once fetched).
 // Official stats are kept once fetched; matches showing live figures keep checking for the official ones.
