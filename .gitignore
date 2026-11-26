@@ -8,3 +8,5 @@ scripts/.cache/
 
 # Written by refresh-calendar for the workflow
 .unmapped-broadcasters.txt
+.live-race-check.txt
+.unknown-event-types.txt

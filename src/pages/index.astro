@@ -162,7 +162,7 @@ const playCards = [
             <li><a href={`/players/${p.slug}`}><span class="poster-num rp">{p.pos}</span><b><Fragment set:html={flag(p.country)} /> {p.name}</b><span class="rm">{money(p.money)}</span></a></li>
           ))}
         </ol>
-        <p class="lbl muted rk-note">{liveOn ? `Projected after the ${lrd.event.name.replace(/^\d{4}\s+/, '')} · updated daily (${raceUpdated})` : 'Official PDC Order of Merit'}</p>
+        <p class="lbl muted rk-note">{liveOn ? `Projected after the ${lrd.event.name.replace(/^\d{4}\s+/, '')} · updated hourly (${raceUpdated})` : 'Official PDC Order of Merit'}</p>
       </section>
 
       {spot && (

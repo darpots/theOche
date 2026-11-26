@@ -37,6 +37,19 @@ jobs:
           title="New TV event type: confirm the broadcaster"
           existing=$(gh issue list --state open --search "in:title \"$title\"" --json number --jq '.[0].number')
           [ -n "$existing" ] || gh issue create --title "$title" --body "$(cat .unmapped-broadcasters.txt)"
+      # The live race checks itself each time the PDC republishes its rankings,
+      # and watches for event types it doesn't count: open one issue for each.
+      - name: Flag live race problems
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          flag() {
+            [ -s "$1" ] || return 0
+            existing=$(gh issue list --state open --search "in:title \"$2\"" --json number --jq '.[0].number')
+            [ -n "$existing" ] || gh issue create --title "$2" --body "$(cat "$1")"
+          }
+          flag .live-race-check.txt "Live race: prediction differed from the official rankings"
+          flag .unknown-event-types.txt "Live race: new PDC event type to check"
       - uses: ./.github/actions/commit
         with:
           message: 'data: refresh calendar, rankings and current tournament'
