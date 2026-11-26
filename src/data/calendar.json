@@ -1,5 +1,5 @@
 {
- "updatedAt": "2026-11-26T15:07:32.341Z",
+ "updatedAt": "2026-11-26T16:07:35.562Z",
  "events": [
   {
    "id": "10268",
@@ -1818,7 +1818,7 @@
    "ranked": true,
    "major": true,
    "winner": null,
-   "fixtures": 40,
+   "fixtures": 63,
    "image": "2800e9a0-be8d-11f0-bbf2-05c127ee4631.jpg",
    "logo": "eaf531d0-9d1f-11f0-bcab-7b767ffe4c98.png"
   },

@@ -1,5 +1,5 @@
 {
- "updatedAt": "2026-11-25T20:53:43.173Z",
+ "updatedAt": "2026-11-26T16:07:39.437Z",
  "tournament": {
   "winner": null,
   "id": "10872",
@@ -23,7 +23,808 @@
     "legsPerSet": 11,
     "twoClear": false,
     "prize": 4000,
-    "fixtures": []
+    "fixtures": [
+     {
+      "id": "518124",
+      "date": "2026-11-27",
+      "time": null,
+      "status": "upcoming",
+      "p1": {
+       "id": "11843",
+       "name": "Chris Dobey",
+       "last": "Dobey",
+       "nick": "Hollywood",
+       "country": "GB-ENG",
+       "ranking": 15
+      },
+      "p2": {
+       "id": "30829",
+       "name": "Mike De Decker",
+       "last": "De Decker",
+       "nick": "Real Deal",
+       "country": "BE",
+       "ranking": 35
+      },
+      "s1": 0,
+      "s2": 0,
+      "winner": null
+     },
+     {
+      "id": "518139",
+      "date": "2026-11-27",
+      "time": null,
+      "status": "upcoming",
+      "p1": {
+       "id": "31041",
+       "name": "Rob Cross",
+       "last": "Cross",
+       "nick": "Voltage",
+       "country": "GB-ENG",
+       "ranking": 24
+      },
+      "p2": {
+       "id": "162",
+       "name": "Mickey Mansell",
+       "last": "Mansell",
+       "nick": "Clonoe Cyclone",
+       "country": "IE",
+       "ranking": 53
+      },
+      "s1": 0,
+      "s2": 0,
+      "winner": null
+     },
+     {
+      "id": "518138",
+      "date": "2026-11-27",
+      "time": null,
+      "status": "upcoming",
+      "p1": {
+       "id": "2771",
+       "name": "Karel Sedlacek",
+       "last": "Sedlacek",
+       "nick": "Evil Charlie",
+       "country": "CZ",
+       "ranking": 38
+      },
+      "p2": {
+       "id": "4",
+       "name": "Gary Anderson",
+       "last": "Anderson",
+       "nick": "The Flying Scotsman",
+       "country": "GB-SCT",
+       "ranking": 16
+      },
+      "s1": 0,
+      "s2": 0,
+      "winner": null
+     },
+     {
+      "id": "518137",
+      "date": "2026-11-27",
+      "time": null,
+      "status": "upcoming",
+      "p1": {
+       "id": "156",
+       "name": "Kim Huybrechts",
+       "last": "Huybrechts",
+       "nick": "The Hurricane",
+       "country": "BE",
+       "ranking": 46
+      },
+      "p2": {
+       "id": "33558",
+       "name": "Joe Hunt",
+       "last": "Hunt",
+       "nick": "Joe Boy",
+       "country": "GB-ENG",
+       "ranking": 85
+      },
+      "s1": 0,
+      "s2": 0,
+      "winner": null
+     },
+     {
+      "id": "518136",
+      "date": "2026-11-27",
+      "time": null,
+      "status": "upcoming",
+      "p1": {
+       "id": "231",
+       "name": "Andrew Gilding",
+       "last": "Gilding",
+       "nick": "Goldfinger",
+       "country": "GB-ENG",
+       "ranking": 27
+      },
+      "p2": {
+       "id": "32078",
+       "name": "Bradley Brooks",
+       "last": "Brooks",
+       "nick": "Bam Bam",
+       "country": "GB-ENG",
+       "ranking": 51
+      },
+      "s1": 0,
+      "s2": 0,
+      "winner": null
+     },
+     {
+      "id": "518135",
+      "date": "2026-11-27",
+      "time": null,
+      "status": "upcoming",
+      "p1": {
+       "id": "33630",
+       "name": "Maik Kuivenhoven",
+       "last": "Kuivenhoven",
+       "nick": null,
+       "country": "NL",
+       "ranking": 67
+      },
+      "p2": {
+       "id": "2554",
+       "name": "Daryl Gurney",
+       "last": "Gurney",
+       "nick": "Superchin",
+       "country": "GB-NIR",
+       "ranking": 31
+      },
+      "s1": 0,
+      "s2": 0,
+      "winner": null
+     },
+     {
+      "id": "518134",
+      "date": "2026-11-27",
+      "time": null,
+      "status": "upcoming",
+      "p1": {
+       "id": "246",
+       "name": "Dirk van Duijvenbode",
+       "last": "van Duijvenbode",
+       "nick": "Aubergenius",
+       "country": "NL",
+       "ranking": 23
+      },
+      "p2": {
+       "id": "37349",
+       "name": "Alan Soutar",
+       "last": "Soutar",
+       "nick": "Soots",
+       "country": "GB-SCT",
+       "ranking": 56
+      },
+      "s1": 0,
+      "s2": 0,
+      "winner": null
+     },
+     {
+      "id": "518133",
+      "date": "2026-11-27",
+      "time": null,
+      "status": "upcoming",
+      "p1": {
+       "id": "22",
+       "name": "James Wade",
+       "last": "Wade",
+       "nick": "The Machine",
+       "country": "GB-ENG",
+       "ranking": 7
+      },
+      "p2": {
+       "id": "36303",
+       "name": "Justin Hood",
+       "last": "Hood",
+       "nick": "The Pocket Rocket",
+       "country": "GB-ENG",
+       "ranking": 39
+      },
+      "s1": 0,
+      "s2": 0,
+      "winner": null
+     },
+     {
+      "id": "518132",
+      "date": "2026-11-27",
+      "time": null,
+      "status": "upcoming",
+      "p1": {
+       "id": "32895",
+       "name": "Kevin Doets",
+       "last": "Doets",
+       "nick": "Hawk Eye",
+       "country": "NL",
+       "ranking": 21
+      },
+      "p2": {
+       "id": "31028",
+       "name": "Ritchie Edhouse",
+       "last": "Edhouse",
+       "nick": "Madhouse",
+       "country": "GB-ENG",
+       "ranking": 59
+      },
+      "s1": 0,
+      "s2": 0,
+      "winner": null
+     },
+     {
+      "id": "518131",
+      "date": "2026-11-27",
+      "time": null,
+      "status": "upcoming",
+      "p1": {
+       "id": "30859",
+       "name": "Jonny Clayton",
+       "last": "Clayton",
+       "nick": "The Ferret",
+       "country": "GB-WLS",
+       "ranking": 5
+      },
+      "p2": {
+       "id": "32627",
+       "name": "Tom Sykes",
+       "last": "Sykes",
+       "nick": "The Castleford Tiger",
+       "country": "GB-ENG",
+       "ranking": 72
+      },
+      "s1": 0,
+      "s2": 0,
+      "winner": null
+     },
+     {
+      "id": "518130",
+      "date": "2026-11-27",
+      "time": null,
+      "status": "upcoming",
+      "p1": {
+       "id": "31356",
+       "name": "Danny Noppert",
+       "last": "Noppert",
+       "nick": "The Freeze",
+       "country": "NL",
+       "ranking": 14
+      },
+      "p2": {
+       "id": "36712",
+       "name": "Scott Williams",
+       "last": "Williams",
+       "nick": "Shaggy",
+       "country": "GB-ENG",
+       "ranking": 50
+      },
+      "s1": 0,
+      "s2": 0,
+      "winner": null
+     },
+     {
+      "id": "518129",
+      "date": "2026-11-27",
+      "time": null,
+      "status": "upcoming",
+      "p1": {
+       "id": "224",
+       "name": "Krzysztof Ratajski",
+       "last": "Ratajski",
+       "nick": "The Polish Eagle",
+       "country": "PL",
+       "ranking": 19
+      },
+      "p2": {
+       "id": "36314",
+       "name": "Damon Heta",
+       "last": "Heta",
+       "nick": "The Heat",
+       "country": "AU",
+       "ranking": 22
+      },
+      "s1": 0,
+      "s2": 0,
+      "winner": null
+     },
+     {
+      "id": "518128",
+      "date": "2026-11-27",
+      "time": null,
+      "status": "upcoming",
+      "p1": {
+       "id": "32102",
+       "name": "Luke Humphries",
+       "last": "Humphries",
+       "nick": "Cool Hand",
+       "country": "GB-ENG",
+       "ranking": 4
+      },
+      "p2": {
+       "id": "33598",
+       "name": "Darryl Pilgrim",
+       "last": "Pilgrim",
+       "nick": "Mr P",
+       "country": "GB-ENG",
+       "ranking": 78
+      },
+      "s1": 0,
+      "s2": 0,
+      "winner": null
+     },
+     {
+      "id": "518127",
+      "date": "2026-11-27",
+      "time": null,
+      "status": "upcoming",
+      "p1": {
+       "id": "19",
+       "name": "Michael van Gerwen",
+       "last": "van Gerwen",
+       "nick": "Mighty Mike",
+       "country": "NL",
+       "ranking": 8
+      },
+      "p2": {
+       "id": "32081",
+       "name": "Connor Scutt",
+       "last": "Scutt",
+       "nick": "The Sniper",
+       "country": "GB-ENG",
+       "ranking": 55
+      },
+      "s1": 0,
+      "s2": 0,
+      "winner": null
+     },
+     {
+      "id": "518126",
+      "date": "2026-11-27",
+      "time": null,
+      "status": "upcoming",
+      "p1": {
+       "id": "30843",
+       "name": "Cristo Reyes",
+       "last": "Reyes",
+       "nick": "The Spartan",
+       "country": "ES",
+       "ranking": 63
+      },
+      "p2": {
+       "id": "31502",
+       "name": "Darius Labanauskas",
+       "last": "Labanauskas",
+       "nick": "Lucky D",
+       "country": "LT",
+       "ranking": 88
+      },
+      "s1": 0,
+      "s2": 0,
+      "winner": null
+     },
+     {
+      "id": "518125",
+      "date": "2026-11-27",
+      "time": null,
+      "status": "upcoming",
+      "p1": {
+       "id": "31027",
+       "name": "Richard Veenstra",
+       "last": "Veenstra",
+       "nick": "Flyers",
+       "country": "NL",
+       "ranking": 57
+      },
+      "p2": {
+       "id": "81",
+       "name": "Joe Cullen",
+       "last": "Cullen",
+       "nick": "The Rockstar",
+       "country": "GB-ENG",
+       "ranking": 33
+      },
+      "s1": 0,
+      "s2": 0,
+      "winner": null
+     },
+     {
+      "id": "518108",
+      "date": "2026-11-27",
+      "time": null,
+      "status": "upcoming",
+      "p1": {
+       "id": "32956",
+       "name": "Wessel Nijman",
+       "last": "Nijman",
+       "nick": null,
+       "country": "NL",
+       "ranking": 10
+      },
+      "p2": {
+       "id": "39687",
+       "name": "Henry Coates",
+       "last": "Coates",
+       "nick": "Triple H",
+       "country": "GB-ENG",
+       "ranking": 86
+      },
+      "s1": 0,
+      "s2": 0,
+      "winner": null
+     },
+     {
+      "id": "518123",
+      "date": "2026-11-27",
+      "time": null,
+      "status": "upcoming",
+      "p1": {
+       "id": "38498",
+       "name": "Tommy Morris",
+       "last": "Morris",
+       "nick": "The Gun",
+       "country": "GB-ENG",
+       "ranking": 79
+      },
+      "p2": {
+       "id": "32079",
+       "name": "Callan Rydz",
+       "last": "Rydz",
+       "nick": "The Riot",
+       "country": "GB-ENG",
+       "ranking": 40
+      },
+      "s1": 0,
+      "s2": 0,
+      "winner": null
+     },
+     {
+      "id": "518122",
+      "date": "2026-11-27",
+      "time": null,
+      "status": "upcoming",
+      "p1": {
+       "id": "153",
+       "name": "William O'Connor",
+       "last": "O'Connor",
+       "nick": "The Magpie",
+       "country": "IE",
+       "ranking": 29
+      },
+      "p2": {
+       "id": "36373",
+       "name": "James Hurrell",
+       "last": "Hurrell",
+       "nick": "Hillbilly",
+       "country": "GB-ENG",
+       "ranking": 45
+      },
+      "s1": 0,
+      "s2": 0,
+      "winner": null
+     },
+     {
+      "id": "518121",
+      "date": "2026-11-27",
+      "time": null,
+      "status": "upcoming",
+      "p1": {
+       "id": "32037",
+       "name": "Ryan Searle",
+       "last": "Searle",
+       "nick": "Heavy Metal",
+       "country": "GB-ENG",
+       "ranking": 13
+      },
+      "p2": {
+       "id": "136",
+       "name": "Brendan Dolan",
+       "last": "Dolan",
+       "nick": "The History Maker",
+       "country": "IE",
+       "ranking": 47
+      },
+      "s1": 0,
+      "s2": 0,
+      "winner": null
+     },
+     {
+      "id": "518120",
+      "date": "2026-11-27",
+      "time": null,
+      "status": "upcoming",
+      "p1": {
+       "id": "30844",
+       "name": "Jermaine Wattimena",
+       "last": "Wattimena",
+       "nick": "The Machine Gun",
+       "country": "NL",
+       "ranking": 18
+      },
+      "p2": {
+       "id": "33144",
+       "name": "Keane Barry",
+       "last": "Barry",
+       "nick": "Dynamite",
+       "country": "IE",
+       "ranking": 54
+      },
+      "s1": 0,
+      "s2": 0,
+      "winner": null
+     },
+     {
+      "id": "518119",
+      "date": "2026-11-27",
+      "time": null,
+      "status": "upcoming",
+      "p1": {
+       "id": "31031",
+       "name": "Jeffrey De Graaf",
+       "last": "De Graaf",
+       "nick": null,
+       "country": "SE",
+       "ranking": 41
+      },
+      "p2": {
+       "id": "33091",
+       "name": "Gian van Veen",
+       "last": "van Veen",
+       "nick": "The Giant",
+       "country": "NL",
+       "ranking": 2
+      },
+      "s1": 0,
+      "s2": 0,
+      "winner": null
+     },
+     {
+      "id": "518118",
+      "date": "2026-11-27",
+      "time": null,
+      "status": "upcoming",
+      "p1": {
+       "id": "36287",
+       "name": "Sebastian Bialecki",
+       "last": "Bialecki",
+       "nick": "The Bolt",
+       "country": "PL",
+       "ranking": 42
+      },
+      "p2": {
+       "id": "11788",
+       "name": "Gerwyn Price",
+       "last": "Price",
+       "nick": "The Iceman",
+       "country": "GB-WLS",
+       "ranking": 3
+      },
+      "s1": 0,
+      "s2": 0,
+      "winner": null
+     },
+     {
+      "id": "518117",
+      "date": "2026-11-27",
+      "time": null,
+      "status": "upcoming",
+      "p1": {
+       "id": "876",
+       "name": "Stephen Bunting",
+       "last": "Bunting",
+       "nick": "The Bullet",
+       "country": "GB-ENG",
+       "ranking": 11
+      },
+      "p2": {
+       "id": "585",
+       "name": "Max Hopp",
+       "last": "Hopp",
+       "nick": "Maximiser",
+       "country": "DE",
+       "ranking": 64
+      },
+      "s1": 0,
+      "s2": 0,
+      "winner": null
+     },
+     {
+      "id": "518116",
+      "date": "2026-11-27",
+      "time": null,
+      "status": "upcoming",
+      "p1": {
+       "id": "11804",
+       "name": "Luke Woodhouse",
+       "last": "Woodhouse",
+       "nick": "Woody",
+       "country": "GB-ENG",
+       "ranking": 17
+      },
+      "p2": {
+       "id": "33768",
+       "name": "Alexander Merkx",
+       "last": "Merkx",
+       "nick": "The Great ",
+       "country": "NL",
+       "ranking": 95
+      },
+      "s1": 0,
+      "s2": 0,
+      "winner": null
+     },
+     {
+      "id": "518115",
+      "date": "2026-11-27",
+      "time": null,
+      "status": "upcoming",
+      "p1": {
+       "id": "33014",
+       "name": "Niels Zonneveld",
+       "last": "Zonneveld",
+       "nick": "Triple Z",
+       "country": "NL",
+       "ranking": 28
+      },
+      "p2": {
+       "id": "34874",
+       "name": "Niko Springer",
+       "last": "Springer",
+       "nick": "Meenzer Bub",
+       "country": "DE",
+       "ranking": 30
+      },
+      "s1": 0,
+      "s2": 0,
+      "winner": null
+     },
+     {
+      "id": "518114",
+      "date": "2026-11-27",
+      "time": null,
+      "status": "upcoming",
+      "p1": {
+       "id": "754",
+       "name": "Ross Smith",
+       "last": "Smith",
+       "nick": "Smudger",
+       "country": "GB-ENG",
+       "ranking": 6
+      },
+      "p2": {
+       "id": "104",
+       "name": "Michael Smith",
+       "last": "Smith",
+       "nick": "Bully Boy",
+       "country": "GB-ENG",
+       "ranking": 37
+      },
+      "s1": 0,
+      "s2": 0,
+      "winner": null
+     },
+     {
+      "id": "518113",
+      "date": "2026-11-27",
+      "time": null,
+      "status": "upcoming",
+      "p1": {
+       "id": "43829",
+       "name": "Tom Bissell",
+       "last": "Bissell",
+       "nick": "Bizzness",
+       "country": "GB-ENG",
+       "ranking": 75
+      },
+      "p2": {
+       "id": "11795",
+       "name": "Rob Owen",
+       "last": "Owen",
+       "nick": "Stack Attack",
+       "country": "GB-WLS",
+       "ranking": 60
+      },
+      "s1": 0,
+      "s2": 0,
+      "winner": null
+     },
+     {
+      "id": "518112",
+      "date": "2026-11-27",
+      "time": null,
+      "status": "upcoming",
+      "p1": {
+       "id": "36640",
+       "name": "Beau Greaves",
+       "last": "Greaves",
+       "nick": "Beau & Arrow",
+       "country": "GB-ENG",
+       "ranking": 74
+      },
+      "p2": {
+       "id": "11109",
+       "name": "Christian Kist",
+       "last": "Kist",
+       "nick": "The Lipstick",
+       "country": "NL",
+       "ranking": 82
+      },
+      "s1": 0,
+      "s2": 0,
+      "winner": null
+     },
+     {
+      "id": "518111",
+      "date": "2026-11-27",
+      "time": null,
+      "status": "upcoming",
+      "p1": {
+       "id": "2040",
+       "name": "Cameron Menzies",
+       "last": "Menzies",
+       "nick": "Cammy",
+       "country": "GB-SCT",
+       "ranking": 25
+      },
+      "p2": {
+       "id": "146",
+       "name": "Mensur Suljovic",
+       "last": "Suljovic",
+       "nick": "The Gentle",
+       "country": "AT",
+       "ranking": 52
+      },
+      "s1": 0,
+      "s2": 0,
+      "winner": null
+     },
+     {
+      "id": "518110",
+      "date": "2026-11-27",
+      "time": null,
+      "status": "upcoming",
+      "p1": {
+       "id": "38279",
+       "name": "Charlie Manby",
+       "last": "Manby",
+       "nick": "Champagne",
+       "country": "GB-ENG",
+       "ranking": 77
+      },
+      "p2": {
+       "id": "11902",
+       "name": "Martin Schindler",
+       "last": "Schindler",
+       "nick": "The Wall",
+       "country": "DE",
+       "ranking": 20
+      },
+      "s1": 0,
+      "s2": 0,
+      "winner": null
+     },
+     {
+      "id": "518109",
+      "date": "2026-11-27",
+      "time": null,
+      "status": "upcoming",
+      "p1": {
+       "id": "11156",
+       "name": "Gabriel Clemens",
+       "last": "Clemens",
+       "nick": "German Giant",
+       "country": "DE",
+       "ranking": 43
+      },
+      "p2": {
+       "id": "142",
+       "name": "Dave Chisnall",
+       "last": "Chisnall",
+       "nick": "Chizzy",
+       "country": "GB-ENG",
+       "ranking": 32
+      },
+      "s1": 0,
+      "s2": 0,
+      "winner": null
+     }
+    ]
    },
    {
     "name": "Last 32",
@@ -33,7 +834,184 @@
     "legsPerSet": 11,
     "twoClear": false,
     "prize": 7000,
-    "fixtures": []
+    "fixtures": [
+     {
+      "id": "518140",
+      "date": "2026-11-27",
+      "time": null,
+      "status": "upcoming",
+      "p1": null,
+      "p2": null,
+      "s1": null,
+      "s2": null,
+      "winner": null
+     },
+     {
+      "id": "518141",
+      "date": "2026-11-27",
+      "time": null,
+      "status": "upcoming",
+      "p1": null,
+      "p2": null,
+      "s1": null,
+      "s2": null,
+      "winner": null
+     },
+     {
+      "id": "518142",
+      "date": "2026-11-27",
+      "time": null,
+      "status": "upcoming",
+      "p1": null,
+      "p2": null,
+      "s1": null,
+      "s2": null,
+      "winner": null
+     },
+     {
+      "id": "518143",
+      "date": "2026-11-27",
+      "time": null,
+      "status": "upcoming",
+      "p1": null,
+      "p2": null,
+      "s1": null,
+      "s2": null,
+      "winner": null
+     },
+     {
+      "id": "518144",
+      "date": "2026-11-27",
+      "time": null,
+      "status": "upcoming",
+      "p1": null,
+      "p2": null,
+      "s1": null,
+      "s2": null,
+      "winner": null
+     },
+     {
+      "id": "518145",
+      "date": "2026-11-27",
+      "time": null,
+      "status": "upcoming",
+      "p1": null,
+      "p2": null,
+      "s1": null,
+      "s2": null,
+      "winner": null
+     },
+     {
+      "id": "518146",
+      "date": "2026-11-27",
+      "time": null,
+      "status": "upcoming",
+      "p1": null,
+      "p2": null,
+      "s1": null,
+      "s2": null,
+      "winner": null
+     },
+     {
+      "id": "518147",
+      "date": "2026-11-27",
+      "time": null,
+      "status": "upcoming",
+      "p1": null,
+      "p2": null,
+      "s1": null,
+      "s2": null,
+      "winner": null
+     },
+     {
+      "id": "518148",
+      "date": "2026-11-27",
+      "time": null,
+      "status": "upcoming",
+      "p1": null,
+      "p2": null,
+      "s1": null,
+      "s2": null,
+      "winner": null
+     },
+     {
+      "id": "518149",
+      "date": "2026-11-27",
+      "time": null,
+      "status": "upcoming",
+      "p1": null,
+      "p2": null,
+      "s1": null,
+      "s2": null,
+      "winner": null
+     },
+     {
+      "id": "518150",
+      "date": "2026-11-27",
+      "time": null,
+      "status": "upcoming",
+      "p1": null,
+      "p2": null,
+      "s1": null,
+      "s2": null,
+      "winner": null
+     },
+     {
+      "id": "518151",
+      "date": "2026-11-27",
+      "time": null,
+      "status": "upcoming",
+      "p1": null,
+      "p2": null,
+      "s1": null,
+      "s2": null,
+      "winner": null
+     },
+     {
+      "id": "518152",
+      "date": "2026-11-27",
+      "time": null,
+      "status": "upcoming",
+      "p1": null,
+      "p2": null,
+      "s1": null,
+      "s2": null,
+      "winner": null
+     },
+     {
+      "id": "518153",
+      "date": "2026-11-27",
+      "time": null,
+      "status": "upcoming",
+      "p1": null,
+      "p2": null,
+      "s1": null,
+      "s2": null,
+      "winner": null
+     },
+     {
+      "id": "518154",
+      "date": "2026-11-27",
+      "time": null,
+      "status": "upcoming",
+      "p1": null,
+      "p2": null,
+      "s1": null,
+      "s2": null,
+      "winner": null
+     },
+     {
+      "id": "518155",
+      "date": "2026-11-27",
+      "time": null,
+      "status": "upcoming",
+      "p1": null,
+      "p2": null,
+      "s1": null,
+      "s2": null,
+      "winner": null
+     }
+    ]
    },
    {
     "name": "Last 16",
@@ -43,7 +1021,96 @@
     "legsPerSet": 19,
     "twoClear": false,
     "prize": 15000,
-    "fixtures": []
+    "fixtures": [
+     {
+      "id": "518156",
+      "date": "2026-11-27",
+      "time": null,
+      "status": "upcoming",
+      "p1": null,
+      "p2": null,
+      "s1": null,
+      "s2": null,
+      "winner": null
+     },
+     {
+      "id": "518157",
+      "date": "2026-11-27",
+      "time": null,
+      "status": "upcoming",
+      "p1": null,
+      "p2": null,
+      "s1": null,
+      "s2": null,
+      "winner": null
+     },
+     {
+      "id": "518158",
+      "date": "2026-11-27",
+      "time": null,
+      "status": "upcoming",
+      "p1": null,
+      "p2": null,
+      "s1": null,
+      "s2": null,
+      "winner": null
+     },
+     {
+      "id": "518159",
+      "date": "2026-11-27",
+      "time": null,
+      "status": "upcoming",
+      "p1": null,
+      "p2": null,
+      "s1": null,
+      "s2": null,
+      "winner": null
+     },
+     {
+      "id": "518160",
+      "date": "2026-11-27",
+      "time": null,
+      "status": "upcoming",
+      "p1": null,
+      "p2": null,
+      "s1": null,
+      "s2": null,
+      "winner": null
+     },
+     {
+      "id": "518161",
+      "date": "2026-11-27",
+      "time": null,
+      "status": "upcoming",
+      "p1": null,
+      "p2": null,
+      "s1": null,
+      "s2": null,
+      "winner": null
+     },
+     {
+      "id": "518162",
+      "date": "2026-11-27",
+      "time": null,
+      "status": "upcoming",
+      "p1": null,
+      "p2": null,
+      "s1": null,
+      "s2": null,
+      "winner": null
+     },
+     {
+      "id": "518163",
+      "date": "2026-11-27",
+      "time": null,
+      "status": "upcoming",
+      "p1": null,
+      "p2": null,
+      "s1": null,
+      "s2": null,
+      "winner": null
+     }
+    ]
    },
    {
     "name": "Quarter-Final",
@@ -53,7 +1120,52 @@
     "legsPerSet": 19,
     "twoClear": false,
     "prize": 27500,
-    "fixtures": []
+    "fixtures": [
+     {
+      "id": "518164",
+      "date": "2026-11-27",
+      "time": null,
+      "status": "upcoming",
+      "p1": null,
+      "p2": null,
+      "s1": null,
+      "s2": null,
+      "winner": null
+     },
+     {
+      "id": "518165",
+      "date": "2026-11-27",
+      "time": null,
+      "status": "upcoming",
+      "p1": null,
+      "p2": null,
+      "s1": null,
+      "s2": null,
+      "winner": null
+     },
+     {
+      "id": "518166",
+      "date": "2026-11-27",
+      "time": null,
+      "status": "upcoming",
+      "p1": null,
+      "p2": null,
+      "s1": null,
+      "s2": null,
+      "winner": null
+     },
+     {
+      "id": "518167",
+      "date": "2026-11-27",
+      "time": null,
+      "status": "upcoming",
+      "p1": null,
+      "p2": null,
+      "s1": null,
+      "s2": null,
+      "winner": null
+     }
+    ]
    },
    {
     "name": "Semi-Final",
@@ -63,7 +1175,30 @@
     "legsPerSet": 21,
     "twoClear": false,
     "prize": 40000,
-    "fixtures": []
+    "fixtures": [
+     {
+      "id": "518168",
+      "date": "2026-11-27",
+      "time": null,
+      "status": "upcoming",
+      "p1": null,
+      "p2": null,
+      "s1": null,
+      "s2": null,
+      "winner": null
+     },
+     {
+      "id": "518169",
+      "date": "2026-11-27",
+      "time": null,
+      "status": "upcoming",
+      "p1": null,
+      "p2": null,
+      "s1": null,
+      "s2": null,
+      "winner": null
+     }
+    ]
    },
    {
     "name": "Final",
@@ -73,526 +1208,21 @@
     "legsPerSet": 21,
     "twoClear": false,
     "prize": 70000,
-    "fixtures": []
-   }
-  ],
-  "draw": {
-   "stage": "Last 64",
-   "matches": [
-    [
-     {
-      "id": "32956",
-      "name": "Wessel Nijman",
-      "last": "Nijman",
-      "country": "NL",
-      "seed": 1
-     },
-     {
-      "id": "39687",
-      "name": "Henry Coates",
-      "last": "Coates",
-      "country": "GB-ENG",
-      "seed": 64
-     }
-    ],
-    [
-     {
-      "id": "11156",
-      "name": "Gabriel Clemens",
-      "last": "Clemens",
-      "country": "DE",
-      "seed": 32
-     },
-     {
-      "id": "142",
-      "name": "Dave Chisnall",
-      "last": "Chisnall",
-      "country": "GB-ENG",
-      "seed": 33
-     }
-    ],
-    [
-     {
-      "id": "38279",
-      "name": "Charlie Manby",
-      "last": "Manby",
-      "country": "GB-ENG",
-      "seed": 16
-     },
-     {
-      "id": "11902",
-      "name": "Martin Schindler",
-      "last": "Schindler",
-      "country": "DE",
-      "seed": 49
-     }
-    ],
-    [
-     {
-      "id": "2040",
-      "name": "Cameron Menzies",
-      "last": "Menzies",
-      "country": "GB-SCT",
-      "seed": 17
-     },
-     {
-      "id": "146",
-      "name": "Mensur Suljovic",
-      "last": "Suljovic",
-      "country": "AT",
-      "seed": 48
-     }
-    ],
-    [
-     {
-      "id": "36640",
-      "name": "Beau Greaves",
-      "last": "Greaves",
-      "country": "GB-ENG",
-      "seed": 8
-     },
-     {
-      "id": "11109",
-      "name": "Christian Kist",
-      "last": "Kist",
-      "country": "NL",
-      "seed": 57
-     }
-    ],
-    [
-     {
-      "id": "43829",
-      "name": "Tom Bissell",
-      "last": "Bissell",
-      "country": "GB-ENG",
-      "seed": 25
-     },
-     {
-      "id": "11795",
-      "name": "Rob Owen",
-      "last": "Owen",
-      "country": "GB-WLS",
-      "seed": 40
-     }
-    ],
-    [
-     {
-      "id": "754",
-      "name": "Ross Smith",
-      "last": "Smith",
-      "country": "GB-ENG",
-      "seed": 9
-     },
-     {
-      "id": "104",
-      "name": "Michael Smith",
-      "last": "Smith",
-      "country": "GB-ENG",
-      "seed": 56
-     }
-    ],
-    [
-     {
-      "id": "33014",
-      "name": "Niels Zonneveld",
-      "last": "Zonneveld",
-      "country": "NL",
-      "seed": 24
-     },
-     {
-      "id": "34874",
-      "name": "Niko Springer",
-      "last": "Springer",
-      "country": "DE",
-      "seed": 41
-     }
-    ],
-    [
-     {
-      "id": "11804",
-      "name": "Luke Woodhouse",
-      "last": "Woodhouse",
-      "country": "GB-ENG",
-      "seed": 4
-     },
-     {
-      "id": "33768",
-      "name": "Alexander Merkx",
-      "last": "Merkx",
-      "country": "NL",
-      "seed": 61
-     }
-    ],
-    [
-     {
-      "id": "876",
-      "name": "Stephen Bunting",
-      "last": "Bunting",
-      "country": "GB-ENG",
-      "seed": 29
-     },
-     {
-      "id": "585",
-      "name": "Max Hopp",
-      "last": "Hopp",
-      "country": "DE",
-      "seed": 36
-     }
-    ],
-    [
-     {
-      "id": "36287",
-      "name": "Sebastian Bialecki",
-      "last": "Bialecki",
-      "country": "PL",
-      "seed": 13
-     },
-     {
-      "id": "11788",
-      "name": "Gerwyn Price",
-      "last": "Price",
-      "country": "GB-WLS",
-      "seed": 52
-     }
-    ],
-    [
-     {
-      "id": "31031",
-      "name": "Jeffrey de Graaf",
-      "last": "de Graaf",
-      "country": "SE",
-      "seed": 20
-     },
-     {
-      "id": "33091",
-      "name": "Gian van Veen",
-      "last": "van Veen",
-      "country": "NL",
-      "seed": 45
-     }
-    ],
-    [
-     {
-      "id": "30844",
-      "name": "Jermaine Wattimena",
-      "last": "Wattimena",
-      "country": "NL",
-      "seed": 5
-     },
-     {
-      "id": "33144",
-      "name": "Keane Barry",
-      "last": "Barry",
-      "country": "IE",
-      "seed": 60
-     }
-    ],
-    [
-     {
-      "id": "32037",
-      "name": "Ryan Searle",
-      "last": "Searle",
-      "country": "GB-ENG",
-      "seed": 28
-     },
-     {
-      "id": "136",
-      "name": "Brendan Dolan",
-      "last": "Dolan",
-      "country": "IE",
-      "seed": 37
-     }
-    ],
-    [
-     {
-      "id": "153",
-      "name": "William O'Connor",
-      "last": "O'Connor",
-      "country": "IE",
-      "seed": 12
-     },
-     {
-      "id": "36373",
-      "name": "James Hurrell",
-      "last": "Hurrell",
-      "country": "GB-ENG",
-      "seed": 53
-     }
-    ],
-    [
-     {
-      "id": "38498",
-      "name": "Tommy Morris",
-      "last": "Morris",
-      "country": "GB-ENG",
-      "seed": 21
-     },
-     {
-      "id": "32079",
-      "name": "Callan Rydz",
-      "last": "Rydz",
-      "country": "GB-ENG",
-      "seed": 44
-     }
-    ],
-    [
-     {
-      "id": "11843",
-      "name": "Chris Dobey",
-      "last": "Dobey",
-      "country": "GB-ENG",
-      "seed": 2
-     },
-     {
-      "id": "30829",
-      "name": "Mike De Decker",
-      "last": "De Decker",
-      "country": "BE",
-      "seed": 63
-     }
-    ],
-    [
-     {
-      "id": "31027",
-      "name": "Richard Veenstra",
-      "last": "Veenstra",
-      "country": "NL",
-      "seed": 31
-     },
-     {
-      "id": "81",
-      "name": "Joe Cullen",
-      "last": "Cullen",
-      "country": "GB-ENG",
-      "seed": 34
-     }
-    ],
-    [
-     {
-      "id": "30843",
-      "name": "Cristo Reyes",
-      "last": "Reyes",
-      "country": "ES",
-      "seed": 15
-     },
-     {
-      "id": "31502",
-      "name": "Darius Labanauskas",
-      "last": "Labanauskas",
-      "country": "LT",
-      "seed": 50
-     }
-    ],
-    [
-     {
-      "id": "19",
-      "name": "Michael van Gerwen",
-      "last": "van Gerwen",
-      "country": "NL",
-      "seed": 18
-     },
-     {
-      "id": "32081",
-      "name": "Connor Scutt",
-      "last": "Scutt",
-      "country": "GB-ENG",
-      "seed": 47
-     }
-    ],
-    [
-     {
-      "id": "32102",
-      "name": "Luke Humphries",
-      "last": "Humphries",
-      "country": "GB-ENG",
-      "seed": 7
-     },
-     {
-      "id": "33598",
-      "name": "Darryl Pilgrim",
-      "last": "Pilgrim",
-      "country": "GB-ENG",
-      "seed": 58
-     }
-    ],
-    [
-     {
-      "id": "224",
-      "name": "Krzysztof Ratajski",
-      "last": "Ratajski",
-      "country": "PL",
-      "seed": 26
-     },
-     {
-      "id": "36314",
-      "name": "Damon Heta",
-      "last": "Heta",
-      "country": "AU",
-      "seed": 39
-     }
-    ],
-    [
-     {
-      "id": "31356",
-      "name": "Danny Noppert",
-      "last": "Noppert",
-      "country": "NL",
-      "seed": 10
-     },
-     {
-      "id": "36712",
-      "name": "Scott Williams",
-      "last": "Williams",
-      "country": "GB-ENG",
-      "seed": 55
-     }
-    ],
-    [
-     {
-      "id": "30859",
-      "name": "Jonny Clayton",
-      "last": "Clayton",
-      "country": "GB-WLS",
-      "seed": 23
-     },
-     {
-      "id": "32627",
-      "name": "Tom Sykes",
-      "last": "Sykes",
-      "country": "GB-ENG",
-      "seed": 42
-     }
-    ],
-    [
-     {
-      "id": "32895",
-      "name": "Kevin Doets",
-      "last": "Doets",
-      "country": "NL",
-      "seed": 3
-     },
-     {
-      "id": "31028",
-      "name": "Ritchie Edhouse",
-      "last": "Edhouse",
-      "country": "GB-ENG",
-      "seed": 62
-     }
-    ],
-    [
-     {
-      "id": "22",
-      "name": "James Wade",
-      "last": "Wade",
-      "country": "GB-ENG",
-      "seed": 30
-     },
-     {
-      "id": "36303",
-      "name": "Justin Hood",
-      "last": "Hood",
-      "country": "GB-ENG",
-      "seed": 35
-     }
-    ],
-    [
-     {
-      "id": "246",
-      "name": "Dirk van Duijvenbode",
-      "last": "van Duijvenbode",
-      "country": "NL",
-      "seed": 14
-     },
-     {
-      "id": "37349",
-      "name": "Alan Soutar",
-      "last": "Soutar",
-      "country": "GB-SCT",
-      "seed": 51
-     }
-    ],
-    [
-     {
-      "id": "33630",
-      "name": "Maik Kuivenhoven",
-      "last": "Kuivenhoven",
-      "country": "NL",
-      "seed": 19
-     },
-     {
-      "id": "2554",
-      "name": "Daryl Gurney",
-      "last": "Gurney",
-      "country": "GB-NIR",
-      "seed": 46
-     }
-    ],
-    [
-     {
-      "id": "231",
-      "name": "Andrew Gilding",
-      "last": "Gilding",
-      "country": "GB-ENG",
-      "seed": 6
-     },
-     {
-      "id": "32078",
-      "name": "Bradley Brooks",
-      "last": "Brooks",
-      "country": "GB-ENG",
-      "seed": 59
-     }
-    ],
-    [
-     {
-      "id": "156",
-      "name": "Kim Huybrechts",
-      "last": "Huybrechts",
-      "country": "BE",
-      "seed": 27
-     },
-     {
-      "id": "33558",
-      "name": "Joe Hunt",
-      "last": "Hunt",
-      "country": "GB-ENG",
-      "seed": 38
-     }
-    ],
-    [
-     {
-      "id": "2771",
-      "name": "Karel Sedlacek",
-      "last": "Sedlacek",
-      "country": "CZ",
-      "seed": 11
-     },
-     {
-      "id": "4",
-      "name": "Gary Anderson",
-      "last": "Anderson",
-      "country": "GB-SCT",
-      "seed": 54
-     }
-    ],
-    [
-     {
-      "id": "31041",
-      "name": "Rob Cross",
-      "last": "Cross",
-      "country": "GB-ENG",
-      "seed": 22
-     },
-     {
-      "id": "162",
-      "name": "Mickey Mansell",
-      "last": "Mansell",
-      "country": "IE",
-      "seed": 43
+    "fixtures": [
+     {
+      "id": "518170",
+      "date": "2026-11-27",
+      "time": null,
+      "status": "upcoming",
+      "p1": null,
+      "p2": null,
+      "s1": null,
+      "s2": null,
+      "winner": null
      }
     ]
-   ]
-  }
+   }
+  ]
  },
  "next": {
   "id": "10873",
