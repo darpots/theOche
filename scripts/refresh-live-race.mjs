@@ -14,6 +14,7 @@ import {
   API, normaliseRankings, isRankedEvent, eventPrizes, expiringMap, liveRaceWith,
   eventsDropping, resetCandidates, acceptReset, pendingEvents,
 } from '../src/lib/pdc.mjs';
+import { writeFile } from 'node:fs/promises';
 import { get, getAll, readJson, writeJsonIfChanged, pool, today, log } from './lib.mjs';
 
 const OUT = new URL('../src/data/live-race.json', import.meta.url).pathname;
@@ -27,9 +28,42 @@ const republished = !!prev.officialSig && prev.officialSig !== sig;
 
 // Every ranked event from three seasons back to next season.
 const y = Number(day.slice(0, 4));
-const idx = (await Promise.all([y - 3, y - 2, y - 1, y, y + 1].map(s => getAll(API.tournaments, { seasonID: s }, 500))))
-  .flat().map(d => ({ id: d.id, ...d.attributes }))
-  .filter(t => isRankedEvent(t) && !/test/i.test(t.name));
+const allRows = (await Promise.all([y - 3, y - 2, y - 1, y, y + 1].map(s => getAll(API.tournaments, { seasonID: s }, 500))))
+  .flat().map(d => ({ id: d.id, ...d.attributes }));
+const idx = allRows.filter(t => isRankedEvent(t) && !/test/i.test(t.name));
+
+// Self-check: when the PDC republishes after the pending events have all
+// finished, compare what the race predicted with the new official figures.
+// The result is kept in the data file (and written out when it is poor).
+let lastCheck = prev.lastCheck || null;
+if (republished && prev.event && !prev.event.live && prev.race?.length) {
+  const byId = new Map(official.map(p => [p.id, p]));
+  const compared = prev.race.filter(p => byId.has(p.id));
+  const misses = compared.filter(p => byId.get(p.id).money !== p.money);
+  lastCheck = {
+    checkedAt: new Date().toISOString(),
+    events: prev.settledNames?.length ? prev.settledNames : [prev.event.name],
+    compared: compared.length,
+    exact: compared.length - misses.length,
+    misses: misses.slice(0, 25).map(p => ({ name: p.name, predicted: p.money, official: byId.get(p.id).money })),
+  };
+  log(`live race self-check: ${lastCheck.exact}/${lastCheck.compared} players' money exactly as predicted after ${lastCheck.events.join(' + ')}`);
+  if (lastCheck.exact < lastCheck.compared * 0.95) await writeFile('.live-race-check.txt',
+    `After ${lastCheck.events.join(' + ')} the PDC's official rankings differed from the live race's prediction for ${misses.length} of ${compared.length} players.\n\n`
+    + lastCheck.misses.map(x => `- ${x.name}: predicted £${x.predicted}, official £${x.official}`).join('\n') + '\n');
+}
+
+// Events of a type the code doesn't know, at ProTour or major level, played
+// recently or coming up: their money is not counted, so they need checking.
+const KNOWN_UNRANKED_TYPES = ['3', '11', '13', '17', '18', '32', '54', '83', '84', '85', '86', '87', '99'];
+const near = d => Math.abs(Date.parse(d) - Date.parse(day)) < 45 * 864e5;
+const unknown = allRows.filter(t => !isRankedEvent(t) && !KNOWN_UNRANKED_TYPES.includes(String(t.tournamentTypeID))
+  && ['2', '4'].includes(String(t.tournamentCategoryID)) && near(t.startDate));
+if (unknown.length) {
+  log(`live race: WARNING ${unknown.length} event(s) of an unknown type, not counted: ${unknown.map(t => t.name).join(', ')}`);
+  await writeFile('.unknown-event-types.txt', 'These PDC events are of a type the live race does not know, so their money is not counted. Check whether they count towards the Order of Merit and, if so, add the type to RANKED_TYPES in src/lib/pdc.mjs.\n\n'
+    + unknown.map(t => `- ${t.name} (type ${t.tournamentTypeID}, starts ${t.startDate}, feed says ${t.isRanked ? 'ranked' : 'not ranked'})`).join('\n') + '\n');
+}
 
 // Events not in the official list yet (see pendingEvents).
 const pending = pendingEvents(idx, prev.pending || [], { day, since: (prev.updatedAt || '').slice(0, 10) || day, republished });
@@ -60,7 +94,7 @@ if (!countsFrom || prev.officialSig !== sig) {
 }
 
 if (!pending.length) {
-  await writeJsonIfChanged(OUT, { updatedAt: new Date().toISOString(), officialSig: sig, countsFrom, pending: [], event: null }, { stamp: 'updatedAt' });
+  await writeJsonIfChanged(OUT, { updatedAt: new Date().toISOString(), officialSig: sig, countsFrom, lastCheck, pending: [], event: null }, { stamp: 'updatedAt' });
   log('live race: no ranking event since the official list was last updated');
 } else {
   const payloads = await Promise.all(pending.map(t => get(API.tournaments + t.id).then(r => r.data.attributes)));
@@ -87,6 +121,7 @@ if (!pending.length) {
     // Lets the browser check it has the same official list before recomputing.
     officialTotal: official.reduce((n, p) => n + p.money, 0),
     countsFrom,
+    lastCheck,
     pending: pending.map(t => t.id),
     event: { id: m.id, name: m.name, seasonID: m.seasonID, startDate: m.startDate, endDate: m.endDate, live },
     // Finished events counted in the race until the PDC republishes its list.

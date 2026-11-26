@@ -55,15 +55,15 @@ test('Grand Slam groups of three pay by finishing place', () => {
   assert.equal(p.get('3').amount, 5000);
 });
 
-test('European Tour from 2026: a seed losing their opening match earns no ranking money', () => {
+test('European Tour: a seed losing their opening match earns no ranking money', () => {
   const mk = season => ({ name: `${season} ET1`, seasonID: season, tournamentTypeID: '14', stages: [
     stage('Last 32', 5, 3500, [fx('1', '9', '9')]), stage('First Round', 7, 2000, [fx('9', '8', '9'), fx('5', '6', '6')]),
   ] });
-  const p26 = eventPrizes(mk(2026)), p25 = eventPrizes(mk(2025));
+  const p26 = eventPrizes(mk(2026)), p24 = eventPrizes(mk(2024));
   assert.equal(p26.get('1').amount, 0); // seed, out in their first match
   assert.equal(p26.get('5').amount, 0); // listed first in the first round: a seed
   assert.equal(p26.get('8').amount, 2000); // qualifier: counts
-  assert.equal(p25.get('1').amount, 3500); // the rule starts in 2026
+  assert.equal(p24.get('1').amount, 3500); // seasons not listed: counts
 });
 
 test('eventsDropping takes off money 104 weeks old, from after the last event in the official list', () => {

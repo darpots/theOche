@@ -235,12 +235,16 @@ export const keyName = s => s.normalize('NFKD').replace(/[̀-ͯ]/g, '').toLowerC
 /** Tournament types that count towards the PDC Order of Merit. */
 export const RANKED_TYPES = ['1', '4', '6', '7', '9', '14', '15', '29', '30'];
 const typeOf = t => String(t?.tournamentTypeID ?? t?.type?.tournamentTypeID ?? '');
+// Qualifying rounds played as a separate event whose money counts: the World
+// Masters preliminary rounds (the last 64, 32 and 16 of the qualifiers).
+const RANKED_QUALIFIERS = /Winmau World Masters \(Preliminary\)/i;
 /**
  * Whether an event counts towards the Order of Merit: the usual ranking types,
- * plus any event the feed marks as ranked (e.g. the World Masters from 2026).
- * The feed's flag alone is not enough: it marks the UK Open as unranked.
+ * the World Masters (type 19) and its preliminary rounds, plus any event the
+ * feed marks as ranked. The feed's flag alone is not enough: it marks the UK
+ * Open and the 2025 World Masters as unranked, and both count.
  */
-export const isRankedEvent = t => RANKED_TYPES.includes(typeOf(t)) || t?.isRanked === true;
+export const isRankedEvent = t => RANKED_TYPES.includes(typeOf(t)) || typeOf(t) === '19' || RANKED_QUALIFIERS.test(t?.name || '') || t?.isRanked === true;
 
 // The feed gives each stage's prize for losing there, but not the winner's
 // prize. Known winner prizes are listed (checked against the official
@@ -338,10 +342,11 @@ export function groupPlaces(fixtures) {
   return new Map([...t.values()].sort((a, b) => b.w - a.w || b.ld - a.ld || b.lf - a.lf || h2h(a.id, b.id)).map((r, i) => [r.id, i + 1]));
 }
 
-// European Tour from 2026: a seeded player who loses their opening match is
-// paid, but the money does not count towards the rankings. The feed does not
-// mark seeds; the seed is listed first in their opening fixture.
-const SEED_OPENING_LOSS_UNRANKED = { '14': 2026 };
+// European Tour seeds who lose their opening match are paid, but the money
+// does not count towards the rankings (seasons listed; checked against the
+// official two-year totals and the PDC's 2026 European Tour list). The feed
+// does not mark seeds; the seed is listed first in their opening fixture.
+const SEED_OPENING_LOSS_UNRANKED = { '14': [2025, 2026, 2027] };
 
 /**
  * Ranking money per player from a tournament payload's attributes.
@@ -370,7 +375,10 @@ export function eventPrizes(a) {
           const decided = !!f.winnerParticipantID;
           const won = decided && String(f.winnerParticipantID) === id;
           rec.alive = !decided || won || ord === 99;
-          if (won && ord === 1) {
+          if (won && ord === 1 && RANKED_QUALIFIERS.test(a.name || '')) {
+            // Through to the main draw: their money comes from there.
+            rec.amount = 0; rec.round = 'Qualified';
+          } else if (won && ord === 1) {
             const w = winnerPrize(a, comp);
             rec.amount = w.amount; rec.round = 'Winner'; rec.estimated = w.estimated;
           } else if (won && ord < 99 && byCup.has(ord - 1) && !inStage(byCup.get(ord - 1), id)) {
@@ -403,7 +411,7 @@ export function eventPrizes(a) {
   const koDrawn = stages.some(st => stageOrder(st) < 99 && (st.fixtures || []).some(f => !isPlaceholder(f.participant1) || !isPlaceholder(f.participant2)));
   if (koDrawn) for (const rec of out.values()) if (rec.order === 99) rec.alive = false;
   // Seeds who lose their opening match: paid, but not ranking money.
-  if (SEED_OPENING_LOSS_UNRANKED[ty] && season >= SEED_OPENING_LOSS_UNRANKED[ty]) {
+  if (SEED_OPENING_LOSS_UNRANKED[ty]?.includes(season)) {
     const first = new Map(); // player -> their earliest fixture
     for (const s of stages) for (const f of s.fixtures || []) for (const p of [f.participant1, f.participant2]) if (!isPlaceholder(p) && !first.has(String(p.participantID))) first.set(String(p.participantID), f);
     for (const [id, f] of first) {
