@@ -122,3 +122,34 @@ test('stale draw slots next to the real fixture are ignored; a player awaiting a
   ] };
   assert.equal(eventPrizes(live).get('1').amount, 3500); // waiting for an opponent: guaranteed the last 32
 });
+
+test('ranking ledger: PDPA breakdowns parsed, matched to PDC events, verified against the official totals', async () => {
+  const { parsePdpaRankings, pdpaEvent, buildLedger, expiringWithLedger } = await import('../src/lib/pdc.mjs');
+  const row = (name, total, entries) => `<div class="player-tag-wrapper linked"><a href="https://pdpa.co.uk/player/${name.toLowerCase().replace(/[^a-z]+/g, '-')}" class="player-tag"><div class="name">${name}</div></a></div></div>`
+    + `<div class="money"><a>£${total.toLocaleString('en-GB')}</a><div class="breakdown-panel"><div>Breakdown</div><div>Position</div><div>Tournament</div>`
+    + entries.map(([p, t, a]) => `<div>${p}</div><div>${t}</div><div>${a}</div>`).join('') + '</div></div>';
+  const html = row('A Player', 21500, [[1, 'Players Championships 2025 PC 01 Wigan', 15000], [9, 'Belgian Darts Open 2025', 4000], [16, 'Grand Slam of Darts 2026', 2500]])
+    + row('B O&#039;Player', 3000, [[33, 'PDC World Championship 2025', 3000]])
+    + row('Next Table', 99999, []); // a following table starts where the money goes back up
+  const pdpa = parsePdpaRankings(html);
+  assert.deepEqual(pdpa.map(p => [p.name, p.total, p.rows.length]), [['A Player', 21500, 3], ["B O'Player", 3000, 1]]);
+  const ev = [
+    { id: '1', name: '2025 Players Championship 1', endDate: '2025-02-10' },
+    { id: '2', name: '2025 ET1 - Belgian Darts Open', endDate: '2025-03-09' },
+    { id: '3', name: '2026 Grand Slam of Darts', endDate: '2026-11-22' },
+    { id: '4', name: '2025 World Championship', endDate: '2025-01-03' },
+  ];
+  assert.equal(pdpaEvent('Belgian Darts Open 2025', ev).id, '2');
+  assert.equal(pdpaEvent('PDC World Championship 2025', ev).id, '4');
+  const official = [{ id: '10', name: 'A Player', money: 21000 }, { id: '11', name: "B O'Player", money: 3000 }];
+  // The 2026 Grand Slam group row is put right from the feed (here £2,000).
+  const { players } = buildLedger(pdpa, official, ev, id => (id === '3' ? new Map([['10', { amount: 2000, round: 'Group A' }]]) : null));
+  assert.equal(players['10'].verified, true);
+  assert.deepEqual(players['10'].rows.find(r => r[0] === '1'), ['1', '2025-02-10', '2027-02-08', 1, 15000]); // expires 104 weeks on
+  assert.equal(players['11'].verified, true);
+  // Expiring money from the ledger replaces the feed's figure for verified players.
+  const exp = expiringWithLedger({ players }, ['1', '4'], new Map([['10', { amount: 99, events: [] }], ['12', { amount: 5, events: [] }]]));
+  assert.equal(exp.get('10').amount, 15000);
+  assert.equal(exp.get('11').amount, 3000);
+  assert.equal(exp.get('12').amount, 5); // not in the ledger: feed figure kept
+});

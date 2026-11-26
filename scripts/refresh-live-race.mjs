@@ -12,7 +12,7 @@
 import { createHash } from 'node:crypto';
 import {
   API, normaliseRankings, isRankedEvent, eventPrizes, expiringMap, liveRaceWith,
-  eventsDropping, resetCandidates, acceptReset, pendingEvents,
+  eventsDropping, resetCandidates, acceptReset, pendingEvents, expiringWithLedger,
 } from '../src/lib/pdc.mjs';
 import { writeFile } from 'node:fs/promises';
 import { get, getAll, readJson, writeJsonIfChanged, pool, today, log } from './lib.mjs';
@@ -110,7 +110,16 @@ if (!pending.length) {
   });
   const drops = eventsDropping(idx, pending, day);
   const dropPayloads = await Promise.all(drops.map(t => get(API.tournaments + t.id).then(r => ({ ...r.data.attributes, endDate: t.endDate }))));
-  const expiring = Object.fromEntries(expiringMap(dropPayloads, countsFrom));
+  // Money coming off: from the ranking ledger (the PDPA's counting money, checked
+  // against the official totals) where it matches the current official list,
+  // else worked out from the PDC feed.
+  const ledger = await readJson(new URL('../src/data/ranking-ledger.json', import.meta.url).pathname, null);
+  const useLedger = ledger?.officialSig === sig;
+  const computed = expiringMap(dropPayloads, countsFrom);
+  const expiring = Object.fromEntries(useLedger
+    ? expiringWithLedger({ players: ledger.byPlayer }, drops.map(t => t.id), computed, Object.fromEntries(drops.map(t => [t.id, t.name])))
+    : computed);
+  log(`live race: expiring money from ${useLedger ? `the ranking ledger (${ledger.verified}/${ledger.players} players verified)` : 'the PDC feed (ledger not current)'}`);
   const race = liveRaceWith(official, live ? payloads[showIdx] : null, expiring, settled).filter(p => p.live <= 150)
     .map(({ id, name, slug, pos, live: l, move, money, plus, minus, expiring: ex, round, alive, estimated }) =>
       ({ id, name, slug, pos, live: l, move, money, plus, minus, expiring: ex, round, alive, estimated }));
