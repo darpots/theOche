@@ -440,13 +440,18 @@ export function eventPrizes(a) {
   if (koDrawn) for (const rec of out.values()) if (rec.order === 99) rec.alive = false;
   // Seeds who lose their opening match: paid, but not ranking money.
   if (SEED_OPENING_LOSS_UNRANKED[ty]?.includes(season)) {
-    const first = new Map(); // player -> their earliest fixture
-    for (const s of stages) for (const f of stageFixtures(s)) for (const p of [f.participant1, f.participant2]) if (!isPlaceholder(p) && !first.has(String(p.participantID))) first.set(String(p.participantID), f);
-    for (const [id, f] of first) {
+    const first = new Map(); // player -> [their earliest fixture, its stage]
+    for (const s of stages) for (const f of stageFixtures(s)) for (const p of [f.participant1, f.participant2]) if (!isPlaceholder(p) && !first.has(String(p.participantID))) first.set(String(p.participantID), [f, s]);
+    const opening = stages.find(s => stageOrder(s) < 99 && stageFixtures(s).length);
+    for (const [id, [f, s]] of first) {
       const r = out.get(id);
-      if (r && f.winnerParticipantID && String(f.winnerParticipantID) !== id && String(f.participant1?.participantID) === id) { r.amount = 0; r.unranked = true; }
+      if (!r || !f.winnerParticipantID || String(f.winnerParticipantID) === id) continue;
+      // A seed either had a bye past the opening round or is listed first in it.
+      const bye = s !== opening, p1 = String(f.participant1?.participantID) === id;
+      if (bye || p1) { r.amount = 0; r.unranked = true; }
     }
   }
+
   return out;
 }
 
