@@ -263,6 +263,16 @@ const WINNER_PRIZE = {
   '2024 European Championship': 120000,
   '2024 Players Championship Finals': 120000,
   '2024 UK Open': 110000,
+  // 2026 prize funds (published): £750k for the UK Open, Grand Prix, European
+  // Championship and PC Finals, £1m for the Matchplay, £500k for the Masters.
+  // The winner's share is the fund less every other prize in the feed.
+  '2025 Winmau World Masters': 100000,
+  '2026 Winmau World Masters': 100000,
+  '2026 UK Open': 120000,
+  '2026 World Matchplay': 225000,
+  '2026 World Grand Prix': 150000,
+  '2026 European Championship': 150000,
+  '2026 Players Championship Finals': 130000,
 };
 // Winner's prize ÷ runner-up's prize for each ranking event type, from the
 // PDC's prize structures, for editions not listed above.
@@ -349,6 +359,24 @@ export function groupPlaces(fixtures) {
 const SEED_OPENING_LOSS_UNRANKED = { '14': [2025, 2026, 2027] };
 
 /**
+ * A stage's fixtures without stale draw slots: the feed can keep the original
+ * draw ("Noppert v (to be decided)") next to the real fixture. A half-empty
+ * fixture is dropped only when its player has a full one in the same round;
+ * during an event it is how a player waiting for an opponent shows up.
+ */
+function stageFixtures(s) {
+  const fx = s.fixtures || [];
+  const full = new Set();
+  for (const f of fx) if (!isPlaceholder(f.participant1) && !isPlaceholder(f.participant2)) { full.add(String(f.participant1.participantID)); full.add(String(f.participant2.participantID)); }
+  return fx.filter(f => {
+    const a = isPlaceholder(f.participant1), b = isPlaceholder(f.participant2);
+    if (!a && !b) return true;
+    const p = a ? f.participant2 : f.participant1;
+    return !(a && b) && !full.has(String(p?.participantID));
+  });
+}
+
+/**
  * Ranking money per player from a tournament payload's attributes.
  * Completed rounds count in full; for an event in progress a player still in it
  * is credited with the prize for the furthest round they are guaranteed.
@@ -364,7 +392,7 @@ export function eventPrizes(a) {
   const inStage = (s, id) => (s.fixtures || []).find(x => [x.participant1, x.participant2].some(q => String(q?.participantID) === id));
   for (const s of stages) {
     const comp = Number(s.compensationValue) || 0;
-    for (const f of s.fixtures || []) {
+    for (const f of stageFixtures(s)) {
       for (const p of [f.participant1, f.participant2]) {
         if (isPlaceholder(p)) continue;
         const id = String(p.participantID);
@@ -394,7 +422,7 @@ export function eventPrizes(a) {
   // Group stages paid by finishing place, once every match in the group is played.
   const gp = (GROUP_PLACE_PRIZE[ty] || []).find(r => season >= r.from && season <= r.to);
   if (gp) for (const s of all.filter(s => stageOrder(s) === 99)) {
-    const real = (s.fixtures || []).filter(f => !isPlaceholder(f.participant1) && !isPlaceholder(f.participant2));
+    const real = stageFixtures(s).filter(f => !isPlaceholder(f.participant1) && !isPlaceholder(f.participant2));
     for (const fx of splitGroups(real)) {
       if (fx.some(f => !f.winnerParticipantID)) continue;
       const places = groupPlaces(fx);
@@ -413,7 +441,7 @@ export function eventPrizes(a) {
   // Seeds who lose their opening match: paid, but not ranking money.
   if (SEED_OPENING_LOSS_UNRANKED[ty]?.includes(season)) {
     const first = new Map(); // player -> their earliest fixture
-    for (const s of stages) for (const f of s.fixtures || []) for (const p of [f.participant1, f.participant2]) if (!isPlaceholder(p) && !first.has(String(p.participantID))) first.set(String(p.participantID), f);
+    for (const s of stages) for (const f of stageFixtures(s)) for (const p of [f.participant1, f.participant2]) if (!isPlaceholder(p) && !first.has(String(p.participantID))) first.set(String(p.participantID), f);
     for (const [id, f] of first) {
       const r = out.get(id);
       if (r && f.winnerParticipantID && String(f.winnerParticipantID) !== id && String(f.participant1?.participantID) === id) { r.amount = 0; r.unranked = true; }

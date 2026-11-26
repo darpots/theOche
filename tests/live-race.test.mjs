@@ -108,3 +108,17 @@ test('pendingEvents keeps finished events until the official list is republished
   // Republished after both: nothing pending.
   assert.deepEqual(pendingEvents(idx, ['pc33', 'pc34'], { day: '2026-11-07', since: '2026-11-06', republished: true }).map(t => t.id), []);
 });
+
+test('stale draw slots next to the real fixture are ignored; a player awaiting an opponent still counts', () => {
+  const empty = null; // how the feed shows an undecided slot
+  const done = { name: '2026 ET1', seasonID: 2026, tournamentTypeID: '14', stages: [
+    stage('Last 32', 5, 3500, [{ participant1: P('1', '1'), participant2: empty, winnerParticipantID: null }, fx('1', '9', '9')]),
+    stage('First Round', 7, 2000, [fx('9', '8', '9')]),
+  ] };
+  assert.equal(eventPrizes(done).get('1').amount, 0); // seed beaten in their opening match: the stale slot doesn't hide it
+  const live = { name: '2026 ET2', seasonID: 2026, tournamentTypeID: '14', stages: [
+    stage('Last 32', 5, 3500, [{ participant1: P('1', '1'), participant2: empty, winnerParticipantID: null }]),
+    stage('First Round', 7, 2000, [fx('9', '8', null)]),
+  ] };
+  assert.equal(eventPrizes(live).get('1').amount, 3500); // waiting for an opponent: guaranteed the last 32
+});
