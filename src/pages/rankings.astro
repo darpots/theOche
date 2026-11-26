@@ -9,9 +9,10 @@ import { loadProfile } from '../lib/players';
 
 const prev = (data.previous || {}) as Record<string, number>;
 // Every ranked player is listed (the PDC ranks around 230 at a time).
-// The live race is worked out by the daily data job (scripts/refresh-live-race.mjs).
+// The live race is worked out by the hourly data job (scripts/refresh-live-race.mjs)
+// and, while an event is being played, refreshed in the browser.
 const lr = liveRaceData as any;
-const liveCache = lr.event ? { event: lr.event, dropNames: lr.dropNames, updatedAt: lr.updatedAt, race: lr.race } : null;
+const liveCache = lr.event ? { event: lr.event, dropNames: lr.dropNames, settledNames: lr.settledNames || [], updatedAt: lr.updatedAt, race: lr.race, expiring: lr.expiring, settled: lr.settled, officialTotal: lr.officialTotal } : null;
 const players = data.players.map(p => ({ ...p, move: prev[p.id] ? prev[p.id] - p.pos : null }));
 // Ranking trend from the snapshots kept after each ranking event.
 const hist = ((data as any).history || []) as { d: string; pos: Record<string, number> }[];
@@ -80,7 +81,7 @@ const av = (name: string) => { const [c1, c2] = avatarColours(name); return `--c
   <script is:inline type="application/json" id="lr-data" set:html={JSON.stringify(liveCache)}></script>
 
   <script>
-    import { API, normaliseRankings } from '../lib/pdc.mjs';
+    import { API, normaliseRankings, liveRaceWith } from '../lib/pdc.mjs';
     import { money } from '../lib/format.mjs';
 
     const esc = (s: unknown) => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]!);
@@ -106,6 +107,7 @@ const av = (name: string) => { const [c1, c2] = avatarColours(name); return `--c
       let race: any[] | null = null;
       let event: any = null;
       let mode: 'live' | 'official' = 'live';
+      let refreshedAt: string | null = null;
       const k = (n: number) => '£' + (n / 1000).toLocaleString('en-GB', { maximumFractionDigits: 2 }) + 'k';
       const keyOf = (p: any) => p.id;
       const asLive = (list: any[]) => list.map((p: any) => ({ ...p, live: p.pos, move: null, plus: 0, minus: 0 }));
@@ -160,7 +162,15 @@ const av = (name: string) => { const [c1, c2] = avatarColours(name); return `--c
         } else if (live) {
           const drops: string[] = found?.dropNames || [];
           const list = drops.length ? drops.map(d => `<b>${esc(d)}</b>`).join(' and ') : 'events from two years ago';
-          note.innerHTML = `<span class="live-dot">Live</span> Projected standings after the <b>${esc(event.name.replace(/^\d{4}\s+/, ''))}</b>, updated daily${found?.updatedAt ? ` (${new Date(found.updatedAt).toLocaleString('en-GB', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit', timeZone: 'Europe/London' })})` : ''}. <details class="how"><summary>How the live race works</summary>The PDC drops prize money 104 weeks after it was won, so money from the ${list} is <span class="minus">expiring</span>, and money players have guaranteed in this event so far counts as <span class="plus">won</span>. The red or green chip shows each player's net change (hover “expiring” to see which events); the volt chip shows how far they've got in the ${esc(event.name.replace(/^\d{4}\s+/, ''))}. Positions settle when the PDC publishes the official list after the final.</details>`;
+          const evName = esc(event.name.replace(/^\d{4}(\/\d{2})?\s+/, ''));
+          const earlier: string[] = (found?.settledNames || []).filter((n: string) => n !== event.name);
+          const when = (d: string) => new Date(d).toLocaleString('en-GB', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit', timeZone: 'Europe/London' });
+          const stamp = refreshedAt ? `updated ${when(refreshedAt)}` : found?.updatedAt ? `updated ${when(found.updatedAt)}` : '';
+          const lead = event.live
+            ? `Projected standings after the <b>${evName}</b>${stamp ? `, ${stamp}` : ''}`
+            : `Projected standings including the <b>${evName}</b>, which the PDC has not added to the official list yet${stamp ? ` (${stamp})` : ''}`;
+          const also = earlier.length ? ` Also includes ${earlier.map(n => `<b>${esc(n)}</b>`).join(' and ')}, not in the official list yet.` : '';
+          note.innerHTML = `<span class="live-dot">Live</span> ${lead}.${also} <details class="how"><summary>How the live race works</summary>The PDC drops prize money 104 weeks after it was won, so money from the ${list} is <span class="minus">expiring</span>, and money players have guaranteed since the official list was last published counts as <span class="plus">won</span>. Money a player earned before losing their Tour Card is not in their total, so it isn't taken off again. The red or green chip shows each player's net change (hover “expiring” to see which events); the volt chip shows how far they've got in the ${evName}. Positions settle when the PDC publishes the official list.</details>`;
         }
         asof.textContent = live && event ? `Movement shown against the official list` : `${official.length} ranked players · official PDC list`;
       };
@@ -178,7 +188,9 @@ const av = (name: string) => { const [c1, c2] = avatarColours(name); return `--c
       const todayLdn = new Date().toLocaleDateString('en-CA', { timeZone: 'Europe/London' });
       // Live race: the daily snapshot saved with the site, shown at once.
       const cache = JSON.parse(document.getElementById('lr-data')!.textContent || 'null');
-      const found: any = cache && cache.event.startDate <= todayLdn && cache.event.endDate >= todayLdn ? cache : null;
+      // The job lists the events played since the official list was published; ignore it if it has stopped updating.
+      const fresh = cache?.updatedAt && Date.now() - Date.parse(cache.updatedAt) < 36 * 3600e3;
+      const found: any = cache?.event && fresh && cache.event.startDate <= todayLdn ? cache : null;
       if (found) {
         event = found.event;
         document.getElementById('onlyev-label')!.textContent = `In the ${found.event.name.replace(/^\d{4}\s+/, '').replace(/ of Darts$/, '')} only`;
@@ -190,12 +202,28 @@ const av = (name: string) => { const [c1, c2] = avatarColours(name); return `--c
       modeBox.hidden = false;
       document.getElementById('onlyev')!.hidden = !found;
       paint();
+      // While the event is being played, recompute the race from the PDC feed every two minutes.
+      async function refreshRace() {
+        if (!found?.event.live || !document.querySelector('.table')) return;
+        // Only when this is the official list the race was worked out against.
+        if (official.reduce((n: number, p: any) => n + p.money, 0) !== found.officialTotal) return;
+        const body = await json(API.tournaments + found.event.id).catch(() => null);
+        if (!body?.data?.attributes) return;
+        race = liveRaceWith(official, body.data.attributes, found.expiring, found.settled).filter((p: any) => p.live <= 150);
+        refreshedAt = new Date().toISOString();
+        if (mode === 'live') paint();
+      }
+      if (found?.event.live && found.event.endDate >= todayLdn) {
+        const timer = setInterval(() => { if (!document.querySelector('.table')) clearInterval(timer); else refreshRace(); }, 120_000);
+        document.addEventListener('astro:before-swap', () => clearInterval(timer), { once: true });
+      }
       // The official list itself is refreshed quietly in the background.
       json(`${API.rankings}2YEAR?page.size=500`).then(body => {
         if (!body || !document.querySelector('.table')) return;
         full = normaliseRankings(body); official = full;
         if (!found) race = asLive(official);
         if (mode === 'official' || !found) paint();
+        if (found?.event.live) refreshRace();
       }).catch(() => {});
     }
     document.addEventListener('astro:page-load', init);

@@ -234,51 +234,129 @@ export const keyName = s => s.normalize('NFKD').replace(/[̀-ͯ]/g, '').toLowerC
 
 /** Tournament types that count towards the PDC Order of Merit. */
 export const RANKED_TYPES = ['1', '4', '6', '7', '9', '14', '15', '29', '30'];
+const typeOf = t => String(t?.tournamentTypeID ?? t?.type?.tournamentTypeID ?? '');
+/**
+ * Whether an event counts towards the Order of Merit: the usual ranking types,
+ * plus any event the feed marks as ranked (e.g. the World Masters from 2026).
+ * The feed's flag alone is not enough: it marks the UK Open as unranked.
+ */
+export const isRankedEvent = t => RANKED_TYPES.includes(typeOf(t)) || t?.isRanked === true;
 
 // The feed gives each stage's prize for losing there, but not the winner's
-// prize. Past winner prizes are listed (exact); any other edition is worked out
-// from the runner-up prize with the ratio for that kind of event (below).
+// prize. Known winner prizes are listed (checked against the official
+// rankings); any other edition is worked out from the runner-up prize with the
+// ratio for that kind of event (below) and marked as estimated.
 const WINNER_PRIZE = {
   '2024 Grand Slam of Darts': 150000,
   '2025 Grand Slam of Darts': 150000,
+  '2026 Grand Slam of Darts': 200000,
   '2024 World Championship': 500000,
   '2025 World Championship': 500000,
   '2026 World Championship': 1000000,
-  '2024 World Matchplay': 800000,
-  '2025 World Matchplay': 800000,
+  '2024 World Matchplay': 200000,
+  '2025 World Matchplay': 200000,
   '2024 World Grand Prix': 120000,
   '2024 European Championship': 120000,
   '2024 Players Championship Finals': 120000,
   '2024 UK Open': 110000,
 };
-// Winner's prize ÷ runner-up's prize for each ranking event type, from the PDC's
-// prize structures (they keep the same shape when the fund grows), so new
-// editions need no entry above: the winner's figure is runner-up × ratio, marked
-// as estimated until the PDC republishes the official rankings after the event.
+// Winner's prize ÷ runner-up's prize for each ranking event type, from the
+// PDC's prize structures, for editions not listed above.
 const WINNER_RATIO = {
   '1': 2.5, // World Championship (£1m / £400k)
-  '9': 1.5, // Grand Slam (£150k / £100k)
-  '15': 2, // World Matchplay (£800k / £400k)
+  '9': 2, // Grand Slam (£200k / £100k)
+  '15': 2, // World Matchplay (£200k / £100k)
   '6': 2, // World Grand Prix
   '7': 2, // European Championship
   '30': 2, // Players Championship Finals
   '4': 2.2, // UK Open (£110k / £50k)
   '29': 1.5, // Players Championship (floor)
   '14': 2.5, // European Tour
+  '19': 2, // World Masters
 };
+// Winner's prize by type from a given season, where the ratio changed.
+const WINNER_FROM = { '14': [[2026, 35000]] };
+const winnerPrize = (a, runnerUp) => {
+  if (a.name in WINNER_PRIZE) return { amount: WINNER_PRIZE[a.name], estimated: false };
+  const ty = typeOf(a), fixed = (WINNER_FROM[ty] || []).filter(([y]) => Number(a.seasonID) >= y).pop();
+  if (fixed) return { amount: fixed[1], estimated: false };
+  return { amount: Math.round(runnerUp * (WINNER_RATIO[ty] ?? 2)), estimated: true };
+};
+// Group stages where the feed gives one prize for the whole stage but the PDC
+// pays by finishing place (checked against the official rankings): `prize`
+// replaces the feed's group prize for that place, `bonus` is added on top
+// (also for players who went through). Places not listed get the feed's.
+const GROUP_PLACE_PRIZE = {
+  '9': [
+    // Grand Slam to 2025: 8 groups of four, top two through.
+    { from: 0, to: 2025, size: 4, prize: { 3: 8000 }, bonus: { 1: 3500 } },
+    // Grand Slam from 2026: 16 groups of three, only the winner goes through.
+    { from: 2026, to: 9999, size: 3, prize: { 2: 12500, 3: 5000 } },
+  ],
+};
+/** Split a group stage's fixtures into its groups (the feed can list all groups as one stage). */
+function splitGroups(fixtures) {
+  const adj = new Map(), key = q => String(q.participantID);
+  for (const f of fixtures) for (const [a, b] of [[f.participant1, f.participant2], [f.participant2, f.participant1]]) (adj.get(key(a)) || adj.set(key(a), new Set()).get(key(a))).add(key(b));
+  const seen = new Set(), groups = [];
+  for (const start of adj.keys()) {
+    if (seen.has(start)) continue;
+    const members = new Set(), todo = [start];
+    while (todo.length) { const x = todo.pop(); if (seen.has(x)) continue; seen.add(x); members.add(x); adj.get(x).forEach(y => todo.push(y)); }
+    groups.push(fixtures.filter(f => members.has(key(f.participant1))));
+  }
+  return groups;
+}
 
-const stageOrder = s => (Number(s.cupRound) > 0 ? Number(s.cupRound) : 99); // lower = later round; groups first
+// Order of the rounds, from their names: the feed's cupRound numbers are not
+// always in playing order (the UK Open's early rounds are numbered 7, 8, 9 for
+// the last 160, 128 and 96). 1 = final, 2 = semi-final, ...; group stages 99.
+const roundSize = name => {
+  if (/^final$/i.test(name)) return 2;
+  if (/semi/i.test(name)) return 4;
+  if (/quarter/i.test(name)) return 8;
+  const l = /last (\d+)/i.exec(name); if (l) return Number(l[1]);
+  if (/first round|round 1\b/i.test(name)) return 1e6;
+  return null; // group or league stage
+};
+function stageOrders(stages) {
+  const ko = stages.filter(s => roundSize(s.stage?.name || '')).sort((x, y) => roundSize(x.stage.name) - roundSize(y.stage.name));
+  const ord = new Map(ko.map((s, i) => [s, i + 1]));
+  return s => ord.get(s) ?? 99;
+}
+
+/** Finishing places in a round-robin group: wins, then leg difference, legs won, head-to-head. */
+export function groupPlaces(fixtures) {
+  const t = new Map();
+  for (const f of fixtures) for (const [q, s, o] of [[f.participant1, f.participant1Score, f.participant2Score], [f.participant2, f.participant2Score, f.participant1Score]]) {
+    if (isPlaceholder(q)) continue;
+    const id = String(q.participantID), r = t.get(id) || { id, w: 0, ld: 0, lf: 0 };
+    if (String(f.winnerParticipantID) === id) r.w++;
+    r.ld += (Number(s) || 0) - (Number(o) || 0); r.lf += Number(s) || 0; t.set(id, r);
+  }
+  const h2h = (a, b) => { const f = fixtures.find(f => [String(f.participant1?.participantID), String(f.participant2?.participantID)].sort().join() === [a, b].sort().join()); return f?.winnerParticipantID ? (String(f.winnerParticipantID) === a ? -1 : 1) : 0; };
+  return new Map([...t.values()].sort((a, b) => b.w - a.w || b.ld - a.ld || b.lf - a.lf || h2h(a.id, b.id)).map((r, i) => [r.id, i + 1]));
+}
+
+// European Tour from 2026: a seeded player who loses their opening match is
+// paid, but the money does not count towards the rankings. The feed does not
+// mark seeds; the seed is listed first in their opening fixture.
+const SEED_OPENING_LOSS_UNRANKED = { '14': 2026 };
 
 /**
- * Prize money per player from a tournament payload's attributes.
+ * Ranking money per player from a tournament payload's attributes.
  * Completed rounds count in full; for an event in progress a player still in it
  * is credited with the prize for the furthest round they are guaranteed.
- * Returns Map<pid, { amount, round, alive }>.
+ * Returns Map<pid, { amount, round, alive, estimated }>.
  */
 export function eventPrizes(a) {
-  const stages = [...(a.stages || [])].sort((x, y) => stageOrder(y) - stageOrder(x));
+  const all = a.stages || [];
+  const stageOrder = stageOrders(all);
+  const stages = [...all].sort((x, y) => stageOrder(y) - stageOrder(x));
   const byCup = new Map(stages.map(s => [stageOrder(s), s]));
+  const ty = typeOf(a), season = Number(a.seasonID);
   const out = new Map();
+  const inStage = (s, id) => (s.fixtures || []).find(x => [x.participant1, x.participant2].some(q => String(q?.participantID) === id));
   for (const s of stages) {
     const comp = Number(s.compensationValue) || 0;
     for (const f of s.fixtures || []) {
@@ -293,18 +371,30 @@ export function eventPrizes(a) {
           const won = decided && String(f.winnerParticipantID) === id;
           rec.alive = !decided || won || ord === 99;
           if (won && ord === 1) {
-            const runnerUp = comp;
-            rec.amount = WINNER_PRIZE[a.name] ?? Math.round(runnerUp * (WINNER_RATIO[a.type?.tournamentTypeID ?? a.tournamentTypeID] ?? 2));
-            rec.round = 'Winner'; rec.estimated = !(a.name in WINNER_PRIZE);
-          } else if (won && ord < 99 && !out.has('__next') && byCup.has(ord - 1)) {
+            const w = winnerPrize(a, comp);
+            rec.amount = w.amount; rec.round = 'Winner'; rec.estimated = w.estimated;
+          } else if (won && ord < 99 && byCup.has(ord - 1) && !inStage(byCup.get(ord - 1), id)) {
             // Won this round, next round not drawn yet: guaranteed the next round's prize.
             const next = byCup.get(ord - 1);
-            if (!(next.fixtures || []).some(x => [x.participant1, x.participant2].some(q => String(q?.participantID) === id))) {
-              rec.amount = Math.max(rec.amount, Number(next.compensationValue) || 0); rec.round = next.stage?.name || rec.round;
-            }
+            rec.amount = Math.max(rec.amount, Number(next.compensationValue) || 0); rec.round = next.stage?.name || rec.round;
           }
         }
         out.set(id, rec);
+      }
+    }
+  }
+  // Group stages paid by finishing place, once every match in the group is played.
+  const gp = (GROUP_PLACE_PRIZE[ty] || []).find(r => season >= r.from && season <= r.to);
+  if (gp) for (const s of all.filter(s => stageOrder(s) === 99)) {
+    const real = (s.fixtures || []).filter(f => !isPlaceholder(f.participant1) && !isPlaceholder(f.participant2));
+    for (const fx of splitGroups(real)) {
+      if (fx.some(f => !f.winnerParticipantID)) continue;
+      const places = groupPlaces(fx);
+      if (places.size !== gp.size) continue;
+      for (const [id, place] of places) {
+        const r = out.get(id); if (!r) continue;
+        if (r.order === 99 && gp.prize?.[place] != null) r.amount = gp.prize[place];
+        if (gp.bonus?.[place]) r.amount += gp.bonus[place];
       }
     }
   }
@@ -312,6 +402,15 @@ export function eventPrizes(a) {
   // group or league stage has been knocked out.
   const koDrawn = stages.some(st => stageOrder(st) < 99 && (st.fixtures || []).some(f => !isPlaceholder(f.participant1) || !isPlaceholder(f.participant2)));
   if (koDrawn) for (const rec of out.values()) if (rec.order === 99) rec.alive = false;
+  // Seeds who lose their opening match: paid, but not ranking money.
+  if (SEED_OPENING_LOSS_UNRANKED[ty] && season >= SEED_OPENING_LOSS_UNRANKED[ty]) {
+    const first = new Map(); // player -> their earliest fixture
+    for (const s of stages) for (const f of s.fixtures || []) for (const p of [f.participant1, f.participant2]) if (!isPlaceholder(p) && !first.has(String(p.participantID))) first.set(String(p.participantID), f);
+    for (const [id, f] of first) {
+      const r = out.get(id);
+      if (r && f.winnerParticipantID && String(f.winnerParticipantID) !== id && String(f.participant1?.participantID) === id) { r.amount = 0; r.unranked = true; }
+    }
+  }
   return out;
 }
 
@@ -332,10 +431,12 @@ export function previousEdition(event, index) {
  * official: normaliseRankings() output; current/previous: tournament attributes.
  */
 /** Money coming off per player: Map<pid, { amount, estimated, events: [{ name, amount, round }] }>. */
-export function expiringMap(dropping) {
+export function expiringMap(dropping, countsFrom = {}) {
   const lose = new Map();
   for (const d of [].concat(dropping || [])) for (const [id, r] of eventPrizes(d)) {
     if (!r.amount) continue;
+    // Money earned before the player's ranking money was reset is not in their total.
+    if (countsFrom[id] && (d.endDate || '') < countsFrom[id]) continue;
     const l = lose.get(id) || { amount: 0, estimated: false, events: [] };
     l.amount += r.amount; l.estimated ||= !!r.estimated;
     l.events.push({ name: d.name, amount: r.amount, round: r.round });
@@ -348,10 +449,18 @@ export function liveRace(official, current, dropping) {
   return liveRaceWith(official, current, expiringMap(dropping));
 }
 
-/** The live race from a precomputed expiring map (a Map, or a plain object from JSON). */
-export function liveRaceWith(official, current, expiring) {
+/**
+ * The live race from a precomputed expiring map (a Map, or a plain object from JSON).
+ * current: the event in progress (tournament attributes) or null.
+ * settled: money from finished events not yet in the official list ({ pid: { amount, name } }).
+ */
+export function liveRaceWith(official, current, expiring, settled = {}) {
   const lose = expiring instanceof Map ? expiring : new Map(Object.entries(expiring || {}));
-  const gain = eventPrizes(current);
+  const gain = current ? eventPrizes(current) : new Map();
+  for (const [id, s] of Object.entries(settled || {})) {
+    const g = gain.get(id);
+    gain.set(id, g ? { ...g, amount: g.amount + s.amount, earlier: s.amount } : { amount: s.amount, earlier: s.amount, name: s.name, round: null, alive: null });
+  }
   const list = official.map(p => {
     const g = gain.get(p.id), l = lose.get(p.id);
     const plus = g?.amount || 0, minus = l?.amount || 0;
@@ -359,9 +468,10 @@ export function liveRaceWith(official, current, expiring) {
   });
   // Players who are not on the list yet but have earned money this event.
   for (const [id, g] of gain) if (g.amount && !official.some(p => p.id === id)) list.push({ id, name: g.name, money: g.amount, official: 0, plus: g.amount, minus: 0, expiring: [], round: g.round, alive: g.alive, pos: null });
-  list.sort((x, y) => y.money - x.money || (x.pos ?? 1e9) - (y.pos ?? 1e9));
-  let rank = 0, last = null;
-  list.forEach((p, i) => { if (p.money !== last) { rank = i + 1; last = p.money; } p.live = rank; p.move = p.pos ? p.pos - rank : null; });
+  // Level on money: the PDC lists the player who has just gained more first,
+  // then keeps the previous order (checked against its published lists).
+  list.sort((x, y) => y.money - x.money || (y.plus - y.minus) - (x.plus - x.minus) || (x.pos ?? 1e9) - (y.pos ?? 1e9));
+  list.forEach((p, i) => { p.live = i + 1; p.move = p.pos ? p.pos - p.live : null; });
   return list;
 }
 
@@ -388,7 +498,7 @@ export async function findLiveRaceEvent(today) {
   const list = async season => ((await json(`${API.tournaments}?seasonID=${season}&page.size=500`))?.data || []).map(d => ({ id: d.id, ...d.attributes }));
   const y = Number(today.slice(0, 4));
   const idx = (await Promise.all([y - 3, y - 2, y - 1, y, y + 1].map(list))).flat()
-    .filter(t => RANKED_TYPES.includes(t.tournamentTypeID) && t.fixtureCount > 0 && !/test/i.test(t.name));
+    .filter(t => isRankedEvent(t) && t.fixtureCount > 0 && !/test/i.test(t.name));
   const live = idx.find(t => t.startDate <= today && t.endDate >= today);
   if (!live) return null;
   // The PDC drops an event's money exactly 104 weeks after it was played. The
@@ -401,6 +511,76 @@ export async function findLiveRaceEvent(today) {
   const prev = (await Promise.all(dropMeta.map(m => json(API.tournaments + m.id)))).map(r => r?.data?.attributes).filter(Boolean);
   return { meta: live, prev, dropNames: dropMeta.map(m => m.name) };
 }
+
+/** The day 104 weeks after a date: when the PDC drops an event's money. */
+export const plus104 = d => new Date(Date.parse(d + 'T12:00:00Z') + 728 * 864e5).toISOString().slice(0, 10);
+
+/**
+ * Ranking events whose money is not in the official list yet: those carried
+ * over from the last run, plus any played since then. When the PDC has
+ * republished its list (the official figures changed), events that had
+ * finished are in it now; one still being played stays.
+ * idx: ranked events (index rows); prevIds: pending ids from the last run;
+ * since: the date of the last run.
+ */
+export function pendingEvents(idx, prevIds, { day, since, republished }) {
+  const byId = new Map(idx.map(t => [t.id, t]));
+  let pending = prevIds.map(id => byId.get(id)).filter(Boolean);
+  if (republished) pending = pending.filter(t => t.endDate >= day);
+  const from = republished || since > day ? day : since;
+  for (const t of idx) if (t.fixtureCount > 0 && t.startDate <= day && t.endDate >= from && !pending.includes(t)) pending.push(t);
+  return pending.sort((a, b) => a.startDate.localeCompare(b.startDate));
+}
+
+/**
+ * Events whose money comes off with the pending events: the PDC drops an
+ * event's money exactly 104 weeks after it was played, and the official list
+ * already reflects everything up to the last event it includes.
+ * idx: ranked events (index rows); pending: index rows not yet in the list.
+ */
+export function eventsDropping(idx, pending, today) {
+  if (!pending.length) return [];
+  const ids = new Set(pending.map(t => t.id));
+  const lastIncluded = idx.filter(t => !ids.has(t.id) && t.fixtureCount > 0 && t.endDate < today).map(t => t.endDate).sort().pop() || '0000';
+  const upTo = pending.map(t => t.endDate).sort().pop();
+  return idx.filter(t => t.fixtureCount > 0 && plus104(t.endDate) > lastIncluded && plus104(t.endDate) <= upTo);
+}
+
+/**
+ * When each player's ranking money starts counting, where it is not the start
+ * of the two-year window. Players who lose their Tour Card (or never had one)
+ * and win it back start again from nothing, so older money is not in their
+ * total. Candidates come from matching each player's official total against
+ * their money since each season start (Q-School is in January); see acceptReset.
+ * totals: Map<pid, [{ endDate, amount }]> for every ranked event in the window.
+ * Returns { pid: { from, removed, err } }.
+ */
+export function resetCandidates(official, totals, seasonStarts) {
+  const out = {};
+  for (const p of official) {
+    const ev = totals.get(p.id) || [];
+    const from = d => ev.reduce((s, e) => s + (e.endDate >= d ? e.amount : 0), 0);
+    const all = from('0000'), base = Math.abs(all - p.money);
+    let best = null;
+    for (const d of seasonStarts) {
+      const removed = all - from(d), err = Math.abs(from(d) - p.money);
+      if (removed >= 1000 && err < (best?.err ?? base) && err <= Math.max(1000, base * 0.25)) best = { from: d, removed, err };
+    }
+    if (best) out[p.id] = best;
+  }
+  return out;
+}
+
+/**
+ * Whether a reset candidate is real: the player had no Tour Card in the season
+ * before it or the season it starts (tourCardYears from the player feed), or
+ * the evidence is strong (£20k+ explained to within £1,000; a card won back at
+ * Q-School straight away can look unbroken in the feed).
+ */
+export const acceptReset = (c, tourCardYears = []) => {
+  const y = Number(c.from.slice(0, 4)), years = tourCardYears.map(Number);
+  return !years.includes(y - 1) || !years.includes(y) || (c.removed >= 20000 && c.err <= 1000);
+};
 
 /** Browser helper: the live race for the event in progress, or null. */
 export async function loadLiveRace(today, found) {
