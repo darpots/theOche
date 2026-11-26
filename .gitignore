@@ -10,3 +10,4 @@ scripts/.cache/
 .unmapped-broadcasters.txt
 .live-race-check.txt
 .unknown-event-types.txt
+.ranking-ledger-check.txt

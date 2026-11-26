@@ -50,6 +50,7 @@ jobs:
           }
           flag .live-race-check.txt "Live race: prediction differed from the official rankings"
           flag .unknown-event-types.txt "Live race: new PDC event type to check"
+          flag .ranking-ledger-check.txt "Ranking ledger: PDPA breakdowns don't match the official totals"
       - uses: ./.github/actions/commit
         with:
           message: 'data: refresh calendar, rankings and current tournament'

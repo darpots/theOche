@@ -623,6 +623,111 @@ export const acceptReset = (c, tourCardYears = []) => {
   return !years.includes(y - 1) || !years.includes(y) || (c.removed >= 20000 && c.err <= 1000);
 };
 
+// ---------------------------------------------------------------------------
+// Ranking ledger: every player's counting prize money, event by event, with the
+// date each amount expires. Source: the PDPA's Order of Merit breakdowns
+// (pdpa.co.uk/ranking-tables), which list only money that counts. Each player's
+// rows are matched to PDC events (for dates) and accepted only when they add up
+// to the player's official PDC total.
+// ---------------------------------------------------------------------------
+
+const unescapeHtml = s => s.replace(/&#0?39;|&#x27;|&rsquo;/g, "'").replace(/&amp;/g, '&').replace(/&quot;/g, '"').replace(/&nbsp;/g, ' ');
+const text = h => unescapeHtml(h.replace(/<[^>]+>/g, ' ')).replace(/\s+/g, ' ').trim();
+
+/**
+ * Parse the main Order of Merit table of the PDPA's ranking page: players in
+ * order, each with their total and breakdown rows { position, tournament, amount }.
+ * The page holds several ranking tables; the first is the Order of Merit, and a
+ * new table starts where the money goes back up.
+ */
+export function parsePdpaRankings(html) {
+  const marks = [...html.matchAll(/class="player-tag-wrapper/g)].map(m => m.index);
+  const players = [];
+  for (let k = 0; k < marks.length; k++) {
+    const blk = html.slice(marks[k], marks[k + 1] ?? html.length);
+    const name = /class="name">([^<]+)</.exec(blk)?.[1];
+    const total = /class="money">[\s\S]*?£([\d,]+)/.exec(blk)?.[1];
+    if (!name || !total) continue;
+    const t = Number(total.replace(/,/g, ''));
+    if (players.length && t > players[players.length - 1].total) break; // next table
+    const panel = blk.slice(Math.max(0, blk.indexOf('breakdown-panel')));
+    const cells = panel.split('</div>').map(text).filter(c => c && !['Breakdown', 'Position', 'Tournament'].includes(c));
+    const rows = [];
+    for (let i = 0; i + 2 < cells.length;) {
+      const [a, b, c] = [cells[i], cells[i + 1], cells[i + 2]];
+      if (/^\d+$/.test(a) && !/^£?[\d,]+$/.test(b) && /^£?[\d,]+$/.test(c)) { rows.push({ position: Number(a), tournament: b, amount: Number(c.replace(/[£,]/g, '')) }); i += 3; } else i++;
+    }
+    players.push({ name: unescapeHtml(name.trim()), slug: /pdpa\.co\.uk\/player\/([a-z0-9-]+)/.exec(blk)?.[1] || null, total: t, rows });
+  }
+  return players;
+}
+
+/** The PDC event (index row) a PDPA tournament name refers to, or null. */
+export function pdpaEvent(name, events) {
+  let x;
+  if ((x = /^Players Championships (\d{4}) PC 0*(\d+)\b/.exec(name))) return events.find(t => t.name === `${x[1]} Players Championship ${x[2]}`) || null;
+  if ((x = /^PDC World Championship (\d{4})$/.exec(name))) return events.find(t => /World Championship$/.test(t.name) && t.endDate.startsWith(x[1])) || null;
+  if ((x = /^PDC World Masters Prelim (\d{4})$/.exec(name))) return events.find(t => t.name === `${x[1]} Winmau World Masters (Preliminary)`) || null;
+  if ((x = /^PDC World Masters (\d{4})$/.exec(name))) return events.find(t => t.name === `${x[1]} Winmau World Masters`) || null;
+  if ((x = /^(.*) (\d{4})$/.exec(name))) return events.find(t => t.name === `${x[2]} ${x[1]}`) || events.find(t => t.name.startsWith(`${x[2]} ET`) && t.name.endsWith(` - ${x[1]}`)) || null;
+  return null;
+}
+
+// Known errors in the PDPA breakdowns, put right from the PDC's own figures:
+// the 2026 Grand Slam group stage is a prize band too high (published prizes:
+// second £12,500, third £5,000; the PDC's rankings use those).
+const PDPA_FIX_FROM_FEED = ['2026 Grand Slam of Darts'];
+
+/** Match a PDPA player to the official list: by name, else by surname and total. */
+const nameKey = s => keyName(s.replace(/ł/g, 'l').replace(/Ł/g, 'L'));
+const surnameKey = s => keyName(s.split(' ').slice(1).join(' ').replace(/ü/g, 'ue').replace(/ö/g, 'oe').replace(/ä/g, 'ae').replace(/ł/g, 'l'));
+export function matchPdpaPlayer(p, official) {
+  return official.find(o => nameKey(o.name) === nameKey(p.name))
+    || (c => (c.length === 1 ? c[0] : null))(official.filter(o => surnameKey(o.name) === surnameKey(p.name) && o.money === p.total));
+}
+
+/**
+ * Build the ledger. pdpa: parsePdpaRankings() output; official: normaliseRankings();
+ * events: ranked index rows; feedPrizes(eventId) → eventPrizes() map for that event
+ * (used only for the known fixes above).
+ * Returns { players: { pid: { name, total, verified, rows: [[eventId, endDate, expires, position, amount]] } }, unmatched: [...] }.
+ */
+export function buildLedger(pdpa, official, events, feedPrizes) {
+  const players = {}, unmatched = [];
+  for (const p of pdpa) {
+    const o = matchPdpaPlayer(p, official);
+    if (!o) { unmatched.push(`${p.name}: not on the official list`); continue; }
+    const rows = [];
+    for (const r of p.rows) {
+      const ev = pdpaEvent(r.tournament, events);
+      if (!ev) { unmatched.push(`${p.name}: unknown tournament "${r.tournament}"`); continue; }
+      let amount = r.amount;
+      if (PDPA_FIX_FROM_FEED.includes(ev.name)) { const f = feedPrizes(ev.id)?.get(o.id); if (f && /^Group/i.test(f.round || '')) amount = f.amount; }
+      rows.push([ev.id, ev.endDate, plus104(ev.endDate), r.position, amount]);
+    }
+    rows.sort((a, b) => b[1].localeCompare(a[1]));
+    const sum = rows.reduce((n, r) => n + r[4], 0);
+    players[o.id] = { name: o.name, total: o.money, verified: sum === o.money, ...(sum === o.money ? {} : { ledgerTotal: sum }), rows };
+  }
+  return { players, unmatched };
+}
+
+/**
+ * Money coming off, from the ledger where a player's ledger is verified, else
+ * from the PDC feed (expiringMap). dropIds: the events whose 104 weeks run out.
+ */
+export function expiringWithLedger(ledger, dropIds, fallback, eventNames = {}) {
+  const ids = new Set(dropIds.map(String));
+  const out = new Map(fallback instanceof Map ? fallback : Object.entries(fallback || {}));
+  for (const [pid, p] of Object.entries(ledger?.players || {})) {
+    if (!p.verified) continue;
+    const ev = p.rows.filter(r => ids.has(String(r[0])) && r[4] > 0);
+    if (ev.length) out.set(pid, { amount: ev.reduce((n, r) => n + r[4], 0), estimated: false, fromLedger: true, events: ev.map(r => ({ name: eventNames[r[0]] || String(r[0]), amount: r[4], position: r[3] })) });
+    else out.delete(pid);
+  }
+  return out;
+}
+
 /** Browser helper: the live race for the event in progress, or null. */
 export async function loadLiveRace(today, found) {
   const json = u => fetch(u).then(r => (r.ok ? r.json() : null)).catch(() => null);
