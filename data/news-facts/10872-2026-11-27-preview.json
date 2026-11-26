@@ -1,0 +1,1703 @@
+{
+ "event": "Players Championship Finals",
+ "date": "2026-11-27",
+ "kind": "preview",
+ "matches": [
+  {
+   "fixture": "518138",
+   "stage": "Last 64",
+   "format": "First to 6 legs",
+   "time": null,
+   "winnerGuaranteed": "£7,000",
+   "losersTake": "£4,000",
+   "players": [
+    {
+     "name": "Karel Sedlacek",
+     "worldRank": 38,
+     "last12Months": {
+      "average": 92.91,
+      "won": 66,
+      "played": 117,
+      "titles": 1
+     },
+     "last5": [
+      "L 0-5 v Nathan Aspinall",
+      "L 4-5 v Maik Kuivenhoven",
+      "L 2-6 v Charlie Manby",
+      "W 6-5 v Tommy Lishman",
+      "L 4-6 v Gabriel Clemens"
+     ],
+     "previousBestAtEvent": "Last 64 (2025)"
+    },
+    {
+     "name": "Gary Anderson",
+     "worldRank": 16,
+     "last12Months": {
+      "average": 98.28,
+      "won": 47,
+      "played": 72,
+      "titles": 0
+     },
+     "last5": [
+      "L 3-6 v Stephen Bunting",
+      "W 6-2 v Andy Boulton",
+      "L 4-7 v Luke Humphries",
+      "W 6-3 v Raymond van Barneveld",
+      "W 6-4 v Wessel Nijman"
+     ],
+     "previousBestAtEvent": "Winner (2014)"
+    }
+   ],
+   "headToHead": {
+    "meetings": 2,
+    "wins": {
+     "Karel Sedlacek": 0,
+     "Gary Anderson": 2
+    }
+   }
+  },
+  {
+   "fixture": "518139",
+   "stage": "Last 64",
+   "format": "First to 6 legs",
+   "time": null,
+   "winnerGuaranteed": "£7,000",
+   "losersTake": "£4,000",
+   "players": [
+    {
+     "name": "Rob Cross",
+     "worldRank": 24,
+     "last12Months": {
+      "average": 96.28,
+      "won": 76,
+      "played": 121,
+      "titles": 1
+     },
+     "last5": [
+      "L 8-10 v Niko Springer",
+      "W 5-1 v Anton Ostlund",
+      "W 5-1 v Jonny Clayton",
+      "L 3-6 v Tommy Morris",
+      "L 3-6 v Gary Anderson"
+     ],
+     "previousBestAtEvent": "Semi-Final (2017)"
+    },
+    {
+     "name": "Mickey Mansell",
+     "worldRank": 53,
+     "last12Months": {
+      "average": 91.87,
+      "won": 47,
+      "played": 89,
+      "titles": 0
+     },
+     "last5": [
+      "L 4-6 v Martin Schindler",
+      "L 5-6 v Dirk van Duijvenbode",
+      "W 6-4 v Patrik Williams",
+      "W 6-1 v Sietse Lap",
+      "L 2-6 v Chris Dobey"
+     ],
+     "previousBestAtEvent": "Last 32 (2017)"
+    }
+   ],
+   "headToHead": {
+    "meetings": 9,
+    "wins": {
+     "Rob Cross": 6,
+     "Mickey Mansell": 3
+    }
+   }
+  },
+  {
+   "fixture": "518137",
+   "stage": "Last 64",
+   "format": "First to 6 legs",
+   "time": null,
+   "winnerGuaranteed": "£7,000",
+   "losersTake": "£4,000",
+   "players": [
+    {
+     "name": "Kim Huybrechts",
+     "worldRank": 46,
+     "last12Months": {
+      "average": 93.64,
+      "won": 65,
+      "played": 112,
+      "titles": 0
+     },
+     "last5": [
+      "L 5-6 v Cristo Reyes",
+      "W 6-2 v James Wade",
+      "W 6-1 v Chris Landman",
+      "W 6-5 v James Hurrell",
+      "W 6-5 v Martijn Dragt"
+     ],
+     "previousBestAtEvent": "Runner-up (2012)"
+    },
+    {
+     "name": "Joe Hunt",
+     "worldRank": 85,
+     "last12Months": {
+      "average": 90.25,
+      "won": 47,
+      "played": 83,
+      "titles": 0
+     },
+     "last5": [
+      "L 4-5 v Sebastian Bialecki",
+      "L 3-5 v Gerwyn Price",
+      "L 3-6 v William O'Connor",
+      "L 2-6 v Ross Smith",
+      "W 6-3 v Joe Cullen"
+     ],
+     "previousBestAtEvent": "first appearance on record"
+    }
+   ],
+   "headToHead": {
+    "meetings": 1,
+    "wins": {
+     "Kim Huybrechts": 0,
+     "Joe Hunt": 1
+    }
+   }
+  },
+  {
+   "fixture": "518124",
+   "stage": "Last 64",
+   "format": "First to 6 legs",
+   "time": null,
+   "winnerGuaranteed": "£7,000",
+   "losersTake": "£4,000",
+   "players": [
+    {
+     "name": "Chris Dobey",
+     "worldRank": 15,
+     "last12Months": {
+      "average": 97.15,
+      "won": 108,
+      "played": 161,
+      "titles": 3
+     },
+     "last5": [
+      "L 3-5 v Martin Schindler",
+      "W 5-2 v Jan Schmidt",
+      "L 4-6 v Cristo Reyes",
+      "W 6-1 v Tom Bissell",
+      "W 6-3 v Raymond van Barneveld"
+     ],
+     "previousBestAtEvent": "Quarter-Final (2025)"
+    },
+    {
+     "name": "Mike De Decker",
+     "worldRank": 35,
+     "last12Months": {
+      "average": 91.17,
+      "won": 34,
+      "played": 80,
+      "titles": 0
+     },
+     "last5": [
+      "L 5-6 v Luke Humphries",
+      "L 2-6 v Joe Cullen",
+      "L 5-6 v Marvin van Velzen",
+      "L 2-6 v Maik Kuivenhoven",
+      "W 6-4 v Ricardo Pietreczko"
+     ],
+     "previousBestAtEvent": "Quarter-Final (2024)"
+    }
+   ],
+   "headToHead": {
+    "meetings": 13,
+    "wins": {
+     "Chris Dobey": 8,
+     "Mike De Decker": 5
+    }
+   }
+  },
+  {
+   "fixture": "518136",
+   "stage": "Last 64",
+   "format": "First to 6 legs",
+   "time": null,
+   "winnerGuaranteed": "£7,000",
+   "losersTake": "£4,000",
+   "players": [
+    {
+     "name": "Andrew Gilding",
+     "worldRank": 27,
+     "last12Months": {
+      "average": 92.65,
+      "won": 82,
+      "played": 136,
+      "titles": 1
+     },
+     "last5": [
+      "L 1-5 v Ryan Searle",
+      "W 5-4 v Charlie Manby",
+      "L 5-6 v Adam Gawlas",
+      "W 6-1 v Thomas Lovely",
+      "L 3-6 v Charlie Manby"
+     ],
+     "previousBestAtEvent": "Last 16 (2025)"
+    },
+    {
+     "name": "Bradley Brooks",
+     "worldRank": 51,
+     "last12Months": {
+      "average": 91.53,
+      "won": 44,
+      "played": 83,
+      "titles": 0
+     },
+     "last5": [
+      "L 2-5 v Gian van Veen",
+      "W 5-3 v Carl Sneyd",
+      "L 1-6 v Luke Humphries",
+      "W 6-1 v Rhys Griffin",
+      "L 3-6 v Tommy Morris"
+     ],
+     "previousBestAtEvent": "Last 32 (2025)"
+    }
+   ],
+   "headToHead": {
+    "meetings": 3,
+    "wins": {
+     "Andrew Gilding": 1,
+     "Bradley Brooks": 2
+    }
+   }
+  },
+  {
+   "fixture": "518135",
+   "stage": "Last 64",
+   "format": "First to 6 legs",
+   "time": null,
+   "winnerGuaranteed": "£7,000",
+   "losersTake": "£4,000",
+   "players": [
+    {
+     "name": "Maik Kuivenhoven",
+     "worldRank": 67,
+     "last12Months": {
+      "average": 91,
+      "won": 50,
+      "played": 93,
+      "titles": 0
+     },
+     "last5": [
+      "W 5-4 v Karel Sedlacek",
+      "L 1-5 v Nathan Aspinall",
+      "L 3-6 v Jeffrey Sparidaans",
+      "L 4-6 v Jurjen van der Velde",
+      "W 6-3 v Rhys Griffin"
+     ],
+     "previousBestAtEvent": "Last 32 (2023)"
+    },
+    {
+     "name": "Daryl Gurney",
+     "worldRank": 31,
+     "last12Months": {
+      "average": 91.53,
+      "won": 52,
+      "played": 99,
+      "titles": 0
+     },
+     "last5": [
+      "L 3-6 v Danny Noppert",
+      "W 6-2 v Charlie Manby",
+      "W 6-4 v Jonny Clayton",
+      "W 6-5 v Darryl Pilgrim",
+      "L 3-6 v Raymond van Barneveld"
+     ],
+     "previousBestAtEvent": "Winner (2018)"
+    }
+   ],
+   "headToHead": {
+    "meetings": 12,
+    "wins": {
+     "Maik Kuivenhoven": 7,
+     "Daryl Gurney": 5
+    }
+   }
+  },
+  {
+   "fixture": "518134",
+   "stage": "Last 64",
+   "format": "First to 6 legs",
+   "time": null,
+   "winnerGuaranteed": "£7,000",
+   "losersTake": "£4,000",
+   "players": [
+    {
+     "name": "Dirk van Duijvenbode",
+     "worldRank": 23,
+     "last12Months": {
+      "average": 95.22,
+      "won": 82,
+      "played": 137,
+      "titles": 0
+     },
+     "last5": [
+      "L 0-6 v Michael van Gerwen",
+      "W 6-3 v Sietse Lap",
+      "W 6-0 v Ryan Meikle",
+      "L 4-6 v Niels Zonneveld",
+      "W 6-5 v Ross Smith"
+     ],
+     "previousBestAtEvent": "Semi-Final (2024)"
+    },
+    {
+     "name": "Alan Soutar",
+     "worldRank": 56,
+     "last12Months": {
+      "average": 93.2,
+      "won": 35,
+      "played": 76,
+      "titles": 0
+     },
+     "last5": [
+      "L 4-5 v Jermaine Wattimena",
+      "W 5-2 v Lisa Ashton",
+      "L 5-6 v Tom Bissell",
+      "W 6-5 v Alexander Merkx",
+      "L 2-6 v Bradley Brooks"
+     ],
+     "previousBestAtEvent": "Last 64 (2025)"
+    }
+   ],
+   "headToHead": {
+    "meetings": 6,
+    "wins": {
+     "Dirk van Duijvenbode": 2,
+     "Alan Soutar": 4
+    }
+   }
+  },
+  {
+   "fixture": "518132",
+   "stage": "Last 64",
+   "format": "First to 6 legs",
+   "time": null,
+   "winnerGuaranteed": "£7,000",
+   "losersTake": "£4,000",
+   "players": [
+    {
+     "name": "Kevin Doets",
+     "worldRank": 21,
+     "last12Months": {
+      "average": 96.56,
+      "won": 128,
+      "played": 181,
+      "titles": 1
+     },
+     "last5": [
+      "L 13-16 v Gerwyn Price",
+      "W 16-7 v Jermaine Wattimena",
+      "W 10-5 v Cameron Menzies",
+      "W 5-1 v Tommy Morris",
+      "W 5-3 v Josh Rock"
+     ],
+     "previousBestAtEvent": "Last 32 (2023)"
+    },
+    {
+     "name": "Ritchie Edhouse",
+     "worldRank": 59,
+     "last12Months": {
+      "average": 91.28,
+      "won": 33,
+      "played": 72,
+      "titles": 0
+     },
+     "last5": [
+      "L 4-6 v Connor Scutt",
+      "L 4-6 v Niels Zonneveld",
+      "L 3-6 v Wesley Plaisier",
+      "W 6-2 v Levy Frauenfelder",
+      "W 6-5 v Jeffrey De Graaf"
+     ],
+     "previousBestAtEvent": "Last 32 (2024)"
+    }
+   ],
+   "headToHead": {
+    "meetings": 9,
+    "wins": {
+     "Kevin Doets": 3,
+     "Ritchie Edhouse": 6
+    }
+   }
+  },
+  {
+   "fixture": "518131",
+   "stage": "Last 64",
+   "format": "First to 6 legs",
+   "time": null,
+   "winnerGuaranteed": "£7,000",
+   "losersTake": "£4,000",
+   "players": [
+    {
+     "name": "Jonny Clayton",
+     "worldRank": 5,
+     "last12Months": {
+      "average": 95.8,
+      "won": 107,
+      "played": 159,
+      "titles": 6
+     },
+     "last5": [
+      "L 1-5 v Rob Cross",
+      "L 4-5 v Anton Ostlund",
+      "L 4-6 v Daryl Gurney",
+      "W 6-3 v Christian Kist",
+      "L 2-6 v Greg Ritchie"
+     ],
+     "previousBestAtEvent": "Runner-up (2017)"
+    },
+    {
+     "name": "Tom Sykes",
+     "worldRank": 72,
+     "last12Months": {
+      "average": 94.12,
+      "won": 53,
+      "played": 91,
+      "titles": 0
+     },
+     "last5": [
+      "L 11-16 v Michael van Gerwen",
+      "W 10-9 v Luke Humphries",
+      "W 5-1 v Krzysztof Ratajski",
+      "W 5-3 v Luke Woodhouse",
+      "L 2-6 v Danny Noppert"
+     ],
+     "previousBestAtEvent": "first appearance on record"
+    }
+   ],
+   "headToHead": {
+    "meetings": 0,
+    "wins": {
+     "Jonny Clayton": 0,
+     "Tom Sykes": 0
+    }
+   }
+  },
+  {
+   "fixture": "518130",
+   "stage": "Last 64",
+   "format": "First to 6 legs",
+   "time": null,
+   "winnerGuaranteed": "£7,000",
+   "losersTake": "£4,000",
+   "players": [
+    {
+     "name": "Danny Noppert",
+     "worldRank": 14,
+     "last12Months": {
+      "average": 95.16,
+      "won": 92,
+      "played": 147,
+      "titles": 0
+     },
+     "last5": [
+      "L 4-6 v Jack Aldridge",
+      "W 6-3 v Daryl Gurney",
+      "W 6-2 v Tom Sykes",
+      "W 6-3 v Mario Vandenbogaerde",
+      "W 6-3 v Marvin van Velzen"
+     ],
+     "previousBestAtEvent": "Semi-Final (2018)"
+    },
+    {
+     "name": "Scott Williams",
+     "worldRank": 50,
+     "last12Months": {
+      "average": 91.63,
+      "won": 31,
+      "played": 67,
+      "titles": 0
+     },
+     "last5": [
+      "L 3-6 v Carl Sneyd",
+      "W 6-4 v Ross Smith",
+      "L 2-6 v Tyler Thorpe",
+      "L 3-7 v Tommy Morris",
+      "W 6-0 v Ricardo Pietreczko"
+     ],
+     "previousBestAtEvent": "Quarter-Final (2024)"
+    }
+   ],
+   "headToHead": {
+    "meetings": 9,
+    "wins": {
+     "Danny Noppert": 6,
+     "Scott Williams": 3
+    }
+   }
+  },
+  {
+   "fixture": "518129",
+   "stage": "Last 64",
+   "format": "First to 6 legs",
+   "time": null,
+   "winnerGuaranteed": "£7,000",
+   "losersTake": "£4,000",
+   "players": [
+    {
+     "name": "Krzysztof Ratajski",
+     "worldRank": 19,
+     "last12Months": {
+      "average": 94.64,
+      "won": 87,
+      "played": 141,
+      "titles": 1
+     },
+     "last5": [
+      "L 1-5 v Tom Sykes",
+      "W 5-1 v Luke Woodhouse",
+      "L 2-6 v Adam Lipscombe",
+      "L 3-6 v Jeffrey De Zwaan",
+      "L 1-6 v Chris Dobey"
+     ],
+     "previousBestAtEvent": "Last 16 (2025)"
+    },
+    {
+     "name": "Damon Heta",
+     "worldRank": 22,
+     "last12Months": {
+      "average": 94.34,
+      "won": 70,
+      "played": 126,
+      "titles": 0
+     },
+     "last5": [
+      "L 5-6 v Rob Owen",
+      "W 6-2 v Jim Long",
+      "L 4-6 v Patrik Williams",
+      "L 4-6 v Wesley Plaisier",
+      "W 6-4 v Jimmy van Schie"
+     ],
+     "previousBestAtEvent": "Quarter-Final (2023)"
+    }
+   ],
+   "headToHead": {
+    "meetings": 10,
+    "wins": {
+     "Krzysztof Ratajski": 3,
+     "Damon Heta": 7
+    }
+   }
+  },
+  {
+   "fixture": "518133",
+   "stage": "Last 64",
+   "format": "First to 6 legs",
+   "time": null,
+   "winnerGuaranteed": "£7,000",
+   "losersTake": "£4,000",
+   "players": [
+    {
+     "name": "James Wade",
+     "worldRank": 7,
+     "last12Months": {
+      "average": 95.23,
+      "won": 79,
+      "played": 121,
+      "titles": 3
+     },
+     "last5": [
+      "L 8-10 v Michael van Gerwen",
+      "W 5-0 v Ricky Evans",
+      "W 5-1 v Cam Crabtree",
+      "L 2-6 v Kim Huybrechts",
+      "W 6-3 v Harry Ward"
+     ],
+     "previousBestAtEvent": "Semi-Final (2009)"
+    },
+    {
+     "name": "Justin Hood",
+     "worldRank": 39,
+     "last12Months": {
+      "average": 95.66,
+      "won": 47,
+      "played": 83,
+      "titles": 0
+     },
+     "last5": [
+      "L 3-6 v Luke Humphries",
+      "W 6-2 v Cameron Menzies",
+      "W 6-2 v Greg Ritchie",
+      "L 4-6 v Niels Zonneveld",
+      "W 6-4 v Gabriel Clemens"
+     ],
+     "previousBestAtEvent": "Last 32 (2025)"
+    }
+   ],
+   "headToHead": {
+    "meetings": 5,
+    "wins": {
+     "James Wade": 3,
+     "Justin Hood": 2
+    }
+   }
+  },
+  {
+   "fixture": "518128",
+   "stage": "Last 64",
+   "format": "First to 6 legs",
+   "time": null,
+   "winnerGuaranteed": "£7,000",
+   "losersTake": "£4,000",
+   "players": [
+    {
+     "name": "Luke Humphries",
+     "worldRank": 4,
+     "last12Months": {
+      "average": 99.92,
+      "won": 102,
+      "played": 138,
+      "titles": 8
+     },
+     "last5": [
+      "L 9-10 v Tom Sykes",
+      "W 5-2 v Joe Cullen",
+      "W 5-3 v Paolo Nebrida",
+      "L 5-8 v Tommy Morris",
+      "W 7-5 v Jack Aldridge"
+     ],
+     "previousBestAtEvent": "Winner (2024)"
+    },
+    {
+     "name": "Darryl Pilgrim",
+     "worldRank": 78,
+     "last12Months": {
+      "average": 90.73,
+      "won": 37,
+      "played": 73,
+      "titles": 0
+     },
+     "last5": [
+      "L 5-6 v Daryl Gurney",
+      "L 3-6 v Callan Rydz",
+      "L 2-6 v Tom Bissell",
+      "W 6-3 v Dimitri Van den Bergh",
+      "L 2-6 v Kevin Doets"
+     ],
+     "previousBestAtEvent": "first appearance on record"
+    }
+   ],
+   "headToHead": {
+    "meetings": 3,
+    "wins": {
+     "Luke Humphries": 3,
+     "Darryl Pilgrim": 0
+    }
+   }
+  },
+  {
+   "fixture": "518127",
+   "stage": "Last 64",
+   "format": "First to 6 legs",
+   "time": null,
+   "winnerGuaranteed": "£7,000",
+   "losersTake": "£4,000",
+   "players": [
+    {
+     "name": "Michael van Gerwen",
+     "worldRank": 8,
+     "last12Months": {
+      "average": 96.38,
+      "won": 94,
+      "played": 150,
+      "titles": 4
+     },
+     "last5": [
+      "L 11-16 v Gian van Veen",
+      "W 16-11 v Tom Sykes",
+      "W 10-8 v James Wade",
+      "W 5-4 v Jeffrey De Graaf",
+      "W 5-4 v Henry Coates"
+     ],
+     "previousBestAtEvent": "Winner (2017)"
+    },
+    {
+     "name": "Connor Scutt",
+     "worldRank": 55,
+     "last12Months": {
+      "average": 92.66,
+      "won": 40,
+      "played": 81,
+      "titles": 0
+     },
+     "last5": [
+      "L 5-6 v Derek Coulson",
+      "W 6-4 v Ritchie Edhouse",
+      "L 1-6 v Michael van Gerwen",
+      "W 6-5 v Harry Ward",
+      "L 4-6 v Charlie Manby"
+     ],
+     "previousBestAtEvent": "Quarter-Final (2024)"
+    }
+   ],
+   "headToHead": {
+    "meetings": 3,
+    "wins": {
+     "Michael van Gerwen": 3,
+     "Connor Scutt": 0
+    }
+   }
+  },
+  {
+   "fixture": "518126",
+   "stage": "Last 64",
+   "format": "First to 6 legs",
+   "time": null,
+   "winnerGuaranteed": "£7,000",
+   "losersTake": "£4,000",
+   "players": [
+    {
+     "name": "Cristo Reyes",
+     "worldRank": 63,
+     "last12Months": {
+      "average": 94.17,
+      "won": 71,
+      "played": 120,
+      "titles": 0
+     },
+     "last5": [
+      "L 4-7 v Tommy Morris",
+      "W 6-5 v Kim Huybrechts",
+      "W 6-4 v Chris Dobey",
+      "W 6-2 v Adam Gawlas",
+      "W 6-2 v Lukas Wenig"
+     ],
+     "previousBestAtEvent": "Last 32 (2018)"
+    },
+    {
+     "name": "Darius Labanauskas",
+     "worldRank": 88,
+     "last12Months": {
+      "average": 91.01,
+      "won": 39,
+      "played": 78,
+      "titles": 0
+     },
+     "last5": [
+      "L 4-6 v Viktor Tingstrom",
+      "L 0-6 v Luke Humphries",
+      "W 6-1 v Tytus Kanik",
+      "L 2-6 v Scott Williams",
+      "W 6-4 v Peter Wright"
+     ],
+     "previousBestAtEvent": "first appearance on record"
+    }
+   ],
+   "headToHead": {
+    "meetings": 2,
+    "wins": {
+     "Cristo Reyes": 0,
+     "Darius Labanauskas": 2
+    }
+   }
+  },
+  {
+   "fixture": "518125",
+   "stage": "Last 64",
+   "format": "First to 6 legs",
+   "time": null,
+   "winnerGuaranteed": "£7,000",
+   "losersTake": "£4,000",
+   "players": [
+    {
+     "name": "Richard Veenstra",
+     "worldRank": 57,
+     "last12Months": {
+      "average": 91.68,
+      "won": 52,
+      "played": 90,
+      "titles": 0
+     },
+     "last5": [
+      "L 4-6 v Wessel Nijman",
+      "W 6-5 v Callan Rydz",
+      "L 5-6 v Ryan Joyce",
+      "L 2-6 v Krzysztof Ratajski",
+      "W 6-1 v Alan Soutar"
+     ],
+     "previousBestAtEvent": "Last 32 (2025)"
+    },
+    {
+     "name": "Joe Cullen",
+     "worldRank": 33,
+     "last12Months": {
+      "average": 93.2,
+      "won": 54,
+      "played": 103,
+      "titles": 0
+     },
+     "last5": [
+      "L 2-5 v Luke Humphries",
+      "L 2-5 v Paolo Nebrida",
+      "L 4-6 v Archie Self",
+      "L 3-6 v Joe Hunt",
+      "W 6-2 v Mike De Decker"
+     ],
+     "previousBestAtEvent": "Last 16 (2018)"
+    }
+   ],
+   "headToHead": {
+    "meetings": 4,
+    "wins": {
+     "Richard Veenstra": 0,
+     "Joe Cullen": 4
+    }
+   }
+  },
+  {
+   "fixture": "518108",
+   "stage": "Last 64",
+   "format": "First to 6 legs",
+   "time": null,
+   "winnerGuaranteed": "£7,000",
+   "losersTake": "£4,000",
+   "players": [
+    {
+     "name": "Wessel Nijman",
+     "worldRank": 10,
+     "last12Months": {
+      "average": 97.3,
+      "won": 138,
+      "played": 186,
+      "titles": 8
+     },
+     "last5": [
+      "L 3-5 v Niko Springer",
+      "W 5-1 v Adam Sevada",
+      "L 3-6 v Tommy Morris",
+      "W 6-3 v Nick Kenny",
+      "W 6-4 v Richard Veenstra"
+     ],
+     "previousBestAtEvent": "Last 64 (2025)"
+    },
+    {
+     "name": "Henry Coates",
+     "worldRank": 86,
+     "last12Months": {
+      "average": 94.34,
+      "won": 27,
+      "played": 46,
+      "titles": 1
+     },
+     "last5": [
+      "W 5-4 v Jeffrey De Graaf",
+      "L 4-5 v Michael van Gerwen",
+      "L 3-6 v Jeffrey De Zwaan",
+      "L 5-6 v Gerwyn Price",
+      "W 6-3 v Mervyn King"
+     ],
+     "previousBestAtEvent": "first appearance on record"
+    }
+   ],
+   "headToHead": {
+    "meetings": 4,
+    "wins": {
+     "Wessel Nijman": 2,
+     "Henry Coates": 2
+    }
+   }
+  },
+  {
+   "fixture": "518123",
+   "stage": "Last 64",
+   "format": "First to 6 legs",
+   "time": null,
+   "winnerGuaranteed": "£7,000",
+   "losersTake": "£4,000",
+   "players": [
+    {
+     "name": "Tommy Morris",
+     "worldRank": 79,
+     "last12Months": {
+      "average": 92.17,
+      "won": 45,
+      "played": 78,
+      "titles": 1
+     },
+     "last5": [
+      "L 1-5 v Kevin Doets",
+      "W 5-2 v Josh Rock",
+      "W 8-5 v Luke Humphries",
+      "W 7-4 v Cristo Reyes",
+      "W 6-3 v Jermaine Wattimena"
+     ],
+     "previousBestAtEvent": "first appearance on record"
+    },
+    {
+     "name": "Callan Rydz",
+     "worldRank": 40,
+     "last12Months": {
+      "average": 93.07,
+      "won": 43,
+      "played": 84,
+      "titles": 0
+     },
+     "last5": [
+      "L 5-6 v Richard Veenstra",
+      "L 2-6 v Gary Anderson",
+      "W 6-4 v Ryan Searle",
+      "W 6-3 v Darryl Pilgrim",
+      "L 4-6 v Christian Kist"
+     ],
+     "previousBestAtEvent": "Last 32 (2025)"
+    }
+   ],
+   "headToHead": {
+    "meetings": 0,
+    "wins": {
+     "Tommy Morris": 0,
+     "Callan Rydz": 0
+    }
+   }
+  },
+  {
+   "fixture": "518122",
+   "stage": "Last 64",
+   "format": "First to 6 legs",
+   "time": null,
+   "winnerGuaranteed": "£7,000",
+   "losersTake": "£4,000",
+   "players": [
+    {
+     "name": "William O'Connor",
+     "worldRank": 29,
+     "last12Months": {
+      "average": 93.66,
+      "won": 76,
+      "played": 131,
+      "titles": 0
+     },
+     "last5": [
+      "L 5-6 v Jack Aldridge",
+      "W 6-2 v Shane McGuirk",
+      "W 6-3 v Joe Hunt",
+      "L 4-6 v Derek Coulson",
+      "W 6-1 v Tom Sykes"
+     ],
+     "previousBestAtEvent": "Last 16 (2017)"
+    },
+    {
+     "name": "James Hurrell",
+     "worldRank": 45,
+     "last12Months": {
+      "average": 90.63,
+      "won": 40,
+      "played": 79,
+      "titles": 0
+     },
+     "last5": [
+      "L 5-6 v Kim Huybrechts",
+      "W 6-3 v Stephen Rosney",
+      "L 4-6 v Owen Bates",
+      "L 3-6 v Kevin Doets",
+      "L 4-6 v Dominik Gruellich"
+     ],
+     "previousBestAtEvent": "Last 16 (2025)"
+    }
+   ],
+   "headToHead": {
+    "meetings": 3,
+    "wins": {
+     "William O'Connor": 3,
+     "James Hurrell": 0
+    }
+   }
+  },
+  {
+   "fixture": "518121",
+   "stage": "Last 64",
+   "format": "First to 6 legs",
+   "time": null,
+   "winnerGuaranteed": "£7,000",
+   "losersTake": "£4,000",
+   "players": [
+    {
+     "name": "Ryan Searle",
+     "worldRank": 13,
+     "last12Months": {
+      "average": 94.69,
+      "won": 64,
+      "played": 104,
+      "titles": 1
+     },
+     "last5": [
+      "L 7-10 v Gerwyn Price",
+      "W 5-1 v Andrew Gilding",
+      "W 5-4 v Charlie Manby",
+      "L 4-6 v Stefaan Henderyck",
+      "L 4-6 v Callan Rydz"
+     ],
+     "previousBestAtEvent": "Last 16 (2025)"
+    },
+    {
+     "name": "Brendan Dolan",
+     "worldRank": 47,
+     "last12Months": {
+      "average": 90.38,
+      "won": 45,
+      "played": 84,
+      "titles": 0
+     },
+     "last5": [
+      "L 0-6 v Ricardo Pietreczko",
+      "W 6-3 v Mervyn King",
+      "L 3-6 v Danny Noppert",
+      "W 6-3 v Charlie Manby",
+      "W 6-5 v Rob Owen"
+     ],
+     "previousBestAtEvent": "Last 16 (2023)"
+    }
+   ],
+   "headToHead": {
+    "meetings": 5,
+    "wins": {
+     "Ryan Searle": 4,
+     "Brendan Dolan": 1
+    }
+   }
+  },
+  {
+   "fixture": "518120",
+   "stage": "Last 64",
+   "format": "First to 6 legs",
+   "time": null,
+   "winnerGuaranteed": "£7,000",
+   "losersTake": "£4,000",
+   "players": [
+    {
+     "name": "Jermaine Wattimena",
+     "worldRank": 18,
+     "last12Months": {
+      "average": 94.6,
+      "won": 88,
+      "played": 145,
+      "titles": 1
+     },
+     "last5": [
+      "L 7-16 v Kevin Doets",
+      "W 10-8 v Luke Littler",
+      "W 5-4 v Alan Soutar",
+      "W 5-2 v Lisa Ashton",
+      "L 3-6 v Tommy Morris"
+     ],
+     "previousBestAtEvent": "Semi-Final (2025)"
+    },
+    {
+     "name": "Keane Barry",
+     "worldRank": 54,
+     "last12Months": {
+      "average": 91.71,
+      "won": 42,
+      "played": 84,
+      "titles": 0
+     },
+     "last5": [
+      "L 1-6 v Chris Dobey",
+      "L 2-6 v Ross Smith",
+      "L 5-6 v Lukas Wenig",
+      "W 6-3 v Max Hopp",
+      "L 5-6 v Beau Greaves"
+     ],
+     "previousBestAtEvent": "Last 64 (2025)"
+    }
+   ],
+   "headToHead": {
+    "meetings": 4,
+    "wins": {
+     "Jermaine Wattimena": 2,
+     "Keane Barry": 2
+    }
+   }
+  },
+  {
+   "fixture": "518118",
+   "stage": "Last 64",
+   "format": "First to 6 legs",
+   "time": null,
+   "winnerGuaranteed": "£7,000",
+   "losersTake": "£4,000",
+   "players": [
+    {
+     "name": "Sebastian Bialecki",
+     "worldRank": 42,
+     "last12Months": {
+      "average": 92.71,
+      "won": 65,
+      "played": 111,
+      "titles": 1
+     },
+     "last5": [
+      "L 2-5 v Gerwyn Price",
+      "W 5-4 v Joe Hunt",
+      "L 1-6 v Cam Crabtree",
+      "W 6-3 v Adam Warner",
+      "L 4-6 v Danny Noppert"
+     ],
+     "previousBestAtEvent": "Last 32 (2025)"
+    },
+    {
+     "name": "Gerwyn Price",
+     "worldRank": 3,
+     "last12Months": {
+      "average": 98.65,
+      "won": 93,
+      "played": 135,
+      "titles": 5
+     },
+     "last5": [
+      "W 16-11 v Gian van Veen",
+      "W 16-13 v Kevin Doets",
+      "W 16-15 v Niko Springer",
+      "W 10-7 v Ryan Searle",
+      "W 5-2 v Sebastian Bialecki"
+     ],
+     "previousBestAtEvent": "Semi-Final (2025)"
+    }
+   ],
+   "headToHead": {
+    "meetings": 6,
+    "wins": {
+     "Sebastian Bialecki": 0,
+     "Gerwyn Price": 6
+    }
+   }
+  },
+  {
+   "fixture": "518117",
+   "stage": "Last 64",
+   "format": "First to 6 legs",
+   "time": null,
+   "winnerGuaranteed": "£7,000",
+   "losersTake": "£4,000",
+   "players": [
+    {
+     "name": "Stephen Bunting",
+     "worldRank": 11,
+     "last12Months": {
+      "average": 95.04,
+      "won": 81,
+      "played": 142,
+      "titles": 2
+     },
+     "last5": [
+      "L 2-5 v Cameron Menzies",
+      "W 5-4 v Raymond Smith",
+      "L 5-6 v Jermaine Wattimena",
+      "W 6-4 v Marvin Kraft",
+      "W 6-3 v Gary Anderson"
+     ],
+     "previousBestAtEvent": "Quarter-Final (2023)"
+    },
+    {
+     "name": "Max Hopp",
+     "worldRank": 64,
+     "last12Months": {
+      "average": 91.67,
+      "won": 44,
+      "played": 81,
+      "titles": 0
+     },
+     "last5": [
+      "L 2-6 v Cam Crabtree",
+      "L 1-6 v Danny Noppert",
+      "W 6-2 v Arno Merk",
+      "L 3-6 v Keane Barry",
+      "L 2-6 v Martin Schindler"
+     ],
+     "previousBestAtEvent": "Last 32 (2018)"
+    }
+   ],
+   "headToHead": {
+    "meetings": 1,
+    "wins": {
+     "Stephen Bunting": 0,
+     "Max Hopp": 1
+    }
+   }
+  },
+  {
+   "fixture": "518119",
+   "stage": "Last 64",
+   "format": "First to 6 legs",
+   "time": null,
+   "winnerGuaranteed": "£7,000",
+   "losersTake": "£4,000",
+   "players": [
+    {
+     "name": "Jeffrey De Graaf",
+     "worldRank": 41,
+     "last12Months": {
+      "average": 93.48,
+      "won": 54,
+      "played": 99,
+      "titles": 1
+     },
+     "last5": [
+      "L 4-5 v Michael van Gerwen",
+      "L 4-5 v Henry Coates",
+      "L 5-6 v Derek Coulson",
+      "L 2-6 v Luke Woodhouse",
+      "W 6-1 v Tavis Dudeney"
+     ],
+     "previousBestAtEvent": "Last 16 (2024)"
+    },
+    {
+     "name": "Gian van Veen",
+     "worldRank": 2,
+     "last12Months": {
+      "average": 95.23,
+      "won": 99,
+      "played": 163,
+      "titles": 0
+     },
+     "last5": [
+      "L 11-16 v Gerwyn Price",
+      "W 16-11 v Michael van Gerwen",
+      "W 16-14 v Nathan Aspinall",
+      "W 10-7 v Martin Schindler",
+      "W 5-2 v Bradley Brooks"
+     ],
+     "previousBestAtEvent": "Last 32 (2025)"
+    }
+   ],
+   "headToHead": {
+    "meetings": 5,
+    "wins": {
+     "Jeffrey De Graaf": 1,
+     "Gian van Veen": 4
+    }
+   }
+  },
+  {
+   "fixture": "518116",
+   "stage": "Last 64",
+   "format": "First to 6 legs",
+   "time": null,
+   "winnerGuaranteed": "£7,000",
+   "losersTake": "£4,000",
+   "players": [
+    {
+     "name": "Luke Woodhouse",
+     "worldRank": 17,
+     "last12Months": {
+      "average": 95.28,
+      "won": 94,
+      "played": 145,
+      "titles": 2
+     },
+     "last5": [
+      "L 1-5 v Krzysztof Ratajski",
+      "L 3-5 v Tom Sykes",
+      "L 2-6 v Chris Landman",
+      "L 2-6 v Gerwyn Price",
+      "W 6-5 v Niko Springer"
+     ],
+     "previousBestAtEvent": "Quarter-Final (2023)"
+    },
+    {
+     "name": "Alexander Merkx",
+     "worldRank": 95,
+     "last12Months": {
+      "average": 90.28,
+      "won": 36,
+      "played": 69,
+      "titles": 0
+     },
+     "last5": [
+      "L 5-6 v Alan Soutar",
+      "L 2-6 v Beau Greaves",
+      "W 6-2 v Viktor Tingstrom",
+      "L 2-6 v Karel Sedlacek",
+      "L 3-6 v Rob Owen"
+     ],
+     "previousBestAtEvent": "first appearance on record"
+    }
+   ],
+   "headToHead": {
+    "meetings": 0,
+    "wins": {
+     "Luke Woodhouse": 0,
+     "Alexander Merkx": 0
+    }
+   }
+  },
+  {
+   "fixture": "518115",
+   "stage": "Last 64",
+   "format": "First to 6 legs",
+   "time": null,
+   "winnerGuaranteed": "£7,000",
+   "losersTake": "£4,000",
+   "players": [
+    {
+     "name": "Niels Zonneveld",
+     "worldRank": 28,
+     "last12Months": {
+      "average": 94.69,
+      "won": 78,
+      "played": 132,
+      "titles": 1
+     },
+     "last5": [
+      "W 5-4 v Luke Littler",
+      "L 3-5 v Beau Greaves",
+      "L 4-6 v Marvin Kraft",
+      "L 4-8 v Luke Humphries",
+      "W 7-5 v Michael van Gerwen"
+     ],
+     "previousBestAtEvent": "Last 16 (2024)"
+    },
+    {
+     "name": "Niko Springer",
+     "worldRank": 30,
+     "last12Months": {
+      "average": 92.03,
+      "won": 60,
+      "played": 110,
+      "titles": 0
+     },
+     "last5": [
+      "L 15-16 v Gerwyn Price",
+      "W 10-8 v Rob Cross",
+      "W 5-3 v Wessel Nijman",
+      "W 5-1 v Adam Sevada",
+      "L 5-6 v Tom Bissell"
+     ],
+     "previousBestAtEvent": "first appearance on record"
+    }
+   ],
+   "headToHead": {
+    "meetings": 2,
+    "wins": {
+     "Niels Zonneveld": 1,
+     "Niko Springer": 1
+    }
+   }
+  },
+  {
+   "fixture": "518113",
+   "stage": "Last 64",
+   "format": "First to 6 legs",
+   "time": null,
+   "winnerGuaranteed": "£7,000",
+   "losersTake": "£4,000",
+   "players": [
+    {
+     "name": "Tom Bissell",
+     "worldRank": 75,
+     "last12Months": {
+      "average": 92.39,
+      "won": 52,
+      "played": 89,
+      "titles": 0
+     },
+     "last5": [
+      "L 1-6 v Chris Dobey",
+      "W 6-5 v Alan Soutar",
+      "W 6-5 v Niko Springer",
+      "L 0-6 v Luke Humphries",
+      "W 6-0 v Ricardo Pietreczko"
+     ],
+     "previousBestAtEvent": "first appearance on record"
+    },
+    {
+     "name": "Rob Owen",
+     "worldRank": 60,
+     "last12Months": {
+      "average": 91.03,
+      "won": 46,
+      "played": 86,
+      "titles": 0
+     },
+     "last5": [
+      "L 3-6 v Tommy Morris",
+      "W 6-5 v Damon Heta",
+      "W 6-0 v Dimitri Van den Bergh",
+      "L 5-6 v Brendan Dolan",
+      "W 6-4 v Cristo Reyes"
+     ],
+     "previousBestAtEvent": "Last 64 (2017)"
+    }
+   ],
+   "headToHead": {
+    "meetings": 1,
+    "wins": {
+     "Tom Bissell": 1,
+     "Rob Owen": 0
+    }
+   }
+  },
+  {
+   "fixture": "518114",
+   "stage": "Last 64",
+   "format": "First to 6 legs",
+   "time": null,
+   "winnerGuaranteed": "£7,000",
+   "losersTake": "£4,000",
+   "players": [
+    {
+     "name": "Ross Smith",
+     "worldRank": 6,
+     "last12Months": {
+      "average": 96.19,
+      "won": 99,
+      "played": 144,
+      "titles": 6
+     },
+     "last5": [
+      "W 5-4 v Gabriel Clemens",
+      "L 3-5 v Rusty-Jake Rodriguez",
+      "L 4-6 v Scott Williams",
+      "L 5-6 v Dirk van Duijvenbode",
+      "W 6-2 v Joe Hunt"
+     ],
+     "previousBestAtEvent": "Semi-Final (2024)"
+    },
+    {
+     "name": "Michael Smith",
+     "worldRank": 37,
+     "last12Months": {
+      "average": 90.1,
+      "won": 42,
+      "played": 81,
+      "titles": 0
+     },
+     "last5": [
+      "L 4-6 v Adam Leek",
+      "L 2-6 v Wessel Nijman",
+      "W 6-2 v Martin Schindler",
+      "L 2-6 v Tommy Morris",
+      "W 6-3 v Stephen Burton"
+     ],
+     "previousBestAtEvent": "Last 16 (2015)"
+    }
+   ],
+   "headToHead": {
+    "meetings": 16,
+    "wins": {
+     "Ross Smith": 7,
+     "Michael Smith": 8
+    }
+   }
+  },
+  {
+   "fixture": "518112",
+   "stage": "Last 64",
+   "format": "First to 6 legs",
+   "time": null,
+   "winnerGuaranteed": "£7,000",
+   "losersTake": "£4,000",
+   "players": [
+    {
+     "name": "Beau Greaves",
+     "worldRank": 74,
+     "last12Months": {
+      "average": 94.4,
+      "won": 61,
+      "played": 99,
+      "titles": 1
+     },
+     "last5": [
+      "W 5-3 v Niels Zonneveld",
+      "L 2-5 v Luke Littler",
+      "L 4-6 v Wessel Nijman",
+      "W 6-2 v Alexander Merkx",
+      "W 6-4 v Peter Wright"
+     ],
+     "previousBestAtEvent": "first appearance on record"
+    },
+    {
+     "name": "Christian Kist",
+     "worldRank": 82,
+     "last12Months": {
+      "average": 89.46,
+      "won": 35,
+      "played": 70,
+      "titles": 0
+     },
+     "last5": [
+      "L 3-6 v Jonny Clayton",
+      "L 4-6 v Rob Cross",
+      "L 3-6 v Cameron Menzies",
+      "W 6-4 v Callan Rydz",
+      "L 3-6 v Mickey Mansell"
+     ],
+     "previousBestAtEvent": "Quarter-Final (2016)"
+    }
+   ],
+   "headToHead": {
+    "meetings": 0,
+    "wins": {
+     "Beau Greaves": 0,
+     "Christian Kist": 0
+    }
+   }
+  },
+  {
+   "fixture": "518111",
+   "stage": "Last 64",
+   "format": "First to 6 legs",
+   "time": null,
+   "winnerGuaranteed": "£7,000",
+   "losersTake": "£4,000",
+   "players": [
+    {
+     "name": "Cameron Menzies",
+     "worldRank": 25,
+     "last12Months": {
+      "average": 92.67,
+      "won": 61,
+      "played": 111,
+      "titles": 2
+     },
+     "last5": [
+      "L 5-10 v Kevin Doets",
+      "W 5-2 v Stephen Bunting",
+      "W 5-4 v Raymond Smith",
+      "L 2-6 v Justin Hood",
+      "W 6-3 v Wesley Plaisier"
+     ],
+     "previousBestAtEvent": "Last 32 (2024)"
+    },
+    {
+     "name": "Mensur Suljovic",
+     "worldRank": 52,
+     "last12Months": {
+      "average": 91.92,
+      "won": 48,
+      "played": 82,
+      "titles": 0
+     },
+     "last5": [
+      "L 3-6 v Tom Sykes",
+      "W 6-4 v Dave Chisnall",
+      "L 5-6 v Bradley Brooks",
+      "W 6-4 v Kevin Doets",
+      "L 4-6 v Maik Kuivenhoven"
+     ],
+     "previousBestAtEvent": "Semi-Final (2015)"
+    }
+   ],
+   "headToHead": {
+    "meetings": 10,
+    "wins": {
+     "Cameron Menzies": 7,
+     "Mensur Suljovic": 3
+    }
+   }
+  },
+  {
+   "fixture": "518110",
+   "stage": "Last 64",
+   "format": "First to 6 legs",
+   "time": null,
+   "winnerGuaranteed": "£7,000",
+   "losersTake": "£4,000",
+   "players": [
+    {
+     "name": "Charlie Manby",
+     "worldRank": 77,
+     "last12Months": {
+      "average": 92.48,
+      "won": 57,
+      "played": 96,
+      "titles": 1
+     },
+     "last5": [
+      "L 4-5 v Andrew Gilding",
+      "L 4-5 v Ryan Searle",
+      "L 2-6 v Daryl Gurney",
+      "W 6-2 v Karel Sedlacek",
+      "W 6-5 v Cor Dekker"
+     ],
+     "previousBestAtEvent": "first appearance on record"
+    },
+    {
+     "name": "Martin Schindler",
+     "worldRank": 20,
+     "last12Months": {
+      "average": 93.26,
+      "won": 54,
+      "played": 108,
+      "titles": 0
+     },
+     "last5": [
+      "L 7-10 v Gian van Veen",
+      "W 5-3 v Chris Dobey",
+      "W 5-0 v Jan Schmidt",
+      "L 1-6 v Nick Kenny",
+      "W 6-4 v Mickey Mansell"
+     ],
+     "previousBestAtEvent": "Last 16 (2025)"
+    }
+   ],
+   "headToHead": {
+    "meetings": 0,
+    "wins": {
+     "Charlie Manby": 0,
+     "Martin Schindler": 0
+    }
+   }
+  },
+  {
+   "fixture": "518109",
+   "stage": "Last 64",
+   "format": "First to 6 legs",
+   "time": null,
+   "winnerGuaranteed": "£7,000",
+   "losersTake": "£4,000",
+   "players": [
+    {
+     "name": "Gabriel Clemens",
+     "worldRank": 43,
+     "last12Months": {
+      "average": 91.4,
+      "won": 46,
+      "played": 85,
+      "titles": 1
+     },
+     "last5": [
+      "L 7-10 v Nathan Aspinall",
+      "W 5-3 v Rusty-Jake Rodriguez",
+      "L 4-5 v Ross Smith",
+      "L 4-6 v Tom Sykes",
+      "L 4-6 v Justin Hood"
+     ],
+     "previousBestAtEvent": "Semi-Final (2023)"
+    },
+    {
+     "name": "Dave Chisnall",
+     "worldRank": 32,
+     "last12Months": {
+      "average": 90.25,
+      "won": 63,
+      "played": 116,
+      "titles": 0
+     },
+     "last5": [
+      "L 4-6 v Mensur Suljovic",
+      "L 3-6 v Jurjen van der Velde",
+      "L 3-6 v Ricardo Pietreczko",
+      "W 6-2 v Ben Townley",
+      "L 5-6 v Rob Owen"
+     ],
+     "previousBestAtEvent": "Runner-up (2016)"
+    }
+   ],
+   "headToHead": {
+    "meetings": 10,
+    "wins": {
+     "Gabriel Clemens": 3,
+     "Dave Chisnall": 7
+    }
+   }
+  }
+ ]
+}
