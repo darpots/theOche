@@ -232,6 +232,7 @@ const playCards = [
   </script>
   <script>
     import { normaliseTournament, applyLive, surnameOf } from '../lib/pdc.mjs';
+    import { patch, setText } from '../lib/morph.mjs';
     import { liveFor, watchLive, unwatch, isPushing, currentLeg, LIVE_TICK, PUSH_TICK } from '../lib/live-client.mjs';
     import { matchday, featureTile, nextTileInner } from '../lib/feature.mjs';
     import { watchWins, watch180 } from '../lib/leg-flash.mjs';
@@ -252,7 +253,7 @@ const playCards = [
         const tick = () => {
           const s = Math.max(0, (target - Date.now()) / 1000);
           const v: Record<string, number> = { d: Math.floor(s / 86400), h: Math.floor(s / 3600) % 24, m: Math.floor(s / 60) % 60 };
-          count.querySelectorAll<HTMLElement>('[data-u]').forEach(el => { el.textContent = String(v[el.dataset.u!]).padStart(2, '0'); });
+          count.querySelectorAll<HTMLElement>('[data-u]').forEach(el => setText(el, String(v[el.dataset.u!]).padStart(2, '0')));
         };
         tick(); timer = window.setInterval(tick, 30_000);
       }
@@ -261,7 +262,8 @@ const playCards = [
       // live score and averages every few seconds; tiles redraw only on change.
       if (box.dataset.on) {
         let base: any = null, baseAt = 0, lastRun = 0;
-        const draw = (el: HTMLElement, html: string) => { if (el.dataset.html !== html) { el.innerHTML = html; el.dataset.html = html; } };
+        // Patched in place: only the scores or rows that changed are touched.
+        const draw = (el: HTMLElement, html: string) => patch(el, html);
         const refresh = async () => {
           if (document.hidden) return;
           lastRun = Date.now();
@@ -287,8 +289,8 @@ const playCards = [
             const nu = document.getElementById('nextup') as HTMLAnchorElement | null;
             const after = md.todays.find((f: any) => f.status !== 'result' && f !== pick?.[0] && (!md.now || f !== md.now) && !md.also.includes(f) && f.time >= ((pick?.[0] as any)?.time || ''));
             if (nu) {
-              if (after) { nu.innerHTML = nextTileInner(after, box.dataset.name!); nu.href = `/match?id=${after.id}`; nu.hidden = false; }
-              else nu.hidden = true;
+              if (after) { patch(nu, nextTileInner(after, box.dataset.name!)); if (nu.getAttribute('href') !== `/match?id=${after.id}`) nu.href = `/match?id=${after.id}`; if (nu.hidden) nu.hidden = false; }
+              else if (!nu.hidden) nu.hidden = true;
             }
             const ol = document.getElementById('results');
             if (ol) {

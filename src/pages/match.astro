@@ -55,6 +55,7 @@ import Layout from '../layouts/Layout.astro';
     import { ukTime, scoreHtml } from '../lib/format.mjs';
     import { watchWins, watch180, flashWin } from '../lib/leg-flash.mjs';
     import { getDelay } from '../lib/tv-delay.mjs';
+    import { patch } from '../lib/morph.mjs';
     import { cutoutImg, avatarSrc, pairPrefer } from '../lib/images.mjs';
     import { wireShareCards } from '../lib/share-card.mjs';
     wireShareCards();
@@ -123,7 +124,7 @@ import Layout from '../layouts/Layout.astro';
         const lastV = v.at(-1);
         const thr = won != null ? null : leg.throwing ?? (lastV ? (lastV.isParticipant1 ? 1 : 0) : null);
         const big = (k: number) => `<div class="lb-s s${k}${thr === k ? ' on' : ''}${won === k ? ' won' : ''}">
-            <b class="poster-num">${thr === k ? '<span class="lb-dot" aria-label="throwing"></span>' : ''}${left(k)}</b>
+            <b class="poster-num"><span class="lb-dot" aria-label="throwing"${thr === k ? '' : ' hidden'}></span>${left(k)}</b>
             <span class="lb-av" title="Three-dart average">${avg[k] != null ? `${Number(avg[k]).toFixed(2)} <i>avg</i>` : ''}</span></div>`;
         const who = (k: number) => { const p = ps[k]; const href = p?.participantSlug ? `/players/${p.participantSlug}` : null;
           return `<div class="who w${k}">${href ? `<a href="${href}">${esc(name(p))}</a>` : `<span>${esc(name(p))}</span>`}<small>${flag(p?.countryCode)} ${p?.ranking ? `World #${p.ranking}` : ''}</small></div>`; };
@@ -222,18 +223,20 @@ import Layout from '../layouts/Layout.astro';
     }
 
     function wireTip() {
-      const wrap = document.querySelector<HTMLElement>('#runavg .svgwrap'); if (!wrap) return;
-      const d = JSON.parse(document.querySelector('#runavg .rd')!.textContent!);
-      const svg = wrap.querySelector('svg')!, tip = wrap.querySelector<HTMLElement>('.tip')!, xh = svg.querySelector<SVGLineElement>('.xh')!;
-      svg.querySelectorAll<SVGRectElement>('rect[data-i]').forEach(r => {
-        r.addEventListener('pointerenter', () => {
-          const i = Number(r.dataset.i); const cx = d.L + (d.n === 1 ? (d.W - d.L - d.R) / 2 : (i / (d.n - 1)) * (d.W - d.L - d.R));
-          xh.setAttribute('x1', String(cx)); xh.setAttribute('x2', String(cx)); xh.removeAttribute('hidden');
-          tip.innerHTML = `<b>After leg ${i + 1}</b>${d.names.map((n: string, k: number) => `<span><i style="background:${C[k]}"></i>${esc(n)} ${d.pts[k][i] != null ? d.pts[k][i].toFixed(2) : '–'}</span>`).join('')}`;
-          tip.hidden = false; tip.style.left = `${(cx / d.W) * 100}%`;
-        });
+      // One delegated listener per chart (the chart is patched in place on each update,
+      // so per-bar listeners would pile up); it reads the current data on each move.
+      const wrap = document.querySelector<HTMLElement>('#runavg .svgwrap'); if (!wrap || (wrap as any).__tip) return;
+      (wrap as any).__tip = true;
+      wrap.addEventListener('pointerover', e => {
+        const r = (e.target as Element).closest?.('rect[data-i]') as SVGRectElement | null; if (!r) return;
+        const d = JSON.parse(document.querySelector('#runavg .rd')!.textContent!);
+        const svg = wrap.querySelector('svg')!, tip = wrap.querySelector<HTMLElement>('.tip')!, xh = svg.querySelector<SVGLineElement>('.xh')!;
+        const i = Number(r.dataset.i); const cx = d.L + (d.n === 1 ? (d.W - d.L - d.R) / 2 : (i / (d.n - 1)) * (d.W - d.L - d.R));
+        xh.setAttribute('x1', String(cx)); xh.setAttribute('x2', String(cx)); xh.removeAttribute('hidden');
+        tip.innerHTML = `<b>After leg ${i + 1}</b>${d.names.map((n: string, k: number) => `<span><i style="background:${C[k]}"></i>${esc(n)} ${d.pts[k][i] != null ? d.pts[k][i].toFixed(2) : '–'}</span>`).join('')}`;
+        tip.hidden = false; tip.style.left = `${(cx / d.W) * 100}%`;
       });
-      svg.addEventListener('pointerleave', () => { tip.hidden = true; xh.setAttribute('hidden', ''); });
+      wrap.addEventListener('pointerleave', () => { const tip = wrap.querySelector<HTMLElement>('.tip'), xh = wrap.querySelector('svg .xh'); if (tip) tip.hidden = true; xh?.setAttribute('hidden', ''); });
     }
 
     // Form from the players' profile files (every ranked player).
@@ -264,7 +267,7 @@ import Layout from '../layouts/Layout.astro';
       const id = new URLSearchParams(location.search).get('id');
       const mh = document.getElementById('mh');
       if (!mh) return;
-      if (!id) { mh.innerHTML = '<div class="loading">No match selected. Open a match from a tournament page.</div>'; return; }
+      if (!id) { patch(mh, '<div class="loading">No match selected. Open a match from a tournament page.</div>'); return; }
       const data = {};
       try {
         // While PDC is pushing this match, the fixture and timeline barely change: reuse them for 30s.
@@ -332,7 +335,9 @@ import Layout from '../layouts/Layout.astro';
         if (playing) watch180(id, playing.setNumber ?? 1, playing.legNumber, playing.visits, names, ['#mh .lb-s.s0', '#mh .lb-s.s1']);
         // No darts for a while since the last leg ended: a break (PDC's data has no flag for it).
         const brk = !!playing && onBreak(playing, prevLeg?.lastAt);
-        mh.innerHTML = header(a, t?.data, data, m?.status === 'live' ? m : null, boardLeg, brk);
+        // Built as one string and patched in, so a live update changes only what moved
+        // (the score, the darts thrown) instead of redrawing the header and its photos.
+        let mhHtml = header(a, t?.data, data, m?.status === 'live' ? m : null, boardLeg, brk);
         // Key numbers under the score (the averages are already by each name): 180s, breaks of throw, best checkout, shortest leg.
         const meta = t?.data?.attributes?.fixtureMeta;
         if (meta?.participant1Data && legs.length) {
@@ -342,33 +347,36 @@ import Layout from '../layouts/Layout.astro';
           const kpi = (v: string, label: string, hi = false) => `<div><b class="poster-num${hi ? ' hi' : ''}">${v}</b><span class="lbl">${label}</span></div>`;
           const t80 = [meta.participant1Data.score180 ?? 0, meta.participant2Data.score180 ?? 0];
           const breaks = [0, 1].map(k => won.filter(x => x.l.winner === k && x.l.starter !== k).length);
-          mh.insertAdjacentHTML('beforeend', `<div class="kpis">${kpi(scoreHtml(t80[0], t80[1]), '180s', t80[0] + t80[1] > 0)}${kpi(scoreHtml(breaks[0], breaks[1]), 'Breaks of throw')}${best ? kpi(String(best.s.checkout), `Best checkout · ${esc(names[best.l.winner])}`) : ''}${fast ? kpi(String(fast.s.darts), `Shortest leg (darts) · ${esc(names[fast.l.winner])}`) : ''}</div>`);
+          mhHtml += (`<div class="kpis">${kpi(scoreHtml(t80[0], t80[1]), '180s', t80[0] + t80[1] > 0)}${kpi(scoreHtml(breaks[0], breaks[1]), 'Breaks of throw')}${best ? kpi(String(best.s.checkout), `Best checkout · ${esc(names[best.l.winner])}`) : ''}${fast ? kpi(String(fast.s.darts), `Shortest leg (darts) · ${esc(names[fast.l.winner])}`) : ''}</div>`);
         }
         const started = !/result|live|progress/i.test(a.attributes.status) && new Date(`${a.attributes.startDate}T${(a.attributes.startTime || '23:59').slice(0, 5)}:00`) <= new Date(new Date().toLocaleString('en-US', { timeZone: 'Europe/London' }));
         const noLegs = !(t?.data?.attributes?.legs?.length);
         const isResult = /result/i.test(a.attributes.status);
         const isLive = /live|progress/i.test(a.attributes.status);
-        if (isLive && liveStats) mh.insertAdjacentHTML('beforeend', `<p class="inplay"><span class="live-dot">Live</span> Score and stats update every few seconds.</p>`);
-        else if (isResult && noLegs) mh.insertAdjacentHTML('beforeend', `<p class="inplay"><b>Result confirmed.</b> ${liveStats ? 'Stats are from PDC live scoring; the' : 'The PDC adds averages and'} leg-by-leg detail follows when the PDC publishes it. This page checks again every two minutes and fills in on its own.</p>`);
+        if (isLive && liveStats) mhHtml += `<p class="inplay"><span class="live-dot">Live</span> Score and stats update every few seconds.</p>`;
+        else if (isResult && noLegs) mhHtml += `<p class="inplay"><b>Result confirmed.</b> ${liveStats ? 'Stats are from PDC live scoring; the' : 'The PDC adds averages and'} leg-by-leg detail follows when the PDC publishes it. This page checks again every two minutes and fills in on its own.</p>`;
         if (!document.getElementById('tp')!.innerHTML) tape([a.attributes.participant1, a.attributes.participant2]);
         headToHead(a);
-        if (started && noLegs && !m?.stats) mh.insertAdjacentHTML('beforeend', `<p class="inplay"><span class="live-dot">On now</span> Scores will show here as soon as the game is in play.</p>`);
+        if (started && noLegs && !m?.stats) mhHtml += `<p class="inplay"><span class="live-dot">On now</span> Scores will show here as soon as the game is in play.</p>`;
+        patch(mh, mhHtml);
         // Stats show as soon as there are any; the leg charts wait for the visit data.
         const mb = document.getElementById('mb')!;
         // Before a match: head to head and form only. Once it starts: tabs, with Match stats first.
         const tabbed = document.getElementById('mtabbed')!, tabsEl = document.getElementById('mtabs')!;
         if (isLive || isResult) {
-          tabsEl.hidden = false;
+          if (tabsEl.hidden) tabsEl.hidden = false;
           if (!tabbed.dataset.tab) tabbed.dataset.tab = 'stats';
-        } else { tabsEl.hidden = true; delete tabbed.dataset.tab; }
-        mb.hidden = !t?.data?.attributes?.fixtureMeta?.participant1Data && noLegs;
-        document.getElementById('mb-wait')!.hidden = !(mb.hidden && (isLive || isResult));
-        mb.querySelectorAll<HTMLElement>('.block:not(:first-child)').forEach(b => { b.hidden = noLegs; });
+        } else { if (!tabsEl.hidden) tabsEl.hidden = true; delete tabbed.dataset.tab; }
+        // Visibility is only written when it changes (writing the same value still touches the page).
+        const show = (el: HTMLElement, hide: boolean) => { if (el.hidden !== hide) el.hidden = hide; };
+        show(mb, !t?.data?.attributes?.fixtureMeta?.participant1Data && noLegs);
+        show(document.getElementById('mb-wait')!, !(mb.hidden && (isLive || isResult)));
+        mb.querySelectorAll<HTMLElement>('.block:not(:first-child)').forEach(b => show(b, noLegs));
         if (t?.data) {
-          document.getElementById('cmp')!.innerHTML = compare(a, t.data);
-          document.getElementById('lg1')!.innerHTML = legend(names);
-          document.getElementById('runavg')!.innerHTML = runAvg(legs.filter(l => l.winner != null), names);
-          document.getElementById('lt')!.innerHTML = legTable(legs, names);
+          patch(document.getElementById('cmp'), compare(a, t.data));
+          patch(document.getElementById('lg1'), legend(names));
+          patch(document.getElementById('runavg'), runAvg(legs.filter(l => l.winner != null), names));
+          patch(document.getElementById('lt'), legTable(legs, names));
           wireTip();
         }
         clearTimeout(timer);
@@ -378,7 +386,7 @@ import Layout from '../layouts/Layout.astro';
         else if (!isResult && a.attributes.startDate <= new Date().toISOString().slice(0, 10)) timer = window.setTimeout(load, 15_000);
         else if (isResult && noLegs) timer = window.setTimeout(load, 120_000);
       } catch {
-        mh.innerHTML = '<div class="loading">This match could not be loaded. Please try again shortly.</div>';
+        patch(mh, '<div class="loading">This match could not be loaded. Please try again shortly.</div>');
       }
     }
     // Match tabs: remembered while the page is open (each poll keeps the choice).
