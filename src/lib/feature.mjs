@@ -4,7 +4,7 @@
 // Size order while a match is live: the match score (sets in set play) is the
 // biggest thing, each player's score left in the leg comes second, and the
 // averages are small and labelled. Set play also shows the legs in the set.
-import { flag, formatLabel, surnameOf, onBreak } from './pdc.mjs';
+import { flag, formatLabel, surnameOf, onBreak, visitShown } from './pdc.mjs';
 import { ukTime, scoreHtml } from './format.mjs';
 import { avatarSrc, cutoutImg, pairPrefer } from './images.mjs';
 
@@ -39,9 +39,12 @@ function legParts(l, k, s) {
   // As soon as a leg is won the new one shows (501 each); the leg flash marks the win.
   const left = l.left[k];
   const throwing = l.throwing === k;
+  // Under the dot: the visit being thrown (running total) or this player's last visit.
+  const x = l.held ? null : visitShown(l, k);
+  const vt = x ? `<i class="ft-vt${x.live ? ' live' : ''}" title="${x.live ? 'This visit so far' : 'Last visit'}">${x.n}</i>` : '';
   // Big number, and their average under it. (A 180 flashes over it: see leg-flash.mjs.)
   const big = `<div class="ft-big ${k ? 'r' : 'l'}${throwing ? ' on' : ''}">
-      <b class="ft-rem poster-num" title="Score left in this leg${throwing ? ' (throwing)' : ''}">${throwing ? '<span class="ft-dot" aria-label="throwing"></span>' : ''}<span class="ft-num">${left}</span></b>
+      <b class="ft-rem poster-num" title="Score left in this leg${throwing ? ' (throwing)' : ''}"><span class="ft-dw">${throwing ? '<span class="ft-dot" aria-label="throwing"></span>' : ''}${vt}</span><span class="ft-num">${left}</span></b>
       <span class="ft-bigav" title="Three-dart average">${s?.avg != null ? `${Number(s.avg).toFixed(2)} <i>avg</i>` : ''}</span>
     </div>`;
   return { big };

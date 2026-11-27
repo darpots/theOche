@@ -31,3 +31,23 @@ test('helpers', () => {
   assert.ok(flag('NL').length > 0 && flag('GB-ENG').length > 0);
   assert.equal(dateRange('2026-12-11', '2027-01-03'), '11 Dec 2026 – 3 Jan 2027');
 });
+
+test('under the throw dot: the running total of the visit when the live data has it, else the last visit', async () => {
+  const { legFromTurns, visitShown } = await import('../src/lib/pdc.mjs');
+  const turn = (i, p, after, turnScore, extra = {}) => ({ globalTurnIndex: i, scoringParticipant: p, activeParticipant: 1 - p, score: after, turnScore, dartsThrown: 3, isComplete: true, ...extra });
+  const done = [turn(1, 0, 441, 60), turn(2, 1, 401, 100)];
+  // Player 1 has thrown two darts and the scorer has saved the score left (441 → 381): 60 so far.
+  const mid = legFromTurns([...done, turn(3, 0, 381, 0, { isComplete: false, dartsThrown: 2 })], 1, 1);
+  assert.equal(mid.throwing, 0);
+  assert.equal(mid.running, 60);
+  assert.deepEqual(visitShown(mid, 0), { n: 60, live: true });
+  assert.deepEqual(visitShown(mid, 1), { n: 100, live: false }); // the other player's last visit
+  // Darts in but nothing saved yet: no number rather than a wrong one.
+  const unsaved = legFromTurns([...done, turn(3, 0, 441, 0, { isComplete: false, dartsThrown: 1 })], 1, 1);
+  assert.equal(unsaved.running, null);
+  assert.equal(visitShown(unsaved, 0), null);
+  // Between visits: each player's last visit total; a bust says so.
+  const after = legFromTurns([...done, turn(3, 0, 441, 0, { isBust: true })], 1, 1);
+  assert.deepEqual(visitShown(after, 0), { n: 'Bust', live: false });
+  assert.equal(visitShown(legFromTurns([], 1, 2), 0), null);
+});

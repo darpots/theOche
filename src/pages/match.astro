@@ -49,7 +49,7 @@ import Layout from '../layouts/Layout.astro';
   </div>
 
   <script>
-    import { onBreak, API, flag, keyName, liveScore, liveLegs, cleanName, formatLabel } from '../lib/pdc.mjs';
+    import { onBreak, visitShown, API, flag, keyName, liveScore, liveLegs, cleanName, formatLabel } from '../lib/pdc.mjs';
     import { fetchH2H, h2hSummary, renderH2H } from '../lib/h2h.mjs';
     import { liveFor, watchLive, unwatch, isPushing, pushedLegFor, LIVE_TICK, PUSH_TICK } from '../lib/live-client.mjs';
     import { ukTime, scoreHtml } from '../lib/format.mjs';
@@ -139,8 +139,10 @@ import Layout from '../layouts/Layout.astro';
         const lastV = v.at(-1);
         // After a 180 the throw stays with whoever hit it until the 180 sticker has gone.
         const thr = won != null ? null : hold ?? leg.throwing ?? (lastV ? (lastV.isParticipant1 ? 1 : 0) : null);
+        // Under each dot: the visit being thrown (running total) or the player's last visit.
+        const vt = (k: number) => { const x = won != null ? null : visitShown(leg, k); return x ? `<span class="lb-vt${x.live ? ' live' : ''}" title="${x.live ? 'This visit so far' : 'Last visit'}">${x.n}</span>` : ''; };
         const big = (k: number) => `<div class="lb-s s${k}${thr === k ? ' on' : ''}${won === k ? ' won' : ''}">
-            <b class="poster-num"><span class="lb-dot" aria-label="throwing"${thr === k ? '' : ' hidden'}></span>${left(k)}</b>
+            <b class="poster-num"><span class="lb-dot" aria-label="throwing"${thr === k ? '' : ' hidden'}></span>${vt(k)}${left(k)}</b>
             <span class="lb-av" title="Three-dart average">${avg[k] != null ? `${Number(avg[k]).toFixed(2)} <i>avg</i>` : ''}</span></div>`;
         const who = (k: number) => { const p = ps[k]; const href = p?.participantSlug ? `/players/${p.participantSlug}` : null;
           return `<div class="who w${k}">${href ? `<a href="${href}">${esc(name(p))}</a>` : `<span>${esc(name(p))}</span>`}<small>${flag(p?.countryCode)} ${p?.ranking ? `World #${p.ranking}` : ''}</small></div>`; };
@@ -489,6 +491,11 @@ import Layout from '../layouts/Layout.astro';
   .mh-in :global(.lb-s.on b), .mh-in :global(.lb-s.won b) { color: var(--volt); }
   .mh-in :global(.lb-dot) { position: absolute; top: 50%; left: -26px; width: 12px; height: 12px; margin-top: -6px; border-radius: 50%; background: var(--volt); box-shadow: 0 0 0 4px rgba(200, 255, 46, .2); }
   .mh-in :global(.lb-s.s1 .lb-dot) { left: auto; right: -26px; }
+  /* The visit score, small, under the throw dot (centred on it) */
+  .mh-in :global(.lb-vt) { position: absolute; top: calc(50% + 14px); left: -20px; transform: translateX(-50%); font-family: var(--body); font-size: 12px; font-weight: 800; line-height: 1; letter-spacing: .02em; color: var(--on-ink-2); white-space: nowrap; font-variant-numeric: tabular-nums; }
+  .mh-in :global(.lb-s.s1 .lb-vt) { left: auto; right: -20px; transform: translateX(50%); }
+  .mh-in :global(.lb-vt.live) { color: var(--volt); }
+  .mh-in :global(.board.brk .lb-vt) { display: none; }
   .mh-in :global(.lb-av) { height: 22px; font-size: 16px; font-weight: 800; color: #fff; font-variant-numeric: tabular-nums; white-space: nowrap; }
   .mh-in :global(.lb-av i) { font-style: normal; font-size: 11px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--on-ink-2); }
   .mh-in :global(.lb-s .cl-180) { top: -18px; right: -10px; }
@@ -507,6 +514,8 @@ import Layout from '../layouts/Layout.astro';
     .mh-in :global(.lb-s b) { font-size: 66px; }
     .mh-in :global(.lb-dot) { width: 8px; height: 8px; margin-top: -4px; left: -16px; box-shadow: 0 0 0 3px rgba(200, 255, 46, .2); }
     .mh-in :global(.lb-s.s1 .lb-dot) { right: -16px; }
+    .mh-in :global(.lb-vt) { top: calc(50% + 10px); left: -12px; font-size: 10px; }
+    .mh-in :global(.lb-s.s1 .lb-vt) { right: -12px; }
     .mh-in :global(.lb-av) { height: 18px; font-size: 13px; }
     .mh-in :global(.lb-av i) { font-size: 10px; }
     .mh-in :global(.lb-mid) { padding: 14px 6px 0; }

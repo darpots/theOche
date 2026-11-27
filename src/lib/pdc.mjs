@@ -905,7 +905,26 @@ export function legFromTurns(turns, set, leg) {
   // Timestamp object from the push client: read either.
   const ms = x => (x == null ? 0 : typeof x === 'string' ? Date.parse(x) : typeof x.toMillis === 'function' ? x.toMillis() : x.seconds ? x.seconds * 1000 : Number(x)) || 0;
   const lastAt = sorted.reduce((t, x) => Math.max(t, ms(x.timestamp)), 0) || null;
-  return { setNumber: set, legNumber: leg, visits, throwing, dartsIn: inVisit ? Math.min(3, last.dartsThrown || 0) : 0, lastAt };
+  // The visit in progress, as a running total, when PDC's scorer has already saved
+  // the score left after the darts so far (it doesn't always: then it's null).
+  let running = null;
+  if (inVisit && last.dartsThrown > 0 && typeof last.score === 'number') {
+    const before = visits.filter(v => v.isParticipant1 === (last.scoringParticipant === 0)).at(-1)?.remaining ?? 501;
+    if (last.score < before) running = before - last.score;
+  }
+  return { setNumber: set, legNumber: leg, visits, throwing, dartsIn: inVisit ? Math.min(3, last.dartsThrown || 0) : 0, running, lastAt };
+}
+
+/**
+ * The number under a player's throw dot: the visit being thrown as a running total
+ * (when the live data has it), else the player's last visit total in this leg.
+ * Returns { n, live } or null.
+ */
+export function visitShown(leg, k) {
+  if (!leg) return null;
+  if (leg.throwing === k && leg.dartsIn > 0) return leg.running != null ? { n: leg.running, live: true } : null;
+  const v = (leg.visits || []).filter(x => x.isParticipant1 === (k === 0)).sort((a, b) => a.order - b.order).at(-1);
+  return v ? { n: v.isBust ? 'Bust' : v.score, live: false } : null;
 }
 
 /** A finished leg's final position: score left each side and who checked out, or null if not won yet. */
@@ -940,7 +959,7 @@ export function legSummary(leg, m, prevFirst = null, prevLastAt = null, prevResu
   // No darts in this leg yet: the throw alternates, so whoever didn't start the last leg starts this one.
   let throwing = leg.throwing;
   if (throwing == null && prevFirst != null) throwing = prevFirst ? 0 : 1;
-  return { set: m.set || 1, leg: m.leg, left: [left(true), left(false)], throwing, dartsIn: leg.dartsIn || 0, visits: leg.visits, lastAt: leg.lastAt || prevLastAt || null,
+  return { set: m.set || 1, leg: m.leg, left: [left(true), left(false)], throwing, dartsIn: leg.dartsIn || 0, running: leg.running ?? null, visits: leg.visits, lastAt: leg.lastAt || prevLastAt || null,
     // Until the new leg's first dart, the leg just won (so a checkout isn't instantly replaced by 501-501).
     held: !leg.visits.length && !leg.dartsIn ? prevResult : null };
 }
