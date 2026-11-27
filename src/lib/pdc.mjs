@@ -916,13 +916,16 @@ export function legFromTurns(turns, set, leg) {
 }
 
 /**
- * The number under a player's throw dot: the visit being thrown as a running total
- * (when the live data has it), else the player's last visit total in this leg.
+ * The number under a player's throw dot: for the player throwing, the visit in
+ * progress as a running total (when the live data has it), and nothing before
+ * that (their previous visit goes as soon as the throw comes to them); for the
+ * other player, their last visit total in this leg. `leg.holdK` is a player the
+ * throw is held on after a 180: their 180 stays until the throw moves on.
  * Returns { n, live } or null.
  */
 export function visitShown(leg, k) {
   if (!leg) return null;
-  if (leg.throwing === k && leg.dartsIn > 0) return leg.running != null ? { n: leg.running, live: true } : null;
+  if (leg.throwing === k && leg.holdK !== k) return leg.dartsIn > 0 && leg.running != null ? { n: leg.running, live: true } : null;
   const v = (leg.visits || []).filter(x => x.isParticipant1 === (k === 0)).sort((a, b) => a.order - b.order).at(-1);
   return v ? { n: v.isBust ? 'Bust' : v.score, live: false } : null;
 }

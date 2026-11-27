@@ -49,5 +49,12 @@ test('under the throw dot: the running total of the visit when the live data has
   // Between visits: each player's last visit total; a bust says so.
   const after = legFromTurns([...done, turn(3, 0, 441, 0, { isBust: true })], 1, 1);
   assert.deepEqual(visitShown(after, 0), { n: 'Bust', live: false });
+  // The throw has come to player 2 (no darts yet): their previous 100 goes straight away.
+  assert.equal(after.throwing, 1);
+  assert.equal(visitShown(after, 1), null);
+  // Held on a 180 (homepage: the dot stays with the 180 thrower): the 180 stays under it.
+  const held = legFromTurns([...done, turn(3, 0, 261, 180)], 1, 1);
+  assert.equal(held.throwing, 1);
+  assert.deepEqual(visitShown({ ...held, throwing: 0, holdK: 0 }, 0), { n: 180, live: false });
   assert.equal(visitShown(legFromTurns([], 1, 2), 0), null);
 });
