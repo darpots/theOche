@@ -140,7 +140,8 @@ import Layout from '../layouts/Layout.astro';
         // After a 180 the throw stays with whoever hit it until the 180 sticker has gone.
         const thr = won != null ? null : hold ?? leg.throwing ?? (lastV ? (lastV.isParticipant1 ? 1 : 0) : null);
         // Under each dot: the visit being thrown (running total) or the player's last visit.
-        const vt = (k: number) => { const x = won != null ? null : visitShown(leg, k); return x ? `<span class="lb-vt${x.live ? ' live' : ''}" title="${x.live ? 'This visit so far' : 'Last visit'}">${x.n}</span>` : ''; };
+        // It follows the dot as shown (a 180 holds the dot, and its 180, on the thrower).
+        const vt = (k: number) => { const x = won != null ? null : visitShown({ ...leg, throwing: thr, holdK: hold }, k); return x ? `<span class="lb-vt${x.live ? ' live' : ''}" title="${x.live ? 'This visit so far' : 'Last visit'}">${x.n}</span>` : ''; };
         const big = (k: number) => `<div class="lb-s s${k}${thr === k ? ' on' : ''}${won === k ? ' won' : ''}">
             <b class="poster-num"><span class="lb-dot" aria-label="throwing"${thr === k ? '' : ' hidden'}></span>${vt(k)}${left(k)}</b>
             <span class="lb-av" title="Three-dart average">${avg[k] != null ? `${Number(avg[k]).toFixed(2)} <i>avg</i>` : ''}</span></div>`;

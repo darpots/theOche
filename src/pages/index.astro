@@ -291,7 +291,7 @@ const playCards = [
               // After a 180 the throw stays with whoever hit it until the sticker has gone.
               const hold = heldThrow(md.now.id);
               clearTimeout(holdTimer);
-              if (hold) { l.throwing = hold.k; holdTimer = window.setTimeout(refresh, hold.left + 50); }
+              if (hold) { l.throwing = hold.k; l.holdK = hold.k; holdTimer = window.setTimeout(refresh, hold.left + 50); }
             }
             if (pick) draw(box, featureTile(pick[0] as any, pick[1] as string, box.dataset.name!, pick[1] === 'now' ? md.also : []));
             const nu = document.getElementById('nextup') as HTMLAnchorElement | null;
