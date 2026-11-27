@@ -1,0 +1,2159 @@
+{
+ "updatedAt": "2026-11-27T22:22:36.716Z",
+ "from": "2025-11-27",
+ "to": "2026-11-27",
+ "rules": {
+  "base": 1500,
+  "k": 24,
+  "minMatches": 20,
+  "types": [
+   "World Championship",
+   "Premier League",
+   "UK Open",
+   "World Grand Prix",
+   "European Championship",
+   "Grand Slam",
+   "European Tour",
+   "World Matchplay",
+   "World Series",
+   "World Masters",
+   "Players Championship",
+   "Players Championship Finals"
+  ]
+ },
+ "matches": 5781,
+ "events": 81,
+ "latest": "Players Championship Finals",
+ "players": [
+  {
+   "id": "32102",
+   "name": "Luke Humphries",
+   "country": "GB-ENG",
+   "pos": 1,
+   "move": 0,
+   "rating": 1928,
+   "played": 139,
+   "won": 103,
+   "lost": 36,
+   "last": {
+    "name": "Players Championship Finals",
+    "delta": 2
+   }
+  },
+  {
+   "id": "40676",
+   "name": "Luke Littler",
+   "country": "GB-ENG",
+   "pos": 2,
+   "move": 0,
+   "rating": 1907,
+   "played": 105,
+   "won": 84,
+   "lost": 21,
+   "last": {
+    "name": "Grand Slam of Darts",
+    "delta": -36
+   }
+  },
+  {
+   "id": "11788",
+   "name": "Gerwyn Price",
+   "country": "GB-WLS",
+   "pos": 3,
+   "move": 0,
+   "rating": 1850,
+   "played": 136,
+   "won": 93,
+   "lost": 43,
+   "last": {
+    "name": "Players Championship Finals",
+    "delta": -20
+   }
+  },
+  {
+   "id": "33091",
+   "name": "Gian van Veen",
+   "country": "NL",
+   "pos": 4,
+   "move": 0,
+   "rating": 1783,
+   "played": 163,
+   "won": 99,
+   "lost": 64,
+   "last": {
+    "name": "Players Championship Finals",
+    "delta": -18
+   }
+  },
+  {
+   "id": "754",
+   "name": "Ross Smith",
+   "country": "GB-ENG",
+   "pos": 5,
+   "move": 0,
+   "rating": 1772,
+   "played": 144,
+   "won": 98,
+   "lost": 46,
+   "last": {
+    "name": "Players Championship Finals",
+    "delta": -19
+   }
+  },
+  {
+   "id": "30859",
+   "name": "Jonny Clayton",
+   "country": "GB-WLS",
+   "pos": 6,
+   "move": 0,
+   "rating": 1740,
+   "played": 159,
+   "won": 107,
+   "lost": 52,
+   "last": {
+    "name": "Players Championship Finals",
+    "delta": 9
+   }
+  },
+  {
+   "id": "19",
+   "name": "Michael van Gerwen",
+   "country": "NL",
+   "pos": 7,
+   "move": 0,
+   "rating": 1731,
+   "played": 149,
+   "won": 94,
+   "lost": 55,
+   "last": {
+    "name": "Players Championship Finals",
+    "delta": 6
+   }
+  },
+  {
+   "id": "38498",
+   "name": "Tommy Morris",
+   "country": "GB-ENG",
+   "pos": 8,
+   "move": 1,
+   "rating": 1727,
+   "played": 79,
+   "won": 46,
+   "lost": 33,
+   "last": {
+    "name": "Players Championship Finals",
+    "delta": 6
+   }
+  },
+  {
+   "id": "11821",
+   "name": "Nathan Aspinall",
+   "country": "GB-ENG",
+   "pos": 9,
+   "move": -1,
+   "rating": 1724,
+   "played": 89,
+   "won": 56,
+   "lost": 33,
+   "last": {
+    "name": "Grand Slam of Darts",
+    "delta": 14
+   }
+  },
+  {
+   "id": "32895",
+   "name": "Kevin Doets",
+   "country": "NL",
+   "pos": 10,
+   "move": 0,
+   "rating": 1723,
+   "played": 182,
+   "won": 129,
+   "lost": 53,
+   "last": {
+    "name": "Players Championship Finals",
+    "delta": 6
+   }
+  },
+  {
+   "id": "33014",
+   "name": "Niels Zonneveld",
+   "country": "NL",
+   "pos": 11,
+   "move": 2,
+   "rating": 1711,
+   "played": 133,
+   "won": 79,
+   "lost": 54,
+   "last": {
+    "name": "Players Championship Finals",
+    "delta": 9
+   }
+  },
+  {
+   "id": "246",
+   "name": "Dirk van Duijvenbode",
+   "country": "NL",
+   "pos": 12,
+   "move": 2,
+   "rating": 1703,
+   "played": 138,
+   "won": 83,
+   "lost": 55,
+   "last": {
+    "name": "Players Championship Finals",
+    "delta": 5
+   }
+  },
+  {
+   "id": "31356",
+   "name": "Danny Noppert",
+   "country": "NL",
+   "pos": 13,
+   "move": 2,
+   "rating": 1702,
+   "played": 148,
+   "won": 93,
+   "lost": 55,
+   "last": {
+    "name": "Players Championship Finals",
+    "delta": 9
+   }
+  },
+  {
+   "id": "4",
+   "name": "Gary Anderson",
+   "country": "GB-SCT",
+   "pos": 14,
+   "move": -3,
+   "rating": 1702,
+   "played": 73,
+   "won": 47,
+   "lost": 26,
+   "last": {
+    "name": "Players Championship Finals",
+    "delta": -15
+   }
+  },
+  {
+   "id": "22",
+   "name": "James Wade",
+   "country": "GB-ENG",
+   "pos": 15,
+   "move": -3,
+   "rating": 1693,
+   "played": 121,
+   "won": 78,
+   "lost": 43,
+   "last": {
+    "name": "Players Championship Finals",
+    "delta": -15
+   }
+  },
+  {
+   "id": "11843",
+   "name": "Chris Dobey",
+   "country": "GB-ENG",
+   "pos": 16,
+   "move": 1,
+   "rating": 1691,
+   "played": 162,
+   "won": 109,
+   "lost": 53,
+   "last": {
+    "name": "Players Championship Finals",
+    "delta": 7
+   }
+  },
+  {
+   "id": "11804",
+   "name": "Luke Woodhouse",
+   "country": "GB-ENG",
+   "pos": 17,
+   "move": 2,
+   "rating": 1687,
+   "played": 146,
+   "won": 95,
+   "lost": 51,
+   "last": {
+    "name": "Players Championship Finals",
+    "delta": 7
+   }
+  },
+  {
+   "id": "32078",
+   "name": "Bradley Brooks",
+   "country": "GB-ENG",
+   "pos": 18,
+   "move": 3,
+   "rating": 1681,
+   "played": 84,
+   "won": 45,
+   "lost": 39,
+   "last": {
+    "name": "Players Championship Finals",
+    "delta": 8
+   }
+  },
+  {
+   "id": "32956",
+   "name": "Wessel Nijman",
+   "country": "NL",
+   "pos": 19,
+   "move": -1,
+   "rating": 1681,
+   "played": 186,
+   "won": 138,
+   "lost": 48,
+   "last": {
+    "name": "Grand Slam of Darts",
+    "delta": -10
+   }
+  },
+  {
+   "id": "30843",
+   "name": "Cristo Reyes",
+   "country": "ES",
+   "pos": 20,
+   "move": 0,
+   "rating": 1676,
+   "played": 120,
+   "won": 71,
+   "lost": 49,
+   "last": {
+    "name": "Players Championship 34",
+    "delta": 33
+   }
+  },
+  {
+   "id": "31041",
+   "name": "Rob Cross",
+   "country": "GB-ENG",
+   "pos": 21,
+   "move": -5,
+   "rating": 1673,
+   "played": 122,
+   "won": 76,
+   "lost": 46,
+   "last": {
+    "name": "Players Championship Finals",
+    "delta": -15
+   }
+  },
+  {
+   "id": "30844",
+   "name": "Jermaine Wattimena",
+   "country": "NL",
+   "pos": 22,
+   "move": 1,
+   "rating": 1671,
+   "played": 146,
+   "won": 89,
+   "lost": 57,
+   "last": {
+    "name": "Players Championship Finals",
+    "delta": 9
+   }
+  },
+  {
+   "id": "32037",
+   "name": "Ryan Searle",
+   "country": "GB-ENG",
+   "pos": 23,
+   "move": 3,
+   "rating": 1658,
+   "played": 105,
+   "won": 65,
+   "lost": 40,
+   "last": {
+    "name": "Players Championship Finals",
+    "delta": 12
+   }
+  },
+  {
+   "id": "153",
+   "name": "William O'Connor",
+   "country": "IE",
+   "pos": 24,
+   "move": -2,
+   "rating": 1654,
+   "played": 132,
+   "won": 76,
+   "lost": 56,
+   "last": {
+    "name": "Players Championship Finals",
+    "delta": -16
+   }
+  },
+  {
+   "id": "36640",
+   "name": "Beau Greaves",
+   "country": "GB-ENG",
+   "pos": 25,
+   "move": 3,
+   "rating": 1649,
+   "played": 100,
+   "won": 62,
+   "lost": 38,
+   "last": {
+    "name": "Players Championship Finals",
+    "delta": 8
+   }
+  },
+  {
+   "id": "2771",
+   "name": "Karel Sedlacek",
+   "country": "CZ",
+   "pos": 26,
+   "move": 6,
+   "rating": 1649,
+   "played": 118,
+   "won": 67,
+   "lost": 51,
+   "last": {
+    "name": "Players Championship Finals",
+    "delta": 15
+   }
+  },
+  {
+   "id": "2040",
+   "name": "Cameron Menzies",
+   "country": "GB-SCT",
+   "pos": 27,
+   "move": 3,
+   "rating": 1649,
+   "played": 111,
+   "won": 62,
+   "lost": 49,
+   "last": {
+    "name": "Players Championship Finals",
+    "delta": 12
+   }
+  },
+  {
+   "id": "876",
+   "name": "Stephen Bunting",
+   "country": "GB-ENG",
+   "pos": 28,
+   "move": -3,
+   "rating": 1648,
+   "played": 142,
+   "won": 81,
+   "lost": 61,
+   "last": {
+    "name": "Grand Slam of Darts",
+    "delta": -6
+   }
+  },
+  {
+   "id": "32627",
+   "name": "Tom Sykes",
+   "country": "GB-ENG",
+   "pos": 29,
+   "move": -5,
+   "rating": 1647,
+   "played": 92,
+   "won": 53,
+   "lost": 39,
+   "last": {
+    "name": "Players Championship Finals",
+    "delta": -9
+   }
+  },
+  {
+   "id": "36314",
+   "name": "Damon Heta",
+   "country": "AU",
+   "pos": 30,
+   "move": -3,
+   "rating": 1643,
+   "played": 126,
+   "won": 70,
+   "lost": 56,
+   "last": {
+    "name": "Players Championship 34",
+    "delta": -8
+   }
+  },
+  {
+   "id": "224",
+   "name": "Krzysztof Ratajski",
+   "country": "PL",
+   "pos": 31,
+   "move": 0,
+   "rating": 1635,
+   "played": 141,
+   "won": 87,
+   "lost": 54,
+   "last": {
+    "name": "Grand Slam of Darts",
+    "delta": 2
+   }
+  },
+  {
+   "id": "31031",
+   "name": "Jeffrey De Graaf",
+   "country": "SE",
+   "pos": 32,
+   "move": 6,
+   "rating": 1631,
+   "played": 100,
+   "won": 55,
+   "lost": 45,
+   "last": {
+    "name": "Players Championship Finals",
+    "delta": 18
+   }
+  },
+  {
+   "id": "156",
+   "name": "Kim Huybrechts",
+   "country": "BE",
+   "pos": 33,
+   "move": 3,
+   "rating": 1631,
+   "played": 113,
+   "won": 66,
+   "lost": 47,
+   "last": {
+    "name": "Players Championship Finals",
+    "delta": 10
+   }
+  },
+  {
+   "id": "31501",
+   "name": "Ryan Joyce",
+   "country": "GB-ENG",
+   "pos": 34,
+   "move": 1,
+   "rating": 1629,
+   "played": 97,
+   "won": 51,
+   "lost": 46,
+   "last": {
+    "name": "Players Championship 34",
+    "delta": -15
+   }
+  },
+  {
+   "id": "136",
+   "name": "Brendan Dolan",
+   "country": "IE",
+   "pos": 35,
+   "move": -6,
+   "rating": 1629,
+   "played": 85,
+   "won": 45,
+   "lost": 40,
+   "last": {
+    "name": "Players Championship Finals",
+    "delta": -12
+   }
+  },
+  {
+   "id": "11902",
+   "name": "Martin Schindler",
+   "country": "DE",
+   "pos": 36,
+   "move": 1,
+   "rating": 1628,
+   "played": 109,
+   "won": 55,
+   "lost": 54,
+   "last": {
+    "name": "Players Championship Finals",
+    "delta": 12
+   }
+  },
+  {
+   "id": "36303",
+   "name": "Justin Hood",
+   "country": "GB-ENG",
+   "pos": 37,
+   "move": 3,
+   "rating": 1627,
+   "played": 84,
+   "won": 48,
+   "lost": 36,
+   "last": {
+    "name": "Players Championship Finals",
+    "delta": 15
+   }
+  },
+  {
+   "id": "162",
+   "name": "Mickey Mansell",
+   "country": "IE",
+   "pos": 38,
+   "move": 3,
+   "rating": 1625,
+   "played": 90,
+   "won": 48,
+   "lost": 42,
+   "last": {
+    "name": "Players Championship Finals",
+    "delta": 15
+   }
+  },
+  {
+   "id": "36287",
+   "name": "Sebastian Bialecki",
+   "country": "PL",
+   "pos": 39,
+   "move": 3,
+   "rating": 1624,
+   "played": 112,
+   "won": 66,
+   "lost": 46,
+   "last": {
+    "name": "Players Championship Finals",
+    "delta": 20
+   }
+  },
+  {
+   "id": "146",
+   "name": "Mensur Suljovic",
+   "country": "AT",
+   "pos": 40,
+   "move": -6,
+   "rating": 1621,
+   "played": 83,
+   "won": 48,
+   "lost": 35,
+   "last": {
+    "name": "Players Championship Finals",
+    "delta": -12
+   }
+  },
+  {
+   "id": "43829",
+   "name": "Tom Bissell",
+   "country": "GB-ENG",
+   "pos": 41,
+   "move": -8,
+   "rating": 1619,
+   "played": 90,
+   "won": 52,
+   "lost": 38,
+   "last": {
+    "name": "Players Championship Finals",
+    "delta": -14
+   }
+  },
+  {
+   "id": "38552",
+   "name": "Josh Rock",
+   "country": "GB-NIR",
+   "pos": 42,
+   "move": 2,
+   "rating": 1602,
+   "played": 118,
+   "won": 61,
+   "lost": 57,
+   "last": {
+    "name": "Grand Slam of Darts",
+    "delta": -18
+   }
+  },
+  {
+   "id": "38279",
+   "name": "Charlie Manby",
+   "country": "GB-ENG",
+   "pos": 43,
+   "move": -4,
+   "rating": 1601,
+   "played": 96,
+   "won": 56,
+   "lost": 40,
+   "last": {
+    "name": "Players Championship Finals",
+    "delta": -12
+   }
+  },
+  {
+   "id": "33630",
+   "name": "Maik Kuivenhoven",
+   "country": "NL",
+   "pos": 44,
+   "move": 4,
+   "rating": 1598,
+   "played": 94,
+   "won": 51,
+   "lost": 43,
+   "last": {
+    "name": "Players Championship Finals",
+    "delta": 10
+   }
+  },
+  {
+   "id": "39687",
+   "name": "Henry Coates",
+   "country": "GB-ENG",
+   "pos": 45,
+   "move": 1,
+   "rating": 1596,
+   "played": 46,
+   "won": 27,
+   "lost": 19,
+   "last": {
+    "name": "Grand Slam of Darts",
+    "delta": 5
+   }
+  },
+  {
+   "id": "34874",
+   "name": "Niko Springer",
+   "country": "DE",
+   "pos": 46,
+   "move": -3,
+   "rating": 1596,
+   "played": 111,
+   "won": 60,
+   "lost": 51,
+   "last": {
+    "name": "Players Championship Finals",
+    "delta": -9
+   }
+  },
+  {
+   "id": "33672",
+   "name": "Ricardo Pietreczko",
+   "country": "DE",
+   "pos": 47,
+   "move": 0,
+   "rating": 1595,
+   "played": 75,
+   "won": 36,
+   "lost": 39,
+   "last": {
+    "name": "Players Championship 34",
+    "delta": 37
+   }
+  },
+  {
+   "id": "36712",
+   "name": "Scott Williams",
+   "country": "GB-ENG",
+   "pos": 48,
+   "move": -3,
+   "rating": 1592,
+   "played": 68,
+   "won": 31,
+   "lost": 37,
+   "last": {
+    "name": "Players Championship Finals",
+    "delta": -9
+   }
+  },
+  {
+   "id": "11795",
+   "name": "Rob Owen",
+   "country": "GB-WLS",
+   "pos": 49,
+   "move": 3,
+   "rating": 1582,
+   "played": 87,
+   "won": 47,
+   "lost": 40,
+   "last": {
+    "name": "Players Championship Finals",
+    "delta": 14
+   }
+  },
+  {
+   "id": "104",
+   "name": "Michael Smith",
+   "country": "GB-ENG",
+   "pos": 50,
+   "move": 4,
+   "rating": 1577,
+   "played": 82,
+   "won": 43,
+   "lost": 39,
+   "last": {
+    "name": "Players Championship Finals",
+    "delta": 19
+   }
+  },
+  {
+   "id": "11156",
+   "name": "Gabriel Clemens",
+   "country": "DE",
+   "pos": 51,
+   "move": 2,
+   "rating": 1576,
+   "played": 86,
+   "won": 47,
+   "lost": 39,
+   "last": {
+    "name": "Players Championship Finals",
+    "delta": 11
+   }
+  },
+  {
+   "id": "36373",
+   "name": "James Hurrell",
+   "country": "GB-ENG",
+   "pos": 52,
+   "move": 3,
+   "rating": 1572,
+   "played": 79,
+   "won": 41,
+   "lost": 38,
+   "last": {
+    "name": "Players Championship Finals",
+    "delta": 16
+   }
+  },
+  {
+   "id": "31027",
+   "name": "Richard Veenstra",
+   "country": "NL",
+   "pos": 53,
+   "move": -4,
+   "rating": 1570,
+   "played": 91,
+   "won": 52,
+   "lost": 39,
+   "last": {
+    "name": "Players Championship Finals",
+    "delta": -15
+   }
+  },
+  {
+   "id": "33144",
+   "name": "Keane Barry",
+   "country": "IE",
+   "pos": 54,
+   "move": -4,
+   "rating": 1565,
+   "played": 85,
+   "won": 42,
+   "lost": 43,
+   "last": {
+    "name": "Players Championship Finals",
+    "delta": -9
+   }
+  },
+  {
+   "id": "33558",
+   "name": "Joe Hunt",
+   "country": "GB-ENG",
+   "pos": 55,
+   "move": -4,
+   "rating": 1558,
+   "played": 84,
+   "won": 47,
+   "lost": 37,
+   "last": {
+    "name": "Players Championship Finals",
+    "delta": -10
+   }
+  },
+  {
+   "id": "33876",
+   "name": "Wesley Plaisier",
+   "country": "NL",
+   "pos": 56,
+   "move": 0,
+   "rating": 1554,
+   "played": 68,
+   "won": 32,
+   "lost": 36,
+   "last": {
+    "name": "Players Championship 34",
+    "delta": -10
+   }
+  },
+  {
+   "id": "31502",
+   "name": "Darius Labanauskas",
+   "country": "LT",
+   "pos": 57,
+   "move": 1,
+   "rating": 1546,
+   "played": 78,
+   "won": 39,
+   "lost": 39,
+   "last": {
+    "name": "Players Championship 34",
+    "delta": -14
+   }
+  },
+  {
+   "id": "47533",
+   "name": "Jack Aldridge",
+   "country": "GB",
+   "pos": 58,
+   "move": 2,
+   "rating": 1542,
+   "played": 23,
+   "won": 11,
+   "lost": 12,
+   "last": {
+    "name": "Players Championship 34",
+    "delta": 64
+   }
+  },
+  {
+   "id": "32079",
+   "name": "Callan Rydz",
+   "country": "GB-ENG",
+   "pos": 59,
+   "move": -2,
+   "rating": 1541,
+   "played": 85,
+   "won": 43,
+   "lost": 42,
+   "last": {
+    "name": "Players Championship Finals",
+    "delta": -6
+   }
+  },
+  {
+   "id": "231",
+   "name": "Andrew Gilding",
+   "country": "GB-ENG",
+   "pos": 60,
+   "move": -1,
+   "rating": 1536,
+   "played": 137,
+   "won": 82,
+   "lost": 55,
+   "last": {
+    "name": "Players Championship Finals",
+    "delta": -8
+   }
+  },
+  {
+   "id": "585",
+   "name": "Max Hopp",
+   "country": "DE",
+   "pos": 61,
+   "move": 3,
+   "rating": 1533,
+   "played": 80,
+   "won": 43,
+   "lost": 37,
+   "last": {
+    "name": "Players Championship 34",
+    "delta": -13
+   }
+  },
+  {
+   "id": "32461",
+   "name": "Daniel Ayres",
+   "country": "GB-ENG",
+   "pos": 62,
+   "move": 3,
+   "rating": 1532,
+   "played": 25,
+   "won": 12,
+   "lost": 13,
+   "last": {
+    "name": "Players Championship 28",
+    "delta": 40
+   }
+  },
+  {
+   "id": "33908",
+   "name": "Derek Coulson",
+   "country": "GB-WLS",
+   "pos": 63,
+   "move": 3,
+   "rating": 1530,
+   "played": 47,
+   "won": 23,
+   "lost": 24,
+   "last": {
+    "name": "Players Championship 34",
+    "delta": 31
+   }
+  },
+  {
+   "id": "1282",
+   "name": "Steve Lennon",
+   "country": "IE",
+   "pos": 64,
+   "move": 4,
+   "rating": 1529,
+   "played": 45,
+   "won": 20,
+   "lost": 25,
+   "last": {
+    "name": "Players Championship 34",
+    "delta": -8
+   }
+  },
+  {
+   "id": "142",
+   "name": "Dave Chisnall",
+   "country": "GB-ENG",
+   "pos": 65,
+   "move": -4,
+   "rating": 1528,
+   "played": 117,
+   "won": 63,
+   "lost": 54,
+   "last": {
+    "name": "Players Championship Finals",
+    "delta": -11
+   }
+  },
+  {
+   "id": "30829",
+   "name": "Mike De Decker",
+   "country": "BE",
+   "pos": 66,
+   "move": -4,
+   "rating": 1528,
+   "played": 81,
+   "won": 34,
+   "lost": 47,
+   "last": {
+    "name": "Players Championship Finals",
+    "delta": -7
+   }
+  },
+  {
+   "id": "32612",
+   "name": "Tommy Lishman",
+   "country": "GB-ENG",
+   "pos": 67,
+   "move": 4,
+   "rating": 1527,
+   "played": 53,
+   "won": 25,
+   "lost": 28,
+   "last": {
+    "name": "Players Championship 34",
+    "delta": -8
+   }
+  },
+  {
+   "id": "317",
+   "name": "Raymond van Barneveld",
+   "country": "NL",
+   "pos": 68,
+   "move": 4,
+   "rating": 1526,
+   "played": 71,
+   "won": 29,
+   "lost": 42,
+   "last": {
+    "name": "Players Championship 34",
+    "delta": 5
+   }
+  },
+  {
+   "id": "33768",
+   "name": "Alexander Merkx",
+   "country": "NL",
+   "pos": 69,
+   "move": -6,
+   "rating": 1526,
+   "played": 70,
+   "won": 36,
+   "lost": 34,
+   "last": {
+    "name": "Players Championship Finals",
+    "delta": -7
+   }
+  },
+  {
+   "id": "31014",
+   "name": "Harry Ward",
+   "country": "GB-ENG",
+   "pos": 70,
+   "move": 3,
+   "rating": 1523,
+   "played": 29,
+   "won": 14,
+   "lost": 15,
+   "last": {
+    "name": "Players Championship 34",
+    "delta": 21
+   }
+  },
+  {
+   "id": "32081",
+   "name": "Connor Scutt",
+   "country": "GB-ENG",
+   "pos": 71,
+   "move": -2,
+   "rating": 1522,
+   "played": 82,
+   "won": 40,
+   "lost": 42,
+   "last": {
+    "name": "Players Championship Finals",
+    "delta": -6
+   }
+  },
+  {
+   "id": "31028",
+   "name": "Ritchie Edhouse",
+   "country": "GB-ENG",
+   "pos": 72,
+   "move": -2,
+   "rating": 1522,
+   "played": 73,
+   "won": 33,
+   "lost": 40,
+   "last": {
+    "name": "Players Championship Finals",
+    "delta": -6
+   }
+  },
+  {
+   "id": "2554",
+   "name": "Daryl Gurney",
+   "country": "GB-NIR",
+   "pos": 73,
+   "move": -6,
+   "rating": 1519,
+   "played": 100,
+   "won": 52,
+   "lost": 48,
+   "last": {
+    "name": "Players Championship Finals",
+    "delta": -10
+   }
+  },
+  {
+   "id": "32846",
+   "name": "David Sharp",
+   "country": "GB-SCT",
+   "pos": 74,
+   "move": 1,
+   "rating": 1516,
+   "played": 63,
+   "won": 28,
+   "lost": 35,
+   "last": {
+    "name": "Players Championship 34",
+    "delta": -6
+   }
+  },
+  {
+   "id": "199",
+   "name": "Andy Boulton",
+   "country": "GB-SCT",
+   "pos": 75,
+   "move": 1,
+   "rating": 1516,
+   "played": 63,
+   "won": 28,
+   "lost": 35,
+   "last": {
+    "name": "Players Championship 34",
+    "delta": -6
+   }
+  },
+  {
+   "id": "35012",
+   "name": "Martijn Dragt",
+   "country": "NL",
+   "pos": 76,
+   "move": 1,
+   "rating": 1515,
+   "played": 56,
+   "won": 28,
+   "lost": 28,
+   "last": {
+    "name": "Players Championship 34",
+    "delta": -10
+   }
+  },
+  {
+   "id": "33598",
+   "name": "Darryl Pilgrim",
+   "country": "GB-ENG",
+   "pos": 77,
+   "move": -3,
+   "rating": 1515,
+   "played": 74,
+   "won": 37,
+   "lost": 37,
+   "last": {
+    "name": "Players Championship Finals",
+    "delta": -2
+   }
+  },
+  {
+   "id": "135",
+   "name": "Scott Waites",
+   "country": "GB-ENG",
+   "pos": 78,
+   "move": 0,
+   "rating": 1513,
+   "played": 32,
+   "won": 15,
+   "lost": 17,
+   "last": {
+    "name": "Players Championship 32",
+    "delta": -14
+   }
+  },
+  {
+   "id": "38149",
+   "name": "Owen Bates",
+   "country": "GB-ENG",
+   "pos": 79,
+   "move": 0,
+   "rating": 1513,
+   "played": 67,
+   "won": 29,
+   "lost": 38,
+   "last": {
+    "name": "Players Championship 34",
+    "delta": -14
+   }
+  },
+  {
+   "id": "32508",
+   "name": "Lewis Pride",
+   "country": "GB-ENG",
+   "pos": 80,
+   "move": 1,
+   "rating": 1512,
+   "played": 22,
+   "won": 11,
+   "lost": 11,
+   "last": {
+    "name": "Players Championship 32",
+    "delta": 13
+   }
+  },
+  {
+   "id": "2713",
+   "name": "Jimmy van Schie",
+   "country": "NL",
+   "pos": 81,
+   "move": 1,
+   "rating": 1511,
+   "played": 67,
+   "won": 29,
+   "lost": 38,
+   "last": {
+    "name": "Players Championship 34",
+    "delta": -12
+   }
+  },
+  {
+   "id": "34625",
+   "name": "Jurjen van der Velde",
+   "country": "NL",
+   "pos": 82,
+   "move": 1,
+   "rating": 1510,
+   "played": 66,
+   "won": 29,
+   "lost": 37,
+   "last": {
+    "name": "Players Championship 34",
+    "delta": 5
+   }
+  },
+  {
+   "id": "34609",
+   "name": "Viktor Tingstrom",
+   "country": "SE",
+   "pos": 83,
+   "move": 1,
+   "rating": 1506,
+   "played": 58,
+   "won": 24,
+   "lost": 34,
+   "last": {
+    "name": "Players Championship 34",
+    "delta": 12
+   }
+  },
+  {
+   "id": "38159",
+   "name": "Cam Crabtree",
+   "country": "GB-ENG",
+   "pos": 84,
+   "move": 1,
+   "rating": 1505,
+   "played": 66,
+   "won": 27,
+   "lost": 39,
+   "last": {
+    "name": "Grand Slam of Darts",
+    "delta": -20
+   }
+  },
+  {
+   "id": "668",
+   "name": "Jeffrey De Zwaan",
+   "country": "NL",
+   "pos": 85,
+   "move": 1,
+   "rating": 1505,
+   "played": 61,
+   "won": 23,
+   "lost": 38,
+   "last": {
+    "name": "Players Championship 34",
+    "delta": 3
+   }
+  },
+  {
+   "id": "11109",
+   "name": "Christian Kist",
+   "country": "NL",
+   "pos": 86,
+   "move": -6,
+   "rating": 1505,
+   "played": 69,
+   "won": 35,
+   "lost": 34,
+   "last": {
+    "name": "Players Championship Finals",
+    "delta": -8
+   }
+  },
+  {
+   "id": "81",
+   "name": "Joe Cullen",
+   "country": "GB-ENG",
+   "pos": 87,
+   "move": 4,
+   "rating": 1505,
+   "played": 104,
+   "won": 55,
+   "lost": 49,
+   "last": {
+    "name": "Players Championship Finals",
+    "delta": 15
+   }
+  },
+  {
+   "id": "31213",
+   "name": "Mario Vandenbogaerde",
+   "country": "BE",
+   "pos": 88,
+   "move": -1,
+   "rating": 1501,
+   "played": 65,
+   "won": 25,
+   "lost": 40,
+   "last": {
+    "name": "Players Championship 34",
+    "delta": 5
+   }
+  },
+  {
+   "id": "32951",
+   "name": "Shane McGuirk",
+   "country": "IE",
+   "pos": 89,
+   "move": -1,
+   "rating": 1500,
+   "played": 64,
+   "won": 27,
+   "lost": 37,
+   "last": {
+    "name": "Players Championship 34",
+    "delta": 6
+   }
+  },
+  {
+   "id": "36408",
+   "name": "Chris Landman",
+   "country": "NL",
+   "pos": 90,
+   "move": -1,
+   "rating": 1498,
+   "played": 61,
+   "won": 22,
+   "lost": 39,
+   "last": {
+    "name": "Players Championship 34",
+    "delta": 23
+   }
+  },
+  {
+   "id": "35168",
+   "name": "Adam Gawlas",
+   "country": "CZ",
+   "pos": 91,
+   "move": -1,
+   "rating": 1491,
+   "played": 66,
+   "won": 27,
+   "lost": 39,
+   "last": {
+    "name": "Players Championship 34",
+    "delta": 15
+   }
+  },
+  {
+   "id": "358",
+   "name": "Jim Long",
+   "country": "CA",
+   "pos": 92,
+   "move": 0,
+   "rating": 1487,
+   "played": 71,
+   "won": 32,
+   "lost": 39,
+   "last": {
+    "name": "Players Championship 34",
+    "delta": -7
+   }
+  },
+  {
+   "id": "35622",
+   "name": "Benjamin Pratnemer",
+   "country": "SI",
+   "pos": 93,
+   "move": 0,
+   "rating": 1484,
+   "played": 60,
+   "won": 24,
+   "lost": 36,
+   "last": {
+    "name": "Players Championship 34",
+    "delta": -2
+   }
+  },
+  {
+   "id": "34",
+   "name": "Mervyn King",
+   "country": "GB-ENG",
+   "pos": 94,
+   "move": 0,
+   "rating": 1483,
+   "played": 63,
+   "won": 26,
+   "lost": 37,
+   "last": {
+    "name": "Players Championship 34",
+    "delta": -7
+   }
+  },
+  {
+   "id": "271",
+   "name": "Ricky Evans",
+   "country": "GB-ENG",
+   "pos": 95,
+   "move": 0,
+   "rating": 1482,
+   "played": 61,
+   "won": 21,
+   "lost": 40,
+   "last": {
+    "name": "Grand Slam of Darts",
+    "delta": 9
+   }
+  },
+  {
+   "id": "40691",
+   "name": "Tyler Thorpe",
+   "country": "GB-ENG",
+   "pos": 96,
+   "move": 0,
+   "rating": 1481,
+   "played": 59,
+   "won": 22,
+   "lost": 37,
+   "last": {
+    "name": "Players Championship 34",
+    "delta": -7
+   }
+  },
+  {
+   "id": "34958",
+   "name": "Daniel Klose",
+   "country": "DE",
+   "pos": 97,
+   "move": 0,
+   "rating": 1480,
+   "played": 22,
+   "won": 8,
+   "lost": 14,
+   "last": {
+    "name": "Players Championship 32",
+    "delta": 2
+   }
+  },
+  {
+   "id": "32094",
+   "name": "Madars Razma",
+   "country": "LV",
+   "pos": 98,
+   "move": 1,
+   "rating": 1474,
+   "played": 79,
+   "won": 36,
+   "lost": 43,
+   "last": {
+    "name": "Players Championship 34",
+    "delta": 0
+   }
+  },
+  {
+   "id": "37349",
+   "name": "Alan Soutar",
+   "country": "GB-SCT",
+   "pos": 99,
+   "move": -1,
+   "rating": 1472,
+   "played": 77,
+   "won": 35,
+   "lost": 42,
+   "last": {
+    "name": "Players Championship Finals",
+    "delta": -5
+   }
+  },
+  {
+   "id": "33998",
+   "name": "Jeffrey Sparidaans",
+   "country": "NL",
+   "pos": 100,
+   "move": 0,
+   "rating": 1471,
+   "played": 60,
+   "won": 24,
+   "lost": 36,
+   "last": {
+    "name": "Players Championship 34",
+    "delta": 11
+   }
+  },
+  {
+   "id": "37085",
+   "name": "Nathan Potter",
+   "country": "GB-ENG",
+   "pos": 101,
+   "move": 0,
+   "rating": 1468,
+   "played": 40,
+   "won": 16,
+   "lost": 24,
+   "last": {
+    "name": "Players Championship 34",
+    "delta": -11
+   }
+  },
+  {
+   "id": "570",
+   "name": "Nick Kenny",
+   "country": "GB-WLS",
+   "pos": 102,
+   "move": 0,
+   "rating": 1464,
+   "played": 63,
+   "won": 23,
+   "lost": 40,
+   "last": {
+    "name": "Players Championship 34",
+    "delta": 22
+   }
+  },
+  {
+   "id": "581",
+   "name": "Jack Tweddell",
+   "country": "GB-ENG",
+   "pos": 103,
+   "move": 0,
+   "rating": 1464,
+   "played": 43,
+   "won": 17,
+   "lost": 26,
+   "last": {
+    "name": "Players Championship 28",
+    "delta": -10
+   }
+  },
+  {
+   "id": "39727",
+   "name": "Pascal Rupprecht",
+   "country": "DE",
+   "pos": 104,
+   "move": 0,
+   "rating": 1458,
+   "played": 27,
+   "won": 10,
+   "lost": 17,
+   "last": {
+    "name": "Players Championship 26",
+    "delta": -8
+   }
+  },
+  {
+   "id": "33009",
+   "name": "Lukas Wenig",
+   "country": "DE",
+   "pos": 105,
+   "move": 0,
+   "rating": 1452,
+   "played": 66,
+   "won": 26,
+   "lost": 40,
+   "last": {
+    "name": "Players Championship 34",
+    "delta": 1
+   }
+  },
+  {
+   "id": "31054",
+   "name": "Cor Dekker",
+   "country": "NO",
+   "pos": 106,
+   "move": 0,
+   "rating": 1450,
+   "played": 59,
+   "won": 21,
+   "lost": 38,
+   "last": {
+    "name": "Players Championship 34",
+    "delta": -6
+   }
+  },
+  {
+   "id": "139",
+   "name": "Peter Wright",
+   "country": "GB-SCT",
+   "pos": 107,
+   "move": 0,
+   "rating": 1450,
+   "played": 64,
+   "won": 25,
+   "lost": 39,
+   "last": {
+    "name": "Players Championship 34",
+    "delta": -15
+   }
+  },
+  {
+   "id": "76",
+   "name": "Ian White",
+   "country": "GB-ENG",
+   "pos": 108,
+   "move": 0,
+   "rating": 1448,
+   "played": 64,
+   "won": 25,
+   "lost": 39,
+   "last": {
+    "name": "Players Championship 34",
+    "delta": -10
+   }
+  },
+  {
+   "id": "35887",
+   "name": "Oskar Lukasiak",
+   "country": "SE",
+   "pos": 109,
+   "move": 0,
+   "rating": 1444,
+   "played": 45,
+   "won": 17,
+   "lost": 28,
+   "last": {
+    "name": "Players Championship 34",
+    "delta": -11
+   }
+  },
+  {
+   "id": "32602",
+   "name": "Kai Gotthardt",
+   "country": "DE",
+   "pos": 110,
+   "move": 0,
+   "rating": 1444,
+   "played": 50,
+   "won": 20,
+   "lost": 30,
+   "last": {
+    "name": "Players Championship 30",
+    "delta": 29
+   }
+  },
+  {
+   "id": "32976",
+   "name": "Stephen Rosney",
+   "country": "IE",
+   "pos": 111,
+   "move": 0,
+   "rating": 1437,
+   "played": 52,
+   "won": 17,
+   "lost": 35,
+   "last": {
+    "name": "Players Championship 34",
+    "delta": -8
+   }
+  },
+  {
+   "id": "32040",
+   "name": "Stephen Burton",
+   "country": "GB-ENG",
+   "pos": 112,
+   "move": 0,
+   "rating": 1436,
+   "played": 60,
+   "won": 20,
+   "lost": 40,
+   "last": {
+    "name": "Players Championship 34",
+    "delta": -11
+   }
+  },
+  {
+   "id": "47162",
+   "name": "Adam Leek",
+   "country": "AU",
+   "pos": 113,
+   "move": 0,
+   "rating": 1433,
+   "played": 59,
+   "won": 20,
+   "lost": 39,
+   "last": {
+    "name": "Players Championship 34",
+    "delta": 13
+   }
+  },
+  {
+   "id": "32526",
+   "name": "Niall Culleton",
+   "country": "IE",
+   "pos": 114,
+   "move": 0,
+   "rating": 1430,
+   "played": 55,
+   "won": 20,
+   "lost": 35,
+   "last": {
+    "name": "Players Championship 34",
+    "delta": -11
+   }
+  },
+  {
+   "id": "33796",
+   "name": "Stefan Bellmont",
+   "country": "CH",
+   "pos": 115,
+   "move": 0,
+   "rating": 1426,
+   "played": 57,
+   "won": 19,
+   "lost": 38,
+   "last": {
+    "name": "Players Championship 34",
+    "delta": 11
+   }
+  },
+  {
+   "id": "32087",
+   "name": "Greg Ritchie",
+   "country": "GB-SCT",
+   "pos": 116,
+   "move": 0,
+   "rating": 1426,
+   "played": 51,
+   "won": 18,
+   "lost": 33,
+   "last": {
+    "name": "Players Championship 34",
+    "delta": -7
+   }
+  },
+  {
+   "id": "32962",
+   "name": "Adam Paxton",
+   "country": "GB-ENG",
+   "pos": 117,
+   "move": 0,
+   "rating": 1424,
+   "played": 52,
+   "won": 17,
+   "lost": 35,
+   "last": {
+    "name": "Players Championship 34",
+    "delta": -4
+   }
+  },
+  {
+   "id": "34245",
+   "name": "Dimitri Van den Bergh",
+   "country": "BE",
+   "pos": 118,
+   "move": 0,
+   "rating": 1423,
+   "played": 43,
+   "won": 13,
+   "lost": 30,
+   "last": {
+    "name": "Players Championship 34",
+    "delta": -8
+   }
+  },
+  {
+   "id": "44506",
+   "name": "Sietse Lap",
+   "country": "NL",
+   "pos": 119,
+   "move": 0,
+   "rating": 1423,
+   "played": 56,
+   "won": 18,
+   "lost": 38,
+   "last": {
+    "name": "Players Championship 34",
+    "delta": 2
+   }
+  },
+  {
+   "id": "917",
+   "name": "Arno Merk",
+   "country": "DE",
+   "pos": 120,
+   "move": 0,
+   "rating": 1420,
+   "played": 56,
+   "won": 20,
+   "lost": 36,
+   "last": {
+    "name": "Players Championship 34",
+    "delta": -6
+   }
+  },
+  {
+   "id": "42904",
+   "name": "Yorick Hofkens",
+   "country": "DE",
+   "pos": 121,
+   "move": 0,
+   "rating": 1419,
+   "played": 40,
+   "won": 11,
+   "lost": 29,
+   "last": {
+    "name": "Players Championship 28",
+    "delta": -7
+   }
+  },
+  {
+   "id": "31034",
+   "name": "Ryan Meikle",
+   "country": "GB-ENG",
+   "pos": 122,
+   "move": 0,
+   "rating": 1417,
+   "played": 56,
+   "won": 19,
+   "lost": 37,
+   "last": {
+    "name": "Players Championship 34",
+    "delta": -4
+   }
+  },
+  {
+   "id": "32497",
+   "name": "Thomas Lovely",
+   "country": "GB-ENG",
+   "pos": 123,
+   "move": 0,
+   "rating": 1409,
+   "played": 56,
+   "won": 19,
+   "lost": 37,
+   "last": {
+    "name": "Players Championship 34",
+    "delta": -8
+   }
+  },
+  {
+   "id": "40143",
+   "name": "Carl Sneyd",
+   "country": "GB-ENG",
+   "pos": 124,
+   "move": 0,
+   "rating": 1406,
+   "played": 48,
+   "won": 14,
+   "lost": 34,
+   "last": {
+    "name": "Grand Slam of Darts",
+    "delta": -7
+   }
+  },
+  {
+   "id": "32704",
+   "name": "Adam Lipscombe",
+   "country": "GB-ENG",
+   "pos": 125,
+   "move": 0,
+   "rating": 1398,
+   "played": 56,
+   "won": 19,
+   "lost": 37,
+   "last": {
+    "name": "Players Championship 34",
+    "delta": 11
+   }
+  },
+  {
+   "id": "33070",
+   "name": "Marvin van Velzen",
+   "country": "NL",
+   "pos": 126,
+   "move": 0,
+   "rating": 1391,
+   "played": 53,
+   "won": 18,
+   "lost": 35,
+   "last": {
+    "name": "Players Championship 34",
+    "delta": -4
+   }
+  },
+  {
+   "id": "41742",
+   "name": "Leon Weber",
+   "country": "DE",
+   "pos": 127,
+   "move": 0,
+   "rating": 1386,
+   "played": 54,
+   "won": 19,
+   "lost": 35,
+   "last": {
+    "name": "Players Championship 34",
+    "delta": -4
+   }
+  },
+  {
+   "id": "33793",
+   "name": "Thibault Tricole",
+   "country": "FR",
+   "pos": 128,
+   "move": 0,
+   "rating": 1384,
+   "played": 57,
+   "won": 20,
+   "lost": 37,
+   "last": {
+    "name": "Players Championship 34",
+    "delta": -4
+   }
+  },
+  {
+   "id": "36368",
+   "name": "Dennie Olde Kalter",
+   "country": "NL",
+   "pos": 129,
+   "move": 0,
+   "rating": 1371,
+   "played": 41,
+   "won": 8,
+   "lost": 33,
+   "last": {
+    "name": "Players Championship 32",
+    "delta": -5
+   }
+  },
+  {
+   "id": "11829",
+   "name": "Rhys Griffin",
+   "country": "GB-WLS",
+   "pos": 130,
+   "move": 0,
+   "rating": 1369,
+   "played": 49,
+   "won": 13,
+   "lost": 36,
+   "last": {
+    "name": "Players Championship 34",
+    "delta": -4
+   }
+  },
+  {
+   "id": "33043",
+   "name": "Dominik Gruellich",
+   "country": "DE",
+   "pos": 131,
+   "move": 0,
+   "rating": 1369,
+   "played": 50,
+   "won": 13,
+   "lost": 37,
+   "last": {
+    "name": "Players Championship 34",
+    "delta": -10
+   }
+  },
+  {
+   "id": "39109",
+   "name": "Adam Warner",
+   "country": "GB-ENG",
+   "pos": 132,
+   "move": 0,
+   "rating": 1354,
+   "played": 46,
+   "won": 11,
+   "lost": 35,
+   "last": {
+    "name": "Players Championship 34",
+    "delta": -5
+   }
+  },
+  {
+   "id": "32068",
+   "name": "Martin Lukeman",
+   "country": "GB-ENG",
+   "pos": 133,
+   "move": 0,
+   "rating": 1347,
+   "played": 43,
+   "won": 9,
+   "lost": 34,
+   "last": {
+    "name": "Players Championship 34",
+    "delta": -8
+   }
+  },
+  {
+   "id": "34743",
+   "name": "Marvin Kraft",
+   "country": "DE",
+   "pos": 134,
+   "move": 0,
+   "rating": 1344,
+   "played": 43,
+   "won": 7,
+   "lost": 36,
+   "last": {
+    "name": "Players Championship 34",
+    "delta": 37
+   }
+  },
+  {
+   "id": "44151",
+   "name": "Samuel Price",
+   "country": "GB-ENG",
+   "pos": 135,
+   "move": 0,
+   "rating": 1330,
+   "played": 45,
+   "won": 8,
+   "lost": 37,
+   "last": {
+    "name": "Players Championship 34",
+    "delta": -7
+   }
+  },
+  {
+   "id": "33950",
+   "name": "Stefaan Henderyck",
+   "country": "BE",
+   "pos": 136,
+   "move": 0,
+   "rating": 1313,
+   "played": 38,
+   "won": 7,
+   "lost": 31,
+   "last": {
+    "name": "Players Championship 34",
+    "delta": 15
+   }
+  },
+  {
+   "id": "39541",
+   "name": "Maximilian Czerwinski",
+   "country": "DE",
+   "pos": 137,
+   "move": 0,
+   "rating": 1312,
+   "played": 31,
+   "won": 6,
+   "lost": 25,
+   "last": {
+    "name": "Players Championship 32",
+    "delta": -8
+   }
+  },
+  {
+   "id": "36998",
+   "name": "Tavis Dudeney",
+   "country": "GB-ENG",
+   "pos": 138,
+   "move": 0,
+   "rating": 1289,
+   "played": 46,
+   "won": 10,
+   "lost": 36,
+   "last": {
+    "name": "Players Championship 34",
+    "delta": -6
+   }
+  },
+  {
+   "id": "44403",
+   "name": "Filip Bereza",
+   "country": "PL",
+   "pos": 139,
+   "move": 0,
+   "rating": 1282,
+   "played": 38,
+   "won": 3,
+   "lost": 35,
+   "last": {
+    "name": "Players Championship 34",
+    "delta": -7
+   }
+  },
+  {
+   "id": "32107",
+   "name": "Rusty-Jake Rodriguez",
+   "country": "AT",
+   "pos": 140,
+   "move": 0,
+   "rating": 1257,
+   "played": 33,
+   "won": 3,
+   "lost": 30,
+   "last": {
+    "name": "Grand Slam of Darts",
+    "delta": 20
+   }
+  },
+  {
+   "id": "409",
+   "name": "Pero Ljubic",
+   "country": "HR",
+   "pos": 141,
+   "move": 0,
+   "rating": 1242,
+   "played": 22,
+   "won": 1,
+   "lost": 21,
+   "last": {
+    "name": "Players Championship 32",
+    "delta": -2
+   }
+  },
+  {
+   "id": "30992",
+   "name": "Tytus Kanik",
+   "country": "PL",
+   "pos": 142,
+   "move": 0,
+   "rating": 1225,
+   "played": 39,
+   "won": 4,
+   "lost": 35,
+   "last": {
+    "name": "Players Championship 34",
+    "delta": -6
+   }
+  }
+ ]
+}

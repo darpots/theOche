@@ -604,7 +604,8 @@ const fullTitle = title === 'The Oche' ? title : `${title} · The Oche`;
   .theme button { border: 0; background: none; border-radius: 999px; padding: 4px 10px; font-size: 12px; font-weight: 700; color: var(--muted); cursor: pointer; }
   .theme button[aria-pressed='true'] { background: var(--ink); color: var(--volt); }
   .foot-base { display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; margin-top: 28px; padding-top: 18px; border-top: 1px solid var(--line); color: var(--muted); font-size: 13px; }
-  @media (max-width: 760px) { .foot-in { grid-template-columns: 1fr; } .foot-links { gap: 28px; } }
+  /* Phones: the link groups in two fixed columns, so the second row lines up with the first */
+  @media (max-width: 760px) { .foot-in { grid-template-columns: 1fr; } .foot-links { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 28px 20px; } }
   @media (max-width: 640px) {
     .bar { height: 58px; }
     .bar nav .nav, .bar nav .pill, .bar nav .dd { display: none; }
