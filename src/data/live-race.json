@@ -1,5 +1,5 @@
 {
- "updatedAt": "2026-11-27T00:00:23.804Z",
+ "updatedAt": "2026-11-27T14:05:22.570Z",
  "officialSig": "1a31ccd0ffb5435e",
  "officialMoney": {
   "4": 515500,
@@ -624,11 +624,11 @@
    "pos": 20,
    "live": 20,
    "move": 0,
-   "money": 472000,
-   "plus": 4000,
+   "money": 475000,
+   "plus": 7000,
    "minus": 0,
    "expiring": [],
-   "round": "Last 64",
+   "round": "Last 32",
    "alive": true,
    "estimated": false
   },
@@ -639,11 +639,11 @@
    "pos": 21,
    "live": 21,
    "move": 0,
-   "money": 460750,
-   "plus": 4000,
+   "money": 463750,
+   "plus": 7000,
    "minus": 0,
    "expiring": [],
-   "round": "Last 64",
+   "round": "Last 32",
    "alive": true,
    "estimated": false
   },
@@ -744,11 +744,11 @@
    "pos": 28,
    "live": 28,
    "move": 0,
-   "money": 342750,
-   "plus": 4000,
+   "money": 345750,
+   "plus": 7000,
    "minus": 0,
    "expiring": [],
-   "round": "Last 64",
+   "round": "Last 32",
    "alive": true,
    "estimated": false
   },
@@ -779,7 +779,7 @@
    "minus": 0,
    "expiring": [],
    "round": "Last 64",
-   "alive": true,
+   "alive": false,
    "estimated": false
   },
   {
@@ -1199,7 +1199,7 @@
    "minus": 0,
    "expiring": [],
    "round": "Last 64",
-   "alive": true,
+   "alive": false,
    "estimated": false
   },
   {
@@ -1224,11 +1224,11 @@
    "pos": 60,
    "live": 60,
    "move": 0,
-   "money": 132250,
-   "plus": 4000,
+   "money": 135250,
+   "plus": 7000,
    "minus": 0,
    "expiring": [],
-   "round": "Last 64",
+   "round": "Last 32",
    "alive": true,
    "estimated": false
   },
@@ -1454,7 +1454,7 @@
    "minus": 0,
    "expiring": [],
    "round": "Last 64",
-   "alive": true,
+   "alive": false,
    "estimated": false
   },
   {
@@ -1484,7 +1484,7 @@
    "minus": 0,
    "expiring": [],
    "round": "Last 64",
-   "alive": true,
+   "alive": false,
    "estimated": false
   },
   {
