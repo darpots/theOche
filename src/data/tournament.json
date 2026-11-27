@@ -1,5 +1,5 @@
 {
- "updatedAt": "2026-11-27T15:07:38.448Z",
+ "updatedAt": "2026-11-27T16:07:37.321Z",
  "tournament": {
   "winner": null,
   "id": "10872",
@@ -98,8 +98,8 @@
      {
       "id": "518138",
       "date": "2026-11-27",
-      "time": "15:35",
-      "status": "upcoming",
+      "time": "15:30",
+      "status": "result",
       "p1": {
        "id": "2771",
        "name": "Karel Sedlacek",
@@ -116,9 +116,30 @@
        "country": "GB-SCT",
        "ranking": 16
       },
-      "s1": 0,
-      "s2": 0,
-      "winner": null
+      "s1": 6,
+      "s2": 4,
+      "winner": "2771",
+      "stats": [
+       {
+        "avg": 94.2,
+        "f9": null,
+        "t80": 5,
+        "t140": 2,
+        "t100": 16,
+        "co": 54.55,
+        "hi": 170
+       },
+       {
+        "avg": 89.11,
+        "f9": null,
+        "t80": 3,
+        "t140": 2,
+        "t100": 15,
+        "co": 28.57,
+        "hi": 78
+       }
+      ],
+      "statsLive": true
      },
      {
       "id": "518137",
@@ -148,8 +169,8 @@
      {
       "id": "518136",
       "date": "2026-11-27",
-      "time": "15:30",
-      "status": "upcoming",
+      "time": "15:31",
+      "status": "result",
       "p1": {
        "id": "231",
        "name": "Andrew Gilding",
@@ -166,15 +187,36 @@
        "country": "GB-ENG",
        "ranking": 51
       },
-      "s1": 0,
-      "s2": 0,
-      "winner": null
+      "s1": 5,
+      "s2": 6,
+      "winner": "32078",
+      "stats": [
+       {
+        "avg": 94.84,
+        "f9": null,
+        "t80": 2,
+        "t140": 10,
+        "t100": 16,
+        "co": 31.25,
+        "hi": 118
+       },
+       {
+        "avg": 94.73,
+        "f9": null,
+        "t80": 3,
+        "t140": 7,
+        "t100": 18,
+        "co": 54.55,
+        "hi": 104
+       }
+      ],
+      "statsLive": true
      },
      {
       "id": "518135",
       "date": "2026-11-27",
-      "time": "14:57",
-      "status": "upcoming",
+      "time": "14:58",
+      "status": "result",
       "p1": {
        "id": "33630",
        "name": "Maik Kuivenhoven",
@@ -191,9 +233,30 @@
        "country": "GB-NIR",
        "ranking": 31
       },
-      "s1": 0,
-      "s2": 0,
-      "winner": null
+      "s1": 6,
+      "s2": 4,
+      "winner": "33630",
+      "stats": [
+       {
+        "avg": 85.85,
+        "f9": null,
+        "t80": 2,
+        "t140": 4,
+        "t100": 8,
+        "co": 60,
+        "hi": 68
+       },
+       {
+        "avg": 83.01,
+        "f9": null,
+        "t80": 1,
+        "t140": 3,
+        "t100": 14,
+        "co": 33.33,
+        "hi": 120
+       }
+      ],
+      "statsLive": true
      },
      {
       "id": "518134",
@@ -294,8 +357,8 @@
      {
       "id": "518131",
       "date": "2026-11-27",
-      "time": "15:05",
-      "status": "upcoming",
+      "time": "15:04",
+      "status": "result",
       "p1": {
        "id": "30859",
        "name": "Jonny Clayton",
@@ -312,9 +375,30 @@
        "country": "GB-ENG",
        "ranking": 72
       },
-      "s1": 0,
-      "s2": 0,
-      "winner": null
+      "s1": 6,
+      "s2": 4,
+      "winner": "30859",
+      "stats": [
+       {
+        "avg": 96.4,
+        "f9": null,
+        "t80": 3,
+        "t140": 7,
+        "t100": 12,
+        "co": 66.67,
+        "hi": 160
+       },
+       {
+        "avg": 90.83,
+        "f9": null,
+        "t80": 5,
+        "t140": 4,
+        "t100": 13,
+        "co": 23.53,
+        "hi": 116
+       }
+      ],
+      "statsLive": true
      },
      {
       "id": "518130",
@@ -444,7 +528,7 @@
      {
       "id": "518125",
       "date": "2026-11-27",
-      "time": "17:00",
+      "time": "16:35",
       "status": "upcoming",
       "p1": {
        "id": "31027",
@@ -1179,9 +1263,16 @@
       "time": "13:00",
       "status": "upcoming",
       "p1": null,
-      "p2": null,
+      "p2": {
+       "id": "30859",
+       "name": "Jonny Clayton",
+       "last": "Clayton",
+       "nick": "The Ferret",
+       "country": "GB-WLS",
+       "ranking": 5
+      },
       "s1": null,
-      "s2": null,
+      "s2": 0,
       "winner": null
      },
      {
@@ -1208,9 +1299,16 @@
       "time": "13:00",
       "status": "upcoming",
       "p1": null,
-      "p2": null,
+      "p2": {
+       "id": "33630",
+       "name": "Maik Kuivenhoven",
+       "last": "Kuivenhoven",
+       "nick": null,
+       "country": "NL",
+       "ranking": 67
+      },
       "s1": null,
-      "s2": null,
+      "s2": 0,
       "winner": null
      },
      {
@@ -1229,9 +1327,16 @@
       "date": "2026-11-28",
       "time": "13:00",
       "status": "upcoming",
-      "p1": null,
+      "p1": {
+       "id": "2771",
+       "name": "Karel Sedlacek",
+       "last": "Sedlacek",
+       "nick": "Evil Charlie",
+       "country": "CZ",
+       "ranking": 38
+      },
       "p2": null,
-      "s1": null,
+      "s1": 0,
       "s2": null,
       "winner": null
      }

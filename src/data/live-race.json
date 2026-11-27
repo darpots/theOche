@@ -1,5 +1,5 @@
 {
- "updatedAt": "2026-11-27T15:07:42.832Z",
+ "updatedAt": "2026-11-27T16:07:43.145Z",
  "officialSig": "1a31ccd0ffb5435e",
  "officialMoney": {
   "4": 515500,
@@ -399,11 +399,11 @@
    "pos": 5,
    "live": 5,
    "move": 0,
-   "money": 723250,
-   "plus": 4000,
+   "money": 726250,
+   "plus": 7000,
    "minus": 0,
    "expiring": [],
-   "round": "Last 64",
+   "round": "Last 32",
    "alive": true,
    "estimated": false
   },
@@ -569,7 +569,7 @@
    "minus": 0,
    "expiring": [],
    "round": "Last 64",
-   "alive": true,
+   "alive": false,
    "estimated": false
   },
   {
@@ -734,7 +734,7 @@
    "minus": 0,
    "expiring": [],
    "round": "Last 64",
-   "alive": true,
+   "alive": false,
    "estimated": false
   },
   {
@@ -794,7 +794,7 @@
    "minus": 0,
    "expiring": [],
    "round": "Last 64",
-   "alive": true,
+   "alive": false,
    "estimated": false
   },
   {
@@ -894,11 +894,11 @@
    "pos": 38,
    "live": 38,
    "move": 0,
-   "money": 202500,
-   "plus": 4000,
+   "money": 205500,
+   "plus": 7000,
    "minus": 0,
    "expiring": [],
-   "round": "Last 64",
+   "round": "Last 32",
    "alive": true,
    "estimated": false
   },
@@ -1089,11 +1089,11 @@
    "pos": 51,
    "live": 51,
    "move": 0,
-   "money": 152250,
-   "plus": 4000,
+   "money": 155250,
+   "plus": 7000,
    "minus": 0,
    "expiring": [],
-   "round": "Last 64",
+   "round": "Last 32",
    "alive": true,
    "estimated": false
   },
@@ -1293,33 +1293,33 @@
    "estimated": false
   },
   {
+   "id": "33630",
+   "name": "Maik Kuivenhoven",
+   "slug": "maik-kuivenhoven",
+   "pos": 67,
+   "live": 65,
+   "move": 2,
+   "money": 118250,
+   "plus": 7000,
+   "minus": 0,
+   "expiring": [],
+   "round": "Last 32",
+   "alive": true,
+   "estimated": false
+  },
+  {
    "id": "570",
    "name": "Nick Kenny",
    "slug": "nick-kenny",
    "pos": 65,
-   "live": 65,
-   "move": 0,
+   "live": 66,
+   "move": -1,
    "money": 116000,
    "plus": 0,
    "minus": 0,
    "expiring": [],
    "round": null,
    "alive": null,
-   "estimated": false
-  },
-  {
-   "id": "33630",
-   "name": "Maik Kuivenhoven",
-   "slug": "maik-kuivenhoven",
-   "pos": 67,
-   "live": 66,
-   "move": 1,
-   "money": 115250,
-   "plus": 4000,
-   "minus": 0,
-   "expiring": [],
-   "round": "Last 64",
-   "alive": true,
    "estimated": false
   },
   {
@@ -1409,7 +1409,7 @@
    "minus": 0,
    "expiring": [],
    "round": "Last 64",
-   "alive": true,
+   "alive": false,
    "estimated": false
   },
   {
