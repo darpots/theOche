@@ -12,7 +12,7 @@
 import { createHash } from 'node:crypto';
 import {
   API, normaliseRankings, isRankedEvent, eventPrizes, expiringMap, liveRaceWith,
-  eventsDropping, resetCandidates, acceptReset, pendingEvents, expiringWithLedger,
+  eventsDropping, eventsDroppingBetween, eventsIncluded, resetCandidates, acceptReset, pendingEvents, expiringWithLedger,
 } from '../src/lib/pdc.mjs';
 import { writeFile } from 'node:fs/promises';
 import { get, getAll, readJson, writeJsonIfChanged, pool, today, log } from './lib.mjs';
@@ -32,11 +32,34 @@ const allRows = (await Promise.all([y - 3, y - 2, y - 1, y, y + 1].map(s => getA
   .flat().map(d => ({ id: d.id, ...d.attributes }));
 const idx = allRows.filter(t => isRankedEvent(t) && !/test/i.test(t.name));
 
+// When the PDC has republished, work out which of the pending events the new
+// list includes (it may not include them all yet): replay them in date order
+// on the previous official figures and keep the count that matches best.
+let includedIds = null;
+const prevPending = (prev.pending || []).map(id => idx.find(t => t.id === id)).filter(Boolean).sort((a, b) => a.endDate.localeCompare(b.endDate));
+if (republished && prev.officialMoney && prevPending.length) {
+  const ids = new Set(prevPending.map(t => t.id));
+  let bound = idx.filter(t => !ids.has(t.id) && t.fixtureCount > 0 && t.endDate <= prevPending[0].startDate).map(t => t.endDate).sort().pop() || '0000';
+  const steps = [];
+  for (const t of prevPending) {
+    const gain = new Map([...eventPrizes((await get(API.tournaments + t.id)).data.attributes)].map(([id, r]) => [id, r.amount]));
+    const drops = eventsDroppingBetween(idx, bound, t.endDate);
+    const lose = new Map([...expiringMap(await Promise.all(drops.map(d => get(API.tournaments + d.id).then(r => ({ ...r.data.attributes, endDate: d.endDate })))), prev.countsFrom || {})].map(([id, r]) => [id, r.amount]));
+    steps.push({ gain, lose });
+    bound = t.endDate > bound ? t.endDate : bound;
+  }
+  const { included, scores } = eventsIncluded(prev.officialMoney, official, steps);
+  includedIds = new Set(prevPending.slice(0, included).map(t => t.id));
+  log(`live race: the PDC's new list includes ${included} of ${prevPending.length} pending event(s)${included ? ` (${prevPending.slice(0, included).map(t => t.name).join(', ')})` : ''}; players matching with 0..${prevPending.length} events in: ${scores.join(', ')}`);
+}
+const allIncluded = !includedIds || includedIds.size === prevPending.length;
+
 // Self-check: when the PDC republishes after the pending events have all
 // finished, compare what the race predicted with the new official figures.
-// The result is kept in the data file (and written out when it is poor).
+// Only when the new list includes all of them (otherwise the prediction holds
+// money the PDC hasn't added yet). Kept in the data file; written out when poor.
 let lastCheck = prev.lastCheck || null;
-if (republished && prev.event && !prev.event.live && prev.race?.length) {
+if (republished && allIncluded && prev.event && !prev.event.live && prev.race?.length) {
   const byId = new Map(official.map(p => [p.id, p]));
   const compared = prev.race.filter(p => byId.has(p.id));
   const misses = compared.filter(p => byId.get(p.id).money !== p.money);
@@ -66,7 +89,17 @@ if (unknown.length) {
 }
 
 // Events not in the official list yet (see pendingEvents).
-const pending = pendingEvents(idx, prev.pending || [], { day, since: (prev.updatedAt || '').slice(0, 10) || day, republished });
+const pending = pendingEvents(idx, prev.pending || [], { day, since: (prev.updatedAt || '').slice(0, 10) || day, republished, includedIds });
+// An event the PDC still hasn't included three weeks after it ended is not
+// going to be: release it, and say so.
+const stale = pending.filter(t => Date.parse(day) - Date.parse(t.endDate) > 21 * 864e5);
+if (stale.length) {
+  for (const t of stale) pending.splice(pending.indexOf(t), 1);
+  log(`live race: WARNING released ${stale.map(t => t.name).join(', ')}: not in the official list three weeks after it ended`);
+  await writeFile('.live-race-check.txt', `These events were still not in the PDC's official rankings three weeks after they ended, so the live race has stopped adding their money:\n\n${stale.map(t => `- ${t.name} (ended ${t.endDate})`).join('\n')}\n`);
+}
+// The official figures this run worked from, for the check above next time.
+const officialMoney = Object.fromEntries(official.map(p => [p.id, p.money]));
 
 // Ranking resets: worked out again whenever the official list changes.
 let countsFrom = prev.countsFrom;
@@ -94,7 +127,7 @@ if (!countsFrom || prev.officialSig !== sig) {
 }
 
 if (!pending.length) {
-  await writeJsonIfChanged(OUT, { updatedAt: new Date().toISOString(), officialSig: sig, countsFrom, lastCheck, pending: [], event: null }, { stamp: 'updatedAt' });
+  await writeJsonIfChanged(OUT, { updatedAt: new Date().toISOString(), officialSig: sig, officialMoney, countsFrom, lastCheck, pending: [], event: null }, { stamp: 'updatedAt' });
   log('live race: no ranking event since the official list was last updated');
 } else {
   const payloads = await Promise.all(pending.map(t => get(API.tournaments + t.id).then(r => r.data.attributes)));
@@ -127,6 +160,7 @@ if (!pending.length) {
   const changed = await writeJsonIfChanged(OUT, {
     updatedAt: new Date().toISOString(),
     officialSig: sig,
+    officialMoney,
     // Lets the browser check it has the same official list before recomputing.
     officialTotal: official.reduce((n, p) => n + p.money, 0),
     countsFrom,

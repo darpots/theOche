@@ -564,13 +564,45 @@ export const plus104 = d => new Date(Date.parse(d + 'T12:00:00Z') + 728 * 864e5)
  * idx: ranked events (index rows); prevIds: pending ids from the last run;
  * since: the date of the last run.
  */
-export function pendingEvents(idx, prevIds, { day, since, republished }) {
+export function pendingEvents(idx, prevIds, { day, since, republished, includedIds = null }) {
   const byId = new Map(idx.map(t => [t.id, t]));
   let pending = prevIds.map(id => byId.get(id)).filter(Boolean);
-  if (republished) pending = pending.filter(t => t.endDate >= day);
+  // includedIds: the events the republished list was found to include (see
+  // eventsIncluded); without it, every event that had finished is assumed in.
+  if (republished) pending = includedIds ? pending.filter(t => !includedIds.has(t.id)) : pending.filter(t => t.endDate >= day);
   const from = republished || since > day ? day : since;
   for (const t of idx) if (t.fixtureCount > 0 && t.startDate <= day && t.endDate >= from && !pending.includes(t)) pending.push(t);
   return pending.sort((a, b) => a.startDate.localeCompare(b.startDate));
+}
+
+/**
+ * Events whose 104 weeks run out after one date and on or before another: the
+ * money that comes off when the official list moves on from `after` to `upTo`.
+ */
+export const eventsDroppingBetween = (idx, after, upTo) => idx.filter(t => t.fixtureCount > 0 && plus104(t.endDate) > after && plus104(t.endDate) <= upTo);
+
+/**
+ * After the PDC republishes its rankings: how many of the events that were
+ * pending (in date order) the new list includes. The PDC adds events in the
+ * order they are played, so it tries none, the first, the first two, … and
+ * keeps the count whose predicted totals match the most players.
+ * prevMoney: { pid: money } from the previous official list.
+ * steps: one per pending event, in order: { gain: Map pid → money it adds,
+ * lose: Map pid → money that came off with it }.
+ * Returns { included, scores } (scores[k] = players matching with k events in).
+ */
+export function eventsIncluded(prevMoney, official, steps) {
+  const delta = new Map();
+  const score = () => official.filter(p => (prevMoney[p.id] ?? 0) + (delta.get(p.id) || 0) === p.money).length;
+  const scores = [score()];
+  for (const s of steps) {
+    for (const [id, a] of s.gain) delta.set(id, (delta.get(id) || 0) + a);
+    for (const [id, a] of s.lose) delta.set(id, (delta.get(id) || 0) - a);
+    scores.push(score());
+  }
+  let included = 0;
+  scores.forEach((v, k) => { if (v > scores[included]) included = k; }); // a tie keeps fewer events in
+  return { included, scores };
 }
 
 /**

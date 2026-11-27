@@ -153,3 +153,21 @@ test('ranking ledger: PDPA breakdowns parsed, matched to PDC events, verified ag
   assert.equal(exp.get('11').amount, 3000);
   assert.equal(exp.get('12').amount, 5); // not in the ledger: feed figure kept
 });
+
+test('after a republish, only the events the new official list includes leave the race', async () => {
+  const { eventsIncluded, pendingEvents } = await import('../src/lib/pdc.mjs');
+  const prevMoney = { 1: 1000, 2: 900, 3: 800 };
+  const pc33 = { gain: new Map([['1', 15000], ['2', 10000]]), lose: new Map([['3', 500]]) };
+  const pc34 = { gain: new Map([['2', 15000], ['3', 4000]]), lose: new Map() };
+  // The PDC has added PC33 only.
+  const official = [{ id: '1', money: 16000 }, { id: '2', money: 10900 }, { id: '3', money: 300 }];
+  assert.equal(eventsIncluded(prevMoney, official, [pc33, pc34]).included, 1);
+  // Both added.
+  assert.equal(eventsIncluded(prevMoney, [{ id: '1', money: 16000 }, { id: '2', money: 25900 }, { id: '3', money: 4300 }], [pc33, pc34]).included, 2);
+  // A republish that added neither (a correction elsewhere).
+  assert.equal(eventsIncluded(prevMoney, [{ id: '1', money: 1000 }, { id: '2', money: 900 }, { id: '3', money: 800 }], [pc33, pc34]).included, 0);
+  // pendingEvents keeps the event the list doesn't include.
+  const T = (id, d) => ({ id, name: id, startDate: d, endDate: d, fixtureCount: 127 });
+  const idx = [T('pc33', '2026-11-04'), T('pc34', '2026-11-05')];
+  assert.deepEqual(pendingEvents(idx, ['pc33', 'pc34'], { day: '2026-11-06', since: '2026-11-06', republished: true, includedIds: new Set(['pc33']) }).map(t => t.id), ['pc34']);
+});
