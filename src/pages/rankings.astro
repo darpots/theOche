@@ -371,6 +371,13 @@ const av = (name: string) => { const [c1, c2] = avatarColours(name); return `--c
     .tools .search { grid-column: 1 / -1; }
   }
   @media (max-width: 720px) {
+    /* Phones: search, the three views across the full width, the event filter, then the
+       count, each on its own line (side by side they were wider than the screen) */
+    .tools { grid-template-columns: minmax(0, 1fr); gap: 10px; }
+    .tools .mode { display: flex; }
+    .mode .seg { flex: 1; justify-content: center; }
+    .tools #asof { grid-column: auto; justify-self: start; text-align: left; white-space: normal; }
+    .onlyev.off { display: none; }
     .tr { grid-template-columns: 50px minmax(0, 1fr) auto; gap: 10px; padding: 10px 12px; }
     /* Phones: full names, wrapping onto a second line rather than cut off */
     .who { gap: 10px; }
