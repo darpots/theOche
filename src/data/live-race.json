@@ -1,5 +1,5 @@
 {
- "updatedAt": "2026-11-27T17:07:39.460Z",
+ "updatedAt": "2026-11-27T20:07:38.227Z",
  "officialSig": "1a31ccd0ffb5435e",
  "officialMoney": {
   "4": 515500,
@@ -359,7 +359,7 @@
    "minus": 0,
    "expiring": [],
    "round": "Last 64",
-   "alive": true,
+   "alive": false,
    "estimated": false
   },
   {
@@ -689,7 +689,7 @@
    "minus": 0,
    "expiring": [],
    "round": "Last 64",
-   "alive": true,
+   "alive": false,
    "estimated": false
   },
   {
@@ -918,33 +918,33 @@
    "estimated": false
   },
   {
+   "id": "31031",
+   "name": "Jeffrey De Graaf",
+   "slug": "jeffrey-de-graaf",
+   "pos": 41,
+   "live": 40,
+   "move": 1,
+   "money": 197000,
+   "plus": 7000,
+   "minus": 0,
+   "expiring": [],
+   "round": "Last 32",
+   "alive": true,
+   "estimated": false
+  },
+  {
    "id": "32079",
    "name": "Callan Rydz",
    "slug": "callan-rydz",
    "pos": 40,
-   "live": 40,
-   "move": 0,
+   "live": 41,
+   "move": -1,
    "money": 195250,
    "plus": 4000,
    "minus": 0,
    "expiring": [],
    "round": "Last 64",
    "alive": false,
-   "estimated": false
-  },
-  {
-   "id": "31031",
-   "name": "Jeffrey De Graaf",
-   "slug": "jeffrey-de-graaf",
-   "pos": 41,
-   "live": 41,
-   "move": 0,
-   "money": 194000,
-   "plus": 4000,
-   "minus": 0,
-   "expiring": [],
-   "round": "Last 64",
-   "alive": true,
    "estimated": false
   },
   {
@@ -1119,11 +1119,11 @@
    "pos": 53,
    "live": 53,
    "move": 0,
-   "money": 147750,
-   "plus": 4000,
+   "money": 150750,
+   "plus": 7000,
    "minus": 0,
    "expiring": [],
-   "round": "Last 64",
+   "round": "Last 32",
    "alive": true,
    "estimated": false
   },

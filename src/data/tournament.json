@@ -1,5 +1,5 @@
 {
- "updatedAt": "2026-11-27T17:07:35.526Z",
+ "updatedAt": "2026-11-27T20:07:34.286Z",
  "tournament": {
   "winner": null,
   "id": "10872",
@@ -73,8 +73,8 @@
      {
       "id": "518139",
       "date": "2026-11-27",
-      "time": "19:00",
-      "status": "upcoming",
+      "time": "19:08",
+      "status": "result",
       "p1": {
        "id": "31041",
        "name": "Rob Cross",
@@ -91,9 +91,30 @@
        "country": "IE",
        "ranking": 53
       },
-      "s1": 0,
-      "s2": 0,
-      "winner": null
+      "s1": 5,
+      "s2": 6,
+      "winner": "162",
+      "stats": [
+       {
+        "avg": 87.09,
+        "f9": null,
+        "t80": 2,
+        "t140": 6,
+        "t100": 11,
+        "co": 38.46,
+        "hi": 127
+       },
+       {
+        "avg": 90.61,
+        "f9": null,
+        "t80": 2,
+        "t140": 6,
+        "t100": 19,
+        "co": 46.15,
+        "hi": 100
+       }
+      ],
+      "statsLive": true
      },
      {
       "id": "518138",
@@ -445,7 +466,7 @@
      {
       "id": "518130",
       "date": "2026-11-27",
-      "time": "19:30",
+      "time": "19:40",
       "status": "upcoming",
       "p1": {
        "id": "31356",
@@ -783,8 +804,8 @@
      {
       "id": "518119",
       "date": "2026-11-27",
-      "time": "19:15",
-      "status": "upcoming",
+      "time": "19:16",
+      "status": "result",
       "p1": {
        "id": "31031",
        "name": "Jeffrey De Graaf",
@@ -801,9 +822,30 @@
        "country": "NL",
        "ranking": 2
       },
-      "s1": 0,
-      "s2": 0,
-      "winner": null
+      "s1": 6,
+      "s2": 4,
+      "winner": "31031",
+      "stats": [
+       {
+        "avg": 91.66,
+        "f9": null,
+        "t80": 3,
+        "t140": 7,
+        "t100": 12,
+        "co": 33.33,
+        "hi": 112
+       },
+       {
+        "avg": 91.18,
+        "f9": null,
+        "t80": 1,
+        "t140": 13,
+        "t100": 9,
+        "co": 14.81,
+        "hi": 81
+       }
+      ],
+      "statsLive": true
      },
      {
       "id": "518118",
@@ -1267,9 +1309,16 @@
       "time": "13:00",
       "status": "upcoming",
       "p1": null,
-      "p2": null,
+      "p2": {
+       "id": "31031",
+       "name": "Jeffrey De Graaf",
+       "last": "De Graaf",
+       "nick": null,
+       "country": "SE",
+       "ranking": 41
+      },
       "s1": null,
-      "s2": null,
+      "s2": 0,
       "winner": null
      },
      {
@@ -1454,9 +1503,16 @@
        "country": "CZ",
        "ranking": 38
       },
-      "p2": null,
+      "p2": {
+       "id": "162",
+       "name": "Mickey Mansell",
+       "last": "Mansell",
+       "nick": "Clonoe Cyclone",
+       "country": "IE",
+       "ranking": 53
+      },
       "s1": 0,
-      "s2": null,
+      "s2": 0,
       "winner": null
      }
     ]
