@@ -414,7 +414,13 @@ const playCards = [
   .feature :global(.ft-legs-l) { color: var(--on-ink-2); white-space: nowrap; }
   .feature :global(.ft-legs-l b) { font-family: var(--poster); font-weight: 400; font-size: 18px; color: #fff; margin-left: 4px; letter-spacing: 0; }
   .feature :global(.ft-now.on .ft-rem) { color: var(--volt); }
-  .feature :global(.ft-dot) { width: 10px; height: 10px; border-radius: 50%; background: var(--volt); box-shadow: 0 0 0 4px rgba(200, 255, 46, .2); }
+  .feature :global(.ft-dot) { display: block; width: 10px; height: 10px; border-radius: 50%; background: var(--volt); box-shadow: 0 0 0 4px rgba(200, 255, 46, .2); }
+  /* The dot's place is kept for both players (so the score doesn't shift when the throw
+     changes), with the visit score small under it: running total, else the last visit. */
+  .feature :global(.ft-dw) { position: relative; flex: none; width: 10px; height: 10px; }
+  .feature :global(.ft-vt) { position: absolute; top: 22px; left: 50%; transform: translateX(-50%); font-family: var(--body); font-style: normal; font-size: 13px; font-weight: 800; line-height: 1; color: var(--on-ink-2); white-space: nowrap; font-variant-numeric: tabular-nums; text-shadow: none; }
+  .feature :global(.ft-vt.live) { color: var(--volt); }
+  .feature :global(.brk .ft-vt) { display: none; }
   .feature :global(.ft-who.r .ft-rem) { flex-direction: row-reverse; }
   /* Last visit and checkout side by side, always one row high */
   .feature :global(.ft-meta) { display: flex; gap: 6px; height: 24px; align-items: center; justify-content: flex-end; }
@@ -560,6 +566,8 @@ const playCards = [
     .feature :global(.ft-big.r) { justify-self: center; align-items: center; }
     .feature :global(.ft-big .ft-rem) { font-size: 66px; gap: 6px; text-shadow: none; }
     .feature :global(.ft-big .ft-dot) { width: 8px; height: 8px; box-shadow: 0 0 0 3px rgba(200, 255, 46, .2); }
+    .feature :global(.ft-big .ft-dw) { width: 8px; height: 8px; }
+    .feature :global(.ft-vt) { top: 16px; font-size: 11px; }
     .feature :global(.ft-bigav) { height: 18px; font-size: 13px; }
     .feature :global(.ft-bigav i) { font-size: 10px; }
     .feature :global(.ft-big .ft-180) { top: -30px; }
