@@ -394,7 +394,7 @@ const news = (await getCollection('news')).map(n => n.data)
   /* The match being played: a taller card, like the match centre header */
   .board :global(.fx.big) { grid-template-columns: 1fr auto 1fr; grid-template-rows: auto auto; padding: 18px 20px 14px; row-gap: 12px; }
   .board :global(.fx.big .avatar) { --size: 72px !important; width: 72px; height: 72px; }
-  .board :global(.fx.big .pl b) { font-size: 20px; }
+  .board :global(.fx.big .pl .nm) { --nm: 20px; }
   .board :global(.fx.big .sc) { font-size: 72px; line-height: .9; color: var(--fg); }
   .board :global(.fx.big .mid) { min-width: 180px; }
   .board :global(.legstrip) { grid-column: 1 / -1; display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 12px; padding: 12px 16px; border-radius: 16px; background: var(--ink); color: #fff; position: relative; z-index: 2; pointer-events: none; }
@@ -418,6 +418,10 @@ const news = (await getCollection('news')).map(n => n.data)
   .board :global(.pl.r) { flex-direction: row-reverse; text-align: right; }
   .board :global(.pl .nm) { display: flex; flex-direction: column; min-width: 0; }
   .board :global(.pl b) { font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  /* A name too long for its line is set smaller so it fits whole (from its length
+     and the space it has, in CSS, so live updates never resize it). */
+  .board :global(.pl .nm) { flex: 1; container-type: inline-size; }
+  .board :global(.pl .nm b) { font-size: max(11px, min(var(--nm, 1em), 100cqi / (var(--len, 10) * .56))); }
   .board :global(.pl small) { color: var(--muted); font-size: 12px; font-weight: 600; }
   .board :global(.pl.won) { background: var(--green-soft); }
   .board :global(.pl.won b) { color: var(--green-text); }
@@ -478,6 +482,7 @@ const news = (await getCollection('news')).map(n => n.data)
     .board :global(.sc) { font-size: 22px; }
     .board :global(.fx.big) { grid-template-columns: 1fr; }
     .board :global(.fx.big .sc) { font-size: 40px; }
+    .board :global(.fx.big) { padding: 14px 10px 12px; }
     .board :global(.fx.big .avatar) { --size: 52px !important; width: 52px; height: 52px; }
     .board :global(.legstrip) { grid-template-columns: 1fr auto 1fr; padding: 12px 12px 10px; gap: 8px; }
     .board :global(.ls-n) { font-size: 54px; }

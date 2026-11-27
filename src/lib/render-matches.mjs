@@ -21,7 +21,7 @@ function side(p, score, won, decided, portraits, align, scored, live, lbl, st, b
   const box = scored ? `<span class="lgs${won ? ' w' : ''}${live ? ' live' : ''}" title="${lbl}"><i>${lbl}</i>${score ?? 0}</span>` : '';
   return `<div class="pl ${align}${won ? ' won' : decided ? ' lost' : ''}">
     ${avatar(p, portraits)}
-    <span class="nm"><b>${esc(p.name)}</b><small>${flag(p.country)}${p.ranking ? ` #${p.ranking}` : ''}${st?.avg != null ? ` · <span class="ma${best ? ' hi' : ''}" title="Three-dart average">${fmt(st.avg)} <i>avg</i></span>` : ''}</small></span>
+    <span class="nm" style="--len:${[...(p.name || '')].length}"><b>${esc(p.name)}</b><small>${flag(p.country)}${p.ranking ? ` #${p.ranking}` : ''}${st?.avg != null ? ` · <span class="ma${best ? ' hi' : ''}" title="Three-dart average">${fmt(st.avg)} <i>avg</i></span>` : ''}</small></span>
     ${box}
   </div>`;
 }
