@@ -1,5 +1,5 @@
 {
- "updatedAt": "2026-11-27T22:07:43.440Z",
+ "updatedAt": "2026-11-27T23:07:47.534Z",
  "officialSig": "1a31ccd0ffb5435e",
  "officialMoney": {
   "4": 515500,
@@ -384,11 +384,11 @@
    "pos": 4,
    "live": 4,
    "move": 0,
-   "money": 958500,
-   "plus": 4000,
+   "money": 961500,
+   "plus": 7000,
    "minus": 0,
    "expiring": [],
-   "round": "Last 64",
+   "round": "Last 32",
    "alive": true,
    "estimated": false
   },
@@ -479,7 +479,7 @@
    "minus": 0,
    "expiring": [],
    "round": "Last 64",
-   "alive": true,
+   "alive": false,
    "estimated": false
   },
   {
@@ -614,7 +614,7 @@
    "minus": 0,
    "expiring": [],
    "round": "Last 64",
-   "alive": true,
+   "alive": false,
    "estimated": false
   },
   {
@@ -654,11 +654,11 @@
    "pos": 22,
    "live": 22,
    "move": 0,
-   "money": 420750,
-   "plus": 4000,
+   "money": 423750,
+   "plus": 7000,
    "minus": 0,
    "expiring": [],
-   "round": "Last 64",
+   "round": "Last 32",
    "alive": true,
    "estimated": false
   },
@@ -669,11 +669,11 @@
    "pos": 23,
    "live": 23,
    "move": 0,
-   "money": 400750,
-   "plus": 4000,
+   "money": 403750,
+   "plus": 7000,
    "minus": 0,
    "expiring": [],
-   "round": "Last 64",
+   "round": "Last 32",
    "alive": true,
    "estimated": false
   },
@@ -1169,7 +1169,7 @@
    "minus": 0,
    "expiring": [],
    "round": "Last 64",
-   "alive": true,
+   "alive": false,
    "estimated": false
   },
   {
@@ -1514,7 +1514,7 @@
    "minus": 0,
    "expiring": [],
    "round": "Last 64",
-   "alive": true,
+   "alive": false,
    "estimated": false
   },
   {
@@ -1593,33 +1593,33 @@
    "estimated": false
   },
   {
+   "id": "39687",
+   "name": "Henry Coates",
+   "slug": "henry-coates",
+   "pos": 86,
+   "live": 85,
+   "move": 1,
+   "money": 56750,
+   "plus": 7000,
+   "minus": 0,
+   "expiring": [],
+   "round": "Last 32",
+   "alive": true,
+   "estimated": false
+  },
+  {
    "id": "358",
    "name": "Jim Long",
    "slug": "jim-long",
    "pos": 84,
-   "live": 85,
-   "move": -1,
+   "live": 86,
+   "move": -2,
    "money": 56500,
    "plus": 0,
    "minus": 0,
    "expiring": [],
    "round": null,
    "alive": null,
-   "estimated": false
-  },
-  {
-   "id": "39687",
-   "name": "Henry Coates",
-   "slug": "henry-coates",
-   "pos": 86,
-   "live": 86,
-   "move": 0,
-   "money": 53750,
-   "plus": 4000,
-   "minus": 0,
-   "expiring": [],
-   "round": "Last 64",
-   "alive": true,
    "estimated": false
   },
   {
