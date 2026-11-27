@@ -61,6 +61,9 @@ function db() {
   return dbPromise;
 }
 
+/** Start downloading the push client now (on a page that will need it), so it's ready when the first match is found in play. */
+export function warmPush() { db().catch(() => { dbPromise = null; }); }
+
 const notify = () => {
   clearTimeout(notifyTimer);
   // Batch bursts (score, stats and leg all change together) into one redraw.
