@@ -188,6 +188,7 @@ const fullTitle = title === 'The Oche' ? title : `${title} · The Oche`;
           <section><h2>{g.title}</h2><div class="more-links">{g.links.map(l => <a href={l.href}>{l.label}</a>)}</div></section>
         ))}
         <section><h2>Theme</h2><span class="theme big" role="group" aria-label="Colour theme"><button type="button" data-theme-set="dark">Dark</button><button type="button" data-theme-set="light">Light</button></span></section>
+        <section class="awake-set"><h2>Keep screen on</h2><span class="theme big" role="group" aria-label="Keep the screen on while the site is open"><button type="button" data-awake-set="on">On</button><button type="button" data-awake-set="off">Off</button></span><p class="awake-note">Stops your phone dimming or locking while The Oche is open. Ends when you leave the site or lock the phone.</p></section>
       </div>
     </dialog>
 
@@ -270,6 +271,35 @@ const fullTitle = title === 'The Oche' ? title : `${title} · The Oche`;
         markTheme();
       });
       document.addEventListener('astro:page-load', markTheme);
+      // ---- Keep the screen on (phones): a screen wake lock while the site is on screen ----
+      // On by default on phones, switchable in the More sheet. The browser drops the lock
+      // whenever the page is hidden (another app, the phone locked), so it's asked for
+      // again each time the page comes back; Safari may want a tap first, so a tap also asks.
+      (() => {
+        const wl = (navigator as any).wakeLock;
+        const phone = matchMedia('(pointer: coarse) and (hover: none)').matches;
+        const want = () => { try { return localStorage.getItem('oche-awake') !== 'off'; } catch { return true; } };
+        const mark = () => document.querySelectorAll<HTMLButtonElement>('[data-awake-set]').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.awakeSet === (want() ? 'on' : 'off'))));
+        let lock: any = null;
+        const hold = async () => {
+          if (!wl || !phone || !want() || document.visibilityState !== 'visible' || (lock && !lock.released)) return;
+          try { lock = await wl.request('screen'); } catch { lock = null; /* refused (low battery, no tap yet): tried again later */ }
+        };
+        const drop = () => { lock?.release?.().catch(() => {}); lock = null; };
+        document.addEventListener('visibilitychange', hold);
+        document.addEventListener('pointerdown', hold, { passive: true });
+        document.addEventListener('astro:page-load', () => { mark(); hold(); });
+        document.addEventListener('click', e => {
+          const b = (e.target as HTMLElement).closest<HTMLButtonElement>('[data-awake-set]');
+          if (!b) return;
+          try { localStorage.setItem('oche-awake', b.dataset.awakeSet!); } catch { /* private mode */ }
+          mark();
+          if (want()) hold(); else drop();
+        });
+        // Not supported here (or not a phone): no switch to show.
+        const hide = () => document.querySelectorAll<HTMLElement>('.awake-set').forEach(x => { x.hidden = !wl || !phone; });
+        document.addEventListener('astro:page-load', hide);
+      })();
       // The router swaps <html> attributes on navigation: keep the chosen theme.
       document.addEventListener('astro:after-swap', () => { document.documentElement.dataset.theme = themeNow(); });
       // Scroll-reveal + the sliding nav pill.
@@ -535,6 +565,8 @@ const fullTitle = title === 'The Oche' ? title : `${title} · The Oche`;
   .more-links a:active { background: rgba(255, 255, 255, .12); }
   .theme.big { background: rgba(255, 255, 255, .06); }
   .theme.big button { padding: 8px 18px; font-size: 14px; }
+  .awake-note { margin: 8px 0 0; font-size: 12px; color: rgba(255, 255, 255, .55); }
+  .awake-set[hidden] { display: none; }
 
   .searchbtn { display: inline-flex; align-items: center; gap: 8px; border: 0; background: var(--ink-3); color: var(--on-ink); border-radius: 999px; padding: 11px 12px 11px 16px; font-weight: 600; font-size: 14px; cursor: pointer; transition: color .2s, background .2s; }
   .searchbtn:hover { color: #fff; background: var(--ink-2); }

@@ -515,8 +515,10 @@ const news = (await getCollection('news'))
     .pboard { width: 900px; height: 900px; left: 50%; top: 210px; }
     .pb-pic .cut { height: 300px; }
     .pb-copy { padding-top: 0; }
-    .kpis { grid-template-columns: repeat(2, auto); }
-    .page { grid-template-columns: 1fr; }
+    /* Two equal columns, the figures scaled to the screen so the smallest phones fit them */
+    .kpis { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .kpis dd { font-size: clamp(28px, 9.5vw, 40px); }
+    .page { grid-template-columns: minmax(0, 1fr); }
     /* Phones: the Profile card comes straight after the header, the rest of the sidebar after the stats */
     .col-side { display: contents; }
     .facts { order: -1; }
