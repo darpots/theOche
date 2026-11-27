@@ -1,5 +1,5 @@
 {
- "updatedAt": "2026-11-27T20:07:34.286Z",
+ "updatedAt": "2026-11-27T21:07:32.705Z",
  "tournament": {
   "winner": null,
   "id": "10872",
@@ -303,7 +303,7 @@
      {
       "id": "518134",
       "date": "2026-11-27",
-      "time": "21:30",
+      "time": "21:35",
       "status": "upcoming",
       "p1": {
        "id": "246",
@@ -466,8 +466,8 @@
      {
       "id": "518130",
       "date": "2026-11-27",
-      "time": "19:40",
-      "status": "upcoming",
+      "time": "19:47",
+      "status": "result",
       "p1": {
        "id": "31356",
        "name": "Danny Noppert",
@@ -484,14 +484,35 @@
        "country": "GB-ENG",
        "ranking": 50
       },
-      "s1": 0,
-      "s2": 0,
-      "winner": null
+      "s1": 6,
+      "s2": 2,
+      "winner": "31356",
+      "stats": [
+       {
+        "avg": 98.1,
+        "f9": null,
+        "t80": 2,
+        "t140": 8,
+        "t100": 9,
+        "co": 40,
+        "hi": 121
+       },
+       {
+        "avg": 90.41,
+        "f9": null,
+        "t80": 3,
+        "t140": 5,
+        "t100": 9,
+        "co": 14.29,
+        "hi": 25
+       }
+      ],
+      "statsLive": true
      },
      {
       "id": "518129",
       "date": "2026-11-27",
-      "time": "22:00",
+      "time": "22:05",
       "status": "upcoming",
       "p1": {
        "id": "224",
@@ -516,7 +537,7 @@
      {
       "id": "518128",
       "date": "2026-11-27",
-      "time": "21:45",
+      "time": "21:50",
       "status": "upcoming",
       "p1": {
        "id": "32102",
@@ -541,7 +562,7 @@
      {
       "id": "518127",
       "date": "2026-11-27",
-      "time": "21:15",
+      "time": "21:20",
       "status": "upcoming",
       "p1": {
        "id": "19",
@@ -566,7 +587,7 @@
      {
       "id": "518126",
       "date": "2026-11-27",
-      "time": "23:00",
+      "time": "23:05",
       "status": "upcoming",
       "p1": {
        "id": "30843",
@@ -637,7 +658,7 @@
      {
       "id": "518108",
       "date": "2026-11-27",
-      "time": "22:15",
+      "time": "22:20",
       "status": "upcoming",
       "p1": {
        "id": "32956",
@@ -754,7 +775,7 @@
      {
       "id": "518121",
       "date": "2026-11-27",
-      "time": "20:30",
+      "time": "20:43",
       "status": "upcoming",
       "p1": {
        "id": "32037",
@@ -779,7 +800,7 @@
      {
       "id": "518120",
       "date": "2026-11-27",
-      "time": "21:00",
+      "time": "21:05",
       "status": "upcoming",
       "p1": {
        "id": "30844",
@@ -850,7 +871,7 @@
      {
       "id": "518118",
       "date": "2026-11-27",
-      "time": "20:45",
+      "time": "20:50",
       "status": "upcoming",
       "p1": {
        "id": "36287",
@@ -875,7 +896,7 @@
      {
       "id": "518117",
       "date": "2026-11-27",
-      "time": "22:30",
+      "time": "22:35",
       "status": "upcoming",
       "p1": {
        "id": "876",
@@ -992,8 +1013,8 @@
      {
       "id": "518114",
       "date": "2026-11-27",
-      "time": "20:15",
-      "status": "upcoming",
+      "time": "20:22",
+      "status": "result",
       "p1": {
        "id": "754",
        "name": "Ross Smith",
@@ -1010,9 +1031,30 @@
        "country": "GB-ENG",
        "ranking": 37
       },
-      "s1": 0,
-      "s2": 0,
-      "winner": null
+      "s1": 3,
+      "s2": 6,
+      "winner": "104",
+      "stats": [
+       {
+        "avg": 90.05,
+        "f9": null,
+        "t80": 2,
+        "t140": 5,
+        "t100": 7,
+        "co": 42.86,
+        "hi": 71
+       },
+       {
+        "avg": 99.26,
+        "f9": null,
+        "t80": 3,
+        "t140": 7,
+        "t100": 10,
+        "co": 46.15,
+        "hi": 76
+       }
+      ],
+      "statsLive": true
      },
      {
       "id": "518113",
@@ -1063,8 +1105,8 @@
      {
       "id": "518112",
       "date": "2026-11-27",
-      "time": "19:45",
-      "status": "upcoming",
+      "time": "19:49",
+      "status": "result",
       "p1": {
        "id": "36640",
        "name": "Beau Greaves",
@@ -1081,9 +1123,30 @@
        "country": "NL",
        "ranking": 82
       },
-      "s1": 0,
-      "s2": 0,
-      "winner": null
+      "s1": 6,
+      "s2": 3,
+      "winner": "36640",
+      "stats": [
+       {
+        "avg": 89.63,
+        "f9": null,
+        "t80": 2,
+        "t140": 7,
+        "t100": 10,
+        "co": 42.86,
+        "hi": 58
+       },
+       {
+        "avg": 86.44,
+        "f9": null,
+        "t80": 0,
+        "t140": 5,
+        "t100": 15,
+        "co": 50,
+        "hi": 88
+       }
+      ],
+      "statsLive": true
      },
      {
       "id": "518111",
@@ -1180,8 +1243,8 @@
      {
       "id": "518109",
       "date": "2026-11-27",
-      "time": "20:00",
-      "status": "upcoming",
+      "time": "20:11",
+      "status": "result",
       "p1": {
        "id": "11156",
        "name": "Gabriel Clemens",
@@ -1198,9 +1261,30 @@
        "country": "GB-ENG",
        "ranking": 32
       },
-      "s1": 0,
-      "s2": 0,
-      "winner": null
+      "s1": 6,
+      "s2": 4,
+      "winner": "11156",
+      "stats": [
+       {
+        "avg": 93.2,
+        "f9": null,
+        "t80": 2,
+        "t140": 6,
+        "t100": 9,
+        "co": 40,
+        "hi": 112
+       },
+       {
+        "avg": 87.99,
+        "f9": null,
+        "t80": 1,
+        "t140": 7,
+        "t100": 8,
+        "co": 57.14,
+        "hi": 130
+       }
+      ],
+      "statsLive": true
      }
     ]
    },
@@ -1219,9 +1303,16 @@
       "time": "13:00",
       "status": "upcoming",
       "p1": null,
-      "p2": null,
+      "p2": {
+       "id": "11156",
+       "name": "Gabriel Clemens",
+       "last": "Clemens",
+       "nick": "German Giant",
+       "country": "DE",
+       "ranking": 43
+      },
       "s1": null,
-      "s2": null,
+      "s2": 0,
       "winner": null
      },
      {
@@ -1254,7 +1345,14 @@
       "date": "2026-11-28",
       "time": "13:00",
       "status": "upcoming",
-      "p1": null,
+      "p1": {
+       "id": "36640",
+       "name": "Beau Greaves",
+       "last": "Greaves",
+       "nick": "Beau & Arrow",
+       "country": "GB-ENG",
+       "ranking": 74
+      },
       "p2": {
        "id": "11795",
        "name": "Rob Owen",
@@ -1263,7 +1361,7 @@
        "country": "GB-WLS",
        "ranking": 60
       },
-      "s1": null,
+      "s1": 0,
       "s2": 0,
       "winner": null
      },
@@ -1272,7 +1370,14 @@
       "date": "2026-11-28",
       "time": "13:00",
       "status": "upcoming",
-      "p1": null,
+      "p1": {
+       "id": "104",
+       "name": "Michael Smith",
+       "last": "Smith",
+       "nick": "Bully Boy",
+       "country": "GB-ENG",
+       "ranking": 37
+      },
       "p2": {
        "id": "33014",
        "name": "Niels Zonneveld",
@@ -1281,7 +1386,7 @@
        "country": "NL",
        "ranking": 28
       },
-      "s1": null,
+      "s1": 0,
       "s2": 0,
       "winner": null
      },
@@ -1409,7 +1514,14 @@
       "date": "2026-11-28",
       "time": "13:00",
       "status": "upcoming",
-      "p1": null,
+      "p1": {
+       "id": "31356",
+       "name": "Danny Noppert",
+       "last": "Noppert",
+       "nick": "The Freeze",
+       "country": "NL",
+       "ranking": 14
+      },
       "p2": {
        "id": "30859",
        "name": "Jonny Clayton",
@@ -1418,7 +1530,7 @@
        "country": "GB-WLS",
        "ranking": 5
       },
-      "s1": null,
+      "s1": 0,
       "s2": 0,
       "winner": null
      },

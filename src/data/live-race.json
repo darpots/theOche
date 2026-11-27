@@ -1,5 +1,5 @@
 {
- "updatedAt": "2026-11-27T20:07:38.227Z",
+ "updatedAt": "2026-11-27T21:07:36.771Z",
  "officialSig": "1a31ccd0ffb5435e",
  "officialMoney": {
   "4": 515500,
@@ -419,7 +419,7 @@
    "minus": 0,
    "expiring": [],
    "round": "Last 64",
-   "alive": true,
+   "alive": false,
    "estimated": false
   },
   {
@@ -534,11 +534,11 @@
    "pos": 14,
    "live": 14,
    "move": 0,
-   "money": 574000,
-   "plus": 4000,
+   "money": 577000,
+   "plus": 7000,
    "minus": 0,
    "expiring": [],
-   "round": "Last 64",
+   "round": "Last 32",
    "alive": true,
    "estimated": false
   },
@@ -824,7 +824,7 @@
    "minus": 0,
    "expiring": [],
    "round": "Last 64",
-   "alive": true,
+   "alive": false,
    "estimated": false
   },
   {
@@ -879,11 +879,11 @@
    "pos": 37,
    "live": 37,
    "move": 0,
-   "money": 212250,
-   "plus": 4000,
+   "money": 215250,
+   "plus": 7000,
    "minus": 0,
    "expiring": [],
-   "round": "Last 64",
+   "round": "Last 32",
    "alive": true,
    "estimated": false
   },
@@ -963,12 +963,27 @@
    "estimated": false
   },
   {
+   "id": "11156",
+   "name": "Gabriel Clemens",
+   "slug": "gabriel-clemens",
+   "pos": 43,
+   "live": 43,
+   "move": 0,
+   "money": 184000,
+   "plus": 7000,
+   "minus": 0,
+   "expiring": [],
+   "round": "Last 32",
+   "alive": true,
+   "estimated": false
+  },
+  {
    "id": "36373",
    "name": "James Hurrell",
    "slug": "james-hurrell",
    "pos": 45,
-   "live": 43,
-   "move": 2,
+   "live": 44,
+   "move": 1,
    "money": 181500,
    "plus": 7000,
    "minus": 0,
@@ -982,28 +997,13 @@
    "name": "Kim Huybrechts",
    "slug": "kim-huybrechts",
    "pos": 46,
-   "live": 44,
-   "move": 2,
+   "live": 45,
+   "move": 1,
    "money": 181000,
    "plus": 7000,
    "minus": 0,
    "expiring": [],
    "round": "Last 32",
-   "alive": true,
-   "estimated": false
-  },
-  {
-   "id": "11156",
-   "name": "Gabriel Clemens",
-   "slug": "gabriel-clemens",
-   "pos": 43,
-   "live": 45,
-   "move": -2,
-   "money": 181000,
-   "plus": 4000,
-   "minus": 0,
-   "expiring": [],
-   "round": "Last 64",
    "alive": true,
    "estimated": false
   },
@@ -1079,7 +1079,7 @@
    "minus": 0,
    "expiring": [],
    "round": "Last 64",
-   "alive": true,
+   "alive": false,
    "estimated": false
   },
   {
@@ -1413,33 +1413,33 @@
    "estimated": false
   },
   {
+   "id": "36640",
+   "name": "Beau Greaves",
+   "slug": "beau-greaves-36640",
+   "pos": 74,
+   "live": 73,
+   "move": 1,
+   "money": 93750,
+   "plus": 7000,
+   "minus": 0,
+   "expiring": [],
+   "round": "Last 32",
+   "alive": true,
+   "estimated": false
+  },
+  {
    "id": "33793",
    "name": "Thibault Tricole",
    "slug": "thibault-tricole",
    "pos": 73,
-   "live": 73,
-   "move": 0,
+   "live": 74,
+   "move": -1,
    "money": 92000,
    "plus": 0,
    "minus": 0,
    "expiring": [],
    "round": null,
    "alive": null,
-   "estimated": false
-  },
-  {
-   "id": "36640",
-   "name": "Beau Greaves",
-   "slug": "beau-greaves-36640",
-   "pos": 74,
-   "live": 74,
-   "move": 0,
-   "money": 90750,
-   "plus": 4000,
-   "minus": 0,
-   "expiring": [],
-   "round": "Last 64",
-   "alive": true,
    "estimated": false
   },
   {
@@ -1544,7 +1544,7 @@
    "minus": 0,
    "expiring": [],
    "round": "Last 64",
-   "alive": true,
+   "alive": false,
    "estimated": false
   },
   {
