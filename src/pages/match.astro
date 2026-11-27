@@ -124,7 +124,7 @@ import Layout from '../layouts/Layout.astro';
         const lastV = v.at(-1);
         const thr = won != null ? null : leg.throwing ?? (lastV ? (lastV.isParticipant1 ? 1 : 0) : null);
         const big = (k: number) => `<div class="lb-s s${k}${thr === k ? ' on' : ''}${won === k ? ' won' : ''}">
-            <b class="poster-num">${thr === k ? '<span class="lb-dot" aria-label="throwing"></span>' : ''}${left(k)}</b>
+            <b class="poster-num"><span class="lb-dot" aria-label="throwing"${thr === k ? '' : ' hidden'}></span>${left(k)}</b>
             <span class="lb-av" title="Three-dart average">${avg[k] != null ? `${Number(avg[k]).toFixed(2)} <i>avg</i>` : ''}</span></div>`;
         const who = (k: number) => { const p = ps[k]; const href = p?.participantSlug ? `/players/${p.participantSlug}` : null;
           return `<div class="who w${k}">${href ? `<a href="${href}">${esc(name(p))}</a>` : `<span>${esc(name(p))}</span>`}<small>${flag(p?.countryCode)} ${p?.ranking ? `World #${p.ranking}` : ''}</small></div>`; };
@@ -364,12 +364,14 @@ import Layout from '../layouts/Layout.astro';
         // Before a match: head to head and form only. Once it starts: tabs, with Match stats first.
         const tabbed = document.getElementById('mtabbed')!, tabsEl = document.getElementById('mtabs')!;
         if (isLive || isResult) {
-          tabsEl.hidden = false;
+          if (tabsEl.hidden) tabsEl.hidden = false;
           if (!tabbed.dataset.tab) tabbed.dataset.tab = 'stats';
-        } else { tabsEl.hidden = true; delete tabbed.dataset.tab; }
-        mb.hidden = !t?.data?.attributes?.fixtureMeta?.participant1Data && noLegs;
-        document.getElementById('mb-wait')!.hidden = !(mb.hidden && (isLive || isResult));
-        mb.querySelectorAll<HTMLElement>('.block:not(:first-child)').forEach(b => { b.hidden = noLegs; });
+        } else { if (!tabsEl.hidden) tabsEl.hidden = true; delete tabbed.dataset.tab; }
+        // Visibility is only written when it changes (writing the same value still touches the page).
+        const show = (el: HTMLElement, hide: boolean) => { if (el.hidden !== hide) el.hidden = hide; };
+        show(mb, !t?.data?.attributes?.fixtureMeta?.participant1Data && noLegs);
+        show(document.getElementById('mb-wait')!, !(mb.hidden && (isLive || isResult)));
+        mb.querySelectorAll<HTMLElement>('.block:not(:first-child)').forEach(b => show(b, noLegs));
         if (t?.data) {
           patch(document.getElementById('cmp'), compare(a, t.data));
           patch(document.getElementById('lg1'), legend(names));
