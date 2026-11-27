@@ -1,5 +1,5 @@
 {
- "updatedAt": "2026-11-27T12:07:33.760Z",
+ "updatedAt": "2026-11-27T14:07:43.206Z",
  "tournament": {
   "winner": null,
   "id": "10872",
@@ -227,8 +227,8 @@
      {
       "id": "518132",
       "date": "2026-11-27",
-      "time": "13:45",
-      "status": "upcoming",
+      "time": "13:47",
+      "status": "result",
       "p1": {
        "id": "32895",
        "name": "Kevin Doets",
@@ -245,9 +245,30 @@
        "country": "GB-ENG",
        "ranking": 59
       },
-      "s1": 0,
-      "s2": 0,
-      "winner": null
+      "s1": 6,
+      "s2": 1,
+      "winner": "32895",
+      "stats": [
+       {
+        "avg": 107.34,
+        "f9": null,
+        "t80": 6,
+        "t140": 4,
+        "t100": 4,
+        "co": 54.55,
+        "hi": 100
+       },
+       {
+        "avg": 99.16,
+        "f9": null,
+        "t80": 0,
+        "t140": 6,
+        "t100": 10,
+        "co": 33.33,
+        "hi": 53
+       }
+      ],
+      "statsLive": true
      },
      {
       "id": "518131",
@@ -477,7 +498,7 @@
      {
       "id": "518122",
       "date": "2026-11-27",
-      "time": "14:00",
+      "time": "14:05",
       "status": "upcoming",
       "p1": {
        "id": "153",
@@ -652,8 +673,8 @@
      {
       "id": "518115",
       "date": "2026-11-27",
-      "time": "13:30",
-      "status": "upcoming",
+      "time": "13:40",
+      "status": "result",
       "p1": {
        "id": "33014",
        "name": "Niels Zonneveld",
@@ -670,9 +691,30 @@
        "country": "DE",
        "ranking": 30
       },
-      "s1": 0,
-      "s2": 0,
-      "winner": null
+      "s1": 6,
+      "s2": 4,
+      "winner": "33014",
+      "stats": [
+       {
+        "avg": 90.89,
+        "f9": null,
+        "t80": 4,
+        "t140": 3,
+        "t100": 9,
+        "co": 60,
+        "hi": 96
+       },
+       {
+        "avg": 90.93,
+        "f9": null,
+        "t80": 1,
+        "t140": 5,
+        "t100": 9,
+        "co": 57.14,
+        "hi": 64
+       }
+      ],
+      "statsLive": true
      },
      {
       "id": "518114",
@@ -702,8 +744,8 @@
      {
       "id": "518113",
       "date": "2026-11-27",
-      "time": "13:00",
-      "status": "upcoming",
+      "time": "13:08",
+      "status": "result",
       "p1": {
        "id": "43829",
        "name": "Tom Bissell",
@@ -720,9 +762,30 @@
        "country": "GB-WLS",
        "ranking": 60
       },
-      "s1": 0,
-      "s2": 0,
-      "winner": null
+      "s1": 5,
+      "s2": 6,
+      "winner": "11795",
+      "stats": [
+       {
+        "avg": 90.29,
+        "f9": null,
+        "t80": 4,
+        "t140": 6,
+        "t100": 12,
+        "co": 71.43,
+        "hi": 81
+       },
+       {
+        "avg": 90.5,
+        "f9": null,
+        "t80": 0,
+        "t140": 10,
+        "t100": 15,
+        "co": 50,
+        "hi": 72
+       }
+      ],
+      "statsLive": true
      },
      {
       "id": "518112",
@@ -777,8 +840,8 @@
      {
       "id": "518110",
       "date": "2026-11-27",
-      "time": "13:15",
-      "status": "upcoming",
+      "time": "13:17",
+      "status": "result",
       "p1": {
        "id": "38279",
        "name": "Charlie Manby",
@@ -795,9 +858,30 @@
        "country": "DE",
        "ranking": 20
       },
-      "s1": 0,
-      "s2": 0,
-      "winner": null
+      "s1": 4,
+      "s2": 6,
+      "winner": "11902",
+      "stats": [
+       {
+        "avg": 96.77,
+        "f9": null,
+        "t80": 2,
+        "t140": 5,
+        "t100": 14,
+        "co": 50,
+        "hi": 72
+       },
+       {
+        "avg": 100.2,
+        "f9": null,
+        "t80": 5,
+        "t140": 4,
+        "t100": 14,
+        "co": 40,
+        "hi": 100
+       }
+      ],
+      "statsLive": true
      },
      {
       "id": "518109",
@@ -851,9 +935,16 @@
       "date": "2026-11-28",
       "time": "13:00",
       "status": "upcoming",
-      "p1": null,
+      "p1": {
+       "id": "11902",
+       "name": "Martin Schindler",
+       "last": "Schindler",
+       "nick": "The Wall",
+       "country": "DE",
+       "ranking": 20
+      },
       "p2": null,
-      "s1": null,
+      "s1": 0,
       "s2": null,
       "winner": null
      },
@@ -863,9 +954,16 @@
       "time": "13:00",
       "status": "upcoming",
       "p1": null,
-      "p2": null,
+      "p2": {
+       "id": "11795",
+       "name": "Rob Owen",
+       "last": "Owen",
+       "nick": "Stack Attack",
+       "country": "GB-WLS",
+       "ranking": 60
+      },
       "s1": null,
-      "s2": null,
+      "s2": 0,
       "winner": null
      },
      {
@@ -874,9 +972,16 @@
       "time": "13:00",
       "status": "upcoming",
       "p1": null,
-      "p2": null,
+      "p2": {
+       "id": "33014",
+       "name": "Niels Zonneveld",
+       "last": "Zonneveld",
+       "nick": "Triple Z",
+       "country": "NL",
+       "ranking": 28
+      },
       "s1": null,
-      "s2": null,
+      "s2": 0,
       "winner": null
      },
      {
@@ -972,9 +1077,16 @@
       "date": "2026-11-28",
       "time": "13:00",
       "status": "upcoming",
-      "p1": null,
+      "p1": {
+       "id": "32895",
+       "name": "Kevin Doets",
+       "last": "Doets",
+       "nick": "Hawk Eye",
+       "country": "NL",
+       "ranking": 21
+      },
       "p2": null,
-      "s1": null,
+      "s1": 0,
       "s2": null,
       "winner": null
      },
