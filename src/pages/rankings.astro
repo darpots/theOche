@@ -2,6 +2,7 @@
 import Layout from '../layouts/Layout.astro';
 import data from '../data/rankings.json';
 import liveRaceData from '../data/live-race.json';
+import eloData from '../data/elo.json';
 import { avatarSrc } from '../lib/images.mjs';
 import { flag, countryName, age, keyName } from '../lib/pdc.mjs';
 import { money, avatarColours, initials } from '../lib/format.mjs';
@@ -24,6 +25,21 @@ const trend = (id: string) => {
   return `<svg class="spark" viewBox="0 0 ${W} ${H}" width="${W}" height="${H}" role="img" aria-label="Ranking trend: ${v.map(r => '#' + r).join(', ')}"><polyline points="${pts}" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg>`;
 };
 const pic = (name: string) => avatarSrc(name);
+// Elo over the last 12 months (scripts/refresh-elo.mjs): each player's rating, record
+// and change at their latest event, shown in the last column in the Elo view.
+const elo = eloData as any;
+const eloById = new Map<string, any>(elo.players.map((p: any) => [p.id, p]));
+// Players rated but not on the Order of Merit get rows too (hidden in the other views).
+const ranked = new Set(data.players.map(p => p.id));
+const eloOnly = elo.players.filter((p: any) => !ranked.has(p.id)).map((p: any) => ({ id: p.id, name: p.name, country: p.country, slug: p.name.normalize('NFKD').replace(/[\u0300-\u036f]/g, '').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, ''), nick: null, money: 0, pos: null, move: null, eloOnly: true }));
+const rows = [...players, ...eloOnly];
+const pct = (p: any) => Math.round((p.won / p.played) * 100);
+const eloCell = (id: string) => {
+  const e = eloById.get(id); if (!e) return '<span class="elocell"><span class="top"><b class="tabular muted">–</b></span><small class="ewl">Under 20 matches</small></span>';
+  const d = e.last?.delta || 0;
+  const chip = d ? `<small class="enet ${d > 0 ? 'up' : 'down'}" title="${d > 0 ? '+' : ''}${d} at the ${e.last.name}">${d > 0 ? '▲' : '▼'}${Math.abs(d)}</small>` : '';
+  return `<span class="elocell"><span class="top">${chip}<b class="tabular">${e.rating}</b></span><small class="ewl" title="Won ${e.won}, lost ${e.lost} in the last 12 months">${e.won}–${e.lost} · ${pct(e)}%</small></span>`;
+};
 // Season average for each ranked player (from their profile), shown instead of age.
 const seasonAvg = (id: string) => { const s = loadProfile(id)?.season; return s?.stats?.avg ? { avg: s.stats.avg, year: s.year } : null; };
 const avgYear = seasonAvg(data.players[0].id)?.year;
@@ -47,6 +63,7 @@ const av = (name: string) => { const [c1, c2] = avatarColours(name); return `--c
       <div class="mode" id="mode" role="group" aria-label="Ranking view">
         <button class="seg" data-mode="live" aria-pressed="true"><span class="ldot"></span>Live race</button>
         <button class="seg" data-mode="official" aria-pressed="false">Official</button>
+        <button class="seg" data-mode="elo" aria-pressed="false">Elo</button>
       </div>
       <label class="onlyev" id="onlyev" hidden><input type="checkbox" id="onlyevcb" /> <span id="onlyev-label">In this event only</span></label>
       <span class="muted small" id="asof">{players.length} ranked players · official PDC list</span>
@@ -54,11 +71,11 @@ const av = (name: string) => { const [c1, c2] = avatarColours(name); return `--c
     <p class="race-note" id="raceNote" hidden></p>
     <div class="table card" role="table" aria-label="PDC World Rankings">
       <div class="tr th" role="row">
-        <span role="columnheader">#</span><span role="columnheader">Player</span><span role="columnheader" class="hide-s">Country</span><span role="columnheader" class="hide-s r" title="Three-dart average over the last 12 months">12-month avg</span><span role="columnheader" class="r">Prize money</span>
+        <span role="columnheader">#</span><span role="columnheader">Player</span><span role="columnheader" class="hide-s">Country</span><span role="columnheader" class="hide-s r" title="Three-dart average over the last 12 months">12-month avg</span><span role="columnheader" class="r" id="lastcol">Prize money</span>
       </div>
-      {players.map(p => (
-        <a class="tr clickable" role="row" href={loadProfile(p.id) ? `/players/${p.slug}` : `https://www.pdc.tv/players/${p.slug}`} data-player={p.id} data-search={`${p.name} ${p.nick || ''} ${countryName(p.country) || ''}`.toLowerCase()}>
-          <span class="pos tabular" role="cell" data-pos={p.pos} data-move={p.move ?? ''}><b>{p.pos}</b>
+      {rows.map((p: any) => (
+        <a class="tr clickable" role="row" hidden={p.eloOnly} href={loadProfile(p.id) ? `/players/${p.slug}` : `https://www.pdc.tv/players/${p.slug}`} data-player={p.id} data-search={`${p.name} ${p.nick || ''} ${countryName(p.country) || ''}`.toLowerCase()}>
+          <span class="pos tabular" role="cell" data-pos={p.pos ?? ''} data-move={p.move ?? ''}><b>{p.pos ?? ''}</b>
             {p.move ? <i class={p.move > 0 ? 'up' : 'down'} title={`${p.move > 0 ? 'Up' : 'Down'} ${Math.abs(p.move)}`}>{p.move > 0 ? '▲' : '▼'}{Math.abs(p.move)}</i> : null}
           </span>
           <span class="who" role="cell">
@@ -70,6 +87,7 @@ const av = (name: string) => { const [c1, c2] = avatarColours(name); return `--c
           <span class="r money-cell" role="cell">
             <span class="top"><small class="netslot"></small><span class="tabular" data-money={p.money}>{money(p.money)}</span></span>
             <small class="delta" hidden></small>
+            <Fragment set:html={eloCell(p.id)} />
           </span>
         </a>
       ))}
@@ -79,6 +97,7 @@ const av = (name: string) => { const [c1, c2] = avatarColours(name); return `--c
 
   <script is:inline type="application/json" id="r-official" set:html={JSON.stringify(data.players)}></script>
   <script is:inline type="application/json" id="lr-data" set:html={JSON.stringify(liveCache)}></script>
+  <script is:inline type="application/json" id="elo-data" set:html={JSON.stringify({ from: elo.from, to: elo.to, updatedAt: elo.updatedAt, matches: elo.matches, events: elo.events, latest: elo.latest, min: elo.rules.minMatches, k: elo.rules.k, players: elo.players.map((p: any) => ({ id: p.id, pos: p.pos, move: p.move })) })}></script>
 
   <script>
     import { API, normaliseRankings, liveRaceWith } from '../lib/pdc.mjs';
@@ -107,7 +126,8 @@ const av = (name: string) => { const [c1, c2] = avatarColours(name); return `--c
       let full: any[] = [];
       let race: any[] | null = null;
       let event: any = null;
-      let mode: 'live' | 'official' = 'live';
+      let mode: 'live' | 'official' | 'elo' = 'live';
+      const eloInfo = JSON.parse(document.getElementById('elo-data')!.textContent || 'null');
       let refreshedAt: string | null = null;
       const k = (n: number) => '£' + (n / 1000).toLocaleString('en-GB', { maximumFractionDigits: 2 }) + 'k';
       const keyOf = (p: any) => p.id;
@@ -117,9 +137,12 @@ const av = (name: string) => { const [c1, c2] = avatarColours(name); return `--c
       const paint = () => {
         // Figures that change get a short 'bump', but not on the first paint (nothing changed for the reader).
         const bumps: HTMLElement[] = [];
+        const isElo = mode === 'elo' && !!eloInfo?.players?.length;
         const live = mode === 'live' && race;
         const onlyEv = (document.getElementById('onlyevcb') as HTMLInputElement)?.checked;
-        const list = live ? race!.filter((p: any) => !onlyEv || p.round) : official;
+        const list = isElo ? eloInfo.players : live ? race!.filter((p: any) => !onlyEv || p.round) : official;
+        table.classList.toggle('m-elo', isElo);
+        note.classList.toggle('is-elo', isElo);
         if (!list.length) return;
         // Cells are patched and rows only moved when the order changes, so a refresh
         // during an event updates the figures that changed and nothing else.
@@ -127,6 +150,12 @@ const av = (name: string) => { const [c1, c2] = avatarColours(name); return `--c
         const seen = new Set<HTMLElement>();
         for (const p of list) {
           const r = rows.get(keyOf(p)); if (!r || seen.has(r)) continue; seen.add(r);
+          if (isElo) {
+            // Elo: position and the move since the latest event began; the rating is in the row already.
+            patch(r.querySelector('.pos'), `<b>${p.pos}</b>${p.move ? `<i class="${p.move > 0 ? 'up' : 'down'}" title="${p.move > 0 ? 'Up' : 'Down'} ${Math.abs(p.move)} since the ${esc(eloInfo.latest || 'latest event')} began">${p.move > 0 ? '▲' : '▼'}${Math.abs(p.move)}</i>` : ''}`);
+            order.push(r);
+            continue;
+          }
           const pos = live ? p.live : p.pos;
           const move = live ? p.move : (Number(r.querySelector<HTMLElement>('.pos')!.dataset.move) || 0);
           if (p.pos) r.querySelector<HTMLElement>('.pos')!.dataset.pos = String(p.pos);
@@ -167,9 +196,13 @@ const av = (name: string) => { const [c1, c2] = avatarColours(name); return `--c
         // Restart the bump on every changed figure with a single layout (not one per row).
         if (bumps.length) { bumps.forEach(m => m.classList.remove('bump')); void table.offsetWidth; bumps.forEach(m => m.classList.add('bump')); }
         painted = true;
-        if (note.hidden !== !live) note.hidden = !live; // the note is patched, so an open "How it works" stays open
+        if (note.hidden !== !(live || isElo)) note.hidden = !(live || isElo); // the note is patched, so an open "How it works" stays open
+        setText(document.getElementById('lastcol'), isElo ? 'Elo rating' : 'Prize money');
         document.getElementById('onlyev')!.classList.toggle('off', mode !== 'live');
-        if (live && !event) {
+        if (isElo) {
+          const d = (x: string) => new Date(x + 'T12:00:00Z').toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric', timeZone: 'UTC' });
+          patch(note, `<span class="elo-tag">Elo</span> Ratings from every match from <b>${d(eloInfo.from)}</b> to <b>${d(eloInfo.to)}</b>: ${eloInfo.matches.toLocaleString('en-GB')} matches across ${eloInfo.events} events, floor Players Championships included.${eloInfo.latest ? ` Movement since the <b>${esc(eloInfo.latest)}</b> began.` : ''} <details class="how"><summary>How the Elo ratings work</summary>Every player starts on 1500. After each match the winner takes points from the loser: more for beating a stronger player, fewer for beating a weaker one (up to ${eloInfo.k} a match). A win is a win, whatever the score, and every match counts the same, from a floor event to a World Championship final. Counted: the World Championship and the other ranking majors, Players Championships, European Tour, World Series and Premier League (not qualifiers, the World Cup's pairs or the Challenge and Development Tours). Only the last 12 months show in each record; the 12 months before set each player's starting rating. Players need ${eloInfo.min} matches in the 12 months to be listed. Updated hourly, so ratings move during events.</details>`);
+        } else if (live && !event) {
           patch(note, `<span class="live-dot">Live</span> No ranking event is being played right now, so the live race matches the official list. It starts moving on the first day of the next ranking event.`);
         } else if (live) {
           const drops: string[] = found?.dropNames || [];
@@ -184,7 +217,7 @@ const av = (name: string) => { const [c1, c2] = avatarColours(name); return `--c
           const also = earlier.length ? ` Also includes ${earlier.map(n => `<b>${esc(n)}</b>`).join(' and ')}, not in the official list yet.` : '';
           patch(note, `<span class="live-dot">Live</span> ${lead}.${also} <details class="how"><summary>How the live race works</summary>The PDC drops prize money 104 weeks after it was won, so money from the ${list} is <span class="minus">expiring</span>, and money players have guaranteed since the official list was last published counts as <span class="plus">won</span>. Money a player earned before losing their Tour Card is not in their total, so it isn't taken off again. The red or green chip shows each player's net change (hover “expiring” to see which events); the volt chip shows how far they've got in the ${evName}. Positions settle when the PDC publishes the official list.</details>`);
         }
-        setText(asof, live && event ? `Movement shown against the official list` : `${official.length} ranked players · official PDC list`);
+        setText(asof, isElo ? `${eloInfo.players.length} players · ${eloInfo.min}+ matches` : live && event ? `Movement shown against the official list` : `${official.length} ranked players · official PDC list`);
       };
 
       document.getElementById('onlyevcb')!.addEventListener('change', () => { if (mode !== 'live') return; table.classList.add('shuffle'); setTimeout(() => table.classList.remove('shuffle'), 500); paint(); });
@@ -276,7 +309,7 @@ const av = (name: string) => { const [c1, c2] = avatarColours(name); return `--c
   .money-cell :global(.delta) { margin-bottom: 2px; }
   .money-cell :global(.delta .br) { line-height: 1.3; }
   .mode { display: inline-flex; padding: 4px; gap: 2px; background: var(--paper-2); border: 1px solid var(--line); border-radius: 999px; }
-  .seg { border: 0; background: none; padding: 7px 14px; border-radius: 999px; font-weight: 700; font-size: 13px; cursor: pointer; display: inline-flex; align-items: center; gap: 7px; color: var(--muted); transition: background .25s, color .25s, box-shadow .25s; }
+  .seg { border: 0; background: none; padding: 7px 14px; border-radius: 999px; font-weight: 700; font-size: 13px; cursor: pointer; display: inline-flex; align-items: center; gap: 7px; color: var(--muted); white-space: nowrap; transition: background .25s, color .25s, box-shadow .25s; }
   .seg[aria-pressed='true'] { background: var(--card); color: var(--fg); box-shadow: var(--shadow-sm); }
   .onlyev { display: inline-flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 700; cursor: pointer; }
   .onlyev input { accent-color: var(--fg); width: 16px; height: 16px; }
@@ -286,6 +319,18 @@ const av = (name: string) => { const [c1, c2] = avatarColours(name); return `--c
   .ldot { width: 8px; height: 8px; border-radius: 50%; background: var(--red); animation: pulse 1.6s ease-in-out infinite; will-change: transform, opacity; }
   .race-note { margin: -2px 0 12px; font-size: 13px; color: var(--muted); background: var(--card); border: 1px solid var(--line); border-left: 3px solid var(--red); border-radius: 12px; padding: 10px 14px; }
   .race-note .live-dot { margin-right: 6px; }
+  /* Elo view: the last column shows the rating (the prize money and race chips are hidden) */
+  .race-note :global(.elo-tag) { display: inline-flex; align-items: center; height: 18px; padding: 0 7px; margin-right: 6px; border-radius: 999px; background: var(--ink); color: var(--volt); font-size: 10px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; vertical-align: 1px; }
+  .table:not(.m-elo) :global(.elocell) { display: none; }
+  .table.m-elo :global(.money-cell > :not(.elocell)) { display: none; }
+  .race-note.is-elo { border-left-color: var(--volt); }
+  :global(.elocell) { display: flex; flex-direction: column; align-items: flex-end; gap: 3px; }
+  :global(.elocell .top) { display: inline-flex; align-items: center; gap: 8px; }
+  :global(.elocell b) { font-size: 17px; font-weight: 800; }
+  :global(.elocell .ewl) { font-size: 11px; font-weight: 700; color: var(--muted); white-space: nowrap; font-variant-numeric: tabular-nums; }
+  :global(.elocell .enet) { display: inline-flex; align-items: center; height: 20px; padding: 0 7px; border-radius: 999px; font-size: 11px; font-weight: 800; line-height: 1; font-variant-numeric: tabular-nums; }
+  :global(.elocell .enet.up) { background: var(--green-soft); color: var(--green-text); }
+  :global(.elocell .enet.down) { background: var(--red-soft); color: var(--red-text, #b3261e); }
   :global(.delta) { display: flex; flex-direction: column; align-items: flex-end; font-size: 12px; font-weight: 700; }
   .top { display: flex; align-items: center; justify-content: flex-end; gap: 10px; }
   .top [data-money] { min-width: 10ch; text-align: right; font-variant-numeric: tabular-nums; }
