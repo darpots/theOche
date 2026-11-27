@@ -1,5 +1,5 @@
 {
- "updatedAt": "2026-11-27T14:05:22.570Z",
+ "updatedAt": "2026-11-27T15:07:42.832Z",
  "officialSig": "1a31ccd0ffb5435e",
  "officialMoney": {
   "4": 515500,
@@ -549,11 +549,11 @@
    "pos": 15,
    "live": 15,
    "move": 0,
-   "money": 564000,
-   "plus": 4000,
+   "money": 567000,
+   "plus": 7000,
    "minus": 0,
    "expiring": [],
-   "round": "Last 64",
+   "round": "Last 32",
    "alive": true,
    "estimated": false
   },
@@ -579,11 +579,11 @@
    "pos": 17,
    "live": 17,
    "move": 0,
-   "money": 515000,
-   "plus": 4000,
+   "money": 518000,
+   "plus": 7000,
    "minus": 0,
    "expiring": [],
-   "round": "Last 64",
+   "round": "Last 32",
    "alive": true,
    "estimated": false
   },
@@ -764,7 +764,7 @@
    "minus": 0,
    "expiring": [],
    "round": "Last 64",
-   "alive": true,
+   "alive": false,
    "estimated": false
   },
   {
@@ -854,7 +854,7 @@
    "minus": 0,
    "expiring": [],
    "round": "Last 64",
-   "alive": true,
+   "alive": false,
    "estimated": false
   },
   {
@@ -929,7 +929,7 @@
    "minus": 0,
    "expiring": [],
    "round": "Last 64",
-   "alive": true,
+   "alive": false,
    "estimated": false
   },
   {
@@ -963,28 +963,28 @@
    "estimated": false
   },
   {
-   "id": "11156",
-   "name": "Gabriel Clemens",
-   "slug": "gabriel-clemens",
-   "pos": 43,
-   "live": 43,
-   "move": 0,
-   "money": 181000,
-   "plus": 4000,
-   "minus": 0,
-   "expiring": [],
-   "round": "Last 64",
-   "alive": true,
-   "estimated": false
-  },
-  {
    "id": "36373",
    "name": "James Hurrell",
    "slug": "james-hurrell",
    "pos": 45,
+   "live": 43,
+   "move": 2,
+   "money": 181500,
+   "plus": 7000,
+   "minus": 0,
+   "expiring": [],
+   "round": "Last 32",
+   "alive": true,
+   "estimated": false
+  },
+  {
+   "id": "11156",
+   "name": "Gabriel Clemens",
+   "slug": "gabriel-clemens",
+   "pos": 43,
    "live": 44,
-   "move": 1,
-   "money": 178500,
+   "move": -1,
+   "money": 181000,
    "plus": 4000,
    "minus": 0,
    "expiring": [],
@@ -1488,28 +1488,28 @@
    "estimated": false
   },
   {
-   "id": "33598",
-   "name": "Darryl Pilgrim",
-   "slug": "darryl-pilgrim",
-   "pos": 78,
-   "live": 78,
-   "move": 0,
-   "money": 76000,
-   "plus": 4000,
-   "minus": 0,
-   "expiring": [],
-   "round": "Last 64",
-   "alive": true,
-   "estimated": false
-  },
-  {
    "id": "38498",
    "name": "Tommy Morris",
    "slug": "tommy-morris",
    "pos": 79,
+   "live": 78,
+   "move": 1,
+   "money": 76750,
+   "plus": 7000,
+   "minus": 0,
+   "expiring": [],
+   "round": "Last 32",
+   "alive": true,
+   "estimated": false
+  },
+  {
+   "id": "33598",
+   "name": "Darryl Pilgrim",
+   "slug": "darryl-pilgrim",
+   "pos": 78,
    "live": 79,
-   "move": 0,
-   "money": 73750,
+   "move": -1,
+   "money": 76000,
    "plus": 4000,
    "minus": 0,
    "expiring": [],
@@ -1694,7 +1694,7 @@
    "minus": 0,
    "expiring": [],
    "round": "Last 64",
-   "alive": true,
+   "alive": false,
    "estimated": false
   },
   {
