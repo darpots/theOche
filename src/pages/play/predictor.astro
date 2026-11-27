@@ -28,6 +28,7 @@ const t = data.tournament as any;
 
   <script>
     import { API, normaliseTournament } from '../../lib/pdc.mjs';
+    import { patch, setText } from '../../lib/morph.mjs';
     const KEY = 'oche:picks';
     type Pick = { p: string; t: string };
     const load = (): Record<string, Pick> => { try { return JSON.parse(localStorage.getItem(KEY) || '{}'); } catch { return {}; } };
@@ -59,9 +60,9 @@ const t = data.tournament as any;
         const picks = load(); let pts = 0, hit = 0, settled = 0, streak = 0;
         const all = t.stages.flatMap((s: any) => s.fixtures).filter((f: any) => f.status === 'result' && picks[f.id]).sort((a: any, b: any) => `${a.date}${a.time}`.localeCompare(`${b.date}${b.time}`));
         for (const f of all) { settled++; if (picks[f.id].p === f.winner) { hit++; streak++; pts += underdog(f, f.winner) ? 2 : 1; } else streak = 0; }
-        document.getElementById('ps-pts')!.textContent = String(pts);
-        document.getElementById('ps-hit')!.textContent = `${hit}/${settled}`;
-        document.getElementById('ps-streak')!.textContent = String(streak);
+        setText(document.getElementById('ps-pts'), String(pts));
+        setText(document.getElementById('ps-hit'), `${hit}/${settled}`);
+        setText(document.getElementById('ps-streak'), String(streak));
         return { pts, hit, settled };
       }
       function draw() {
@@ -86,7 +87,8 @@ const t = data.tournament as any;
         };
         if (open.length) groups.push(`<h2 class="gh">Up next</h2>${open.map(row).join('')}`);
         if (shut.length) groups.push(`<h2 class="gh">Played and locked</h2>${shut.map(row).join('')}`);
-        board.innerHTML = groups.join('') || `<div class="empty"><h3>Nothing to call yet</h3><p>Picks open as soon as the draw for the ${esc(t.name)} is out.</p></div>`;
+        // Patched: the minute-by-minute refresh only touches matches whose state changed.
+        patch(board, groups.join('') || `<div class="empty"><h3>Nothing to call yet</h3><p>Picks open as soon as the draw for the ${esc(t.name)} is out.</p></div>`);
         score();
       }
       board.onclick = e => {

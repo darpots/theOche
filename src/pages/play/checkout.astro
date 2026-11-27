@@ -37,6 +37,7 @@ import Layout from '../../layouts/Layout.astro';
 
   <script>
     import { checkout } from '../../lib/checkout.mjs';
+    import { setText } from '../../lib/morph.mjs';
     type Dart = { label: string; v: number; dbl: boolean };
     function init() {
       const pad = document.getElementById('c-pad');
@@ -94,7 +95,7 @@ import Layout from '../../layouts/Layout.astro';
         clearInterval(timer);
         timer = window.setInterval(() => {
           const s = Math.max(0, Math.ceil((ends - Date.now()) / 1000));
-          $('c-clock').textContent = `${s}s`;
+          setText($('c-clock'), `${s}s`); // ticks 4× a second; writes once a second
           if (!s) {
             clearInterval(timer); running = false;
             if (done > best) { best = done; try { localStorage.setItem('oche:checkout-best', String(best)); } catch { /* private mode */ } $('c-best').textContent = String(best); }

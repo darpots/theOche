@@ -103,6 +103,7 @@ const news = (await getCollection('news')).map(n => n.data)
 
   <script>
     import { API, normaliseTournament, fixtureStatsUrl, slimStats, applyLive, onBreak } from '../../lib/pdc.mjs';
+    import { patch, patchElement, setText } from '../../lib/morph.mjs';
     import { liveFor, watchLive, unwatch, isPushing, currentLeg, LIVE_TICK, PUSH_TICK } from '../../lib/live-client.mjs';
     import { matchDays, renderDay, renderTabs, progress, fixtureRow, renderDraw } from '../../lib/render-matches.mjs';
     import { markFollowed } from '../../lib/follow.mjs';
@@ -139,7 +140,7 @@ const news = (await getCollection('news')).map(n => n.data)
                 f.statsLive = false;
                 statsCache.set(f.id, st); f.stats = st;
                 const li = board!.querySelector<HTMLElement>(`.fx[data-id="${f.id}"]`);
-                if (li) { const tmp = document.createElement('div'); tmp.innerHTML = fixtureRow({ ...f, stage, sets }, portraits).trim(); const n = tmp.firstElementChild as HTMLElement; n.classList.add('stats-in'); li.replaceWith(n); }
+                if (li) patchElement(li, fixtureRow({ ...f, stage, sets }, portraits)).classList.add('stats-in');
               } catch { /* stats are optional */ }
             }
           }));
@@ -152,7 +153,7 @@ const news = (await getCollection('news')).map(n => n.data)
               if (!m?.stats) continue;
               f.stats = m.stats; f.statsLive = true;
               const li = board!.querySelector<HTMLElement>(`.fx[data-id="${f.id}"]`);
-              if (li) { const tmp = document.createElement('div'); tmp.innerHTML = fixtureRow({ ...f, stage, sets }, portraits).trim(); const n = tmp.firstElementChild as HTMLElement; n.classList.add('stats-in'); li.replaceWith(n); }
+              if (li) patchElement(li, fixtureRow({ ...f, stage, sets }, portraits)).classList.add('stats-in');
             }
           }
         } finally { loading = false; }
@@ -169,22 +170,26 @@ const news = (await getCollection('news')).map(n => n.data)
         : `<div class="empty"><h3>No matches published</h3><p>The PDC hasn't published fixtures for this event.</p></div>`;
 
       const paint = (animate = false) => {
-        if (!days.length) { document.getElementById('days')!.innerHTML = ''; board.innerHTML = empty(); return; }
+        if (!days.length) { patch(document.getElementById('days'), ''); patch(board, empty()); return; }
         const before = new Map([...board.querySelectorAll<HTMLElement>('.fx')].map(li => [li.dataset.id, li.dataset.sig]));
-        document.getElementById('days')!.innerHTML = (days.length > 1 ? `<button class="day all${current === 'all' ? ' on' : ''}" data-day="all" aria-pressed="${current === 'all'}"><span>Every</span><b>All days</b></button>` : '') + renderTabs(days, current);
-        board.innerHTML = current === 'all'
+        // Patched, not rewritten: a live update changes only the rows whose score moved,
+        // so the rest of the board (photos, fade-ins, the day strip) doesn't redraw or flicker.
+        patch(document.getElementById('days'), (days.length > 1 ? `<button class="day all${current === 'all' ? ' on' : ''}" data-day="all" aria-pressed="${current === 'all'}"><span>Every</span><b>All days</b></button>` : '') + renderTabs(days, current));
+        patch(board, current === 'all'
           ? days.map(d => `<div class="dayblock"><h2 class="dayhead">${new Date(d + 'T12:00:00Z').toLocaleDateString('en-GB', { weekday: 'long', day: 'numeric', month: 'long' })}</h2>${renderDay(t, d, portraits)}</div>`).join('')
-          : renderDay(t, current, portraits);
-        board.querySelectorAll<HTMLElement>('.stage').forEach(s => requestAnimationFrame(() => s.classList.add('in')));
+          : renderDay(t, current, portraits));
+        board.querySelectorAll<HTMLElement>('.stage:not(.in)').forEach(s => requestAnimationFrame(() => s.classList.add('in')));
         markFollowed(board);
-        if (animate) board.querySelectorAll<HTMLElement>('.fx').forEach(li => { if (before.has(li.dataset.id) && before.get(li.dataset.id) !== li.dataset.sig) li.classList.add('flash'); });
+        // Flash only the rows that changed (restarting the animation on a row that stayed).
+        if (animate) board.querySelectorAll<HTMLElement>('.fx').forEach(li => { if (before.has(li.dataset.id) && before.get(li.dataset.id) !== li.dataset.sig) { li.classList.remove('flash'); void li.offsetWidth; li.classList.add('flash'); } });
         const draw = renderDraw(t);
-        if (draw) { document.getElementById('tdraw')!.innerHTML = draw; (document.querySelector('.vt[data-view="draw"]') as HTMLElement).hidden = false; }
+        if (draw) { patch(document.getElementById('tdraw'), draw); (document.querySelector('.vt[data-view="draw"]') as HTMLElement).hidden = false; }
         const p = progress(t);
-        document.getElementById('prog')!.hidden = !p.total;
-        document.getElementById('pfill')!.style.width = p.pct + '%';
-        document.getElementById('pdone')!.textContent = String(p.done);
-        document.getElementById('ptotal')!.textContent = String(p.total);
+        const prog = document.getElementById('prog')!, fill = document.getElementById('pfill')!;
+        if (prog.hidden !== !p.total) prog.hidden = !p.total;
+        if (fill.style.width !== p.pct + '%') fill.style.width = p.pct + '%';
+        setText(document.getElementById('pdone'), String(p.done));
+        setText(document.getElementById('ptotal'), String(p.total));
         // Centre the selected day within the day strip only. (scrollIntoView also scrolled
         // the whole page back up to the strip on every live update.)
         const strip = document.getElementById('days'), on = strip?.querySelector<HTMLElement>('.on');
@@ -215,7 +220,7 @@ const news = (await getCollection('news')).map(n => n.data)
           ({ days } = matchDays(t, today));
           if (current !== 'all' && !days.includes(current)) current = matchDays(t, today).def;
           paint(true);
-          if (live) document.getElementById('updated')!.textContent = `· updated ${new Date().toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' })}`;
+          if (live) setText(document.getElementById('updated'), `· updated ${new Date().toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' })}`);
         } catch { /* keep showing the last good data */ }
       };
       // Live scores and averages from PDC's live data every few seconds; the

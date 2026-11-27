@@ -113,6 +113,7 @@ const label = { live: 'Live now', soon: 'Starts soon', champion: 'Champion crown
 </section>
 
 <script>
+  import { setText } from '../lib/morph.mjs';
   function init() {
     const stage = document.querySelector<HTMLElement>('.stage');
     if (!stage) return;
@@ -131,7 +132,7 @@ const label = { live: 'Live now', soon: 'Starts soon', champion: 'Champion crown
       const tick = () => {
         const s = Math.max(0, (target - Date.now()) / 1000);
         const v: Record<string, number> = { d: Math.floor(s / 86400), h: Math.floor(s / 3600) % 24, m: Math.floor(s / 60) % 60 };
-        count.querySelectorAll<HTMLElement>('[data-u]').forEach(el => { el.textContent = String(v[el.dataset.u!]).padStart(2, '0'); });
+        count.querySelectorAll<HTMLElement>('[data-u]').forEach(el => setText(el, String(v[el.dataset.u!]).padStart(2, '0')));
       };
       tick(); setInterval(tick, 30_000);
     }

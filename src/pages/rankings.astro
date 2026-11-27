@@ -82,6 +82,7 @@ const av = (name: string) => { const [c1, c2] = avatarColours(name); return `--c
 
   <script>
     import { API, normaliseRankings, liveRaceWith } from '../lib/pdc.mjs';
+    import { patch, setText } from '../lib/morph.mjs';
     import { money } from '../lib/format.mjs';
 
     const esc = (s: unknown) => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]!);
@@ -117,14 +118,16 @@ const av = (name: string) => { const [c1, c2] = avatarColours(name); return `--c
         const onlyEv = (document.getElementById('onlyevcb') as HTMLInputElement)?.checked;
         const list = live ? race!.filter((p: any) => !onlyEv || p.round) : official;
         if (!list.length) return;
-        const frag = document.createDocumentFragment();
+        // Cells are patched and rows only moved when the order changes, so a refresh
+        // during an event updates the figures that changed and nothing else.
+        const order: HTMLElement[] = [];
         const seen = new Set<HTMLElement>();
         for (const p of list) {
           const r = rows.get(keyOf(p)); if (!r || seen.has(r)) continue; seen.add(r);
           const pos = live ? p.live : p.pos;
           const move = live ? p.move : (Number(r.querySelector<HTMLElement>('.pos')!.dataset.move) || 0);
           if (p.pos) r.querySelector<HTMLElement>('.pos')!.dataset.pos = String(p.pos);
-          r.querySelector('.pos')!.innerHTML = `<b>${pos}</b>${move ? `<i class="${move > 0 ? 'up' : 'down'}" title="${move > 0 ? 'Up' : 'Down'} ${Math.abs(move)}${live ? ' on the official list' : ''}">${move > 0 ? '▲' : '▼'}${Math.abs(move)}</i>` : ''}`;
+          patch(r.querySelector('.pos'), `<b>${pos}</b>${move ? `<i class="${move > 0 ? 'up' : 'down'}" title="${move > 0 ? 'Up' : 'Down'} ${Math.abs(move)}${live ? ' on the official list' : ''}">${move > 0 ? '▲' : '▼'}${Math.abs(move)}</i>` : ''}`);
           const m = r.querySelector<HTMLElement>('[data-money]')!;
           if (Number(m.dataset.money) !== p.money) { m.textContent = money(p.money); m.dataset.money = String(p.money); m.classList.remove('bump'); void m.offsetWidth; m.classList.add('bump'); }
           const d = r.querySelector<HTMLElement>('.delta')!;
@@ -148,17 +151,20 @@ const av = (name: string) => { const [c1, c2] = avatarColours(name); return `--c
             netHtml = `<span class="net ${net > 0 ? 'up' : net < 0 ? 'down' : 'flat'}">${net > 0 ? '▲ ' : net < 0 ? '▼ ' : ''}${net ? k(Math.abs(net)) : 'No change'}</span>`;
             html = `<span class="br">${parts}</span>`;
           }
-          d.hidden = !html; d.innerHTML = html;
-          r.querySelector<HTMLElement>('.netslot')!.innerHTML = netHtml;
-          frag.appendChild(r);
+          if (d.hidden !== !html) d.hidden = !html;
+          patch(d, html);
+          patch(r.querySelector<HTMLElement>('.netslot'), netHtml);
+          order.push(r);
         }
         // Anyone not in this view's list is hidden.
-        rows.forEach(r => { r.hidden = !seen.has(r); if (!seen.has(r)) frag.appendChild(r); });
-        table.appendChild(frag);
-        note.hidden = !live;
+        rows.forEach(r => { if (r.hidden !== !seen.has(r)) r.hidden = !seen.has(r); if (!seen.has(r)) order.push(r); });
+        // Move only the rows that are out of place (none, on most refreshes).
+        let prev: Element = table.querySelector('.th')!;
+        for (const r of order) { if (prev.nextElementSibling !== r) prev.after(r); prev = r; }
+        if (note.hidden !== !live) note.hidden = !live; // the note is patched, so an open "How it works" stays open
         document.getElementById('onlyev')!.classList.toggle('off', mode !== 'live');
         if (live && !event) {
-          note.innerHTML = `<span class="live-dot">Live</span> No ranking event is being played right now, so the live race matches the official list. It starts moving on the first day of the next ranking event.`;
+          patch(note, `<span class="live-dot">Live</span> No ranking event is being played right now, so the live race matches the official list. It starts moving on the first day of the next ranking event.`);
         } else if (live) {
           const drops: string[] = found?.dropNames || [];
           const list = drops.length ? drops.map(d => `<b>${esc(d)}</b>`).join(' and ') : 'events from two years ago';
@@ -170,9 +176,9 @@ const av = (name: string) => { const [c1, c2] = avatarColours(name); return `--c
             ? `Projected standings after the <b>${evName}</b>${stamp ? `, ${stamp}` : ''}`
             : `Projected standings including the <b>${evName}</b>, which the PDC has not added to the official list yet${stamp ? ` (${stamp})` : ''}`;
           const also = earlier.length ? ` Also includes ${earlier.map(n => `<b>${esc(n)}</b>`).join(' and ')}, not in the official list yet.` : '';
-          note.innerHTML = `<span class="live-dot">Live</span> ${lead}.${also} <details class="how"><summary>How the live race works</summary>The PDC drops prize money 104 weeks after it was won, so money from the ${list} is <span class="minus">expiring</span>, and money players have guaranteed since the official list was last published counts as <span class="plus">won</span>. Money a player earned before losing their Tour Card is not in their total, so it isn't taken off again. The red or green chip shows each player's net change (hover “expiring” to see which events); the volt chip shows how far they've got in the ${evName}. Positions settle when the PDC publishes the official list.</details>`;
+          patch(note, `<span class="live-dot">Live</span> ${lead}.${also} <details class="how"><summary>How the live race works</summary>The PDC drops prize money 104 weeks after it was won, so money from the ${list} is <span class="minus">expiring</span>, and money players have guaranteed since the official list was last published counts as <span class="plus">won</span>. Money a player earned before losing their Tour Card is not in their total, so it isn't taken off again. The red or green chip shows each player's net change (hover “expiring” to see which events); the volt chip shows how far they've got in the ${evName}. Positions settle when the PDC publishes the official list.</details>`);
         }
-        asof.textContent = live && event ? `Movement shown against the official list` : `${official.length} ranked players · official PDC list`;
+        setText(asof, live && event ? `Movement shown against the official list` : `${official.length} ranked players · official PDC list`);
       };
 
       document.getElementById('onlyevcb')!.addEventListener('change', () => { if (mode !== 'live') return; table.classList.add('shuffle'); setTimeout(() => table.classList.remove('shuffle'), 500); paint(); });
