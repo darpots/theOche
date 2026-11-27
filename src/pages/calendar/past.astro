@@ -1,7 +1,6 @@
 ---
-// Past seasons for /calendar, fetched by the page when "Include past 2 years" is ticked.
+// The two years before the calendar's opening months, loaded in by /calendar after its first paint.
 import CalendarMonths from '../../components/CalendarMonths.astro';
-import { months, isPast } from '../../lib/calendar-cards';
-const past = [...months.entries()].filter(([, list]) => list.every(isPast));
+import { pastMonths } from '../../lib/calendar-cards';
 ---
-<div id="past-months"><CalendarMonths entries={past} /></div>
+<div id="past-months"><CalendarMonths entries={pastMonths} /></div>

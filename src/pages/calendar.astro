@@ -1,11 +1,11 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import CalendarMonths from '../components/CalendarMonths.astro';
-import { months, isPast } from '../lib/calendar-cards';
+import { focusMonths } from '../lib/calendar-cards';
 
-// Months with anything still to come are in the page; past seasons (two thirds of
-// the events) load from /calendar/past only when someone ticks "Include past 2 years".
-const current = [...months.entries()].filter(([, list]) => !list.every(isPast));
+// The page opens on the previous, current and next tournaments (from the month of the
+// latest finished event onwards); the two years before load in after the first paint.
+const current = focusMonths;
 ---
 <Layout title="Calendar" description="Every PDC darts event on Sky Sports, ITV and PDCTV: dates, venues, broadcasters and winners." active="calendar">
 
@@ -22,17 +22,23 @@ const current = [...months.entries()].filter(([, list]) => !list.every(isPast));
       <button class="chip logo-chip" data-filter="itv" aria-pressed="false" aria-label="ITV"><img src="/brand/itv.svg" alt="" height="18" /></button>
       <button class="chip logo-chip" data-filter="pdctv" aria-pressed="false" aria-label="European Tour on PDCTV"><span class="pdc-mark"><img src="/brand/pdctv.png" alt="" height="12" /></span>European Tour</button>
     </div>
-    <label class="toggle">
-      <input type="checkbox" id="showPast" />
-      <span class="track"><span class="thumb"></span></span>
-      Include past 2 years
-    </label>
   </section>
 
   <section class="wrap months" id="months">
     <CalendarMonths entries={current} />
     <p class="empty" id="none" hidden>No events match this filter.</p>
   </section>
+  <!-- Open on the previous, current and next tournaments: scrolled there while the page
+       is still loading, so the top of the page is never painted first. -->
+  <script is:inline>
+    (function () {
+      if (location.hash || window.scrollY > 40) return;
+      var m = document.querySelector('#months > .month'); if (!m) return;
+      var c = document.querySelector('.controls'), sticky = c && getComputedStyle(c).position === 'sticky';
+      var h = document.querySelector('header'), hdr = h ? h.getBoundingClientRect().bottom : 68;
+      window.scrollTo({ top: m.getBoundingClientRect().top + window.scrollY - hdr - (sticky ? c.offsetHeight : 0) - 14, behavior: 'instant' });
+    })();
+  </script>
 
 
   <script>
@@ -61,35 +67,62 @@ const current = [...months.entries()].filter(([, list]) => !list.every(isPast));
       status([...root.querySelectorAll<HTMLElement>('.ev')]);
 
       let filter = 'all';
-      const showPast = document.getElementById('showPast') as HTMLInputElement;
-      const apply = () => {
-        let shown = 0;
-        for (const c of root.querySelectorAll<HTMLElement>('.ev')) {
-          const ok = (filter === 'all' || c.dataset.kind === filter) && (showPast.checked || !c.classList.contains('past'));
-          c.hidden = !ok; if (ok) shown++;
-        }
-        root.querySelectorAll<HTMLElement>('.month').forEach(m => { m.hidden = !m.querySelector('.ev:not([hidden])'); });
-        document.getElementById('none')!.hidden = shown > 0;
-        root.querySelectorAll('[data-reveal]:not(.in)').forEach(el => el.classList.add('in'));
+      const apply = (scope: ParentNode = root) => {
+        for (const c of scope.querySelectorAll<HTMLElement>('.ev')) { const hide = !(filter === 'all' || c.dataset.kind === filter); if (c.hidden !== hide) c.hidden = hide; }
+        const ms = scope instanceof HTMLElement && scope.matches('.month') ? [scope] : [...scope.querySelectorAll<HTMLElement>('.month')];
+        ms.forEach(m => { const hide = !m.querySelector('.ev:not([hidden])'); if (m.hidden !== hide) m.hidden = hide; });
+        document.getElementById('none')!.hidden = !!root.querySelector('.ev:not([hidden])');
+        scope.querySelectorAll('[data-reveal]:not(.in)').forEach(el => el.classList.add('in'));
       };
-      // Past seasons are a separate file, fetched the first time they're asked for.
+      const later = (window as any).requestIdleCallback || ((f: (d?: any) => void) => setTimeout(f, 50));
+      // The two years before load in once the page has painted, above what's on screen,
+      // without moving it: the view stays on the previous, current and next tournaments.
       const loadPast = async () => {
         if (root.querySelector('#past-months')) return;
         pastHtml ||= fetch('/calendar/past').then(r => r.text());
         const doc = new DOMParser().parseFromString(await pastHtml, 'text/html');
         const block = doc.getElementById('past-months');
-        if (!block || root.querySelector('#past-months')) return;
-        root.prepend(document.importNode(block, true));
-        status([...root.querySelectorAll<HTMLElement>('#past-months .ev')]);
+        if (!block || root.querySelector('#past-months') || !document.body.contains(root)) return;
+        // Its images wait until they come near the screen (inserted far above it, the
+        // browser would otherwise fetch them straight away).
+        for (const img of block.querySelectorAll('img')) { const src = img.getAttribute('src'); if (src) { img.setAttribute('data-src', src); img.removeAttribute('src'); } }
+        const io = new IntersectionObserver(es => es.forEach(e => { if (!e.isIntersecting) return; const i = e.target as HTMLImageElement; i.src = i.dataset.src!; i.removeAttribute('data-src'); io.unobserve(i); }), { rootMargin: '900px 0px' });
+        const holder = document.createElement('div'); holder.id = 'past-months';
+        root.prepend(holder);
+        // A month at a time, newest first, each in its own idle moment, so no single task is long.
+        const months = [...block.querySelectorAll<HTMLElement>(':scope > .month')].reverse();
+        const step = (deadline?: { timeRemaining(): number }) => {
+          do {
+            const m = months.shift(); if (!m || !document.body.contains(root)) return;
+            const node = document.importNode(m, true) as HTMLElement;
+            node.querySelectorAll('img[data-src]').forEach(i => io.observe(i));
+            status([...node.querySelectorAll<HTMLElement>('.ev')]);
+            apply(node);
+            // Keep what's on screen exactly where it is (Safari doesn't do this by itself).
+            const anchor = holder.nextElementSibling as HTMLElement || root;
+            const before = anchor.getBoundingClientRect().top;
+            holder.prepend(node);
+            const moved = anchor.getBoundingClientRect().top - before;
+            if (moved) window.scrollBy({ top: moved, behavior: 'instant' }); // never animated: the view mustn't move
+          } while (deadline && deadline.timeRemaining() > 8);
+          if (months.length) later(step, { timeout: 1000 });
+        };
+        later(step, { timeout: 1000 });
       };
       document.querySelectorAll<HTMLButtonElement>('[data-filter]').forEach(b => b.addEventListener('click', () => {
         filter = b.dataset.filter!;
         document.querySelectorAll('[data-filter]').forEach(x => x.setAttribute('aria-pressed', String(x === b)));
         apply();
       }));
-      showPast.addEventListener('change', async () => { if (showPast.checked) { showPast.disabled = true; await loadPast().catch(() => {}); showPast.disabled = false; } apply(); });
-      if (showPast.checked) loadPast().then(apply).catch(() => {});
       apply();
+      // Arrived by an in-site link (the inline script above ran before the router's scroll reset).
+      if (!location.hash && window.scrollY < 40 && !root.querySelector('#past-months')) {
+        const m = root.querySelector<HTMLElement>('.month'), c = document.querySelector<HTMLElement>('.controls');
+        const hdr = document.querySelector('header')?.getBoundingClientRect().bottom || 68;
+        if (m) window.scrollTo({ top: m.getBoundingClientRect().top + window.scrollY - hdr - (c && getComputedStyle(c).position === 'sticky' ? c.offsetHeight : 0) - 14, behavior: 'instant' });
+      }
+      // After the first paint, while the reader looks at what's here.
+      requestAnimationFrame(() => later(() => loadPast().catch(() => {}), { timeout: 1500 }));
     }
     document.addEventListener('astro:page-load', init);
   </script>
@@ -103,13 +136,6 @@ const current = [...months.entries()].filter(([, list]) => !list.every(isPast));
   .logo-chip img { width: auto; display: block; }
   .logo-chip[aria-pressed='true'] { background: #fff; color: #0b0c10; border-color: var(--fg); box-shadow: 0 0 0 2px var(--fg); }
   .pdc-mark { background: #14161f; border-radius: 6px; padding: 3px 6px; display: inline-flex; }
-  .toggle { display: inline-flex; align-items: center; gap: 10px; font-weight: 600; font-size: 14px; cursor: pointer; user-select: none; }
-  .toggle input { position: absolute; opacity: 0; }
-  .track { width: 42px; height: 24px; border-radius: 999px; background: var(--track); position: relative; transition: background .25s; }
-  .thumb { position: absolute; top: 3px; left: 3px; width: 18px; height: 18px; border-radius: 50%; background: #fff; box-shadow: var(--shadow-sm); transition: transform .35s var(--spring); }
-  .toggle input:checked + .track { background: var(--green); }
-  .toggle input:checked + .track .thumb { transform: translateX(18px); }
-  .toggle input:focus-visible + .track { outline: 3px solid var(--sky); outline-offset: 2px; }
 
   @media (max-width: 640px) { .controls { position: static; background: none; } .chips { flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none; } .chip { white-space: nowrap; } }
 </style>

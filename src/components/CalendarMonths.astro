@@ -1,6 +1,6 @@
 ---
 // The month sections of the calendar: used by /calendar (this season) and
-// /calendar/past (past seasons, fetched when "Include past 2 years" is ticked).
+// /calendar/past (the two years before, loaded in after the page's first paint).
 import { tvBadge } from '../lib/pdc.mjs';
 import { dayNum, monthShort, monthLong, weekday, dateRange, initials } from '../lib/format.mjs';
 import { type Ev, pic, av, days, place, kind, isPast, badges, featured, bgFor, champCut } from '../lib/calendar-cards';
@@ -9,11 +9,11 @@ interface Props { entries: [string, Ev[]][] }
 const { entries } = Astro.props;
 ---
     {entries.map(([k, list]) => (
-      <div class="month" data-month={k} hidden={list.every(isPast)}>
+      <div class="month" data-month={k}>
         <h2 class="month-title"><span>{monthLong(k + '-01')}</span><small>{list.length} event{list.length === 1 ? '' : 's'}</small></h2>
         <div class="grid">
           {list.map(e => (
-            <a href={`/tournament/${e.id}`} class={`ev ev-${e.broadcaster}${isPast(e) ? ' past' : ''}${featured(e) ? ' feat' : ''}`} hidden={isPast(e)}
+            <a href={`/tournament/${e.id}`} class={`ev ev-${e.broadcaster}${isPast(e) ? ' past' : ''}${featured(e) ? ' feat' : ''}`}
               data-kind={kind(e)} data-start={e.start} data-end={e.end}>
               {(
                 <span class="ev-art" aria-hidden="true">

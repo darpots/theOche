@@ -171,3 +171,17 @@ test('after a republish, only the events the new official list includes leave th
   const idx = [T('pc33', '2026-11-04'), T('pc34', '2026-11-05')];
   assert.deepEqual(pendingEvents(idx, ['pc33', 'pc34'], { day: '2026-11-06', since: '2026-11-06', republished: true, includedIds: new Set(['pc33']) }).map(t => t.id), ['pc34']);
 });
+
+test('after a 180 the throw is held on that player for the length of the 180 sticker', async () => {
+  const { watch180, heldThrow, FLASH_180_MS } = await import('../src/lib/leg-flash.mjs');
+  assert.equal(FLASH_180_MS, 2400); // 1.6 s plus 50%
+  const v = (order, p1, score) => ({ order, isParticipant1: p1, score, remaining: 501 - score, isBust: false });
+  watch180('m1', 1, 1, [v(1, true, 60)], ['A', 'B'], ['', '']); // first sighting: no flash, no hold
+  assert.equal(heldThrow('m1'), null);
+  watch180('m1', 1, 1, [v(1, true, 60), v(2, false, 180)], ['A', 'B'], ['', '']); // B hits 180
+  const h = heldThrow('m1');
+  assert.equal(h.k, 1);
+  assert.ok(h.left > 2000 && h.left <= 2400);
+  watch180('m1', 1, 1, [v(1, true, 60), v(2, false, 180), v(3, true, 45)], ['A', 'B'], ['', '']); // a later visit doesn't clear the hold early
+  assert.equal(heldThrow('m1').k, 1);
+});

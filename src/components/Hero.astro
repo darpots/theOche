@@ -176,7 +176,7 @@ const label = { live: 'Live now', soon: 'Starts soon', champion: 'Champion crown
   .kicker { display: flex; align-items: center; gap: 12px; margin: 0 0 18px; }
   .state { font-size: 12px; font-weight: 800; letter-spacing: .16em; text-transform: uppercase; color: #f1c96b; display: inline-flex; align-items: center; gap: 8px; }
   .state.live { color: #ff6b7d; }
-  .state.live::before { content: ''; width: 9px; height: 9px; border-radius: 50%; background: #ff4d63; animation: pulse 1.6s infinite; }
+  .state.live::before { content: ''; width: 9px; height: 9px; border-radius: 50%; background: #ff4d63; animation: pulse 1.6s ease-in-out infinite; will-change: transform, opacity; }
   .kicker :global(.tv) { box-shadow: none; }
   h1 { font-size: clamp(42px, 5.6vw, 76px); font-weight: 800; letter-spacing: -.04em; line-height: .95; max-width: 9ch; }
   h1 small { display: block; font-size: .32em; letter-spacing: 0; color: rgba(255, 255, 255, .6); margin-top: 10px; font-weight: 600; }

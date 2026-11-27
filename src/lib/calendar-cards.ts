@@ -28,6 +28,14 @@ export const builtOn = new Date().toLocaleDateString('en-CA', { timeZone: 'Europ
 export const isPast = (e: Ev) => e.end < builtOn;
 export const isLive = (e: Ev) => e.start <= builtOn && e.end >= builtOn;
 
+// The calendar opens on the previous, current and next tournaments: the page's own
+// HTML starts at the month of the latest event to have finished, and the two years
+// before it (/calendar/past) load in after the first paint.
+const lastDone = events.filter(isPast).map(e => e.start.slice(0, 7)).sort().pop();
+export const focusMonth = lastDone || [...months.keys()].sort()[0] || '';
+export const focusMonths = [...months.entries()].filter(([k]) => k >= focusMonth);
+export const pastMonths = [...months.entries()].filter(([k]) => k < focusMonth);
+
 // What each event's page has, shown as badges so people know it's there.
 const allNews = (await getCollection('news')).map(n => n.data);  // top-level await: fine in an ES module
 const shift = (d: string, n: number) => new Date(Date.parse(d) + n * 864e5).toISOString().slice(0, 10);
