@@ -74,6 +74,15 @@ const current = focusMonths;
         document.getElementById('none')!.hidden = !!root.querySelector('.ev:not([hidden])');
         scope.querySelectorAll('[data-reveal]:not(.in)').forEach(el => el.classList.add('in'));
       };
+      // Months off screen skip rendering (content-visibility), so the browser doesn't
+      // lay out and paint two years of cards: above all when leaving the page, as the
+      // page transition paints the whole page. Each keeps the height it was measured at,
+      // so nothing moves when it comes back on screen (Safari has no scroll anchoring).
+      const rest = (ms: HTMLElement[]) => {
+        const hs = ms.map(m => m.offsetHeight);
+        ms.forEach((m, i) => { if (hs[i]) { m.style.containIntrinsicSize = `auto ${hs[i]}px`; m.style.contentVisibility = 'auto'; } });
+      };
+      const wake = () => root.querySelectorAll<HTMLElement>('.month').forEach(m => { m.style.contentVisibility = ''; });
       const later = (window as any).requestIdleCallback || ((f: (d?: any) => void) => setTimeout(f, 50));
       // The two years before load in once the page has painted, above what's on screen,
       // without moving it: the view stays on the previous, current and next tournaments.
@@ -104,6 +113,7 @@ const current = focusMonths;
             holder.prepend(node);
             const moved = anchor.getBoundingClientRect().top - before;
             if (moved) window.scrollBy({ top: moved, behavior: 'instant' }); // never animated: the view mustn't move
+            rest([node]);
           } while (deadline && deadline.timeRemaining() > 8);
           if (months.length) later(step, { timeout: 1000 });
         };
@@ -112,7 +122,7 @@ const current = focusMonths;
       document.querySelectorAll<HTMLButtonElement>('[data-filter]').forEach(b => b.addEventListener('click', () => {
         filter = b.dataset.filter!;
         document.querySelectorAll('[data-filter]').forEach(x => x.setAttribute('aria-pressed', String(x === b)));
-        apply();
+        wake(); apply(); rest([...root.querySelectorAll<HTMLElement>('.month')]); // heights change with the filter
       }));
       apply();
       // Arrived by an in-site link (the inline script above ran before the router's scroll reset).
@@ -122,7 +132,7 @@ const current = focusMonths;
         if (m) window.scrollTo({ top: m.getBoundingClientRect().top + window.scrollY - hdr - (c && getComputedStyle(c).position === 'sticky' ? c.offsetHeight : 0) - 14, behavior: 'instant' });
       }
       // After the first paint, while the reader looks at what's here.
-      requestAnimationFrame(() => later(() => loadPast().catch(() => {}), { timeout: 1500 }));
+      requestAnimationFrame(() => later(() => { rest([...root.querySelectorAll<HTMLElement>(':scope > .month')]); loadPast().catch(() => {}); }, { timeout: 1500 }));
     }
     document.addEventListener('astro:page-load', init);
   </script>
