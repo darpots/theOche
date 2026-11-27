@@ -113,7 +113,10 @@ const av = (name: string) => { const [c1, c2] = avatarColours(name); return `--c
       const keyOf = (p: any) => p.id;
       const asLive = (list: any[]) => list.map((p: any) => ({ ...p, live: p.pos, move: null, plus: 0, minus: 0 }));
 
+      let painted = false;
       const paint = () => {
+        // Figures that change get a short 'bump', but not on the first paint (nothing changed for the reader).
+        const bumps: HTMLElement[] = [];
         const live = mode === 'live' && race;
         const onlyEv = (document.getElementById('onlyevcb') as HTMLInputElement)?.checked;
         const list = live ? race!.filter((p: any) => !onlyEv || p.round) : official;
@@ -129,7 +132,7 @@ const av = (name: string) => { const [c1, c2] = avatarColours(name); return `--c
           if (p.pos) r.querySelector<HTMLElement>('.pos')!.dataset.pos = String(p.pos);
           patch(r.querySelector('.pos'), `<b>${pos}</b>${move ? `<i class="${move > 0 ? 'up' : 'down'}" title="${move > 0 ? 'Up' : 'Down'} ${Math.abs(move)}${live ? ' on the official list' : ''}">${move > 0 ? '▲' : '▼'}${Math.abs(move)}</i>` : ''}`);
           const m = r.querySelector<HTMLElement>('[data-money]')!;
-          if (Number(m.dataset.money) !== p.money) { m.textContent = money(p.money); m.dataset.money = String(p.money); m.classList.remove('bump'); void m.offsetWidth; m.classList.add('bump'); }
+          if (Number(m.dataset.money) !== p.money) { m.textContent = money(p.money); m.dataset.money = String(p.money); if (painted) bumps.push(m); }
           const d = r.querySelector<HTMLElement>('.delta')!;
           // Net change as a chip, then what was won and what is expiring (named on hover).
           let html = '', netHtml = '';
@@ -161,6 +164,9 @@ const av = (name: string) => { const [c1, c2] = avatarColours(name); return `--c
         // Move only the rows that are out of place (none, on most refreshes).
         let prev: Element = table.querySelector('.th')!;
         for (const r of order) { if (prev.nextElementSibling !== r) prev.after(r); prev = r; }
+        // Restart the bump on every changed figure with a single layout (not one per row).
+        if (bumps.length) { bumps.forEach(m => m.classList.remove('bump')); void table.offsetWidth; bumps.forEach(m => m.classList.add('bump')); }
+        painted = true;
         if (note.hidden !== !live) note.hidden = !live; // the note is patched, so an open "How it works" stays open
         document.getElementById('onlyev')!.classList.toggle('off', mode !== 'live');
         if (live && !event) {
@@ -247,6 +253,9 @@ const av = (name: string) => { const [c1, c2] = avatarColours(name); return `--c
   .search input { border: 0; outline: 0; background: none; font: inherit; padding: 12px 0; width: 100%; }
   .small { font-size: 13px; }
   .table { overflow: hidden; }
+  /* Rows below the first screen are laid out and painted only as they scroll near:
+     the page keeps all ~240 rows (search and find work), but first paint does a screenful. */
+  .table .tr[data-search]:nth-child(n+14) { content-visibility: auto; contain-intrinsic-size: auto 62px; }
   .tr { display: grid; text-decoration: none; grid-template-columns: 76px minmax(0, 1.6fr) minmax(0, 1fr) 150px 340px; align-items: center; gap: 12px; padding: 10px 18px; width: 100%; border: 0; border-bottom: 1px solid var(--line); background: none; text-align: left; font: inherit; color: inherit; }
   .tr:last-child { border-bottom: 0; }
   .tr.nomatch { display: none; }
@@ -274,7 +283,7 @@ const av = (name: string) => { const [c1, c2] = avatarColours(name); return `--c
   :global(.spark) { color: var(--fg-2); vertical-align: middle; margin-right: 12px; }
   .avgcell { display: flex; align-items: center; justify-content: flex-end; }
   .avgcell b { font-variant-numeric: tabular-nums; min-width: 5ch; text-align: right; }
-  .ldot { width: 8px; height: 8px; border-radius: 50%; background: var(--red); animation: pulse 1.6s infinite; }
+  .ldot { width: 8px; height: 8px; border-radius: 50%; background: var(--red); animation: pulse 1.6s ease-in-out infinite; will-change: transform, opacity; }
   .race-note { margin: -2px 0 12px; font-size: 13px; color: var(--muted); background: var(--card); border: 1px solid var(--line); border-left: 3px solid var(--red); border-radius: 12px; padding: 10px 14px; }
   .race-note .live-dot { margin-right: 6px; }
   :global(.delta) { display: flex; flex-direction: column; align-items: flex-end; font-size: 12px; font-weight: 700; }

@@ -177,8 +177,10 @@ h1, h2, h3 { text-wrap: balance; hyphens: none; }
 .tv-pdctv img { height: 13px; }
 
 .live-dot { display: inline-flex; align-items: center; gap: 7px; color: var(--red-text); font-weight: 800; font-size: 12px; letter-spacing: .1em; text-transform: uppercase; }
-.live-dot::before { content: ''; width: 9px; height: 9px; border-radius: 50%; background: var(--red); box-shadow: 0 0 0 0 rgba(215, 38, 61, .6); animation: pulse 1.6s infinite; }
-@keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(215, 38, 61, .55); } 70% { box-shadow: 0 0 0 10px rgba(215, 38, 61, 0); } 100% { box-shadow: 0 0 0 0 rgba(215, 38, 61, 0); } }
+.live-dot::before { content: ''; width: 9px; height: 9px; border-radius: 50%; background: var(--red); animation: pulse 1.6s ease-in-out infinite; will-change: transform, opacity; }
+/* The live pulse animates transform and opacity only, so the GPU runs it: animating
+   box-shadow repainted the page every frame, which was slow on long pages (rankings). */
+@keyframes pulse { 0%, 100% { transform: scale(1); opacity: 1; } 50% { transform: scale(1.35); opacity: .55; } }
 
 .card {
   background: var(--card); border: 0; border-radius: var(--radius); box-shadow: none;
@@ -273,8 +275,8 @@ h1, h2, h3 { text-wrap: balance; hyphens: none; }
 /* 180: the original small sticker size ('180!' only), with the same zoom and wobble, on top */
 .leg-flash.t180 { padding: 0 10px; border-radius: 10px; box-shadow: 0 8px 24px rgba(0, 0, 0, .45), 0 0 0 3px rgba(11, 12, 16, .9); }
 .leg-flash.t180 span { display: none; }
-.leg-flash.t180 { animation-duration: 1.6s; }
-@media (prefers-reduced-motion: reduce) { .leg-flash.t180 { animation-duration: 1.6s !important; } }
+.leg-flash.t180 { animation-duration: 2.4s; } /* FLASH_180_MS in src/lib/leg-flash.mjs */
+@media (prefers-reduced-motion: reduce) { .leg-flash.t180 { animation-duration: 2.4s !important; } }
 .leg-flash.t180 b { font-size: 34px; line-height: 1.1; }
 @media (max-width: 640px) { .leg-flash.t180 b { font-size: 28px; } }
 @keyframes leg-flash {

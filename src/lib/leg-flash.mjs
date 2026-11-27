@@ -55,11 +55,26 @@ function show(small, big, anchor, variant = '', at = 'centre') {
     // Restart the animation now it's placed.
     el.style.animation = 'none'; void el.offsetWidth; el.style.animation = '';
   }));
-  // Zoom in, wobble, hold, then shrink away: three seconds for a leg, a quick 1.6 for a 180.
-  setTimeout(() => el.remove(), variant.includes('t180') ? 1600 : 3000);
+  // Zoom in, wobble, hold, then shrink away: three seconds for a leg, 2.4 for a 180.
+  setTimeout(() => el.remove(), variant.includes('t180') ? FLASH_180_MS : 3000);
 }
 
 const seen180 = new Map(); // fixture id -> key of the latest visit seen
+
+/** How long the 180 sticker stays on screen (keep in step with .leg-flash.t180 in global.css). */
+export const FLASH_180_MS = 2400;
+// While a 180 sticker shows, the throw stays with the player who hit it: their
+// score stays neon green until the sticker has gone, then the throw moves on.
+const held = new Map(); // fixture id -> { k, until }
+
+/** The player (0 or 1) the throw is held on after a 180, with ms left; null when no hold. */
+export function heldThrow(id) {
+  const h = held.get(String(id));
+  if (!h) return null;
+  const left = h.until - Date.now();
+  if (left <= 0) { held.delete(String(id)); return null; }
+  return { k: h.k, left };
+}
 
 /**
  * Call on every refresh with the leg in play's visits: a new visit that's a 180
@@ -74,6 +89,7 @@ export function watch180(id, set, leg, visits, names, anchors) {
   seen180.set(key, now);
   if (prev === undefined || prev === now || !last || last.isBust || last.score !== 180) return;
   const k = last.isParticipant1 ? 0 : 1;
+  held.set(key, { k, until: Date.now() + FLASH_180_MS });
   flash180(names[k], anchors[k]);
 }
 

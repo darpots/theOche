@@ -51,14 +51,16 @@ const nav: { key: string; href: string; label: string; phone?: string; title?: s
 // Stats and Records live under Rankings in the menu.
 const act = active === 'stats' ? 'rankings' : active;
 // Phone tab bar: the four daily destinations, everything else in More.
-const tabs = [nav[0], nav[2], nav[1], nav[5]];
+// Phone tab bar: Home, the current event, News, Calendar (Play is in the More sheet).
+const tabs = [nav[0], nav[2], nav[1], nav[3]];
 const moreGroups: { title: string; links: { href: string; label: string }[] }[] = [
   { title: 'Rankings & numbers', links: [{ href: '/rankings', label: 'World rankings' }, { href: '/stats', label: 'Stats leaders' }, { href: '/records', label: 'Records' }, { href: '/h2h', label: 'Head to head' }] },
-  { title: 'Events', links: [{ href: '/calendar', label: 'Calendar' }, { href: '/world-championship', label: 'World Championship' }] },
+  { title: 'Play', links: [{ href: '/play/predictor', label: 'Predictor' }, { href: '/play/guess', label: 'Guess the player' }, { href: '/play/checkout', label: 'Checkout trainer' }] },
+  { title: 'Events', links: [{ href: '/world-championship', label: 'World Championship' }] },
   { title: 'Yours', links: [{ href: '/my', label: 'My Oche' }] },
   { title: 'The Oche', links: [{ href: '/about', label: 'About & contact' }, { href: '/privacy', label: 'Privacy' }, { href: '/rss.xml', label: 'RSS feed' }] },
 ];
-const inMore = ['rankings', 'stats', 'calendar'].includes(active || '') ;
+const inMore = ['rankings', 'stats', 'play'].includes(active || '') ;
 const t = current.tournament;
 const icons: Record<string, string> = {
   home: '<path d="M4 11l8-7 8 7v8a2 2 0 0 1-2 2h-3v-6H9v6H6a2 2 0 0 1-2-2z"/>',
@@ -286,8 +288,8 @@ const fullTitle = title === 'The Oche' ? title : `${title} · The Oche`;
       // after each swap, starting from where the pill was before navigation.
       let last: { x: number; w: number } | null = null;
       function setOn(key: string) {
-        // Phones: Rankings and Calendar live in the More sheet, so More lights up for them.
-        document.querySelectorAll<HTMLElement>('.tabbar .tab[data-tab]').forEach(a => a.classList.toggle('on', a.dataset.tab === key || (a.dataset.tab === 'more' && ['rankings', 'calendar'].includes(key))));
+        // Phones: Rankings and Play live in the More sheet, so More lights up for them.
+        document.querySelectorAll<HTMLElement>('.tabbar .tab[data-tab]').forEach(a => a.classList.toggle('on', a.dataset.tab === key || (a.dataset.tab === 'more' && ['rankings', 'stats', 'play'].includes(key))));
         document.querySelectorAll<HTMLAnchorElement>('.top a.nav').forEach(a => {
           const on = a.dataset.nav === key;
           a.classList.toggle('on', on);
@@ -569,7 +571,7 @@ const fullTitle = title === 'The Oche' ? title : `${title} · The Oche`;
   .livenav { position: relative; z-index: 1; display: inline-flex; align-items: center; gap: 7px; margin-left: 6px; padding: 8px 14px; border-radius: 999px; background: var(--red); color: #fff; text-decoration: none; font-weight: 800; font-size: 13px; letter-spacing: .08em; text-transform: uppercase; transition: background .2s; }
   .livenav:hover { background: #ff4a3d; }
   .livenav[hidden] { display: none; }
-  .ln-dot { width: 7px; height: 7px; border-radius: 50%; background: #fff; animation: lnblink 1.4s ease-in-out infinite; }
+  .ln-dot { width: 7px; height: 7px; border-radius: 50%; background: #fff; animation: lnblink 1.4s ease-in-out infinite; will-change: opacity; }
   @keyframes lnblink { 50% { opacity: .25; } }
   @media (prefers-reduced-motion: reduce) { .ln-dot { animation: none; } }
 
