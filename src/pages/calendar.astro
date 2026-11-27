@@ -133,9 +133,13 @@ const current = focusMonths;
   .chips { display: flex; flex-wrap: wrap; gap: 8px; }
   /* Broadcaster logos are made for white: the chips stay white in the dark theme too */
   .logo-chip { gap: 8px; background: #fff; color: #0b0c10; border-color: #e2ddd2; }
-  .logo-chip img { width: auto; display: block; }
+  /* Chips and their logos keep their natural size (a chip that doesn't fit moves to the
+     next line instead of squeezing), so the channel logos look as they do on the event cards. */
+  .chips > .chip { flex: none; }
+  .logo-chip img { width: auto; max-width: none; flex: none; display: block; }
+  .pdc-mark { flex: none; }
   .logo-chip[aria-pressed='true'] { background: #fff; color: #0b0c10; border-color: var(--fg); box-shadow: 0 0 0 2px var(--fg); }
   .pdc-mark { background: #14161f; border-radius: 6px; padding: 3px 6px; display: inline-flex; }
 
-  @media (max-width: 640px) { .controls { position: static; background: none; } .chips { flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none; } .chip { white-space: nowrap; } }
+  @media (max-width: 640px) { .controls { position: static; background: none; } .chip { white-space: nowrap; } } /* chips wrap onto a second line on phones */
 </style>
