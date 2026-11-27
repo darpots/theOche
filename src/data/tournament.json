@@ -1,5 +1,5 @@
 {
- "updatedAt": "2026-11-27T21:07:32.705Z",
+ "updatedAt": "2026-11-27T22:07:38.728Z",
  "tournament": {
   "winner": null,
   "id": "10872",
@@ -303,7 +303,7 @@
      {
       "id": "518134",
       "date": "2026-11-27",
-      "time": "21:35",
+      "time": "21:33",
       "status": "upcoming",
       "p1": {
        "id": "246",
@@ -537,7 +537,7 @@
      {
       "id": "518128",
       "date": "2026-11-27",
-      "time": "21:50",
+      "time": "21:55",
       "status": "upcoming",
       "p1": {
        "id": "32102",
@@ -562,8 +562,8 @@
      {
       "id": "518127",
       "date": "2026-11-27",
-      "time": "21:20",
-      "status": "upcoming",
+      "time": "21:26",
+      "status": "result",
       "p1": {
        "id": "19",
        "name": "Michael van Gerwen",
@@ -580,9 +580,30 @@
        "country": "GB-ENG",
        "ranking": 55
       },
-      "s1": 0,
-      "s2": 0,
-      "winner": null
+      "s1": 6,
+      "s2": 3,
+      "winner": "19",
+      "stats": [
+       {
+        "avg": 89.35,
+        "f9": null,
+        "t80": 2,
+        "t140": 8,
+        "t100": 8,
+        "co": 31.58,
+        "hi": 121
+       },
+       {
+        "avg": 86.16,
+        "f9": null,
+        "t80": 2,
+        "t140": 4,
+        "t100": 10,
+        "co": 25,
+        "hi": 110
+       }
+      ],
+      "statsLive": true
      },
      {
       "id": "518126",
@@ -658,7 +679,7 @@
      {
       "id": "518108",
       "date": "2026-11-27",
-      "time": "22:20",
+      "time": "22:25",
       "status": "upcoming",
       "p1": {
        "id": "32956",
@@ -776,7 +797,7 @@
       "id": "518121",
       "date": "2026-11-27",
       "time": "20:43",
-      "status": "upcoming",
+      "status": "result",
       "p1": {
        "id": "32037",
        "name": "Ryan Searle",
@@ -793,15 +814,36 @@
        "country": "IE",
        "ranking": 47
       },
-      "s1": 0,
-      "s2": 0,
-      "winner": null
+      "s1": 6,
+      "s2": 1,
+      "winner": "32037",
+      "stats": [
+       {
+        "avg": 95.47,
+        "f9": null,
+        "t80": 0,
+        "t140": 7,
+        "t100": 9,
+        "co": 40,
+        "hi": 68
+       },
+       {
+        "avg": 90.73,
+        "f9": null,
+        "t80": 1,
+        "t140": 2,
+        "t100": 11,
+        "co": 50,
+        "hi": 8
+       }
+      ],
+      "statsLive": true
      },
      {
       "id": "518120",
       "date": "2026-11-27",
-      "time": "21:05",
-      "status": "upcoming",
+      "time": "21:06",
+      "status": "result",
       "p1": {
        "id": "30844",
        "name": "Jermaine Wattimena",
@@ -818,9 +860,30 @@
        "country": "IE",
        "ranking": 54
       },
-      "s1": 0,
-      "s2": 0,
-      "winner": null
+      "s1": 6,
+      "s2": 5,
+      "winner": "30844",
+      "stats": [
+       {
+        "avg": 94.13,
+        "f9": null,
+        "t80": 3,
+        "t140": 7,
+        "t100": 14,
+        "co": 40,
+        "hi": 125
+       },
+       {
+        "avg": 92.77,
+        "f9": null,
+        "t80": 3,
+        "t140": 6,
+        "t100": 13,
+        "co": 35.71,
+        "hi": 150
+       }
+      ],
+      "statsLive": true
      },
      {
       "id": "518119",
@@ -871,8 +934,8 @@
      {
       "id": "518118",
       "date": "2026-11-27",
-      "time": "20:50",
-      "status": "upcoming",
+      "time": "20:54",
+      "status": "result",
       "p1": {
        "id": "36287",
        "name": "Sebastian Bialecki",
@@ -889,9 +952,30 @@
        "country": "GB-WLS",
        "ranking": 3
       },
-      "s1": 0,
-      "s2": 0,
-      "winner": null
+      "s1": 6,
+      "s2": 4,
+      "winner": "36287",
+      "stats": [
+       {
+        "avg": 95.61,
+        "f9": null,
+        "t80": 2,
+        "t140": 7,
+        "t100": 10,
+        "co": 37.5,
+        "hi": 81
+       },
+       {
+        "avg": 95.54,
+        "f9": null,
+        "t80": 1,
+        "t140": 6,
+        "t100": 16,
+        "co": 40,
+        "hi": 120
+       }
+      ],
+      "statsLive": true
      },
      {
       "id": "518117",
@@ -1413,7 +1497,14 @@
       "date": "2026-11-28",
       "time": "13:00",
       "status": "upcoming",
-      "p1": null,
+      "p1": {
+       "id": "36287",
+       "name": "Sebastian Bialecki",
+       "last": "Bialecki",
+       "nick": "The Bolt",
+       "country": "PL",
+       "ranking": 42
+      },
       "p2": {
        "id": "31031",
        "name": "Jeffrey De Graaf",
@@ -1422,7 +1513,7 @@
        "country": "SE",
        "ranking": 41
       },
-      "s1": null,
+      "s1": 0,
       "s2": 0,
       "winner": null
      },
@@ -1431,10 +1522,24 @@
       "date": "2026-11-28",
       "time": "13:00",
       "status": "upcoming",
-      "p1": null,
-      "p2": null,
-      "s1": null,
-      "s2": null,
+      "p1": {
+       "id": "30844",
+       "name": "Jermaine Wattimena",
+       "last": "Wattimena",
+       "nick": "The Machine Gun",
+       "country": "NL",
+       "ranking": 18
+      },
+      "p2": {
+       "id": "32037",
+       "name": "Ryan Searle",
+       "last": "Searle",
+       "nick": "Heavy Metal",
+       "country": "GB-ENG",
+       "ranking": 13
+      },
+      "s1": 0,
+      "s2": 0,
       "winner": null
      },
      {
@@ -1493,9 +1598,16 @@
       "time": "13:00",
       "status": "upcoming",
       "p1": null,
-      "p2": null,
+      "p2": {
+       "id": "19",
+       "name": "Michael van Gerwen",
+       "last": "van Gerwen",
+       "nick": "Mighty Mike",
+       "country": "NL",
+       "ranking": 8
+      },
       "s1": null,
-      "s2": null,
+      "s2": 0,
       "winner": null
      },
      {
