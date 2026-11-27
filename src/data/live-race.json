@@ -1,5 +1,5 @@
 {
- "updatedAt": "2026-11-27T16:07:43.145Z",
+ "updatedAt": "2026-11-27T17:07:39.460Z",
  "officialSig": "1a31ccd0ffb5435e",
  "officialMoney": {
   "4": 515500,
@@ -434,7 +434,7 @@
    "minus": 0,
    "expiring": [],
    "round": "Last 64",
-   "alive": true,
+   "alive": false,
    "estimated": false
   },
   {
@@ -699,11 +699,11 @@
    "pos": 25,
    "live": 25,
    "move": 0,
-   "money": 379500,
-   "plus": 4000,
+   "money": 382500,
+   "plus": 7000,
    "minus": 0,
    "expiring": [],
-   "round": "Last 64",
+   "round": "Last 32",
    "alive": true,
    "estimated": false
   },
@@ -798,28 +798,28 @@
    "estimated": false
   },
   {
-   "id": "142",
-   "name": "Dave Chisnall",
-   "slug": "dave-chisnall",
-   "pos": 32,
-   "live": 32,
-   "move": 0,
-   "money": 280250,
-   "plus": 4000,
-   "minus": 0,
-   "expiring": [],
-   "round": "Last 64",
-   "alive": true,
-   "estimated": false
-  },
-  {
    "id": "81",
    "name": "Joe Cullen",
    "slug": "joe-cullen",
    "pos": 33,
+   "live": 32,
+   "move": 1,
+   "money": 282500,
+   "plus": 7000,
+   "minus": 0,
+   "expiring": [],
+   "round": "Last 32",
+   "alive": true,
+   "estimated": false
+  },
+  {
+   "id": "142",
+   "name": "Dave Chisnall",
+   "slug": "dave-chisnall",
+   "pos": 32,
    "live": 33,
-   "move": 0,
-   "money": 279500,
+   "move": -1,
+   "money": 280250,
    "plus": 4000,
    "minus": 0,
    "expiring": [],
@@ -909,11 +909,11 @@
    "pos": 39,
    "live": 39,
    "move": 0,
-   "money": 202500,
-   "plus": 4000,
+   "money": 205500,
+   "plus": 7000,
    "minus": 0,
    "expiring": [],
-   "round": "Last 64",
+   "round": "Last 32",
    "alive": true,
    "estimated": false
   },
@@ -978,28 +978,28 @@
    "estimated": false
   },
   {
-   "id": "11156",
-   "name": "Gabriel Clemens",
-   "slug": "gabriel-clemens",
-   "pos": 43,
-   "live": 44,
-   "move": -1,
-   "money": 181000,
-   "plus": 4000,
-   "minus": 0,
-   "expiring": [],
-   "round": "Last 64",
-   "alive": true,
-   "estimated": false
-  },
-  {
    "id": "156",
    "name": "Kim Huybrechts",
    "slug": "kim-huybrechts",
    "pos": 46,
+   "live": 44,
+   "move": 2,
+   "money": 181000,
+   "plus": 7000,
+   "minus": 0,
+   "expiring": [],
+   "round": "Last 32",
+   "alive": true,
+   "estimated": false
+  },
+  {
+   "id": "11156",
+   "name": "Gabriel Clemens",
+   "slug": "gabriel-clemens",
+   "pos": 43,
    "live": 45,
-   "move": 1,
-   "money": 178000,
+   "move": -2,
+   "money": 181000,
    "plus": 4000,
    "minus": 0,
    "expiring": [],
@@ -1109,7 +1109,7 @@
    "minus": 0,
    "expiring": [],
    "round": "Last 64",
-   "alive": true,
+   "alive": false,
    "estimated": false
   },
   {
@@ -1184,7 +1184,7 @@
    "minus": 0,
    "expiring": [],
    "round": "Last 64",
-   "alive": true,
+   "alive": false,
    "estimated": false
   },
   {
@@ -1589,7 +1589,7 @@
    "minus": 0,
    "expiring": [],
    "round": "Last 64",
-   "alive": true,
+   "alive": false,
    "estimated": false
   },
   {

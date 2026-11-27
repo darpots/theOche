@@ -1,5 +1,5 @@
 {
- "updatedAt": "2026-11-27T16:07:37.321Z",
+ "updatedAt": "2026-11-27T17:07:35.526Z",
  "tournament": {
   "winner": null,
   "id": "10872",
@@ -144,8 +144,8 @@
      {
       "id": "518137",
       "date": "2026-11-27",
-      "time": "16:00",
-      "status": "upcoming",
+      "time": "16:07",
+      "status": "result",
       "p1": {
        "id": "156",
        "name": "Kim Huybrechts",
@@ -162,9 +162,30 @@
        "country": "GB-ENG",
        "ranking": 85
       },
-      "s1": 0,
-      "s2": 0,
-      "winner": null
+      "s1": 6,
+      "s2": 2,
+      "winner": "156",
+      "stats": [
+       {
+        "avg": 94.24,
+        "f9": null,
+        "t80": 3,
+        "t140": 3,
+        "t100": 14,
+        "co": 40,
+        "hi": 103
+       },
+       {
+        "avg": 92.58,
+        "f9": null,
+        "t80": 4,
+        "t140": 3,
+        "t100": 11,
+        "co": 13.33,
+        "hi": 50
+       }
+      ],
+      "statsLive": true
      },
      {
       "id": "518136",
@@ -286,8 +307,8 @@
      {
       "id": "518133",
       "date": "2026-11-27",
-      "time": "16:05",
-      "status": "upcoming",
+      "time": "16:01",
+      "status": "result",
       "p1": {
        "id": "22",
        "name": "James Wade",
@@ -304,9 +325,30 @@
        "country": "GB-ENG",
        "ranking": 39
       },
-      "s1": 0,
-      "s2": 0,
-      "winner": null
+      "s1": 4,
+      "s2": 6,
+      "winner": "36303",
+      "stats": [
+       {
+        "avg": 90.7,
+        "f9": null,
+        "t80": 2,
+        "t140": 9,
+        "t100": 10,
+        "co": 28.57,
+        "hi": 68
+       },
+       {
+        "avg": 91.08,
+        "f9": null,
+        "t80": 4,
+        "t140": 4,
+        "t100": 7,
+        "co": 50,
+        "hi": 70
+       }
+      ],
+      "statsLive": true
      },
      {
       "id": "518132",
@@ -528,8 +570,8 @@
      {
       "id": "518125",
       "date": "2026-11-27",
-      "time": "16:35",
-      "status": "upcoming",
+      "time": "16:36",
+      "status": "result",
       "p1": {
        "id": "31027",
        "name": "Richard Veenstra",
@@ -546,9 +588,30 @@
        "country": "GB-ENG",
        "ranking": 33
       },
-      "s1": 0,
-      "s2": 0,
-      "winner": null
+      "s1": 3,
+      "s2": 6,
+      "winner": "81",
+      "stats": [
+       {
+        "avg": 88.21,
+        "f9": null,
+        "t80": 3,
+        "t140": 1,
+        "t100": 10,
+        "co": 25,
+        "hi": 32
+       },
+       {
+        "avg": 102.02,
+        "f9": null,
+        "t80": 3,
+        "t140": 10,
+        "t100": 9,
+        "co": 42.86,
+        "hi": 60
+       }
+      ],
+      "statsLive": true
      },
      {
       "id": "518108",
@@ -983,8 +1046,8 @@
      {
       "id": "518111",
       "date": "2026-11-27",
-      "time": "16:30",
-      "status": "upcoming",
+      "time": "16:32",
+      "status": "result",
       "p1": {
        "id": "2040",
        "name": "Cameron Menzies",
@@ -1001,9 +1064,30 @@
        "country": "AT",
        "ranking": 52
       },
-      "s1": 0,
-      "s2": 0,
-      "winner": null
+      "s1": 6,
+      "s2": 3,
+      "winner": "2040",
+      "stats": [
+       {
+        "avg": 108.9,
+        "f9": null,
+        "t80": 2,
+        "t140": 8,
+        "t100": 14,
+        "co": 85.71,
+        "hi": 160
+       },
+       {
+        "avg": 102.45,
+        "f9": null,
+        "t80": 1,
+        "t140": 12,
+        "t100": 7,
+        "co": 60,
+        "hi": 140
+       }
+      ],
+      "statsLive": true
      },
      {
       "id": "518110",
@@ -1111,9 +1195,16 @@
        "country": "DE",
        "ranking": 20
       },
-      "p2": null,
+      "p2": {
+       "id": "2040",
+       "name": "Cameron Menzies",
+       "last": "Menzies",
+       "nick": "Cammy",
+       "country": "GB-SCT",
+       "ranking": 25
+      },
       "s1": 0,
-      "s2": null,
+      "s2": 0,
       "winner": null
      },
      {
@@ -1230,9 +1321,16 @@
        "country": "GB-ENG",
        "ranking": 15
       },
-      "p2": null,
+      "p2": {
+       "id": "81",
+       "name": "Joe Cullen",
+       "last": "Cullen",
+       "nick": "The Rockstar",
+       "country": "GB-ENG",
+       "ranking": 33
+      },
       "s1": 0,
-      "s2": null,
+      "s2": 0,
       "winner": null
      },
      {
@@ -1288,9 +1386,16 @@
        "country": "NL",
        "ranking": 21
       },
-      "p2": null,
+      "p2": {
+       "id": "36303",
+       "name": "Justin Hood",
+       "last": "Hood",
+       "nick": "The Pocket Rocket",
+       "country": "GB-ENG",
+       "ranking": 39
+      },
       "s1": 0,
-      "s2": null,
+      "s2": 0,
       "winner": null
      },
      {
@@ -1316,10 +1421,24 @@
       "date": "2026-11-28",
       "time": "13:00",
       "status": "upcoming",
-      "p1": null,
-      "p2": null,
-      "s1": null,
-      "s2": null,
+      "p1": {
+       "id": "32078",
+       "name": "Bradley Brooks",
+       "last": "Brooks",
+       "nick": "Bam Bam",
+       "country": "GB-ENG",
+       "ranking": 51
+      },
+      "p2": {
+       "id": "156",
+       "name": "Kim Huybrechts",
+       "last": "Huybrechts",
+       "nick": "The Hurricane",
+       "country": "BE",
+       "ranking": 46
+      },
+      "s1": 0,
+      "s2": 0,
       "winner": null
      },
      {
