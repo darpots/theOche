@@ -1,5 +1,5 @@
 {
- "updatedAt": "2026-11-27T23:07:47.534Z",
+ "updatedAt": "2026-11-28T00:07:38.985Z",
  "officialSig": "1a31ccd0ffb5435e",
  "officialMoney": {
   "4": 515500,
@@ -468,33 +468,33 @@
    "estimated": false
   },
   {
+   "id": "876",
+   "name": "Stephen Bunting",
+   "slug": "stephen-bunting",
+   "pos": 11,
+   "live": 10,
+   "move": 1,
+   "money": 602250,
+   "plus": 7000,
+   "minus": 0,
+   "expiring": [],
+   "round": "Last 32",
+   "alive": true,
+   "estimated": false
+  },
+  {
    "id": "32956",
    "name": "Wessel Nijman",
    "slug": "wessel-nijman",
    "pos": 10,
-   "live": 10,
-   "move": 0,
+   "live": 11,
+   "move": -1,
    "money": 599250,
    "plus": 4000,
    "minus": 0,
    "expiring": [],
    "round": "Last 64",
    "alive": false,
-   "estimated": false
-  },
-  {
-   "id": "876",
-   "name": "Stephen Bunting",
-   "slug": "stephen-bunting",
-   "pos": 11,
-   "live": 11,
-   "move": 0,
-   "money": 599250,
-   "plus": 4000,
-   "minus": 0,
-   "expiring": [],
-   "round": "Last 64",
-   "alive": true,
    "estimated": false
   },
   {
@@ -1244,7 +1244,7 @@
    "minus": 0,
    "expiring": [],
    "round": "Last 64",
-   "alive": true,
+   "alive": false,
    "estimated": false
   },
   {
@@ -1259,7 +1259,7 @@
    "minus": 0,
    "expiring": [],
    "round": "Last 64",
-   "alive": true,
+   "alive": false,
    "estimated": false
   },
   {
@@ -1629,11 +1629,11 @@
    "pos": 88,
    "live": 87,
    "move": 1,
-   "money": 50250,
-   "plus": 4000,
+   "money": 53250,
+   "plus": 7000,
    "minus": 0,
    "expiring": [],
-   "round": "Last 64",
+   "round": "Last 32",
    "alive": true,
    "estimated": false
   },
