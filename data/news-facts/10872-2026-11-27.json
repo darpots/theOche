@@ -4,74 +4,6 @@
  "kind": "results",
  "matches": [
   {
-   "fixture": "518113",
-   "stage": "Last 64",
-   "time": "1:08pm GMT",
-   "winner": "Rob Owen",
-   "loser": "Tom Bissell",
-   "score": "6-5",
-   "averages": {
-    "Rob Owen": null,
-    "Tom Bissell": null
-   },
-   "t80s": {
-    "Rob Owen": null,
-    "Tom Bissell": null
-   },
-   "bestCheckout": null,
-   "worldRanks": {
-    "Rob Owen": 60,
-    "Tom Bissell": 75
-   },
-   "flags": [
-    "went to a deciding leg"
-   ]
-  },
-  {
-   "fixture": "518116",
-   "stage": "Last 64",
-   "time": "2:09pm GMT",
-   "winner": "Luke Woodhouse",
-   "loser": "Alexander Merkx",
-   "score": "6-4",
-   "averages": {
-    "Luke Woodhouse": null,
-    "Alexander Merkx": null
-   },
-   "t80s": {
-    "Luke Woodhouse": null,
-    "Alexander Merkx": null
-   },
-   "bestCheckout": null,
-   "worldRanks": {
-    "Luke Woodhouse": 17,
-    "Alexander Merkx": 95
-   },
-   "flags": []
-  },
-  {
-   "fixture": "518132",
-   "stage": "Last 64",
-   "time": "1:47pm GMT",
-   "winner": "Kevin Doets",
-   "loser": "Ritchie Edhouse",
-   "score": "6-1",
-   "averages": {
-    "Kevin Doets": null,
-    "Ritchie Edhouse": null
-   },
-   "t80s": {
-    "Kevin Doets": null,
-    "Ritchie Edhouse": null
-   },
-   "bestCheckout": null,
-   "worldRanks": {
-    "Kevin Doets": 21,
-    "Ritchie Edhouse": 59
-   },
-   "flags": []
-  },
-  {
    "fixture": "518122",
    "stage": "Last 64",
    "time": "2:09pm GMT",
@@ -96,26 +28,50 @@
    ]
   },
   {
-   "fixture": "518115",
+   "fixture": "518132",
    "stage": "Last 64",
-   "time": "1:40pm GMT",
-   "winner": "Niels Zonneveld",
-   "loser": "Niko Springer",
-   "score": "6-4",
+   "time": "1:47pm GMT",
+   "winner": "Kevin Doets",
+   "loser": "Ritchie Edhouse",
+   "score": "6-1",
    "averages": {
-    "Niels Zonneveld": null,
-    "Niko Springer": null
+    "Kevin Doets": 107.34,
+    "Ritchie Edhouse": 99.16
    },
    "t80s": {
-    "Niels Zonneveld": null,
-    "Niko Springer": null
+    "Kevin Doets": 6,
+    "Ritchie Edhouse": 0
    },
-   "bestCheckout": null,
+   "bestCheckout": 100,
    "worldRanks": {
-    "Niels Zonneveld": 28,
-    "Niko Springer": 30
+    "Kevin Doets": 21,
+    "Ritchie Edhouse": 59
    },
    "flags": []
+  },
+  {
+   "fixture": "518113",
+   "stage": "Last 64",
+   "time": "1:08pm GMT",
+   "winner": "Rob Owen",
+   "loser": "Tom Bissell",
+   "score": "6-5",
+   "averages": {
+    "Rob Owen": 90.5,
+    "Tom Bissell": 90.29
+   },
+   "t80s": {
+    "Rob Owen": 0,
+    "Tom Bissell": 4
+   },
+   "bestCheckout": 81,
+   "worldRanks": {
+    "Rob Owen": 60,
+    "Tom Bissell": 75
+   },
+   "flags": [
+    "went to a deciding leg"
+   ]
   },
   {
    "fixture": "518110",
@@ -125,14 +81,14 @@
    "loser": "Charlie Manby",
    "score": "6-4",
    "averages": {
-    "Martin Schindler": null,
-    "Charlie Manby": null
+    "Martin Schindler": 100.2,
+    "Charlie Manby": 96.77
    },
    "t80s": {
-    "Martin Schindler": null,
-    "Charlie Manby": null
+    "Martin Schindler": 5,
+    "Charlie Manby": 2
    },
-   "bestCheckout": null,
+   "bestCheckout": 100,
    "worldRanks": {
     "Martin Schindler": 20,
     "Charlie Manby": 77
@@ -140,160 +96,24 @@
    "flags": []
   },
   {
-   "fixture": "518124",
+   "fixture": "518116",
    "stage": "Last 64",
-   "time": "2:35pm GMT",
-   "winner": "Chris Dobey",
-   "loser": "Mike De Decker",
+   "time": "2:09pm GMT",
+   "winner": "Luke Woodhouse",
+   "loser": "Alexander Merkx",
    "score": "6-4",
    "averages": {
-    "Chris Dobey": null,
-    "Mike De Decker": null
+    "Luke Woodhouse": 100.5,
+    "Alexander Merkx": 88.8
    },
    "t80s": {
-    "Chris Dobey": null,
-    "Mike De Decker": null
+    "Luke Woodhouse": 7,
+    "Alexander Merkx": 4
    },
-   "bestCheckout": null,
+   "bestCheckout": 121,
    "worldRanks": {
-    "Chris Dobey": 15,
-    "Mike De Decker": 35
-   },
-   "flags": []
-  },
-  {
-   "fixture": "518136",
-   "stage": "Last 64",
-   "time": "3:31pm GMT",
-   "winner": "Bradley Brooks",
-   "loser": "Andrew Gilding",
-   "score": "6-5",
-   "averages": {
-    "Bradley Brooks": null,
-    "Andrew Gilding": null
-   },
-   "t80s": {
-    "Bradley Brooks": null,
-    "Andrew Gilding": null
-   },
-   "bestCheckout": null,
-   "worldRanks": {
-    "Bradley Brooks": 51,
-    "Andrew Gilding": 27
-   },
-   "flags": [
-    "went to a deciding leg"
-   ]
-  },
-  {
-   "fixture": "518133",
-   "stage": "Last 64",
-   "time": "4:01pm GMT",
-   "winner": "Justin Hood",
-   "loser": "James Wade",
-   "score": "6-4",
-   "averages": {
-    "Justin Hood": null,
-    "James Wade": null
-   },
-   "t80s": {
-    "Justin Hood": null,
-    "James Wade": null
-   },
-   "bestCheckout": null,
-   "worldRanks": {
-    "Justin Hood": 39,
-    "James Wade": 7
-   },
-   "flags": [
-    "upset: world No 39 beat world No 7"
-   ]
-  },
-  {
-   "fixture": "518137",
-   "stage": "Last 64",
-   "time": "4:07pm GMT",
-   "winner": "Kim Huybrechts",
-   "loser": "Joe Hunt",
-   "score": "6-2",
-   "averages": {
-    "Kim Huybrechts": null,
-    "Joe Hunt": null
-   },
-   "t80s": {
-    "Kim Huybrechts": null,
-    "Joe Hunt": null
-   },
-   "bestCheckout": null,
-   "worldRanks": {
-    "Kim Huybrechts": 46,
-    "Joe Hunt": 85
-   },
-   "flags": []
-  },
-  {
-   "fixture": "518123",
-   "stage": "Last 64",
-   "time": "2:33pm GMT",
-   "winner": "Tommy Morris",
-   "loser": "Callan Rydz",
-   "score": "6-3",
-   "averages": {
-    "Tommy Morris": null,
-    "Callan Rydz": null
-   },
-   "t80s": {
-    "Tommy Morris": null,
-    "Callan Rydz": null
-   },
-   "bestCheckout": null,
-   "worldRanks": {
-    "Tommy Morris": 79,
-    "Callan Rydz": 40
-   },
-   "flags": []
-  },
-  {
-   "fixture": "518135",
-   "stage": "Last 64",
-   "time": "2:58pm GMT",
-   "winner": "Maik Kuivenhoven",
-   "loser": "Daryl Gurney",
-   "score": "6-4",
-   "averages": {
-    "Maik Kuivenhoven": null,
-    "Daryl Gurney": null
-   },
-   "t80s": {
-    "Maik Kuivenhoven": null,
-    "Daryl Gurney": null
-   },
-   "bestCheckout": null,
-   "worldRanks": {
-    "Maik Kuivenhoven": 67,
-    "Daryl Gurney": 31
-   },
-   "flags": []
-  },
-  {
-   "fixture": "518111",
-   "stage": "Last 64",
-   "time": "4:32pm GMT",
-   "winner": "Cameron Menzies",
-   "loser": "Mensur Suljovic",
-   "score": "6-3",
-   "averages": {
-    "Cameron Menzies": null,
-    "Mensur Suljovic": null
-   },
-   "t80s": {
-    "Cameron Menzies": null,
-    "Mensur Suljovic": null
-   },
-   "bestCheckout": null,
-   "worldRanks": {
-    "Cameron Menzies": 25,
-    "Mensur Suljovic": 52
+    "Luke Woodhouse": 17,
+    "Alexander Merkx": 95
    },
    "flags": []
   },
@@ -305,14 +125,14 @@
    "loser": "Tom Sykes",
    "score": "6-4",
    "averages": {
-    "Jonny Clayton": null,
-    "Tom Sykes": null
+    "Jonny Clayton": 96.4,
+    "Tom Sykes": 90.83
    },
    "t80s": {
-    "Jonny Clayton": null,
-    "Tom Sykes": null
+    "Jonny Clayton": 3,
+    "Tom Sykes": 5
    },
-   "bestCheckout": null,
+   "bestCheckout": 160,
    "worldRanks": {
     "Jonny Clayton": 5,
     "Tom Sykes": 72
@@ -320,24 +140,24 @@
    "flags": []
   },
   {
-   "fixture": "518125",
+   "fixture": "518115",
    "stage": "Last 64",
-   "time": "4:36pm GMT",
-   "winner": "Joe Cullen",
-   "loser": "Richard Veenstra",
-   "score": "6-3",
+   "time": "1:40pm GMT",
+   "winner": "Niels Zonneveld",
+   "loser": "Niko Springer",
+   "score": "6-4",
    "averages": {
-    "Joe Cullen": null,
-    "Richard Veenstra": null
+    "Niels Zonneveld": 90.89,
+    "Niko Springer": 90.93
    },
    "t80s": {
-    "Joe Cullen": null,
-    "Richard Veenstra": null
+    "Niels Zonneveld": 4,
+    "Niko Springer": 1
    },
-   "bestCheckout": null,
+   "bestCheckout": 96,
    "worldRanks": {
-    "Joe Cullen": 33,
-    "Richard Veenstra": 57
+    "Niels Zonneveld": 28,
+    "Niko Springer": 30
    },
    "flags": []
   },
@@ -349,14 +169,14 @@
    "loser": "Gary Anderson",
    "score": "6-4",
    "averages": {
-    "Karel Sedlacek": null,
-    "Gary Anderson": null
+    "Karel Sedlacek": 94.2,
+    "Gary Anderson": 89.11
    },
    "t80s": {
-    "Karel Sedlacek": null,
-    "Gary Anderson": null
+    "Karel Sedlacek": 5,
+    "Gary Anderson": 3
    },
-   "bestCheckout": null,
+   "bestCheckout": 170,
    "worldRanks": {
     "Karel Sedlacek": 38,
     "Gary Anderson": 16
@@ -364,19 +184,570 @@
    "flags": [
     "upset: world No 38 beat world No 16"
    ]
+  },
+  {
+   "fixture": "518135",
+   "stage": "Last 64",
+   "time": "2:58pm GMT",
+   "winner": "Maik Kuivenhoven",
+   "loser": "Daryl Gurney",
+   "score": "6-4",
+   "averages": {
+    "Maik Kuivenhoven": 85.85,
+    "Daryl Gurney": 83.01
+   },
+   "t80s": {
+    "Maik Kuivenhoven": 2,
+    "Daryl Gurney": 1
+   },
+   "bestCheckout": 120,
+   "worldRanks": {
+    "Maik Kuivenhoven": 67,
+    "Daryl Gurney": 31
+   },
+   "flags": []
+  },
+  {
+   "fixture": "518124",
+   "stage": "Last 64",
+   "time": "2:35pm GMT",
+   "winner": "Chris Dobey",
+   "loser": "Mike De Decker",
+   "score": "6-4",
+   "averages": {
+    "Chris Dobey": 94.97,
+    "Mike De Decker": 92.46
+   },
+   "t80s": {
+    "Chris Dobey": 2,
+    "Mike De Decker": 1
+   },
+   "bestCheckout": 83,
+   "worldRanks": {
+    "Chris Dobey": 15,
+    "Mike De Decker": 35
+   },
+   "flags": []
+  },
+  {
+   "fixture": "518133",
+   "stage": "Last 64",
+   "time": "4:01pm GMT",
+   "winner": "Justin Hood",
+   "loser": "James Wade",
+   "score": "6-4",
+   "averages": {
+    "Justin Hood": 91.08,
+    "James Wade": 90.7
+   },
+   "t80s": {
+    "Justin Hood": 4,
+    "James Wade": 2
+   },
+   "bestCheckout": 70,
+   "worldRanks": {
+    "Justin Hood": 39,
+    "James Wade": 7
+   },
+   "flags": [
+    "upset: world No 39 beat world No 7"
+   ]
+  },
+  {
+   "fixture": "518136",
+   "stage": "Last 64",
+   "time": "3:31pm GMT",
+   "winner": "Bradley Brooks",
+   "loser": "Andrew Gilding",
+   "score": "6-5",
+   "averages": {
+    "Bradley Brooks": 94.73,
+    "Andrew Gilding": 94.84
+   },
+   "t80s": {
+    "Bradley Brooks": 3,
+    "Andrew Gilding": 2
+   },
+   "bestCheckout": 118,
+   "worldRanks": {
+    "Bradley Brooks": 51,
+    "Andrew Gilding": 27
+   },
+   "flags": [
+    "went to a deciding leg"
+   ]
+  },
+  {
+   "fixture": "518125",
+   "stage": "Last 64",
+   "time": "4:36pm GMT",
+   "winner": "Joe Cullen",
+   "loser": "Richard Veenstra",
+   "score": "6-3",
+   "averages": {
+    "Joe Cullen": 102.02,
+    "Richard Veenstra": 88.21
+   },
+   "t80s": {
+    "Joe Cullen": 3,
+    "Richard Veenstra": 3
+   },
+   "bestCheckout": 60,
+   "worldRanks": {
+    "Joe Cullen": 33,
+    "Richard Veenstra": 57
+   },
+   "flags": []
+  },
+  {
+   "fixture": "518111",
+   "stage": "Last 64",
+   "time": "4:32pm GMT",
+   "winner": "Cameron Menzies",
+   "loser": "Mensur Suljovic",
+   "score": "6-3",
+   "averages": {
+    "Cameron Menzies": 108.9,
+    "Mensur Suljovic": 102.45
+   },
+   "t80s": {
+    "Cameron Menzies": 2,
+    "Mensur Suljovic": 1
+   },
+   "bestCheckout": 160,
+   "worldRanks": {
+    "Cameron Menzies": 25,
+    "Mensur Suljovic": 52
+   },
+   "flags": [
+    "Mensur Suljovic averaged 102.45 and lost"
+   ]
+  },
+  {
+   "fixture": "518137",
+   "stage": "Last 64",
+   "time": "4:07pm GMT",
+   "winner": "Kim Huybrechts",
+   "loser": "Joe Hunt",
+   "score": "6-2",
+   "averages": {
+    "Kim Huybrechts": 94.24,
+    "Joe Hunt": 92.58
+   },
+   "t80s": {
+    "Kim Huybrechts": 3,
+    "Joe Hunt": 4
+   },
+   "bestCheckout": 103,
+   "worldRanks": {
+    "Kim Huybrechts": 46,
+    "Joe Hunt": 85
+   },
+   "flags": []
+  },
+  {
+   "fixture": "518119",
+   "stage": "Last 64",
+   "time": "7:16pm GMT",
+   "winner": "Jeffrey De Graaf",
+   "loser": "Gian van Veen",
+   "score": "6-4",
+   "averages": {
+    "Jeffrey De Graaf": 91.66,
+    "Gian van Veen": 91.18
+   },
+   "t80s": {
+    "Jeffrey De Graaf": 3,
+    "Gian van Veen": 1
+   },
+   "bestCheckout": 112,
+   "worldRanks": {
+    "Jeffrey De Graaf": 41,
+    "Gian van Veen": 2
+   },
+   "flags": [
+    "upset: world No 41 beat world No 2"
+   ]
+  },
+  {
+   "fixture": "518139",
+   "stage": "Last 64",
+   "time": "7:08pm GMT",
+   "winner": "Mickey Mansell",
+   "loser": "Rob Cross",
+   "score": "6-5",
+   "averages": {
+    "Mickey Mansell": 90.61,
+    "Rob Cross": 87.09
+   },
+   "t80s": {
+    "Mickey Mansell": 2,
+    "Rob Cross": 2
+   },
+   "bestCheckout": 127,
+   "worldRanks": {
+    "Mickey Mansell": 53,
+    "Rob Cross": 24
+   },
+   "flags": [
+    "went to a deciding leg"
+   ]
+  },
+  {
+   "fixture": "518123",
+   "stage": "Last 64",
+   "time": "2:33pm GMT",
+   "winner": "Tommy Morris",
+   "loser": "Callan Rydz",
+   "score": "6-3",
+   "averages": {
+    "Tommy Morris": 89.96,
+    "Callan Rydz": 91.89
+   },
+   "t80s": {
+    "Tommy Morris": 0,
+    "Callan Rydz": 2
+   },
+   "bestCheckout": 120,
+   "worldRanks": {
+    "Tommy Morris": 79,
+    "Callan Rydz": 40
+   },
+   "flags": []
+  },
+  {
+   "fixture": "518112",
+   "stage": "Last 64",
+   "time": "7:49pm GMT",
+   "winner": "Beau Greaves",
+   "loser": "Christian Kist",
+   "score": "6-3",
+   "averages": {
+    "Beau Greaves": 89.63,
+    "Christian Kist": 86.44
+   },
+   "t80s": {
+    "Beau Greaves": 2,
+    "Christian Kist": 0
+   },
+   "bestCheckout": 88,
+   "worldRanks": {
+    "Beau Greaves": 74,
+    "Christian Kist": 82
+   },
+   "flags": []
+  },
+  {
+   "fixture": "518130",
+   "stage": "Last 64",
+   "time": "7:47pm GMT",
+   "winner": "Danny Noppert",
+   "loser": "Scott Williams",
+   "score": "6-2",
+   "averages": {
+    "Danny Noppert": 98.1,
+    "Scott Williams": 90.41
+   },
+   "t80s": {
+    "Danny Noppert": 2,
+    "Scott Williams": 3
+   },
+   "bestCheckout": 121,
+   "worldRanks": {
+    "Danny Noppert": 14,
+    "Scott Williams": 50
+   },
+   "flags": []
+  },
+  {
+   "fixture": "518109",
+   "stage": "Last 64",
+   "time": "8:11pm GMT",
+   "winner": "Gabriel Clemens",
+   "loser": "Dave Chisnall",
+   "score": "6-4",
+   "averages": {
+    "Gabriel Clemens": 93.2,
+    "Dave Chisnall": 87.99
+   },
+   "t80s": {
+    "Gabriel Clemens": 2,
+    "Dave Chisnall": 1
+   },
+   "bestCheckout": 130,
+   "worldRanks": {
+    "Gabriel Clemens": 43,
+    "Dave Chisnall": 32
+   },
+   "flags": []
+  },
+  {
+   "fixture": "518114",
+   "stage": "Last 64",
+   "time": "8:22pm GMT",
+   "winner": "Michael Smith",
+   "loser": "Ross Smith",
+   "score": "6-3",
+   "averages": {
+    "Michael Smith": 99.26,
+    "Ross Smith": 90.05
+   },
+   "t80s": {
+    "Michael Smith": 3,
+    "Ross Smith": 2
+   },
+   "bestCheckout": 76,
+   "worldRanks": {
+    "Michael Smith": 37,
+    "Ross Smith": 6
+   },
+   "flags": [
+    "upset: world No 37 beat world No 6"
+   ]
+  },
+  {
+   "fixture": "518121",
+   "stage": "Last 64",
+   "time": "8:43pm GMT",
+   "winner": "Ryan Searle",
+   "loser": "Brendan Dolan",
+   "score": "6-1",
+   "averages": {
+    "Ryan Searle": 95.47,
+    "Brendan Dolan": 90.73
+   },
+   "t80s": {
+    "Ryan Searle": 0,
+    "Brendan Dolan": 1
+   },
+   "bestCheckout": 68,
+   "worldRanks": {
+    "Ryan Searle": 13,
+    "Brendan Dolan": 47
+   },
+   "flags": []
+  },
+  {
+   "fixture": "518118",
+   "stage": "Last 64",
+   "time": "8:54pm GMT",
+   "winner": "Sebastian Bialecki",
+   "loser": "Gerwyn Price",
+   "score": "6-4",
+   "averages": {
+    "Sebastian Bialecki": 95.61,
+    "Gerwyn Price": 95.54
+   },
+   "t80s": {
+    "Sebastian Bialecki": 2,
+    "Gerwyn Price": 1
+   },
+   "bestCheckout": 120,
+   "worldRanks": {
+    "Sebastian Bialecki": 42,
+    "Gerwyn Price": 3
+   },
+   "flags": [
+    "upset: world No 42 beat world No 3"
+   ]
+  },
+  {
+   "fixture": "518134",
+   "stage": "Last 64",
+   "time": "9:34pm GMT",
+   "winner": "Dirk van Duijvenbode",
+   "loser": "Alan Soutar",
+   "score": "6-4",
+   "averages": {
+    "Dirk van Duijvenbode": 87.06,
+    "Alan Soutar": 88.13
+   },
+   "t80s": {
+    "Dirk van Duijvenbode": 1,
+    "Alan Soutar": 3
+   },
+   "bestCheckout": 82,
+   "worldRanks": {
+    "Dirk van Duijvenbode": 23,
+    "Alan Soutar": 56
+   },
+   "flags": []
+  },
+  {
+   "fixture": "518120",
+   "stage": "Last 64",
+   "time": "9:06pm GMT",
+   "winner": "Jermaine Wattimena",
+   "loser": "Keane Barry",
+   "score": "6-5",
+   "averages": {
+    "Jermaine Wattimena": 94.13,
+    "Keane Barry": 92.77
+   },
+   "t80s": {
+    "Jermaine Wattimena": 3,
+    "Keane Barry": 3
+   },
+   "bestCheckout": 150,
+   "worldRanks": {
+    "Jermaine Wattimena": 18,
+    "Keane Barry": 54
+   },
+   "flags": [
+    "went to a deciding leg"
+   ]
+  },
+  {
+   "fixture": "518128",
+   "stage": "Last 64",
+   "time": "9:55pm GMT",
+   "winner": "Luke Humphries",
+   "loser": "Darryl Pilgrim",
+   "score": "6-3",
+   "averages": {
+    "Luke Humphries": 93.32,
+    "Darryl Pilgrim": 87.22
+   },
+   "t80s": {
+    "Luke Humphries": 1,
+    "Darryl Pilgrim": 1
+   },
+   "bestCheckout": 136,
+   "worldRanks": {
+    "Luke Humphries": 4,
+    "Darryl Pilgrim": 78
+   },
+   "flags": []
+  },
+  {
+   "fixture": "518129",
+   "stage": "Last 64",
+   "time": "10:06pm GMT",
+   "winner": "Damon Heta",
+   "loser": "Krzysztof Ratajski",
+   "score": "6-4",
+   "averages": {
+    "Damon Heta": 96.81,
+    "Krzysztof Ratajski": 102.92
+   },
+   "t80s": {
+    "Damon Heta": 5,
+    "Krzysztof Ratajski": 3
+   },
+   "bestCheckout": 81,
+   "worldRanks": {
+    "Damon Heta": 22,
+    "Krzysztof Ratajski": 19
+   },
+   "flags": [
+    "Krzysztof Ratajski averaged 102.92 and lost"
+   ]
+  },
+  {
+   "fixture": "518108",
+   "stage": "Last 64",
+   "time": "10:23pm GMT",
+   "winner": "Henry Coates",
+   "loser": "Wessel Nijman",
+   "score": "6-3",
+   "averages": {
+    "Henry Coates": 93.73,
+    "Wessel Nijman": 110.56
+   },
+   "t80s": {
+    "Henry Coates": 3,
+    "Wessel Nijman": 6
+   },
+   "bestCheckout": 105,
+   "worldRanks": {
+    "Henry Coates": 86,
+    "Wessel Nijman": 10
+   },
+   "flags": [
+    "upset: world No 86 beat world No 10",
+    "Wessel Nijman averaged 110.56 and lost"
+   ]
+  },
+  {
+   "fixture": "518117",
+   "stage": "Last 64",
+   "time": "10:36pm GMT",
+   "winner": "Stephen Bunting",
+   "loser": "Max Hopp",
+   "score": "6-5",
+   "averages": {
+    "Stephen Bunting": 86.38,
+    "Max Hopp": 80.79
+   },
+   "t80s": {
+    "Stephen Bunting": 2,
+    "Max Hopp": 2
+   },
+   "bestCheckout": 107,
+   "worldRanks": {
+    "Stephen Bunting": 11,
+    "Max Hopp": 64
+   },
+   "flags": [
+    "went to a deciding leg"
+   ]
+  },
+  {
+   "fixture": "518126",
+   "stage": "Last 64",
+   "time": "10:50pm GMT",
+   "winner": "Darius Labanauskas",
+   "loser": "Cristo Reyes",
+   "score": "6-1",
+   "averages": {
+    "Darius Labanauskas": 94.35,
+    "Cristo Reyes": 91.42
+   },
+   "t80s": {
+    "Darius Labanauskas": 1,
+    "Cristo Reyes": 0
+   },
+   "bestCheckout": 72,
+   "worldRanks": {
+    "Darius Labanauskas": 88,
+    "Cristo Reyes": 63
+   },
+   "flags": []
+  },
+  {
+   "fixture": "518127",
+   "stage": "Last 64",
+   "time": "9:26pm GMT",
+   "winner": "Michael van Gerwen",
+   "loser": "Connor Scutt",
+   "score": "6-3",
+   "averages": {
+    "Michael van Gerwen": 89.35,
+    "Connor Scutt": 86.16
+   },
+   "t80s": {
+    "Michael van Gerwen": 2,
+    "Connor Scutt": 2
+   },
+   "bestCheckout": 121,
+   "worldRanks": {
+    "Michael van Gerwen": 8,
+    "Connor Scutt": 55
+   },
+   "flags": []
   }
  ],
  "leaders": {
   "highestAverage": {
-   "n": "Rob Owen",
-   "v": 0
+   "n": "Wessel Nijman",
+   "v": 110.56
   },
   "most180s": {
-   "n": "Rob Owen",
-   "v": 0
+   "n": "Luke Woodhouse",
+   "v": 7
   },
-  "total180s": 0,
-  "bestCheckout": null,
-  "hundredPlusAverages": 0
+  "total180s": 149,
+  "bestCheckout": 170,
+  "hundredPlusAverages": 8
  }
 }

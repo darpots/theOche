@@ -1,0 +1,136 @@
+{
+ "fixture": "518118",
+ "event": "Players Championship Finals",
+ "stage": "Last 64",
+ "format": "First to 6 legs",
+ "date": "2026-11-27",
+ "venue": "Butlins, Minehead, Minehead",
+ "winner": "Sebastian Bialecki",
+ "loser": "Gerwyn Price",
+ "score": "6-4",
+ "angles": [
+  {
+   "angle": "upset",
+   "score": 89,
+   "evidence": "world No 42 beat world No 3 (39 places higher)"
+  },
+  {
+   "angle": "result",
+   "score": 10,
+   "evidence": "Sebastian Bialecki beat Gerwyn Price 6-4"
+  }
+ ],
+ "notable": true,
+ "players": [
+  {
+   "name": "Sebastian Bialecki",
+   "worldRank": 42,
+   "average": 95.61,
+   "t80s": 2,
+   "checkoutPct": 37.5,
+   "highestCheckout": 81,
+   "breaks": 1,
+   "biggestLead": 2,
+   "longestRun": 2,
+   "previousBestAtEvent": "Last 32 (2025)",
+   "form": {
+    "period": "last 12 months",
+    "played": 112,
+    "won": 66,
+    "average": 92.74,
+    "titles": 1,
+    "last5": [
+     "L 2-5 v Gerwyn Price",
+     "W 5-4 v Joe Hunt",
+     "L 1-6 v Cam Crabtree",
+     "W 6-3 v Adam Warner",
+     "L 4-6 v Danny Noppert"
+    ]
+   }
+  },
+  {
+   "name": "Gerwyn Price",
+   "worldRank": 3,
+   "average": 95.54,
+   "t80s": 1,
+   "checkoutPct": 40,
+   "highestCheckout": 120,
+   "breaks": 0,
+   "biggestLead": 0,
+   "longestRun": 1,
+   "previousBestAtEvent": "Semi-Final (2025)",
+   "form": {
+    "period": "last 12 months",
+    "played": 136,
+    "won": 93,
+    "average": 98.63,
+    "titles": 5,
+    "last5": [
+     "W 16-11 v Gian van Veen",
+     "W 16-13 v Kevin Doets",
+     "W 16-15 v Niko Springer",
+     "W 10-7 v Ryan Searle",
+     "W 5-2 v Sebastian Bialecki"
+    ]
+   }
+  }
+ ],
+ "swings": {
+  "fightback": null,
+  "turningPoint": null
+ },
+ "decidingLeg": null,
+ "bestFinish": {
+  "player": "Gerwyn Price",
+  "score": 120,
+  "leg": 9
+ },
+ "quickestLeg": {
+  "player": "Sebastian Bialecki",
+  "darts": 14,
+  "leg": 6
+ },
+ "nineDarters": [],
+ "finishes170": [],
+ "stakes": {
+  "loserTakes": "£4,000",
+  "winnerGuaranteed": "£7,000",
+  "next": {
+   "stage": "Last 32",
+   "opponent": "Jeffrey De Graaf",
+   "when": "Saturday 28 November, 3:30pm GMT"
+  }
+ },
+ "headToHead": {
+  "meetingsBefore": 6,
+  "wins": {
+   "Sebastian Bialecki": 0,
+   "Gerwyn Price": 6
+  },
+  "lastMeeting": "null: Players Championship 4, 4-6 (Sebastian Bialecki first)"
+ },
+ "milestone": null,
+ "records": {
+  "highestAverageOfEvent": null,
+  "highestLosingAverage": null,
+  "bestCheckoutOfEvent": null,
+  "most180sInAMatchAtEvent": null
+ },
+ "legs": [
+  "L1: Bialecki (break) 15 darts, out 81 -> 1-0",
+  "L2: Bialecki 17 darts, out 28 -> 2-0",
+  "L3: Price 16 darts, out 20 -> 2-1",
+  "L4: Bialecki 17 darts, out 80 -> 3-1",
+  "L5: Price 17 darts, out 20 -> 3-2",
+  "L6: Bialecki 14 darts, out 28 -> 4-2",
+  "L7: Price 14 darts, out 64 -> 4-3",
+  "L8: Bialecki 18 darts, out 40 -> 5-3",
+  "L9: Price 15 darts, out 120 -> 5-4",
+  "L10: Bialecki 17 darts, out 14 -> 6-4"
+ ],
+ "source": {
+  "name": "PDC",
+  "url": "https://www.pdc.tv/matches/518118",
+  "title": "Sebastian Bialecki v Gerwyn Price"
+ }
+}

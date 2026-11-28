@@ -1,0 +1,145 @@
+{
+ "fixture": "518108",
+ "event": "Players Championship Finals",
+ "stage": "Last 64",
+ "format": "First to 6 legs",
+ "date": "2026-11-27",
+ "venue": "Butlins, Minehead, Minehead",
+ "winner": "Henry Coates",
+ "loser": "Wessel Nijman",
+ "score": "6-3",
+ "angles": [
+  {
+   "angle": "upset",
+   "score": 90,
+   "evidence": "world No 86 beat world No 10 (76 places higher)"
+  },
+  {
+   "angle": "event-record-average",
+   "score": 35,
+   "evidence": "110.56, the best average of the Players Championship Finals so far"
+  },
+  {
+   "angle": "high-average-defeat",
+   "score": 30,
+   "evidence": "Nijman averaged 110.56 and lost"
+  },
+  {
+   "angle": "result",
+   "score": 10,
+   "evidence": "Henry Coates beat Wessel Nijman 6-3"
+  }
+ ],
+ "notable": true,
+ "players": [
+  {
+   "name": "Wessel Nijman",
+   "worldRank": 10,
+   "average": 110.56,
+   "t80s": 6,
+   "checkoutPct": 50,
+   "highestCheckout": 46,
+   "breaks": 1,
+   "biggestLead": 0,
+   "longestRun": 1,
+   "previousBestAtEvent": "Last 64 (2025)",
+   "form": {
+    "period": "last 12 months",
+    "played": 187,
+    "won": 138,
+    "average": 97.36,
+    "titles": 8,
+    "last5": [
+     "L 3-5 v Niko Springer",
+     "W 5-1 v Adam Sevada",
+     "L 3-6 v Tommy Morris",
+     "W 6-3 v Nick Kenny",
+     "W 6-4 v Richard Veenstra"
+    ]
+   }
+  },
+  {
+   "name": "Henry Coates",
+   "worldRank": 86,
+   "average": 93.73,
+   "t80s": 3,
+   "checkoutPct": 85.7,
+   "highestCheckout": 105,
+   "breaks": 2,
+   "biggestLead": 3,
+   "longestRun": 2,
+   "previousBestAtEvent": "first appearance on record",
+   "form": {
+    "period": "last 12 months",
+    "played": 47,
+    "won": 28,
+    "average": 94.33,
+    "titles": 1,
+    "last5": [
+     "W 5-4 v Jeffrey De Graaf",
+     "L 4-5 v Michael van Gerwen",
+     "L 3-6 v Jeffrey De Zwaan",
+     "L 5-6 v Gerwyn Price",
+     "W 6-3 v Mervyn King"
+    ]
+   }
+  }
+ ],
+ "swings": {
+  "fightback": null,
+  "turningPoint": null
+ },
+ "decidingLeg": null,
+ "bestFinish": {
+  "player": "Henry Coates",
+  "score": 105,
+  "leg": 7
+ },
+ "quickestLeg": {
+  "player": "Wessel Nijman",
+  "darts": 11,
+  "leg": 3
+ },
+ "nineDarters": [],
+ "finishes170": [],
+ "stakes": {
+  "loserTakes": "£4,000",
+  "winnerGuaranteed": "£7,000",
+  "next": {
+   "stage": "Last 32",
+   "opponent": "Gabriel Clemens",
+   "when": "Saturday 28 November, 1:45pm GMT"
+  }
+ },
+ "headToHead": {
+  "meetingsBefore": 4,
+  "wins": {
+   "Wessel Nijman": 2,
+   "Henry Coates": 2
+  },
+  "lastMeeting": "2024-10-12: Winmau Development Tour 21, 4-0 (Wessel Nijman first)"
+ },
+ "milestone": null,
+ "records": {
+  "highestAverageOfEvent": 110.56,
+  "highestLosingAverage": 110.56,
+  "bestCheckoutOfEvent": null,
+  "most180sInAMatchAtEvent": null
+ },
+ "legs": [
+  "L1: Coates 16 darts, out 24 -> 0-1",
+  "L2: Coates (break) 12 darts, out 58 -> 0-2",
+  "L3: Nijman (break) 11 darts, out 46 -> 1-2",
+  "L4: Coates (break) 14 darts, out 96 -> 1-3",
+  "L5: Coates 18 darts, out 95 -> 1-4",
+  "L6: Nijman 11 darts, out 41 -> 2-4",
+  "L7: Coates 15 darts, out 105 -> 2-5",
+  "L8: Nijman 13 darts, out 36 -> 3-5",
+  "L9: Coates 15 darts, out 74 -> 3-6"
+ ],
+ "source": {
+  "name": "PDC",
+  "url": "https://www.pdc.tv/matches/518108",
+  "title": "Wessel Nijman v Henry Coates"
+ }
+}
