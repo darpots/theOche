@@ -27,7 +27,7 @@ const { entries } = Astro.props;
                 <span class="mo">{monthShort(e.start)}</span>
               </span>
               <span class="ev-main">
-                <span class="ev-top"><span class="ev-tags"><Fragment set:html={tvBadge(e.broadcaster)} />{featured(e) && <span class="major-tag">Major</span>}</span><span class="len">{days(e) === 1 ? 'One night' : `${days(e)} days`}</span></span>
+                <span class="ev-top"><span class="ev-tags"><Fragment set:html={tvBadge(e.broadcaster)} />{featured(e) && <span class="major-tag">Major</span>}</span>{days(e) > 1 && <span class="len">{days(e)} days</span>}</span>
                 <h3 class="headline">{e.name}{e.tag && <small>{e.tag}</small>}</h3>
                 <span class="where">{place(e) || 'Venue to be announced'}</span>
                 {badges(e).length > 0 && <span class="badges">{badges(e).map(b => <i class={`bd ${b.cls}`}>{b.text}</i>)}</span>}
@@ -78,7 +78,7 @@ const { entries } = Astro.props;
   .ev:hover .ev-art img:not(.champ) { transform: scale(1.04); opacity: .9; }
   .ev .ev-date { background: rgba(255, 255, 255, .1); color: #fff; backdrop-filter: blur(4px); }
   .ev .ev-date .wd, .ev .ev-date .mo { color: var(--on-ink); }
-  .ev .where, .ev .len { color: var(--on-ink); }
+  .ev .where { color: var(--on-ink); }
   .ev h3 small { color: #ff7a72; }
   .ev .winner { color: #fff; }
   .ev .bd:not(.live):not(.res):not(.sched) { background: rgba(255, 255, 255, .12); color: #fff; }
@@ -95,7 +95,7 @@ const { entries } = Astro.props;
   .ev.feat .ev-date { background: var(--volt); color: var(--ink); }
   .ev.feat .ev-date .wd, .ev.feat .ev-date .mo { color: var(--ink); }
   .ev.feat h3 { font-size: 24px; }
-  .ev.feat .where, .ev.feat .len { color: var(--on-ink); }
+  .ev.feat .where { color: var(--on-ink); }
   .ev.feat .bd:not(.live):not(.res):not(.sched) { background: rgba(255, 255, 255, .12); color: #fff; }
   .ev.feat .winner { color: #fff; }
   .ev:hover { transform: translateY(-3px); box-shadow: var(--shadow); }
@@ -104,7 +104,8 @@ const { entries } = Astro.props;
   .ev-date .wd, .ev-date .mo { font-size: 11px; font-weight: 800; letter-spacing: .14em; text-transform: uppercase; color: var(--on-ink); }
   .ev-main { display: flex; flex-direction: column; min-width: 0; gap: 4px; }
   .ev-top { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
-  .len { font-size: 11px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+  /* How long the event runs (not shown for one-day events): a dark pill so it reads over any photo */
+  .len { flex: none; margin-left: auto; font-size: 11px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; white-space: nowrap; color: #fff; background: rgba(7, 8, 11, .72); box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .14); padding: 4px 9px; border-radius: 999px; backdrop-filter: blur(4px); }
   .ev h3 { font-size: 20px; margin-top: 6px; }
   .ev h3 small { display: block; font-family: var(--body); font-size: 13px; font-weight: 700; letter-spacing: 0; color: var(--red-text); margin-top: 2px; }
   .ev:hover h3 { color: var(--red-text); }
@@ -128,7 +129,7 @@ const { entries } = Astro.props;
   .ev.live::after { content: ''; position: absolute; inset: 0; z-index: 4; border: 2px solid var(--red); border-radius: inherit; pointer-events: none; }
   .ev.live .ev-date { background: var(--red); }
   .ev.live .ev-date .wd, .ev.live .ev-date .mo { color: #fff; }
-  .ev.live .where, .ev.live .len { color: var(--on-ink); }
+  .ev.live .where { color: var(--on-ink); }
   .ev.live h3 small { color: var(--volt); }
   .ev.past { opacity: .8; }
   .ev.past .ev-date { background: rgba(255, 255, 255, .06); color: var(--on-ink-2); }
@@ -136,6 +137,12 @@ const { entries } = Astro.props;
   .ev.past .ev-art img:not(.champ) { filter: grayscale(.6); }
   .ev.past:hover { opacity: 1; }
 
+  /* Wider screens: the text column runs the full card so the day count and arrow sit
+     at its right edge; the title, venue and badges stay clear of the photo */
+  @media (min-width: 761px) {
+    .ev .ev-main { grid-column: 2 / -1; }
+    .ev h3, .ev .where, .ev .badges { max-width: 58%; }
+  }
   @media (max-width: 760px) { .ev, .ev.feat { grid-template-columns: 64px minmax(0, 1fr); } .ev .ev-art { inset: 0; width: auto; } .ev .ev-art img:not(.champ) { opacity: .45; } .ev .ev-art::after { background: linear-gradient(100deg, var(--ink) 25%, rgba(11, 12, 16, .55) 75%, rgba(11, 12, 16, .3)); } .ev.feat .ev-date, .ev.feat .ev-main { position: relative; z-index: 1; } .ev .champ { top: 12%; height: 130%; right: calc(2% + 52px); opacity: .55; } }
   @media (max-width: 420px) { .grid { grid-template-columns: 1fr; } .ev { grid-template-columns: 64px minmax(0, 1fr); gap: 12px; } .ev-date b { font-size: 34px; } }
 </style>
