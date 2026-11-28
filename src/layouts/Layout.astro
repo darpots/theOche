@@ -27,6 +27,7 @@ const { title, description = 'PDC darts on TV, live matches, news and world rank
 const canonical = new URL(Astro.url.pathname.replace(/\/$/, '') || '/', Astro.site).href;
 const shareImage = new URL(image, Astro.site).href;
 // Desktop menu. Rankings and Play open a dropdown (the link itself still goes to the page).
+// Home is left out of the top menu (the logo goes home) but kept for the phone tab bar.
 type Sub = { href: string; label: string; text: string };
 const nav: { key: string; href: string; label: string; phone?: string; title?: string; menu?: Sub[] }[] = [
   { key: 'home', href: '/', label: 'Home' },
@@ -118,7 +119,7 @@ const fullTitle = title === 'The Oche' ? title : `${title} · The Oche`;
       <div class="wrap bar">
         <a href="/" class="brand" aria-label="The Oche home"><Logo size={40} tone="light" /></a>
         <nav aria-label="Main" data-current={current.tournament.id}>
-          {nav.map(n => n.menu ? (
+          {nav.filter(n => n.key !== 'home').map(n => n.menu ? (
             <div class="dd" data-dd={n.key}>
               <a href={n.href} class:list={['nav', 'has-dd', { on: act === n.key }]} aria-current={act === n.key ? 'page' : undefined} data-nav={n.key} aria-haspopup="true">{n.label}<svg class="dd-chev" viewBox="0 0 12 12" width="10" height="10" aria-hidden="true"><path d="M2.5 4.5L6 8l3.5-3.5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" /></svg></a>
               <!-- Opens on hover and on keyboard focus (:focus-within); the link itself goes to the section's page -->
@@ -637,8 +638,18 @@ const fullTitle = title === 'The Oche' ? title : `${title} · The Oche`;
   .theme button[aria-pressed='true'] { background: var(--ink); color: var(--volt); }
   .foot-base { display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; margin-top: 28px; padding-top: 18px; border-top: 1px solid var(--line); color: var(--muted); font-size: 13px; }
   /* Phones: the link groups in two fixed columns, so the second row lines up with the first */
+  /* Between phone and wide desktop the full menu only just fits: search shrinks to its icon,
+     menu items tighten up and never wrap (at 768px the search box ran off the screen) */
+  @media (min-width: 761px) and (max-width: 1100px) {
+    .bar { gap: 10px; }
+    .nav { padding: 10px 11px; white-space: nowrap; }
+    .livenav { white-space: nowrap; }
+    .searchbtn { padding: 10px; }
+    .searchbtn span, .searchbtn kbd { display: none; }
+  }
   @media (max-width: 760px) { .foot-in { grid-template-columns: 1fr; } .foot-links { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 28px 20px; } }
-  @media (max-width: 640px) {
+  /* Phones and small tablets: compact top bar and the bottom tab bar (the full menu needs ~760px) */
+  @media (max-width: 760px) {
     .bar { height: 58px; }
     .bar nav .nav, .bar nav .pill, .bar nav .dd { display: none; }
     /* Search moves from the tab bar to an icon in the top bar */
