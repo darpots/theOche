@@ -3,6 +3,9 @@
 // fixture feed (players, score) and its timeline (every visit), refreshed
 // every 15 seconds while the match is live.
 import Layout from '../layouts/Layout.astro';
+import eloData from '../data/elo.json';
+// Elo ratings for the win chance: { playerId: [rating, Elo ranking] } (players with 20+ matches).
+const eloRatings = Object.fromEntries((eloData as any).players.map((p: any) => [p.id, [Math.round(p.rating), p.pos]]));
 ---
 <Layout title="Match centre" description="Live score, statistics, leg table and head to head for a PDC darts match.">
   <section class="mhead" aria-live="polite">
@@ -16,6 +19,14 @@ import Layout from '../layouts/Layout.astro';
     <button class="mt" role="tab" data-mt="h2h" aria-selected="false">Head to head &amp; form</button>
   </div>
   <p class="wrap muted mb-wait" id="mb-wait" hidden>Match stats appear here after the first leg.</p>
+
+  <!-- Before and during a match: each player's chance of winning, from their Elo ratings -->
+  <section class="wrap h2h wchance" id="wc" hidden>
+    <h2>Win chance</h2>
+    <p class="sub" id="wc-sub"></p>
+    <div id="wc-box"></div>
+  </section>
+  <script is:inline type="application/json" id="elo-r" set:html={JSON.stringify(eloRatings)}></script>
 
   <section class="wrap h2h" id="h2h" hidden>
     <h2>Head to head</h2>
@@ -51,6 +62,7 @@ import Layout from '../layouts/Layout.astro';
   <script>
     import { onBreak, visitShown, API, flag, keyName, liveScore, liveLegs, cleanName, formatLabel } from '../lib/pdc.mjs';
     import { fetchH2H, h2hSummary, renderH2H } from '../lib/h2h.mjs';
+    import { winPercents } from '../lib/win-chance.mjs';
     import { liveFor, watchLive, unwatch, isPushing, pushedLegFor, LIVE_TICK, PUSH_TICK } from '../lib/live-client.mjs';
     import { ukTime, scoreHtml } from '../lib/format.mjs';
     import { watchWins, watch180, flashWin, heldThrow } from '../lib/leg-flash.mjs';
@@ -225,6 +237,28 @@ import Layout from '../layouts/Layout.astro';
       }).join('')}</tbody>`;
     }
 
+    // Win chance from the two players' Elo ratings, for this match's length. Shown before
+    // the match only (not live; once it's over the ratings include its result). Hidden when
+    // either player has too few matches to be rated.
+    let eloR: Record<string, [number, number]> | null = null;
+    function winChanceBox(f: any, show: boolean) {
+      const box = document.getElementById('wc'), out = document.getElementById('wc-box'), sub = document.getElementById('wc-sub');
+      if (!box || !out || !sub) return;
+      eloR ??= JSON.parse(document.getElementById('elo-r')?.textContent || '{}');
+      const a = f.attributes, ps = [a.participant1, a.participant2];
+      const r = ps.map((p: any) => eloR![String(p?.participantID || '')]);
+      if (!show || !r[0] || !r[1]) { if (!box.hidden) box.hidden = true; return; }
+      const ts = a.tournamentStage || {}, sets = (ts.numberOfSets || 0) > 1;
+      const fmt = { sets, bestOf: sets ? ts.numberOfSets : ts.numberOfLegsPerSet, legsPerSet: ts.numberOfLegsPerSet };
+      const pc = winPercents(r[0][0], r[1][0], fmt);
+      const cols = ['#2b4bff', '#e8362d'];
+      const side = (k: number) => `<div class="hh-n${k ? ' r' : ''}"><b class="poster-num${pc[k] > pc[1 - k] ? ' lead' : ''}">${pc[k]}%</b><span>${esc(last(ps[k]))}</span><small class="wc-elo">Elo ${r[k][0]} · #${r[k][1]}</small></div>`;
+      patch(out, `<div class="hh-sum">${side(0)}<div class="hh-bar" role="img" aria-label="${esc(`${last(ps[0])} ${pc[0]}%, ${last(ps[1])} ${pc[1]}%`)}"><i style="width:${pc[0]}%;background:${cols[0]}"></i><i style="width:${pc[1]}%;background:${cols[1]}"></i></div>${side(1)}</div>`);
+      const len = formatLabel({ sets, bestOf: fmt.bestOf });
+      sub.textContent = `From each player's Elo rating (every PDC main-tour match over the last 12 months, floor events included)${len ? `, for a ${len.replace(/^First/, 'first')} match: the longer the match, the more it favours the stronger player` : ''}.`;
+      if (box.hidden) box.hidden = false;
+    }
+
     // Head to head from the PDC: every earlier meeting, oriented to this match's players.
     async function headToHead(f: any) {
       const box = document.getElementById('h2h'), out = document.getElementById('hh'), sub = document.getElementById('hh-sub');
@@ -379,6 +413,7 @@ import Layout from '../layouts/Layout.astro';
         if (isResult && noLegs) mhHtml += `<p class="inplay"><b>Result confirmed.</b> ${liveStats ? 'Stats are from PDC live scoring; the' : 'The PDC adds averages and'} leg-by-leg detail follows when the PDC publishes it. This page checks again every two minutes and fills in on its own.</p>`;
         if (!document.getElementById('tp')!.innerHTML) tape([a.attributes.participant1, a.attributes.participant2]);
         headToHead(a);
+        winChanceBox(a, !isResult && !isLive);
         if (started && noLegs && !m?.stats) mhHtml += `<p class="inplay"><span class="live-dot">On now</span> Scores will show here as soon as the game is in play.</p>`;
         patch(mh, mhHtml);
         // Stats show as soon as there are any; the leg charts wait for the visit data.
@@ -604,6 +639,8 @@ import Layout from '../layouts/Layout.astro';
   .mt[aria-selected='true'] { color: var(--fg); }
   .mt[aria-selected='true']::after { transform: scaleX(1); }
   #mtabbed[data-tab='stats'] .h2h, #mtabbed[data-tab='stats'] .tape { display: none; }
+  .wchance :global(.hh-sum) { border-radius: var(--tile); }
+  .wchance :global(.wc-elo) { font-size: 12px; font-weight: 600; color: var(--muted); font-variant-numeric: tabular-nums; }
   #mtabbed[data-tab='h2h'] .mbody, #mtabbed[data-tab='h2h'] .mb-wait { display: none; }
   #mtabbed[data-tab] .mbody { margin-top: 22px; }
   .mb-wait { margin-top: 22px; }
