@@ -1,5 +1,5 @@
 {
- "updatedAt": "2026-11-28T15:09:47.462Z",
+ "updatedAt": "2026-11-28T16:08:03.889Z",
  "from": "2025-11-28",
  "to": "2026-11-28",
  "rules": {
@@ -21,7 +21,7 @@
    "Players Championship Finals"
   ]
  },
- "matches": 5792,
+ "matches": 5797,
  "events": 81,
  "latest": "Players Championship Finals",
  "players": [
@@ -31,13 +31,13 @@
    "country": "GB-ENG",
    "pos": 1,
    "move": 0,
-   "rating": 1928,
-   "played": 139,
-   "won": 103,
+   "rating": 1932,
+   "played": 140,
+   "won": 104,
    "lost": 36,
    "last": {
     "name": "Players Championship Finals",
-    "delta": 2
+    "delta": 6
    }
   },
   {
@@ -116,11 +116,41 @@
    }
   },
   {
+   "id": "19",
+   "name": "Michael van Gerwen",
+   "country": "NL",
+   "pos": 7,
+   "move": 0,
+   "rating": 1737,
+   "played": 150,
+   "won": 95,
+   "lost": 55,
+   "last": {
+    "name": "Players Championship Finals",
+    "delta": 12
+   }
+  },
+  {
+   "id": "38498",
+   "name": "Tommy Morris",
+   "country": "GB-ENG",
+   "pos": 8,
+   "move": 1,
+   "rating": 1734,
+   "played": 80,
+   "won": 47,
+   "lost": 33,
+   "last": {
+    "name": "Players Championship Finals",
+    "delta": 13
+   }
+  },
+  {
    "id": "32895",
    "name": "Kevin Doets",
    "country": "NL",
-   "pos": 7,
-   "move": 3,
+   "pos": 9,
+   "move": 1,
    "rating": 1732,
    "played": 183,
    "won": 130,
@@ -128,36 +158,6 @@
    "last": {
     "name": "Players Championship Finals",
     "delta": 15
-   }
-  },
-  {
-   "id": "19",
-   "name": "Michael van Gerwen",
-   "country": "NL",
-   "pos": 8,
-   "move": -1,
-   "rating": 1731,
-   "played": 149,
-   "won": 94,
-   "lost": 55,
-   "last": {
-    "name": "Players Championship Finals",
-    "delta": 6
-   }
-  },
-  {
-   "id": "38498",
-   "name": "Tommy Morris",
-   "country": "GB-ENG",
-   "pos": 9,
-   "move": 0,
-   "rating": 1727,
-   "played": 79,
-   "won": 46,
-   "lost": 33,
-   "last": {
-    "name": "Players Championship Finals",
-    "delta": 6
    }
   },
   {
@@ -236,11 +236,26 @@
    }
   },
   {
+   "id": "11843",
+   "name": "Chris Dobey",
+   "country": "GB-ENG",
+   "pos": 15,
+   "move": 2,
+   "rating": 1697,
+   "played": 163,
+   "won": 110,
+   "lost": 53,
+   "last": {
+    "name": "Players Championship Finals",
+    "delta": 13
+   }
+  },
+  {
    "id": "22",
    "name": "James Wade",
    "country": "GB-ENG",
-   "pos": 15,
-   "move": -3,
+   "pos": 16,
+   "move": -4,
    "rating": 1693,
    "played": 121,
    "won": 78,
@@ -248,21 +263,6 @@
    "last": {
     "name": "Players Championship Finals",
     "delta": -15
-   }
-  },
-  {
-   "id": "11843",
-   "name": "Chris Dobey",
-   "country": "GB-ENG",
-   "pos": 16,
-   "move": 1,
-   "rating": 1691,
-   "played": 162,
-   "won": 109,
-   "lost": 53,
-   "last": {
-    "name": "Players Championship Finals",
-    "delta": 7
    }
   },
   {
@@ -401,26 +401,11 @@
    }
   },
   {
-   "id": "36314",
-   "name": "Damon Heta",
-   "country": "AU",
-   "pos": 26,
-   "move": 1,
-   "rating": 1655,
-   "played": 127,
-   "won": 71,
-   "lost": 56,
-   "last": {
-    "name": "Players Championship Finals",
-    "delta": 12
-   }
-  },
-  {
    "id": "153",
    "name": "William O'Connor",
    "country": "IE",
-   "pos": 27,
-   "move": -5,
+   "pos": 26,
+   "move": -4,
    "rating": 1654,
    "played": 132,
    "won": 76,
@@ -428,6 +413,21 @@
    "last": {
     "name": "Players Championship Finals",
     "delta": -16
+   }
+  },
+  {
+   "id": "36314",
+   "name": "Damon Heta",
+   "country": "AU",
+   "pos": 27,
+   "move": 0,
+   "rating": 1651,
+   "played": 128,
+   "won": 71,
+   "lost": 57,
+   "last": {
+    "name": "Players Championship Finals",
+    "delta": 8
    }
   },
   {
@@ -491,11 +491,26 @@
    }
   },
   {
+   "id": "36287",
+   "name": "Sebastian Bialecki",
+   "country": "PL",
+   "pos": 32,
+   "move": 10,
+   "rating": 1637,
+   "played": 113,
+   "won": 67,
+   "lost": 46,
+   "last": {
+    "name": "Players Championship Finals",
+    "delta": 32
+   }
+  },
+  {
    "id": "2771",
    "name": "Karel Sedlacek",
    "country": "CZ",
-   "pos": 32,
-   "move": 0,
+   "pos": 33,
+   "move": -1,
    "rating": 1636,
    "played": 119,
    "won": 67,
@@ -509,8 +524,8 @@
    "id": "2040",
    "name": "Cameron Menzies",
    "country": "GB-SCT",
-   "pos": 33,
-   "move": -3,
+   "pos": 34,
+   "move": -4,
    "rating": 1636,
    "played": 112,
    "won": 62,
@@ -518,21 +533,6 @@
    "last": {
     "name": "Players Championship Finals",
     "delta": -1
-   }
-  },
-  {
-   "id": "31031",
-   "name": "Jeffrey De Graaf",
-   "country": "SE",
-   "pos": 34,
-   "move": 4,
-   "rating": 1631,
-   "played": 100,
-   "won": 55,
-   "lost": 45,
-   "last": {
-    "name": "Players Championship Finals",
-    "delta": 18
    }
   },
   {
@@ -566,26 +566,11 @@
    }
   },
   {
-   "id": "36287",
-   "name": "Sebastian Bialecki",
-   "country": "PL",
-   "pos": 37,
-   "move": 5,
-   "rating": 1624,
-   "played": 112,
-   "won": 66,
-   "lost": 46,
-   "last": {
-    "name": "Players Championship Finals",
-    "delta": 20
-   }
-  },
-  {
    "id": "224",
    "name": "Krzysztof Ratajski",
    "country": "PL",
-   "pos": 38,
-   "move": -7,
+   "pos": 37,
+   "move": -6,
    "rating": 1623,
    "played": 142,
    "won": 87,
@@ -599,8 +584,8 @@
    "id": "146",
    "name": "Mensur Suljovic",
    "country": "AT",
-   "pos": 39,
-   "move": -5,
+   "pos": 38,
+   "move": -4,
    "rating": 1621,
    "played": 83,
    "won": 48,
@@ -608,6 +593,21 @@
    "last": {
     "name": "Players Championship Finals",
     "delta": -12
+   }
+  },
+  {
+   "id": "31031",
+   "name": "Jeffrey De Graaf",
+   "country": "SE",
+   "pos": 39,
+   "move": -1,
+   "rating": 1619,
+   "played": 101,
+   "won": 55,
+   "lost": 46,
+   "last": {
+    "name": "Players Championship Finals",
+    "delta": 6
    }
   },
   {
@@ -761,26 +761,11 @@
    }
   },
   {
-   "id": "36373",
-   "name": "James Hurrell",
-   "country": "GB-ENG",
-   "pos": 50,
-   "move": 5,
-   "rating": 1572,
-   "played": 79,
-   "won": 41,
-   "lost": 38,
-   "last": {
-    "name": "Players Championship Finals",
-    "delta": 16
-   }
-  },
-  {
    "id": "11795",
    "name": "Rob Owen",
    "country": "GB-WLS",
-   "pos": 51,
-   "move": 1,
+   "pos": 50,
+   "move": 2,
    "rating": 1572,
    "played": 88,
    "won": 47,
@@ -794,8 +779,8 @@
    "id": "31027",
    "name": "Richard Veenstra",
    "country": "NL",
-   "pos": 52,
-   "move": -3,
+   "pos": 51,
+   "move": -2,
    "rating": 1570,
    "played": 91,
    "won": 52,
@@ -809,8 +794,8 @@
    "id": "104",
    "name": "Michael Smith",
    "country": "GB-ENG",
-   "pos": 53,
-   "move": 1,
+   "pos": 52,
+   "move": 2,
    "rating": 1569,
    "played": 83,
    "won": 43,
@@ -824,8 +809,8 @@
    "id": "33144",
    "name": "Keane Barry",
    "country": "IE",
-   "pos": 54,
-   "move": -4,
+   "pos": 53,
+   "move": -3,
    "rating": 1565,
    "played": 85,
    "won": 42,
@@ -836,26 +821,26 @@
    }
   },
   {
-   "id": "31502",
-   "name": "Darius Labanauskas",
-   "country": "LT",
-   "pos": 55,
-   "move": 3,
-   "rating": 1562,
-   "played": 79,
-   "won": 40,
+   "id": "36373",
+   "name": "James Hurrell",
+   "country": "GB-ENG",
+   "pos": 54,
+   "move": 1,
+   "rating": 1565,
+   "played": 80,
+   "won": 41,
    "lost": 39,
    "last": {
     "name": "Players Championship Finals",
-    "delta": 16
+    "delta": 9
    }
   },
   {
    "id": "33558",
    "name": "Joe Hunt",
    "country": "GB-ENG",
-   "pos": 56,
-   "move": -5,
+   "pos": 55,
+   "move": -4,
    "rating": 1558,
    "played": 84,
    "won": 47,
@@ -863,6 +848,21 @@
    "last": {
     "name": "Players Championship Finals",
     "delta": -10
+   }
+  },
+  {
+   "id": "31502",
+   "name": "Darius Labanauskas",
+   "country": "LT",
+   "pos": 56,
+   "move": 2,
+   "rating": 1555,
+   "played": 80,
+   "won": 40,
+   "lost": 40,
+   "last": {
+    "name": "Players Championship Finals",
+    "delta": 10
    }
   },
   {
@@ -1316,26 +1316,11 @@
    }
   },
   {
-   "id": "81",
-   "name": "Joe Cullen",
-   "country": "GB-ENG",
-   "pos": 87,
-   "move": 4,
-   "rating": 1505,
-   "played": 104,
-   "won": 55,
-   "lost": 49,
-   "last": {
-    "name": "Players Championship Finals",
-    "delta": 15
-   }
-  },
-  {
    "id": "31213",
    "name": "Mario Vandenbogaerde",
    "country": "BE",
-   "pos": 88,
-   "move": -1,
+   "pos": 87,
+   "move": 0,
    "rating": 1501,
    "played": 65,
    "won": 25,
@@ -1349,8 +1334,8 @@
    "id": "32951",
    "name": "Shane McGuirk",
    "country": "IE",
-   "pos": 89,
-   "move": -1,
+   "pos": 88,
+   "move": 0,
    "rating": 1500,
    "played": 64,
    "won": 27,
@@ -1358,6 +1343,21 @@
    "last": {
     "name": "Players Championship 34",
     "delta": 6
+   }
+  },
+  {
+   "id": "81",
+   "name": "Joe Cullen",
+   "country": "GB-ENG",
+   "pos": 89,
+   "move": 2,
+   "rating": 1499,
+   "played": 105,
+   "won": 55,
+   "lost": 50,
+   "last": {
+    "name": "Players Championship Finals",
+    "delta": 9
    }
   },
   {

@@ -1,5 +1,5 @@
 {
- "updatedAt": "2026-11-28T15:09:03.331Z",
+ "updatedAt": "2026-11-28T16:07:57.393Z",
  "tournament": {
   "winner": null,
   "id": "10872",
@@ -1539,7 +1539,7 @@
      {
       "id": "518144",
       "date": "2026-11-28",
-      "time": "16:15",
+      "time": "16:10",
       "status": "upcoming",
       "p1": {
        "id": "11804",
@@ -1564,8 +1564,8 @@
      {
       "id": "518145",
       "date": "2026-11-28",
-      "time": "15:40",
-      "status": "upcoming",
+      "time": "15:41",
+      "status": "result",
       "p1": {
        "id": "36287",
        "name": "Sebastian Bialecki",
@@ -1582,9 +1582,30 @@
        "country": "SE",
        "ranking": 41
       },
-      "s1": 0,
-      "s2": 0,
-      "winner": null
+      "s1": 6,
+      "s2": 4,
+      "winner": "36287",
+      "stats": [
+       {
+        "avg": 95.41,
+        "f9": null,
+        "t80": 2,
+        "t140": 7,
+        "t100": 9,
+        "co": 60,
+        "hi": 46
+       },
+       {
+        "avg": 92.1,
+        "f9": null,
+        "t80": 5,
+        "t140": 2,
+        "t100": 8,
+        "co": 30.77,
+        "hi": 40
+       }
+      ],
+      "statsLive": true
      },
      {
       "id": "518146",
@@ -1614,8 +1635,8 @@
      {
       "id": "518147",
       "date": "2026-11-28",
-      "time": "15:10",
-      "status": "upcoming",
+      "time": "15:09",
+      "status": "result",
       "p1": {
        "id": "36373",
        "name": "James Hurrell",
@@ -1632,15 +1653,36 @@
        "country": "GB-ENG",
        "ranking": 79
       },
-      "s1": 0,
-      "s2": 0,
-      "winner": null
+      "s1": 5,
+      "s2": 6,
+      "winner": "38498",
+      "stats": [
+       {
+        "avg": 95.36,
+        "f9": null,
+        "t80": 3,
+        "t140": 7,
+        "t100": 13,
+        "co": 71.43,
+        "hi": 120
+       },
+       {
+        "avg": 99.8,
+        "f9": null,
+        "t80": 2,
+        "t140": 8,
+        "t100": 15,
+        "co": 40,
+        "hi": 96
+       }
+      ],
+      "statsLive": true
      },
      {
       "id": "518148",
       "date": "2026-11-28",
-      "time": "14:51",
-      "status": "upcoming",
+      "time": "14:52",
+      "status": "result",
       "p1": {
        "id": "11843",
        "name": "Chris Dobey",
@@ -1657,15 +1699,36 @@
        "country": "GB-ENG",
        "ranking": 33
       },
-      "s1": 0,
-      "s2": 0,
-      "winner": null
+      "s1": 6,
+      "s2": 2,
+      "winner": "11843",
+      "stats": [
+       {
+        "avg": 98.7,
+        "f9": null,
+        "t80": 5,
+        "t140": 4,
+        "t100": 6,
+        "co": 60,
+        "hi": 118
+       },
+       {
+        "avg": 93.05,
+        "f9": null,
+        "t80": 0,
+        "t140": 4,
+        "t100": 11,
+        "co": 25,
+        "hi": 16
+       }
+      ],
+      "statsLive": true
      },
      {
       "id": "518149",
       "date": "2026-11-28",
       "time": "15:15",
-      "status": "upcoming",
+      "status": "result",
       "p1": {
        "id": "31502",
        "name": "Darius Labanauskas",
@@ -1682,15 +1745,36 @@
        "country": "NL",
        "ranking": 8
       },
-      "s1": 0,
-      "s2": 0,
-      "winner": null
+      "s1": 2,
+      "s2": 6,
+      "winner": "19",
+      "stats": [
+       {
+        "avg": 94.08,
+        "f9": null,
+        "t80": 2,
+        "t140": 5,
+        "t100": 9,
+        "co": 20,
+        "hi": 32
+       },
+       {
+        "avg": 95.24,
+        "f9": null,
+        "t80": 4,
+        "t140": 3,
+        "t100": 8,
+        "co": 60,
+        "hi": 139
+       }
+      ],
+      "statsLive": true
      },
      {
       "id": "518150",
       "date": "2026-11-28",
-      "time": "15:45",
-      "status": "upcoming",
+      "time": "15:41",
+      "status": "result",
       "p1": {
        "id": "32102",
        "name": "Luke Humphries",
@@ -1707,14 +1791,35 @@
        "country": "AU",
        "ranking": 22
       },
-      "s1": 0,
-      "s2": 0,
-      "winner": null
+      "s1": 6,
+      "s2": 3,
+      "winner": "32102",
+      "stats": [
+       {
+        "avg": 106.48,
+        "f9": null,
+        "t80": 8,
+        "t140": 4,
+        "t100": 8,
+        "co": 33.33,
+        "hi": 84
+       },
+       {
+        "avg": 102.66,
+        "f9": null,
+        "t80": 2,
+        "t140": 5,
+        "t100": 15,
+        "co": 37.5,
+        "hi": 100
+       }
+      ],
+      "statsLive": true
      },
      {
       "id": "518151",
       "date": "2026-11-28",
-      "time": "16:45",
+      "time": "16:40",
       "status": "upcoming",
       "p1": {
        "id": "31356",
@@ -1913,7 +2018,7 @@
      {
       "id": "518156",
       "date": "2026-11-28",
-      "time": "19:00",
+      "time": "20:00",
       "status": "upcoming",
       "p1": {
        "id": "11156",
@@ -1938,7 +2043,7 @@
      {
       "id": "518157",
       "date": "2026-11-28",
-      "time": "19:00",
+      "time": "19:15",
       "status": "upcoming",
       "p1": {
        "id": "36640",
@@ -1963,7 +2068,7 @@
      {
       "id": "518158",
       "date": "2026-11-28",
-      "time": "19:00",
+      "time": "21:00",
       "status": "upcoming",
       "p1": null,
       "p2": null,
@@ -1974,40 +2079,68 @@
      {
       "id": "518159",
       "date": "2026-11-28",
-      "time": "19:00",
+      "time": "22:15",
       "status": "upcoming",
       "p1": null,
-      "p2": null,
+      "p2": {
+       "id": "38498",
+       "name": "Tommy Morris",
+       "last": "Morris",
+       "nick": "The Gun",
+       "country": "GB-ENG",
+       "ranking": 79
+      },
       "s1": null,
-      "s2": null,
+      "s2": 0,
       "winner": null
      },
      {
       "id": "518160",
       "date": "2026-11-28",
-      "time": "19:00",
+      "time": "20:15",
       "status": "upcoming",
-      "p1": null,
-      "p2": null,
-      "s1": null,
-      "s2": null,
+      "p1": {
+       "id": "11843",
+       "name": "Chris Dobey",
+       "last": "Dobey",
+       "nick": "Hollywood",
+       "country": "GB-ENG",
+       "ranking": 15
+      },
+      "p2": {
+       "id": "19",
+       "name": "Michael van Gerwen",
+       "last": "van Gerwen",
+       "nick": "Mighty Mike",
+       "country": "NL",
+       "ranking": 8
+      },
+      "s1": 0,
+      "s2": 0,
       "winner": null
      },
      {
       "id": "518161",
       "date": "2026-11-28",
-      "time": "19:00",
+      "time": "21:15",
       "status": "upcoming",
-      "p1": null,
+      "p1": {
+       "id": "32102",
+       "name": "Luke Humphries",
+       "last": "Humphries",
+       "nick": "Cool Hand",
+       "country": "GB-ENG",
+       "ranking": 4
+      },
       "p2": null,
-      "s1": null,
+      "s1": 0,
       "s2": null,
       "winner": null
      },
      {
       "id": "518162",
       "date": "2026-11-28",
-      "time": "19:00",
+      "time": "22:00",
       "status": "upcoming",
       "p1": {
        "id": "32895",
