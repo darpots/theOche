@@ -1,7 +1,8 @@
 // Builds src/data/rankings.json from the PDC World Rankings (Order of Merit).
 // Keeps the previous distinct ranking list so the page can show movement.
 import { API, normaliseRankings } from '../src/lib/pdc.mjs';
-import { get, readJson, writeJsonIfChanged, log } from './lib.mjs';
+import { get, readJson, writeJsonIfChanged, today, log } from './lib.mjs';
+import { trimHistory } from './rank-history.mjs';
 
 const OUT = new URL('../src/data/rankings.json', import.meta.url).pathname;
 
@@ -19,14 +20,15 @@ if (prev?.players && order(prev.players) !== order(players)) {
 }
 
 // Rank history for sparklines: one snapshot each time the official order
-// changes (after each ranking event), positions for the top 150, last 26 kept.
+// changes (after each ranking event), positions for the top 150, kept for
+// 12 months (scripts/rank-history.mjs).
 let history = prev?.history ?? [];
 const snap = Object.fromEntries(players.filter(p => p.pos <= 150).map(p => [p.id, p.pos]));
 if (!history.length || order(players) !== (prev?.players ? order(prev.players) : '')) {
   if (!history.length && prev?.previous) history.push({ d: prev.changedAt?.slice(0, 10) ?? null, pos: prev.previous });
   if (!history.length || JSON.stringify(history[history.length - 1].pos) !== JSON.stringify(snap)) history.push({ d: new Date().toISOString().slice(0, 10), pos: snap });
 }
-history = history.slice(-26);
+history = trimHistory(history, today());
 
 const changed = await writeJsonIfChanged(OUT, { changedAt, players, previous, history });
 log(`rankings: ${players.length} players (${changed ? 'updated' : 'unchanged'})`);
