@@ -71,7 +71,7 @@ const av = (name: string) => { const [c1, c2] = avatarColours(name); return `--c
     <p class="race-note" id="raceNote" hidden></p>
     <div class="table card" role="table" aria-label="PDC World Rankings">
       <div class="tr th" role="row">
-        <span role="columnheader">#</span><span role="columnheader">Player</span><span role="columnheader" class="hide-s">Country</span><span role="columnheader" class="hide-s r" title="Three-dart average over the last 12 months">12-month avg</span><span role="columnheader" class="r" id="lastcol">Prize money</span>
+        <span role="columnheader">#</span><span role="columnheader">Player</span><span role="columnheader" class="hide-s">Country</span><span role="columnheader" class="hide-s r" title="Three-dart average over the last 12 months">12-month avg</span><span role="columnheader" class="r lastcol"><span id="evcol" class="hide-s" hidden>This event</span><span id="lastcol">Prize money</span></span>
       </div>
       {rows.map((p: any) => (
         <a class="tr clickable" role="row" hidden={p.eloOnly} href={loadProfile(p.id) ? `/players/${p.slug}` : `https://www.pdc.tv/players/${p.slug}`} data-player={p.id} data-search={`${p.name} ${p.nick || ''} ${countryName(p.country) || ''}`.toLowerCase()}>
@@ -198,6 +198,10 @@ const av = (name: string) => { const [c1, c2] = avatarColours(name); return `--c
         painted = true;
         if (note.hidden !== !(live || isElo)) note.hidden = !(live || isElo); // the note is patched, so an open "How it works" stays open
         setText(document.getElementById('lastcol'), isElo ? 'Elo rating' : 'Prize money');
+        // In the live race the round chips and money won sit in the last column: label them.
+        const evcol = document.getElementById('evcol')!;
+        if (evcol.hidden !== !(live && event)) evcol.hidden = !(live && event);
+        if (live && event) evcol.title = `Round reached and prize money won at the ${event.name.replace(/^\d{4}(\/\d{2})?\s+/, '')}`;
         document.getElementById('onlyev')!.classList.toggle('off', mode !== 'live');
         if (isElo) {
           const d = (x: string) => new Date(x + 'T12:00:00Z').toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric', timeZone: 'UTC' });
@@ -289,9 +293,11 @@ const av = (name: string) => { const [c1, c2] = avatarColours(name); return `--c
   /* Rows below the first screen are laid out and painted only as they scroll near:
      the page keeps all ~240 rows (search and find work), but first paint does a screenful. */
   .table .tr[data-search]:nth-child(n+14) { content-visibility: auto; contain-intrinsic-size: auto 62px; }
-  .tr { display: grid; text-decoration: none; grid-template-columns: 76px minmax(0, 1.6fr) minmax(0, 1fr) 150px 340px; align-items: center; gap: 12px; padding: 10px 18px; width: 100%; border: 0; border-bottom: 1px solid var(--line); background: none; text-align: left; font: inherit; color: inherit; }
+  .tr { display: grid; text-decoration: none; grid-template-columns: 76px minmax(0, 1.6fr) minmax(0, 1fr) 150px 364px; align-items: center; gap: 12px; padding: 10px 18px; width: 100%; border: 0; border-bottom: 1px solid var(--line); background: none; text-align: left; font: inherit; color: inherit; }
   .tr:last-child { border-bottom: 0; }
   .tr.nomatch { display: none; }
+  .th .lastcol { display: flex; justify-content: space-between; gap: 12px; justify-self: stretch; }
+  .lastcol #lastcol { margin-left: auto; }
   .th { font-size: 12px; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); background: var(--paper-2); }
   .tr.clickable { cursor: pointer; transition: background .2s, transform .25s var(--ease); }
   .tr.clickable:hover { background: var(--hover); }
@@ -366,6 +372,10 @@ const av = (name: string) => { const [c1, c2] = avatarColours(name); return `--c
   @keyframes bump { 0% { transform: scale(1.25); color: var(--green); } 100% { transform: none; } }
 
 
+  /* Breathing room between the 12-month average and the live/prize column */
+  @media (min-width: 721px) {
+    .money-cell, .th .lastcol { padding-left: 24px; }
+  }
   @media (max-width: 900px) {
     .tools { grid-template-columns: auto auto minmax(0, 1fr); }
     .tools .search { grid-column: 1 / -1; }
