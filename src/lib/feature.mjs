@@ -6,6 +6,7 @@
 // averages are small and labelled. Set play also shows the legs in the set.
 import { flag, formatLabel, surnameOf, onBreak, visitShown } from './pdc.mjs';
 import { ukTime, scoreHtml } from './format.mjs';
+import { nextTileLabel } from './next-label.mjs';
 import { avatarSrc, cutoutImg, pairPrefer } from './images.mjs';
 
 const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]);
@@ -90,9 +91,9 @@ export function featureTile(f, mode, eventName, also = []) {
     <div class="ft-bottom${playing ? ' live' : ''}">${side(f.p1, w1, st?.[0], 0)}${side(f.p2, w2, st?.[1], 1)}</div>${others}`;
 }
 
-/** HTML for the volt "Next up" tile (inside its <a>). */
-export function nextTileInner(f, eventName) {
-  return `<span class="lbl">Next up · ${esc(ukTime(f.time, f.date) || 'TBC')}</span>
+/** HTML for the volt "Next up" tile (inside its <a>). feature: see nextTileLabel. */
+export function nextTileInner(f, eventName, feature = null) {
+  return `<span class="lbl">${esc(nextTileLabel(f, feature))}</span>
     <span class="poster nu-names">${esc(surnameOf(f.p1))}<br>v ${esc(surnameOf(f.p2))}</span>
     <span class="nu-sub">${esc(f.stage || '')} · ${esc(eventName)}</span>`;
 }

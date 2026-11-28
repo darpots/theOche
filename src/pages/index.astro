@@ -89,7 +89,7 @@ const playCards = [
 
       <div class="side">
         {nextUp ? (
-          <a class="tile tile-volt nu" href={`/match?id=${nextUp.id}`} id="nextup" set:html={nextTileInner(nextUp, t.name)} />
+          <a class="tile tile-volt nu" href={`/match?id=${nextUp.id}`} id="nextup" set:html={nextTileInner(nextUp, t.name, feature)} />
         ) : sideEvent && (
           <a class:list={['tile', 'tile-volt', 'nu', { compact: isOn }]} href={`/tournament/${sideEvent.id}`}>
             <span class="lbl">{feature ? 'Next event' : 'After that'} · {dayNum(sideEvent.start)} {monthShort(sideEvent.start)}</span>
@@ -97,8 +97,8 @@ const playCards = [
             <span class="nu-sub">{sideEvent.venue || sideEvent.city}</span>
           </a>
         )}
-        <section class="tile tile-card res">
-          <div class="th"><h2 class="lbl">{md.results.some(f => f.date === today) ? 'Today’s results' : 'Latest results'}</h2><a href={`/tournament/${t.id}`}>All →</a></div>
+        <section class="tile tile-card res" id="restile" hidden={!resultsList.length}>
+          <div class="th"><h2 class="lbl" id="reshead">{md.results.some(f => f.date === today) ? 'Today’s results' : 'Latest results'}</h2><a href={`/tournament/${t.id}`}>All →</a></div>
           <ol id="results">
             {resultsList.map(f => (
               <li><a href={`/match?id=${f.id}`}>
@@ -297,12 +297,16 @@ const playCards = [
             const nu = document.getElementById('nextup') as HTMLAnchorElement | null;
             const after = md.todays.find((f: any) => f.status !== 'result' && f !== pick?.[0] && (!md.now || f !== md.now) && !md.also.includes(f) && f.time >= ((pick?.[0] as any)?.time || ''));
             if (nu) {
-              if (after) { patch(nu, nextTileInner(after, box.dataset.name!)); if (nu.getAttribute('href') !== `/match?id=${after.id}`) nu.href = `/match?id=${after.id}`; if (nu.hidden) nu.hidden = false; }
+              if (after) { patch(nu, nextTileInner(after, box.dataset.name!, pick ? { f: pick[0], mode: pick[1] } : null)); if (nu.getAttribute('href') !== `/match?id=${after.id}`) nu.href = `/match?id=${after.id}`; if (nu.hidden) nu.hidden = false; }
               else if (!nu.hidden) nu.hidden = true;
             }
             const ol = document.getElementById('results');
             if (ol) {
               const list = md.results.slice(0, 6);
+              // No results yet (or the feed lost them): no tile, rather than an empty one.
+              const tile = document.getElementById('restile')!;
+              if (tile.hidden !== !list.length) tile.hidden = !list.length;
+              setText(document.getElementById('reshead'), md.results.some((f: any) => f.date === today()) ? 'Today’s results' : 'Latest results');
               const e = (x: unknown) => String(x ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]!);
               draw(ol, list.map((f: any) => `<li><a href="/match?id=${e(f.id)}"><span class="rd">${e(shortDate(f.date))}</span><span class="rn${f.winner === f.p1.id ? ' w' : ''}">${e(surnameOf(f.p1))}</span><span class="poster-num rs">${scoreHtml(f.s1, f.s2)}</span><span class="rn r${f.winner === f.p2.id ? ' w' : ''}">${e(surnameOf(f.p2))}</span></a></li>`).join(''));
             }
