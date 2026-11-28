@@ -375,8 +375,8 @@ import Layout from '../layouts/Layout.astro';
         const noLegs = !(t?.data?.attributes?.legs?.length);
         const isResult = /result/i.test(a.attributes.status);
         const isLive = /live|progress/i.test(a.attributes.status);
-        if (isLive && liveStats) mhHtml += `<p class="inplay"><span class="live-dot">Live</span> Score and stats update every few seconds.</p>`;
-        else if (isResult && noLegs) mhHtml += `<p class="inplay"><b>Result confirmed.</b> ${liveStats ? 'Stats are from PDC live scoring; the' : 'The PDC adds averages and'} leg-by-leg detail follows when the PDC publishes it. This page checks again every two minutes and fills in on its own.</p>`;
+        // While live the header's Live dot says it all; no "updates every few seconds" note.
+        if (isResult && noLegs) mhHtml += `<p class="inplay"><b>Result confirmed.</b> ${liveStats ? 'Stats are from PDC live scoring; the' : 'The PDC adds averages and'} leg-by-leg detail follows when the PDC publishes it. This page checks again every two minutes and fills in on its own.</p>`;
         if (!document.getElementById('tp')!.innerHTML) tape([a.attributes.participant1, a.attributes.participant2]);
         headToHead(a);
         if (started && noLegs && !m?.stats) mhHtml += `<p class="inplay"><span class="live-dot">On now</span> Scores will show here as soon as the game is in play.</p>`;
@@ -447,24 +447,26 @@ import Layout from '../layouts/Layout.astro';
   .mh-in :global(.duel) { display: grid; grid-template-columns: 1fr auto 1fr; align-items: end; gap: 16px; margin-top: 8px; }
   .mh-in :global(.side) { display: flex; align-items: flex-end; gap: 16px; min-width: 0; }
   .mh-in :global(.s1) { flex-direction: row-reverse; text-align: right; }
-  /* Wider screens: the same shape as the live scoreboard — pictures centred in each half with
-     the v (or final score) between them, names along the bottom at the outer edges */
-  @media (min-width: 761px) {
-    .mh-in :global(.duel) { grid-template-columns: 1fr auto auto 1fr; grid-template-areas: 'p0 sc sc p1' 'w0 . . w1'; column-gap: 0; row-gap: 0; align-items: end; padding-bottom: 24px; }
-    .mh-in :global(.duel .side) { display: contents; }
-    .mh-in :global(.duel .pic) { width: 200px; height: 230px; }
+  /* Beyond a normal phone (441px up): each player is one centred column — picture, score or
+     average, then name, flag and ranking — in every state. Narrower phones keep names at the edges. */
+  @media (min-width: 441px) {
+    .mh-in :global(div.duel) { grid-template-areas: 'p0 sc sc p1' 'w0 . . w1'; }
     .mh-in :global(.duel .s0 .pic) { grid-area: p0; justify-self: center; }
     .mh-in :global(.duel .s1 .pic) { grid-area: p1; justify-self: center; }
-    .mh-in :global(.duel .score) { grid-area: sc; align-self: center; padding: 0 24px; }
-    .mh-in :global(.duel .who) { padding: 18px 0 0; }
-    /* Name, flag, ranking and average centred under each player's picture */
     .mh-in :global(.duel .s0 .who) { grid-area: w0; }
     .mh-in :global(.duel .s1 .who) { grid-area: w1; }
     .mh-in :global(.duel .s0 .who), .mh-in :global(.duel .s1 .who) { align-items: center; text-align: center; padding-left: 8px; padding-right: 8px; }
     .mh-in :global(.duel .s0 .av), .mh-in :global(.duel .s1 .av) { align-self: center; align-items: center; }
-    /* Live scoreboard: names in their player's column, centred like the picture and score above */
     .mh-in :global(div.board) { grid-template-areas: 'p0 . . p1' 'b0 m m b1' 'w0 . . w1'; }
     .mh-in :global(.board .who.w0), .mh-in :global(.board .who.w1) { align-items: center; text-align: center; padding-left: 8px; padding-right: 8px; }
+  }
+  /* Tablet and desktop: the live scoreboard's proportions before and after a match too */
+  @media (min-width: 761px) {
+    .mh-in :global(.duel) { grid-template-columns: 1fr auto auto 1fr; column-gap: 0; row-gap: 0; align-items: end; padding-bottom: 24px; }
+    .mh-in :global(.duel .side) { display: contents; }
+    .mh-in :global(.duel .pic) { width: 200px; height: 230px; }
+    .mh-in :global(.duel .score) { grid-area: sc; align-self: center; padding: 0 24px; }
+    .mh-in :global(.duel .who) { padding: 18px 0 0; }
     .mh-in :global(.duel .who a), .mh-in :global(.duel .who > span) { font-size: clamp(26px, 3vw, 44px); }
   }
   .mh-in :global(.pic) { width: 170px; height: 210px; flex: none; display: flex; align-items: flex-end; justify-content: center; overflow: hidden; }
