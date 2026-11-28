@@ -142,6 +142,7 @@ const av = (name: string) => { const [c1, c2] = avatarColours(name); return `--c
         const onlyEv = (document.getElementById('onlyevcb') as HTMLInputElement)?.checked;
         const list = isElo ? eloInfo.players : live ? race!.filter((p: any) => !onlyEv || p.round) : official;
         table.classList.toggle('m-elo', isElo);
+        table.classList.toggle('has-exp', !!live && race!.some((p: any) => p.minus));
         note.classList.toggle('is-elo', isElo);
         if (!list.length) return;
         // Cells are patched and rows only moved when the order changes, so a refresh
@@ -163,25 +164,21 @@ const av = (name: string) => { const [c1, c2] = avatarColours(name); return `--c
           const m = r.querySelector<HTMLElement>('[data-money]')!;
           if (Number(m.dataset.money) !== p.money) { m.textContent = money(p.money); m.dataset.money = String(p.money); if (painted) bumps.push(m); }
           const d = r.querySelector<HTMLElement>('.delta')!;
-          // Net change as a chip, then what was won and what is expiring (named on hover).
+          // Money won (▲) and money expiring (▼) as chips beside the total; the round reached below.
           let html = '', netHtml = '';
           if (live && (p.plus || p.minus)) {
-            const net = p.plus - p.minus;
             const ev = (p.expiring || []).map((e: any) => `${k(e.amount)} ${e.name}`).join(', ');
-            // Progress in the event, beside what it has won them (event named on hover).
+            // Progress in the event (event named on hover).
             const evName = event.name.replace(/^\d{4}\s+/, '');
             const round = p.round ? (/^(group|league)/i.test(p.round) ? 'Group stage' : p.round) : '';
             // Short round names for phones: "Quarter-Final" -> "QF", "Last 16" -> "L16".
             const abbr = (r: string) => r.replace(/quarter-?final/i, 'QF').replace(/semi-?final/i, 'SF').replace(/^final$/i, 'Final').replace(/^last (\d+)$/i, 'L$1').replace(/^group stage$/i, 'Groups');
             const chip = round ? `<span class="stage-chip tip ${p.alive === false ? 'out' : 'in'}" data-tip="${esc(`${evName}\n${p.alive === false ? `Knocked out · ${round}` : `Still in · ${round}`}`)}">${p.alive === false ? `Out<span class="rnd"> · ${esc(round)}</span>` : `<span class="full">${esc(round)}</span><span class="abbr">${esc(abbr(round))}</span>`}</span>` : '';
-            // Three fixed slots (chip · won · expiring) so every row lines up.
-            const parts = [
-              chip || '<span></span>',
-              p.plus ? `<span class="plus">won ${k(p.plus)}</span>` : '<span></span>',
-              p.minus ? `<span class="minus tip" data-tip="${esc(`Expiring:\n${(p.expiring || []).map((e: any) => `${k(e.amount)} · ${e.name}`).join('\n')}`)}" aria-label="${esc(`Expiring: ${ev}`)}">expiring ${k(p.minus)}${p.estimated ? '*' : ''}</span>` : '<span></span>',
-            ].join('');
-            netHtml = `<span class="net ${net > 0 ? 'up' : net < 0 ? 'down' : 'flat'}">${net > 0 ? '▲ ' : net < 0 ? '▼ ' : ''}${net ? k(Math.abs(net)) : 'No change'}</span>`;
-            html = `<span class="br">${parts}</span>`;
+            // Fixed slots (won · expiring) so the chips line up from row to row.
+            const won = p.plus ? `<span class="net up" title="${esc(`Won ${k(p.plus)} at the ${evName}`)}">▲ ${k(p.plus)}</span>` : '<span></span>';
+            const exp = p.minus ? `<span class="net down tip" data-tip="${esc(`Expiring:\n${(p.expiring || []).map((e: any) => `${k(e.amount)} · ${e.name}`).join('\n')}`)}" aria-label="${esc(`Expiring: ${ev}`)}">▼ ${k(p.minus)}${p.estimated ? '*' : ''}</span>` : '<span></span>';
+            netHtml = won + exp;
+            html = chip;
           }
           if (d.hidden !== !html) d.hidden = !html;
           patch(d, html);
@@ -219,7 +216,7 @@ const av = (name: string) => { const [c1, c2] = avatarColours(name); return `--c
             ? `Projected standings after the <b>${evName}</b>${stamp ? `, ${stamp}` : ''}`
             : `Projected standings including the <b>${evName}</b>, which the PDC has not added to the official list yet${stamp ? ` (${stamp})` : ''}`;
           const also = earlier.length ? ` Also includes ${earlier.map(n => `<b>${esc(n)}</b>`).join(' and ')}, not in the official list yet.` : '';
-          patch(note, `<span class="live-dot">Live</span> ${lead}.${also} <details class="how"><summary>How the live race works</summary>The PDC drops prize money 104 weeks after it was won, so money from the ${list} is <span class="minus">expiring</span>, and money players have guaranteed since the official list was last published counts as <span class="plus">won</span>. Money a player earned before losing their Tour Card is not in their total, so it isn't taken off again. The red or green chip shows each player's net change (hover “expiring” to see which events); the volt chip shows how far they've got in the ${evName}. Positions settle when the PDC publishes the official list.</details>`);
+          patch(note, `<span class="live-dot">Live</span> ${lead}.${also} <details class="how"><summary>How the live race works</summary>The PDC drops prize money 104 weeks after it was won, so money from the ${list} is <span class="minus">▼ expiring</span>, and money players have guaranteed since the official list was last published counts as <span class="plus">▲ won</span>. Money a player earned before losing their Tour Card is not in their total, so it isn't taken off again. The red or green chip shows each player's net change (hover “expiring” to see which events); the volt chip shows how far they've got in the ${evName}. Positions settle when the PDC publishes the official list.</details>`);
         }
         setText(asof, isElo ? `${eloInfo.players.length} players · ${eloInfo.min}+ matches` : live && event ? `Movement shown against the official list` : `${official.length} ranked players · official PDC list`);
       };
@@ -311,9 +308,9 @@ const av = (name: string) => { const [c1, c2] = avatarColours(name); return `--c
   .who b { transition: color .2s; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   .who small { color: var(--muted); font-size: 12px; }
   .r { text-align: right; justify-self: end; }
-  .money-cell { display: flex; flex-direction: column; align-items: flex-end; gap: 6px; width: 100%; font-weight: 600; }
-  .money-cell :global(.delta) { margin-bottom: 2px; }
-  .money-cell :global(.delta .br) { line-height: 1.3; }
+  /* One line, centred in the row: the round chip on the left, the won/expiring chips and the total on the right */
+  .money-cell { display: flex; align-items: center; justify-content: flex-end; gap: 10px; width: 100%; font-weight: 600; }
+  .money-cell :global(.delta) { order: -1; margin-right: auto; }
   .mode { display: inline-flex; padding: 4px; gap: 2px; background: var(--paper-2); border: 1px solid var(--line); border-radius: 999px; }
   .seg { border: 0; background: none; padding: 7px 14px; border-radius: 999px; font-weight: 700; font-size: 13px; cursor: pointer; display: inline-flex; align-items: center; gap: 7px; color: var(--muted); white-space: nowrap; transition: background .25s, color .25s, box-shadow .25s; }
   .seg[aria-pressed='true'] { background: var(--card); color: var(--fg); box-shadow: var(--shadow-sm); }
@@ -341,26 +338,26 @@ const av = (name: string) => { const [c1, c2] = avatarColours(name); return `--c
   .top { display: flex; align-items: center; justify-content: flex-end; gap: 10px; }
   .top [data-money] { min-width: 10ch; text-align: right; font-variant-numeric: tabular-nums; }
   .netslot:empty { display: none; }
+  /* Won and expiring chips in fixed slots; the expiring slot only when money is expiring in this event */
+  .netslot { display: grid; grid-template-columns: 72px; column-gap: 6px; justify-items: end; }
+  .table.has-exp .netslot { grid-template-columns: 72px 72px; }
+  .table:not(.has-exp) .netslot > :global(:nth-child(2)) { display: none; }
   /* One pill size for the net change and the progress chip */
   :global(.money-cell .net), :global(.stage-chip) { display: inline-flex; align-items: center; height: 20px; padding: 0 8px; border-radius: 999px; font-size: 11px; font-weight: 800; line-height: 1; white-space: nowrap; font-variant-numeric: tabular-nums; }
   :global(.money-cell .net.up) { background: var(--green-soft); color: var(--green-text); }
   :global(.money-cell .net.down) { background: var(--red-soft); color: #a3221a; }
   :global(.money-cell .net.flat) { background: var(--paper-2); color: var(--muted); }
   /* Fixed tracks: chips line up on the left, won and expiring line up on the right */
-  :global(.delta .br) { display: grid; grid-template-columns: 1fr 76px 118px; align-items: center; column-gap: 12px; white-space: nowrap; width: 100%; }
-  :global(.delta .br > *) { justify-self: end; }
-  :global(.delta .br > .stage-chip) { justify-self: start; }
-  :global(.money-cell .delta) { width: 100%; }
   /* Instant tooltip naming the events whose money is expiring */
-  :global(.delta .tip) { position: relative; }
-  :global(.delta .minus.tip) { text-decoration: underline dotted; text-underline-offset: 2px; }
-  :global(.delta .tip::after) {
+  :global(.money-cell .tip) { position: relative; }
+  :global(.money-cell .net.down.tip) { cursor: help; }
+  :global(.money-cell .tip::after) {
     content: attr(data-tip); white-space: pre; position: absolute; z-index: 20; right: 0; bottom: calc(100% + 8px);
     background: var(--ink); color: #fff; font-size: 12px; font-weight: 600; line-height: 1.5; text-align: left;
     padding: 8px 12px; border-radius: 10px; box-shadow: 0 10px 24px -10px rgba(11, 12, 16, .6);
     opacity: 0; transform: translateY(4px); pointer-events: none; transition: opacity .15s, transform .15s;
   }
-  :global(.delta .tip:hover::after), :global(.tr:focus-visible .delta .tip::after) { opacity: 1; transform: none; }
+  :global(.money-cell .tip:hover::after), :global(.tr:focus-visible .money-cell .tip::after) { opacity: 1; transform: none; }
   :global(.plus) { color: #0a7a3a; } :global(.minus) { color: #c42c23; }
   :global(.stage-chip) { margin-right: 2px; letter-spacing: .05em; text-transform: uppercase; }
   :global(.stage-chip.in) { background: var(--volt); color: var(--ink); }
@@ -396,9 +393,9 @@ const av = (name: string) => { const [c1, c2] = avatarColours(name); return `--c
     /* Phones: prize money on top, then the net change and the round reached side by side
        (won/expiring detail is left to the net chip) */
     .money-cell { display: grid; grid-template-columns: auto auto; justify-content: end; justify-items: end; align-items: center; gap: 5px 6px; width: auto; }
-    .top, .money-cell :global(.delta), .money-cell :global(.delta .br) { display: contents; }
+    .top, .money-cell :global(.delta) { display: contents; }
+    .netslot, .table.has-exp .netslot { grid-template-columns: auto auto; }
     .top [data-money] { min-width: 0; grid-column: 1 / -1; order: -1; }
-    :global(.delta .br > :not(.stage-chip)) { display: none; }
     :global(.stage-chip.out .rnd) { display: none; }
     :global(.stage-chip .full) { display: none; }
     :global(.stage-chip .abbr) { display: inline !important; }
