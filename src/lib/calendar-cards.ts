@@ -5,7 +5,7 @@ import { avatarSrc, cutout } from '../lib/images.mjs';
 import { getCollection } from 'astro:content';
 import current from '../data/tournament.json';
 import venuePhotos from '../data/venue-photos.json';
-import { tvBadge, keyName } from '../lib/pdc.mjs';
+import { tvBadge, keyName, isMajor } from '../lib/pdc.mjs';
 import { dayNum, monthShort, monthLong, weekday, dateRange, initials, avatarColours } from '../lib/format.mjs';
 
 export const pic = (name: string) => avatarSrc(name);
@@ -54,7 +54,8 @@ export function badges(e: Ev) {
 }
 // Majors get a wide feature card with a licensed photo that fits the event.
 const MAJOR_PHOTO: [RegExp, string][] = [[/world championship/i, 'ally-pally-crowd'], [/matchplay/i, 'winter-gardens'], [/grand slam/i, 'on-stage'], [/grand prix/i, 'board-lights'], [/uk open/i, 'crowd-180s'], [/european championship/i, 'darts-cluster'], [/players championship/i, 'referee'], [/masters/i, 'confetti'], [/world cup/i, 'crowd-signs'], [/world series/i, 'walk-on-crowd']];
-export const featured = (e: Ev) => !!e.major;
+// The eight PDC majors (by name: the feed's own flag also covers the Premier League and other TV events).
+export const featured = (e: Ev) => isMajor(e.name);
 const photoFor = (e: Ev) => (MAJOR_PHOTO.find(([re]) => re.test(e.name))?.[1]) || 'arena';
 // Every card has a background: the venue's photo, else (for majors) a fitting
 // library photo, else one of eight generated backgrounds picked by the event id.

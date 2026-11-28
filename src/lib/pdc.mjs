@@ -553,6 +553,14 @@ export async function findLiveRaceEvent(today) {
   return { meta: live, prev, dropNames: dropMeta.map(m => m.name) };
 }
 
+/**
+ * The PDC majors: the eight televised ranking majors. Not the Premier League,
+ * World Cup, World Series Finals or other TV events (the feed's own category
+ * includes those). Names as in the calendar, with or without a year in front.
+ */
+const MAJORS = /^(?:\d{4}(?:\/\d{2})?\s+)?(?:PDC\s+)?(?:World Championship|(?:Winmau\s+)?World Masters|UK Open|World Matchplay|World Grand Prix|European Championship|Grand Slam of Darts|Players Championship Finals)$/i;
+export const isMajor = name => MAJORS.test(String(name || '').trim());
+
 /** The day 104 weeks after a date: when the PDC drops an event's money. */
 export const plus104 = d => new Date(Date.parse(d + 'T12:00:00Z') + 728 * 864e5).toISOString().slice(0, 10);
 
