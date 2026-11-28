@@ -4,6 +4,7 @@
 import { flag, tvBadge, surnameOf, formatLabel, onBreak } from './pdc.mjs';
 import { avatarSrc } from './images.mjs';
 import { avatarColours, initials, longDate, shortDate, ukClock, ukZone, money } from './format.mjs';
+import { koRounds, bracketColumns, isRedrawn, drawNotes, projectSlots } from './redraw.mjs';
 
 const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]);
 
@@ -16,7 +17,10 @@ export function avatar(p, _unused, size = 44) {
 const fmt = (n, d = 2) => (n == null || Number.isNaN(n) ? '–' : Number(n).toFixed(d));
 
 // One player: picture, name, and their score (legs, or sets in set play) in the box on the end.
-function side(p, score, won, decided, portraits, align, scored, live, lbl, st, best) {
+// proj: who fills an empty slot, from the bracket (see projectSlots).
+function side(p, score, won, decided, portraits, align, scored, live, lbl, st, best, proj) {
+  if (!p && proj?.player) return side(proj.player, null, false, false, portraits, align, false, false, lbl, null, false);
+  if (!p && proj?.either) return `<div class="pl ${align} tbc"><span class="avatar" style="--size:44px">?</span><span class="nm"><b>${esc(proj.either.map(surnameOf).join(' or '))}</b><small>${esc(proj.round)} winner</small></span></div>`;
   if (!p) return `<div class="pl ${align} tbc"><span class="avatar" style="--size:44px">?</span><span class="nm"><b>To be decided</b></span></div>`;
   const box = scored ? `<span class="lgs${won ? ' w' : ''}${live ? ' live' : ''}" title="${lbl}"><i>${lbl}</i>${score ?? 0}</span>` : '';
   return `<div class="pl ${align}${won ? ' won' : decided ? ' lost' : ''}">
@@ -42,10 +46,10 @@ export function fixtureRow(f, portraits) {
   const setLegs = live && sets && f.liveLegs ? ` · Set ${f.liveSet || 1}, legs ${f.liveLegs[0]}–${f.liveLegs[1]}` : '';
   const state = live ? `<span class="live-dot">Live</span>${esc(setLegs)}${onBreak(f.legNow) ? ' · Break' : ''}` : `<span class="ft">${group}${f.status === 'result' ? 'Result' : f.time ? ukZone(f.date) : 'Time TBC'}</span>`;
   const lbl = sets ? 'Sets' : 'Legs';
-  return `<li class="fx ${f.status}${live ? ' big' : ''}${st ? ' has-stats' : ''}" data-players="${esc([f.p1?.id, f.p2?.id].filter(Boolean).join(' '))}" data-id="${esc(f.id)}" data-sig="${esc(`${f.s1}-${f.s2}-${f.status}-${st ? st[0]?.avg + '/' + st[1]?.avg : ''}`)}">
-    ${side(f.p1, f.s1, w1, decided, portraits, 'l', scored, live, lbl, st?.[0], best === 1)}
+  return `<li class="fx ${f.status}${live ? ' big' : ''}${st ? ' has-stats' : ''}" data-players="${esc([f.p1?.id, f.p2?.id].filter(Boolean).join(' '))}" data-id="${esc(f.id)}" data-sig="${esc(`${f.s1}-${f.s2}-${f.status}-${st ? st[0]?.avg + '/' + st[1]?.avg : ''}-${(f.proj || []).map(x => x?.player?.id || x?.either?.map(p => p.id).join('/') || '').join(',')}`)}">
+    ${side(f.p1, f.s1, w1, decided, portraits, 'l', scored, live, lbl, st?.[0], best === 1, f.proj?.[0])}
     <div class="mid">${mid}<div class="st">${state}</div></div>
-    ${side(f.p2, f.s2, w2, decided, portraits, 'r', scored, live, lbl, st?.[1], best === 2)}
+    ${side(f.p2, f.s2, w2, decided, portraits, 'r', scored, live, lbl, st?.[1], best === 2, f.proj?.[1])}
     ${f.p1 && f.p2 ? `<a class="fx-link" href="/match?id=${esc(f.id)}" aria-label="${esc(`${f.p1.name} v ${f.p2.name}: match centre`)}"></a>` : ''}
   </li>`;
 }
@@ -67,16 +71,19 @@ const sessionOf = time => (time && time < '17:00' ? 'Afternoon session' : 'Eveni
 export function renderDay(t, day, portraits) {
   // Chronological order of play, in sessions (afternoon / evening, with who's showing it);
   // consecutive matches from the same round share a heading.
-  const all = t.stages.flatMap(s => s.fixtures.filter(f => f.date === day).map(f => ({ ...f, stage: s.name, sets: s.sets, fmt: s })))
+  const slots = projectSlots(t);
+  const all = t.stages.flatMap(s => s.fixtures.filter(f => f.date === day).map(f => ({ ...f, stage: s.name, sets: s.sets, fmt: s, proj: slots.get(f.id) })))
     .sort((a, b) => (a.time || '99').localeCompare(b.time || '99') || a.id.localeCompare(b.id));
   if (!all.length) return `<div class="empty"><h3>No matches on this day</h3><p>Pick another day above.</p></div>`;
+  // Redrawn events: when each round still to be drawn will be ("Drawn after the Last 32").
+  const notes = drawNotes(t);
   const blocks = [];
   for (const f of all) {
     const last = blocks[blocks.length - 1];
     const label = /^group/i.test(f.stage) ? 'Group stage' : f.stage;
     const session = f.time ? sessionOf(f.time) : '';
     if (last && last.label === label && last.session === session) last.fixtures.push(f);
-    else blocks.push({ label, session, fmt: formatLabel(f.fmt), fixtures: [f] });
+    else blocks.push({ label, session, fmt: formatLabel(f.fmt), note: notes.get(f.stage) || '', fixtures: [f] });
   }
   const tv = t.broadcaster ? tvBadge(t.broadcaster) : '';
   let shownSession = '';
@@ -87,31 +94,37 @@ export function renderDay(t, day, portraits) {
     shownSession = b.session || shownSession;
     return `${head}
     <section class="stage" style="--d:${i * 70}ms">
-      <h3><span>${esc(b.label)}</span><small>${b.fixtures.length} match${b.fixtures.length === 1 ? '' : 'es'}${b.fmt ? ` · ${esc(b.fmt)}` : ''}</small></h3>
+      <h3><span>${esc(b.label)}</span><small>${b.fixtures.length} match${b.fixtures.length === 1 ? '' : 'es'}${b.fmt ? ` · ${esc(b.fmt)}` : ''}${b.note && b.fixtures.some(f => !f.p1 || !f.p2) ? ` · <span class="draw-note">${esc(b.note)}</span>` : ''}</small></h3>
       <ol class="fixtures">${b.fixtures.map(f => fixtureRow(f, portraits)).join('')}</ol>
     </section>`;
   }).join('');
 }
 
-/** Knockout draw: one column per round, each round ordered so a match sits beside the two it came from. */
+/**
+ * Knockout draw: one column per round, each round ordered so a match sits beside
+ * the two it came from. Events redrawn after every round get plain columns in
+ * order of play instead, with no bracket lines (they would join the wrong matches).
+ */
 export function renderDraw(t) {
-  const ko = t.stages.filter(s => !/^group/i.test(s.name) && s.fixtures.length).sort((a, b) => b.fixtures.length - a.fixtures.length || (b.round ?? 0) - (a.round ?? 0));
+  const ko = koRounds(t);
   if (!ko.length && t.draw?.matches?.length) return renderPublishedDraw(t);
   if (ko.length < 2) return '';
-  const cols = [ko[0].fixtures.slice()];
-  for (let i = 1; i < ko.length; i++) {
-    const prev = cols[i - 1];
-    const at = id => prev.findIndex(f => f.p1?.id === id || f.p2?.id === id);
-    const pos = f => Math.min(...[f.p1?.id, f.p2?.id].filter(Boolean).map(at).filter(x => x >= 0), 999);
-    cols.push(ko[i].fixtures.slice().sort((a, b) => pos(a) - pos(b)));
-  }
-  const side = (p, s, won, done) => `<div class="dr-p${won ? ' w' : done ? ' l' : ''}"><span>${p ? `${flag(p.country)} ${esc(surnameOf(p))}` : '<em>TBC</em>'}</span><b>${s ?? ''}</b></div>`;
+  const redrawn = isRedrawn(t);
+  const cols = redrawn
+    ? ko.map(s => s.fixtures.slice().sort((a, b) => (a.date || '').localeCompare(b.date || '') || (a.time || '99').localeCompare(b.time || '99') || a.id.localeCompare(b.id)))
+    : bracketColumns(ko);
+  const slots = projectSlots(t);
+  // An empty slot shows who can still fill it ("Sedlacek / Mansell"), else TBC.
+  const tbc = pr => pr?.player ? `${flag(pr.player.country)} ${esc(surnameOf(pr.player))}` : pr?.either ? `<em>${esc(pr.either.map(surnameOf).join(' / '))}</em>` : '<em>TBC</em>';
+  const side = (p, s, won, done, pr) => `<div class="dr-p${won ? ' w' : done ? ' l' : ''}"><span>${p ? `${flag(p.country)} ${esc(surnameOf(p))}` : tbc(pr)}</span><b>${s ?? ''}</b></div>`;
   const cell = f => {
     const done = f.status === 'result';
     const w = done ? f.winner : null;
-    return `<a class="dr-m ${f.status}" ${f.p1 && f.p2 ? `href="/match?id=${esc(f.id)}"` : ''}>${side(f.p1, f.status === 'upcoming' && !(f.s1 + f.s2) ? '' : f.s1, w && w === f.p1?.id, done)}${side(f.p2, f.status === 'upcoming' && !(f.s1 + f.s2) ? '' : f.s2, w && w === f.p2?.id, done)}</a>`;
+    const pr = slots.get(f.id);
+    return `<a class="dr-m ${f.status}" ${f.p1 && f.p2 ? `href="/match?id=${esc(f.id)}"` : ''}>${side(f.p1, f.status === 'upcoming' && !(f.s1 + f.s2) ? '' : f.s1, w && w === f.p1?.id, done, pr?.[0])}${side(f.p2, f.status === 'upcoming' && !(f.s1 + f.s2) ? '' : f.s2, w && w === f.p2?.id, done, pr?.[1])}</a>`;
   };
-  return `<div class="draw" style="--cols:${cols.length}">${cols.map((c, i) => `<div class="dr-col"><h3>${esc(ko[i].name)}</h3><div class="dr-list">${c.map(cell).join('')}</div></div>`).join('')}</div>`;
+  const note = redrawn ? '<p class="muted dr-note">This event is redrawn after every round, so each column is that round\'s draw, in order of play, rather than a bracket.</p>' : '';
+  return `${note}<div class="draw${redrawn ? ' redraw' : ''}" style="--cols:${cols.length}">${cols.map((c, i) => `<div class="dr-col"><h3>${esc(ko[i].name)}</h3><div class="dr-list">${c.map(cell).join('')}</div></div>`).join('')}</div>`;
 }
 
 /** The published draw (no fixtures in the feed yet): the first round, then TBC slots for each later round. */
