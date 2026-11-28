@@ -345,7 +345,7 @@ const av = (name: string) => { const [c1, c2] = avatarColours(name); return `--c
   /* One pill size for the net change and the progress chip */
   :global(.money-cell .net), :global(.stage-chip) { display: inline-flex; align-items: center; height: 20px; padding: 0 8px; border-radius: 999px; font-size: 11px; font-weight: 800; line-height: 1; white-space: nowrap; font-variant-numeric: tabular-nums; }
   :global(.money-cell .net.up) { background: var(--green-soft); color: var(--green-text); }
-  :global(.money-cell .net.down) { background: var(--red-soft); color: #a3221a; }
+  :global(.money-cell .net.down) { background: var(--red-soft); color: var(--red-text); }
   :global(.money-cell .net.flat) { background: var(--paper-2); color: var(--muted); }
   /* Fixed tracks: chips line up on the left, won and expiring line up on the right */
   /* Instant tooltip naming the events whose money is expiring */
@@ -358,7 +358,7 @@ const av = (name: string) => { const [c1, c2] = avatarColours(name); return `--c
     opacity: 0; transform: translateY(4px); pointer-events: none; transition: opacity .15s, transform .15s;
   }
   :global(.money-cell .tip:hover::after), :global(.tr:focus-visible .money-cell .tip::after) { opacity: 1; transform: none; }
-  :global(.plus) { color: #0a7a3a; } :global(.minus) { color: #c42c23; }
+  :global(.plus) { color: var(--green-text); } :global(.minus) { color: var(--red-text); }
   :global(.stage-chip) { margin-right: 2px; letter-spacing: .05em; text-transform: uppercase; }
   :global(.stage-chip.in) { background: var(--volt); color: var(--ink); }
   :global(.stage-chip.out) { background: var(--paper-2); color: var(--muted); }
