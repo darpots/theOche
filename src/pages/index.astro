@@ -43,10 +43,13 @@ const liveOn = !!lrd.event && lrd.event.startDate <= today && lrd.event.endDate 
 const raceTop = liveOn ? lrd.race.slice(0, 4) : [];
 const raceMover = liveOn ? lrd.race.slice(4, 32).filter((p: any) => p.move > 0).sort((a: any, b: any) => b.move - a.move)[0] : null;
 const raceUpdated = liveOn ? new Date(lrd.updatedAt).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', timeZone: 'Europe/London' }) : '';
-// Spotlight: the best-ranked player in today's matches, else world number one.
-const todayIds = new Set(md.todays.flatMap(f => [f.p1.id, f.p2.id]));
-const spotRank = rankings.players.find(p => todayIds.has(p.id) && cutout(p.name)) || rankings.players[0];
-const spot = loadProfile(spotRank.id);
+// Spotlight: a ranked player with a cut-out photo and a season's stats, picked at random.
+// The build picks one; the browser picks again on every visit from the same list.
+const spotList = rankings.players.flatMap(p => {
+  const c = cutout(p.name), prof = c && loadProfile(p.id);
+  return prof?.season?.stats ? [{ slug: prof.slug, name: prof.name, pos: p.pos, avg: prof.season.stats.avg.toFixed(2), src: c.src, srcset: c.srcset }] : [];
+});
+const spotPick = spotList[Math.floor(Math.random() * spotList.length)] || null;
 import { isStale } from '../lib/news';
 // Play cards: what each is, and a starting line the browser replaces with this visitor's own state.
 const wcEvent = calendar.events.find(e => /world championship/i.test(e.name) && e.end >= today);
@@ -165,18 +168,17 @@ const playCards = [
         <p class="lbl muted rk-note">{liveOn ? `Projected after the ${lrd.event.name.replace(/^\d{4}\s+/, '')} · updated hourly (${raceUpdated})` : 'Official PDC Order of Merit'}</p>
       </section>
 
-      {spot && (
-        <a class="tile tile-ink spot" href={`/players/${spot.slug}`}>
-          {cutout(spot.name) && <img class="spot-cut photo" src={cutout(spot.name)!.src} srcset={cutout(spot.name)!.srcset} sizes="(max-width: 640px) 45vw, 220px" alt="" loading="lazy" />}
-          <div class="spot-top"><span class="lbl volt">Player spotlight · World #{spotRank.pos}</span><h2>{spot.name.split(' ')[0]}<br />{spot.name.split(' ').slice(1).join(' ')}</h2></div>
-          {spot.season?.stats && (
-            <div class="spot-bottom">
-              <div class="poster-num spot-avg">{spot.season.stats.avg.toFixed(2)}</div>
-              <div class="lbl">Average · last 12 months</div>
-            </div>
-          )}
+      {spotPick && (
+        <a class="tile tile-ink spot" id="spot" href={`/players/${spotPick.slug}`}>
+          <img class="spot-cut photo" src={spotPick.src} srcset={spotPick.srcset} sizes="(max-width: 640px) 45vw, 220px" alt="" loading="lazy" />
+          <div class="spot-top"><span class="lbl volt">Player spotlight · World #<span data-spot="pos">{spotPick.pos}</span></span><h2><span data-spot="first">{spotPick.name.split(' ')[0]}</span><br /><span data-spot="rest">{spotPick.name.split(' ').slice(1).join(' ')}</span></h2></div>
+          <div class="spot-bottom">
+            <div class="poster-num spot-avg" data-spot="avg">{spotPick.avg}</div>
+            <div class="lbl">Average · last 12 months</div>
+          </div>
         </a>
       )}
+      <script is:inline type="application/json" id="spot-list" set:html={JSON.stringify(spotList)}></script>
 
       <section class="tile tile-card cu">
         <div class="th"><h2 class="lbl">Coming up</h2><a href="/calendar">Calendar →</a></div>
@@ -319,6 +321,18 @@ const playCards = [
       }
 
     }
+    // Player spotlight: a different player on every visit (same list as the build's pick).
+    function spotlight() {
+      const a = document.getElementById('spot') as HTMLAnchorElement | null;
+      const list = JSON.parse(document.getElementById('spot-list')?.textContent || '[]');
+      if (!a || list.length < 2) return;
+      const p = list[Math.floor(Math.random() * list.length)];
+      a.href = `/players/${p.slug}`;
+      const img = a.querySelector('img')!; img.srcset = p.srcset; img.src = p.src;
+      const set = (k: string, v: string) => { const el = a.querySelector(`[data-spot="${k}"]`); if (el) el.textContent = v; };
+      set('pos', String(p.pos)); set('first', p.name.split(' ')[0]); set('rest', p.name.split(' ').slice(1).join(' ')); set('avg', p.avg);
+    }
+    document.addEventListener('astro:page-load', spotlight);
     document.addEventListener('astro:page-load', init);
   </script>
 </Layout>
@@ -361,7 +375,8 @@ const playCards = [
   .feature :global(.ft-who.l) { border-right: 1px solid var(--ink-2); }
   .feature :global(.ft-who.r) { flex-direction: row-reverse; text-align: right; }
   .feature :global(.ft-id) { min-width: 0; display: flex; flex-direction: column; gap: 2px; }
-  .feature :global(.ft-id b) { display: block; font-size: 19px; }
+  /* Names in poster capitals, as on the match page */
+  .feature :global(.ft-id b) { display: block; font-family: var(--poster); font-weight: 400; text-transform: uppercase; font-size: 26px; line-height: .95; letter-spacing: .01em; }
   .feature :global(.ft-who small) { color: var(--on-ink-2); font-size: 13px; }
   .feature :global(.ft-who.won .ft-id b) { color: var(--volt); }
   .feature :global(.ft-av) { font-size: 13px; font-weight: 700; color: #fff; font-variant-numeric: tabular-nums; white-space: nowrap; }

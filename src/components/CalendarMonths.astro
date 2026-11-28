@@ -3,7 +3,10 @@
 // /calendar/past (the two years before, loaded in after the page's first paint).
 import { tvBadge } from '../lib/pdc.mjs';
 import { dayNum, monthShort, monthLong, weekday, dateRange, initials } from '../lib/format.mjs';
-import { type Ev, pic, av, days, place, kind, isPast, badges, featured, bgFor, champCut } from '../lib/calendar-cards';
+import { type Ev, pic, av, days, place, kind, isPast, isLive, badges, featured, bgFor, champCut, builtOn } from '../lib/calendar-cards';
+// The status as of the build (at least hourly), so it's right even before (or without) the page script.
+const daysTo = (e: Ev) => Math.round((Date.parse(e.start) - Date.parse(builtOn)) / 864e5);
+const statusOf = (e: Ev) => isLive(e) ? ['status live-dot', 'On now'] : isPast(e) ? ['status done', 'Completed'] : ['status soon', daysTo(e) === 1 ? 'Tomorrow' : `In ${daysTo(e)} days`];
 
 interface Props { entries: [string, Ev[]][] }
 const { entries } = Astro.props;
@@ -13,7 +16,7 @@ const { entries } = Astro.props;
         <h2 class="month-title"><span>{monthLong(k + '-01')}</span><small>{list.length} event{list.length === 1 ? '' : 's'}</small></h2>
         <div class="grid">
           {list.map(e => (
-            <a href={`/tournament/${e.id}`} class={`ev ev-${e.broadcaster}${isPast(e) ? ' past' : ''}${featured(e) ? ' feat' : ''}`}
+            <a href={`/tournament/${e.id}`} class={`ev ev-${e.broadcaster}${isPast(e) ? ' past' : ''}${isLive(e) ? ' live' : ''}${featured(e) ? ' feat' : ''}`}
               data-kind={kind(e)} data-start={e.start} data-end={e.end}>
               {(
                 <span class="ev-art" aria-hidden="true">
@@ -35,7 +38,7 @@ const { entries } = Astro.props;
                 <span class="ev-foot">
                   {e.winner
                     ? <span class="winner"><span class="avatar" style={`--size:26px;${av(e.winner.name)}`}>{pic(e.winner.name) ? <img src={pic(e.winner.name)} alt="" width="26" height="26" loading="lazy" /> : initials(e.winner.name)}</span><span><small>Winner</small>{e.winner.name}</span></span>
-                    : <span class="status" data-status></span>}
+                    : <span class={statusOf(e)[0]} data-status>{statusOf(e)[1]}</span>}
                   <span class="go" aria-hidden="true">→</span>
                 </span>
               </span>

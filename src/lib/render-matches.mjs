@@ -114,8 +114,8 @@ export function renderDraw(t) {
     ? ko.map(s => s.fixtures.slice().sort((a, b) => (a.date || '').localeCompare(b.date || '') || (a.time || '99').localeCompare(b.time || '99') || a.id.localeCompare(b.id)))
     : bracketColumns(ko);
   const slots = projectSlots(t);
-  // An empty slot shows who can still fill it ("Sedlacek / Mansell"), else TBC.
-  const tbc = pr => pr?.player ? `${flag(pr.player.country)} ${esc(surnameOf(pr.player))}` : pr?.either ? `<em>${esc(pr.either.map(surnameOf).join(' / '))}</em>` : '<em>TBC</em>';
+  // An empty slot is TBC until its player is known (a feeding match already won shows the winner).
+  const tbc = pr => pr?.player ? `${flag(pr.player.country)} ${esc(surnameOf(pr.player))}` : '<em>TBC</em>';
   const side = (p, s, won, done, pr) => `<div class="dr-p${won ? ' w' : done ? ' l' : ''}"><span>${p ? `${flag(p.country)} ${esc(surnameOf(p))}` : tbc(pr)}</span><b>${s ?? ''}</b></div>`;
   const cell = f => {
     const done = f.status === 'result';

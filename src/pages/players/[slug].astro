@@ -10,7 +10,6 @@ import { cutout, avatarSrc } from '../../lib/images.mjs';
 import { rankedProfiles, playerHref } from '../../lib/players';
 import { flag, countryName, age, keyName, cleanName, surnameOf, formatLabel } from '../../lib/pdc.mjs';
 import tournament from '../../data/tournament.json';
-import liveRace from '../../data/live-race.json';
 import { ukTime } from '../../lib/format.mjs';
 import { money, avatarColours, initials, newsDate } from '../../lib/format.mjs';
 
@@ -57,10 +56,6 @@ const groups = [
 const finishClass = (label: string) => label === 'Winner' ? 'f-win' : label === 'Runner-up' ? 'f-ru' : /semi/i.test(label) ? 'f-sf' : /quarter/i.test(label) ? 'f-qf' : '';
 // This season's titles as table rows: one per event, details grouped
 // (e.g. Premier League nights), linked to the tournament page when we have it.
-// While a ranking event is on, the rankings page shows projected money: say which figure is which.
-const lrx = liveRace as any;
-const todayLdn = new Date().toLocaleDateString('en-CA', { timeZone: 'Europe/London' });
-const projected = lrx.event && lrx.event.startDate <= todayLdn && lrx.event.endDate >= todayLdn ? lrx.race.find((r: any) => String(r.id) === String(p.id)) : null;
 const titleRows = (() => {
   const rows = new Map<string, { name: string; details: string[]; count: number; href: string | null }>();
   for (const t of s.titles as string[]) {
@@ -155,7 +150,6 @@ const news = (await getCollection('news'))
         <button class="follow" type="button" data-follow={p.id} data-name={p.name} aria-pressed="false"><span class="f-off">☆ Follow</span><span class="f-on">★ Following</span></button>
         <dl class="kpis">
           <div><dt>Prize money (official, 2 yrs)</dt><dd>{money(rank.money)}</dd></div>
-          {projected?.money != null && <div><dt>Projected after {lrx.event.name.replace(/^\d{4}\s+/, '')}</dt><dd>{money(projected.money)} <small class="muted">#{projected.live}</small></dd></div>}
           <div><dt>12-month average</dt><dd>{st ? st.avg.toFixed(2) : '–'}</dd></div>
           <div><dt>Titles · 12 months</dt><dd>{s.titles.length}</dd></div>
           <div><dt>Win rate</dt><dd>{s.played ? `${winPct}%` : '–'}</dd></div>

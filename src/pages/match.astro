@@ -237,9 +237,9 @@ const eloRatings = Object.fromEntries((eloData as any).players.map((p: any) => [
       }).join('')}</tbody>`;
     }
 
-    // Win chance from the two players' Elo ratings, for this match's length. Shown before
-    // the match only (not live; once it's over the ratings include its result). Hidden when
-    // either player has too few matches to be rated.
+    // Win chance from the two players' Elo ratings, for this match's length: before the match,
+    // and during it in the Head to head & form tab (the pre-match chance, not the score so far).
+    // Not once it's over (the ratings include its result), nor when either player isn't rated.
     let eloR: Record<string, [number, number]> | null = null;
     function winChanceBox(f: any, show: boolean) {
       const box = document.getElementById('wc'), out = document.getElementById('wc-box'), sub = document.getElementById('wc-sub');
@@ -413,7 +413,7 @@ const eloRatings = Object.fromEntries((eloData as any).players.map((p: any) => [
         if (isResult && noLegs) mhHtml += `<p class="inplay"><b>Result confirmed.</b> ${liveStats ? 'Stats are from PDC live scoring; the' : 'The PDC adds averages and'} leg-by-leg detail follows when the PDC publishes it. This page checks again every two minutes and fills in on its own.</p>`;
         if (!document.getElementById('tp')!.innerHTML) tape([a.attributes.participant1, a.attributes.participant2]);
         headToHead(a);
-        winChanceBox(a, !isResult && !isLive);
+        winChanceBox(a, !isResult);
         if (started && noLegs && !m?.stats) mhHtml += `<p class="inplay"><span class="live-dot">On now</span> Scores will show here as soon as the game is in play.</p>`;
         patch(mh, mhHtml);
         // Stats show as soon as there are any; the leg charts wait for the visit data.

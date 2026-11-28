@@ -172,7 +172,8 @@ for (const s of Object.values(statsCache)) for (const r of [s.a, s.b]) {
 const avgOf = t => (t[2] ? Math.round((t[1] / t[2]) * 300) / 100 : null);
 function summaryOf(t) {
   if (!t || !t[2]) return null;
-  return { matches: t[0], avg: avgOf(t), f9: t[4] ? Math.round((t[3] / t[4]) * 300) / 100 : null, t80: t[5], co: t[7] ? Math.round((t[6] / t[7]) * 1000) / 10 : null, hi: t[8] || null, n170: t[9] || 0 };
+  // coAtt: checkout attempts behind co (the PDC gives no checkout figures for about half of matches)
+  return { matches: t[0], avg: avgOf(t), f9: t[4] ? Math.round((t[3] / t[4]) * 300) / 100 : null, t80: t[5], co: t[7] ? Math.round((t[6] / t[7]) * 1000) / 10 : null, coAtt: t[7] || 0, hi: t[8] || null, n170: t[9] || 0 };
 }
 
 // ---- 4. Per-player profiles ----------------------------------------------

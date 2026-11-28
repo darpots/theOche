@@ -10,6 +10,9 @@ const all = rankedProfiles().map(({ rank, profile: p }) => ({ rank, p, s: p.seas
 const label = all[0]?.s.label || `${all[0]?.s.year} season`;
 const MIN = 20; // matches with stats, for the rate-based boards
 const qual = all.filter(x => (x.st.matches || 0) >= MIN);
+// Checkout %: the PDC gives checkout figures for only about half of matches, so a player can
+// have 20+ matches but few with checkouts (one led on 9 from 14). Qualify on attempts instead.
+const MIN_CO = 200;
 
 type Row = { p: any; v: number; shown: string; sub?: string };
 const board = (list: typeof all, value: (x: (typeof all)[number]) => number | null | undefined, fmt: (v: number) => string, sub?: (x: (typeof all)[number]) => string, asc = false): Row[] =>
@@ -22,7 +25,7 @@ const boards = [
   { key: 'f9', title: 'First-nine average', note: `${MIN}+ matches`, rows: board(qual, x => x.st.f9, v => v.toFixed(2)) },
   { key: 't80', title: 'Most 180s', note: 'Last 12 months', rows: board(all, x => x.st.t80, v => String(v), x => `${x.st.matches || 0} matches`) },
   { key: 't80pm', title: '180s per match', note: `${MIN}+ matches`, rows: board(qual, x => x.st.t80 / x.st.matches, v => v.toFixed(2)) },
-  { key: 'co', title: 'Checkout %', note: `${MIN}+ matches`, rows: board(qual, x => x.st.co, v => `${v.toFixed(1)}%`) },
+  { key: 'co', title: 'Checkout %', note: `${MIN_CO}+ checkout attempts`, rows: board(all.filter(x => (x.st.coAtt || 0) >= MIN_CO), x => x.st.co, v => `${v.toFixed(1)}%`, x => `${x.st.coAtt.toLocaleString('en-GB')} attempts`) },
   { key: 'n170', title: '170 checkouts', note: 'Matches with a 170 finish', rows: board(all, x => x.st.n170, v => String(v), x => `${x.st.matches} matches`) },
   { key: 'titles', title: 'Titles', note: 'Last 12 months', rows: board(all, x => x.s.titles?.length, v => String(v), x => x.s.titles.slice(0, 2).join(', ') + (x.s.titles.length > 2 ? '…' : '')) },
   { key: 'win', title: 'Win rate', note: `${MIN}+ matches`, rows: board(all.filter(x => (x.s.played || 0) >= MIN), x => (x.s.won / x.s.played) * 100, v => `${Math.round(v)}%`, x => `${x.s.won}–${x.s.lost}`) },
