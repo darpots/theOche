@@ -1,5 +1,5 @@
 {
- "updatedAt": "2026-11-28T00:07:39.689Z",
+ "updatedAt": "2026-11-28T14:08:47.115Z",
  "from": "2025-11-28",
  "to": "2026-11-28",
  "rules": {
@@ -21,7 +21,7 @@
    "Players Championship Finals"
   ]
  },
- "matches": 5785,
+ "matches": 5787,
  "events": 81,
  "latest": "Players Championship Finals",
  "players": [
@@ -181,13 +181,13 @@
    "country": "NL",
    "pos": 11,
    "move": 2,
-   "rating": 1711,
-   "played": 133,
-   "won": 79,
+   "rating": 1718,
+   "played": 134,
+   "won": 80,
    "lost": 54,
    "last": {
     "name": "Players Championship Finals",
-    "delta": 9
+    "delta": 16
    }
   },
   {
@@ -281,26 +281,11 @@
    }
   },
   {
-   "id": "32078",
-   "name": "Bradley Brooks",
-   "country": "GB-ENG",
-   "pos": 18,
-   "move": 3,
-   "rating": 1681,
-   "played": 84,
-   "won": 45,
-   "lost": 39,
-   "last": {
-    "name": "Players Championship Finals",
-    "delta": 8
-   }
-  },
-  {
    "id": "31041",
    "name": "Rob Cross",
    "country": "GB-ENG",
-   "pos": 19,
-   "move": -3,
+   "pos": 18,
+   "move": -2,
    "rating": 1673,
    "played": 122,
    "won": 76,
@@ -314,8 +299,8 @@
    "id": "30844",
    "name": "Jermaine Wattimena",
    "country": "NL",
-   "pos": 20,
-   "move": 3,
+   "pos": 19,
+   "move": 4,
    "rating": 1671,
    "played": 146,
    "won": 89,
@@ -323,6 +308,21 @@
    "last": {
     "name": "Players Championship Finals",
     "delta": 9
+   }
+  },
+  {
+   "id": "32078",
+   "name": "Bradley Brooks",
+   "country": "GB-ENG",
+   "pos": 20,
+   "move": 1,
+   "rating": 1667,
+   "played": 85,
+   "won": 45,
+   "lost": 40,
+   "last": {
+    "name": "Players Championship Finals",
+    "delta": -6
    }
   },
   {
@@ -476,11 +476,26 @@
    }
   },
   {
+   "id": "156",
+   "name": "Kim Huybrechts",
+   "country": "BE",
+   "pos": 31,
+   "move": 5,
+   "rating": 1645,
+   "played": 114,
+   "won": 67,
+   "lost": 47,
+   "last": {
+    "name": "Players Championship Finals",
+    "delta": 24
+   }
+  },
+  {
    "id": "31031",
    "name": "Jeffrey De Graaf",
    "country": "SE",
-   "pos": 31,
-   "move": 7,
+   "pos": 32,
+   "move": 6,
    "rating": 1631,
    "played": 100,
    "won": 55,
@@ -488,21 +503,6 @@
    "last": {
     "name": "Players Championship Finals",
     "delta": 18
-   }
-  },
-  {
-   "id": "156",
-   "name": "Kim Huybrechts",
-   "country": "BE",
-   "pos": 32,
-   "move": 4,
-   "rating": 1631,
-   "played": 113,
-   "won": 66,
-   "lost": 47,
-   "last": {
-    "name": "Players Championship Finals",
-    "delta": 10
    }
   },
   {
@@ -761,26 +761,11 @@
    }
   },
   {
-   "id": "104",
-   "name": "Michael Smith",
-   "country": "GB-ENG",
-   "pos": 50,
-   "move": 4,
-   "rating": 1577,
-   "played": 82,
-   "won": 43,
-   "lost": 39,
-   "last": {
-    "name": "Players Championship Finals",
-    "delta": 19
-   }
-  },
-  {
    "id": "11156",
    "name": "Gabriel Clemens",
    "country": "DE",
-   "pos": 51,
-   "move": 2,
+   "pos": 50,
+   "move": 3,
    "rating": 1576,
    "played": 86,
    "won": 47,
@@ -794,8 +779,8 @@
    "id": "36373",
    "name": "James Hurrell",
    "country": "GB-ENG",
-   "pos": 52,
-   "move": 3,
+   "pos": 51,
+   "move": 4,
    "rating": 1572,
    "played": 79,
    "won": 41,
@@ -809,8 +794,8 @@
    "id": "31027",
    "name": "Richard Veenstra",
    "country": "NL",
-   "pos": 53,
-   "move": -4,
+   "pos": 52,
+   "move": -3,
    "rating": 1570,
    "played": 91,
    "won": 52,
@@ -818,6 +803,21 @@
    "last": {
     "name": "Players Championship Finals",
     "delta": -15
+   }
+  },
+  {
+   "id": "104",
+   "name": "Michael Smith",
+   "country": "GB-ENG",
+   "pos": 53,
+   "move": 1,
+   "rating": 1569,
+   "played": 83,
+   "won": 43,
+   "lost": 40,
+   "last": {
+    "name": "Players Championship Finals",
+    "delta": 11
    }
   },
   {

@@ -1,5 +1,5 @@
 {
- "updatedAt": "2026-11-28T03:07:32.583Z",
+ "updatedAt": "2026-11-28T14:08:04.596Z",
  "tournament": {
   "winner": null,
   "id": "10872",
@@ -1355,7 +1355,7 @@
      {
       "id": "518140",
       "date": "2026-11-28",
-      "time": "13:45",
+      "time": "13:48",
       "status": "upcoming",
       "p1": {
        "id": "39687",
@@ -1430,8 +1430,8 @@
      {
       "id": "518143",
       "date": "2026-11-28",
-      "time": "13:15",
-      "status": "upcoming",
+      "time": "13:21",
+      "status": "result",
       "p1": {
        "id": "104",
        "name": "Michael Smith",
@@ -1448,9 +1448,30 @@
        "country": "NL",
        "ranking": 28
       },
-      "s1": 0,
-      "s2": 0,
-      "winner": null
+      "s1": 3,
+      "s2": 6,
+      "winner": "33014",
+      "stats": [
+       {
+        "avg": 90.89,
+        "f9": null,
+        "t80": 2,
+        "t140": 5,
+        "t100": 12,
+        "co": 27.27,
+        "hi": 80
+       },
+       {
+        "avg": 95.12,
+        "f9": null,
+        "t80": 3,
+        "t140": 9,
+        "t100": 11,
+        "co": 24,
+        "hi": 40
+       }
+      ],
+      "statsLive": true
      },
      {
       "id": "518144",
@@ -1705,8 +1726,8 @@
      {
       "id": "518154",
       "date": "2026-11-28",
-      "time": "13:00",
-      "status": "upcoming",
+      "time": "13:08",
+      "status": "result",
       "p1": {
        "id": "32078",
        "name": "Bradley Brooks",
@@ -1723,14 +1744,35 @@
        "country": "BE",
        "ranking": 46
       },
-      "s1": 0,
-      "s2": 0,
-      "winner": null
+      "s1": 3,
+      "s2": 6,
+      "winner": "156",
+      "stats": [
+       {
+        "avg": 90.83,
+        "f9": null,
+        "t80": 3,
+        "t140": 8,
+        "t100": 9,
+        "co": 16.67,
+        "hi": 40
+       },
+       {
+        "avg": 93.43,
+        "f9": null,
+        "t80": 3,
+        "t140": 6,
+        "t100": 8,
+        "co": 42.86,
+        "hi": 44
+       }
+      ],
+      "statsLive": true
      },
      {
       "id": "518155",
       "date": "2026-11-28",
-      "time": "13:30",
+      "time": "13:36",
       "status": "upcoming",
       "p1": {
        "id": "2771",
@@ -1780,9 +1822,16 @@
       "time": "19:00",
       "status": "upcoming",
       "p1": null,
-      "p2": null,
+      "p2": {
+       "id": "33014",
+       "name": "Niels Zonneveld",
+       "last": "Zonneveld",
+       "nick": "Triple Z",
+       "country": "NL",
+       "ranking": 28
+      },
       "s1": null,
-      "s2": null,
+      "s2": 0,
       "winner": null
      },
      {
@@ -1845,9 +1894,16 @@
       "date": "2026-11-28",
       "time": "19:00",
       "status": "upcoming",
-      "p1": null,
+      "p1": {
+       "id": "156",
+       "name": "Kim Huybrechts",
+       "last": "Huybrechts",
+       "nick": "The Hurricane",
+       "country": "BE",
+       "ranking": 46
+      },
       "p2": null,
-      "s1": null,
+      "s1": 0,
       "s2": null,
       "winner": null
      }
